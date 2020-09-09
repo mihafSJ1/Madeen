@@ -2,11 +2,20 @@ import React from 'react';
 
 import { StyleSheet,TextInput} from 'react-native';
 
+<<<<<<< HEAD
 export default function RegisterTextInput() {
+=======
+export default function RegisterForm() {
+>>>>>>> login front end
     return (
         <TextInput style={styles.TextInput}/>
     )};
     const styles = StyleSheet.create({
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> login front end
         TextInput:{
             //  marginTop:15,
              marginLeft:30,

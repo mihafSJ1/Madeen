@@ -13,9 +13,19 @@ export default function Logo() {
 const styles = StyleSheet.create({
     logo:{
         alignItems:'center',
+<<<<<<< HEAD
         marginLeft:100,
         marginTop:100,
         marginBottom:-40,
         zIndex:2,
     }
 })
+=======
+        marginLeft:70,
+        marginTop:100,
+        marginBottom:-40,
+        zIndex:2,
+     
+      },
+});
+>>>>>>> login front end
