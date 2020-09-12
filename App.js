@@ -1,6 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
 /*
@@ -29,6 +36,7 @@ firebase.initializeApp(firebaseConfig);
 */
 export default function App() {
   let [fontsLoaded] = useFonts({
+    "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
     "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
   });
 
@@ -36,29 +44,28 @@ export default function App() {
     return <AppLoading />;
   }
 
-  const clickHandler = () => {}
-
+  const clickHandler = () => {};
 
   return (
     <View style={styles.container}>
-      
       <View style={styles.buttonContainer}>
-      <Image style={styles.logo}
-     source={require('./assets/logo.png')}
-     />
-<Image style={styles.background}
-     source={require('./assets/FirstPagePic.png')}
-     />
-     
-        <TouchableOpacity style={[styles.Gbutton,{backgroundColor:'#57694C'}]}>
-          <Text style={styles.buttonText} > تسجيل الدخول </Text>
-        </TouchableOpacity>
-       
-        <TouchableOpacity style={[styles.Wbutton,{backgroundColor:'#FFFF'}]}>
-          <Text style={styles.buttonText} > تسجيل الدخول </Text>
+        <Image style={styles.logo} source={require("./assets/logo.png")} />
+        <Image
+          style={styles.background}
+          source={require("./assets/FirstPagePic.png")}
+        />
+
+        <TouchableOpacity
+          style={[styles.Gbutton, { backgroundColor: "#57694C" }]}
+        >
+          <Text style={styles.buttonText}> تسجيل الدخول </Text>
         </TouchableOpacity>
 
-       
+        <TouchableOpacity
+          style={[styles.Wbutton, { backgroundColor: "#FFFF" }]}
+        >
+          <Text style={styles.buttonText}> تسجيل الدخول </Text>
+        </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
     </View>
@@ -68,73 +75,67 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   Gbutton: {
-    top:230,
+    top: 230,
     marginTop: 0,
-    height:56,
-    width:300,
-    alignItems:'center', 
-    padding:5,
-    borderRadius:25,
-    marginLeft:0,
-    marginBottom:0,
-    shadowOffset:{  width: 0.5,  height: 0.5,  },
-shadowColor: 'grey',
-shadowOpacity: 0.8,
-fontFamily: "Bahij_TheSansArabic-Light",
-
-            
+    height: 56,
+    width: 300,
+    alignItems: "center",
+    padding: 5,
+    borderRadius: 25,
+    marginLeft: 0,
+    marginBottom: 0,
+    shadowOffset: { width: 0.5, height: 0.5 },
+    shadowColor: "grey",
+    shadowOpacity: 0.8,
   },
   Wbutton: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-
-    top:80,
-    marginTop:0,
-    height:56,
-    width:300,
-    alignItems:'center', 
-    padding:5,
-    borderRadius:25,
-    marginLeft:0,
-    marginBottom:0,
-    shadowOffset:{  width: 0,  height: 0,  },
-shadowColor: 'grey',
-shadowOpacity: 0.5,
-            
+    top: 80,
+    marginTop: 0,
+    height: 56,
+    width: 300,
+    alignItems: "center",
+    padding: 5,
+    borderRadius: 25,
+    marginLeft: 0,
+    marginBottom: 0,
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: "grey",
+    shadowOpacity: 0.5,
   },
   buttonText: {
-    textAlign:'center',
+    textAlign: "center",
     fontSize: 22,
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
-  logo:{
-    alignItems:'center',
-    marginLeft:0,
-    marginBottom:0,
+  logo: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginBottom: 0,
     width: 210,
     height: 170,
-    resizeMode: 'stretch',
-    position: 'absolute',
+    resizeMode: "stretch",
+    position: "absolute",
     left: 50,
     bottom: 150,
-    zIndex:2,
- 
+    zIndex: 2,
   },
 
-  background:{
-    alignItems:'center',
-    marginLeft:0,
-    marginBottom:0,
+  background: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginBottom: 0,
     width: 375,
     height: 385,
-    resizeMode: 'stretch',
-    position: 'absolute',
+    resizeMode: "stretch",
+    position: "absolute",
     left: -40,
-   top:2,
-    zIndex:-1,
-  }
- // Get a reference to the database service
+    top: 2,
+    zIndex: -1,
+  },
+  // Get a reference to the database service
 });
