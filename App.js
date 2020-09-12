@@ -7,9 +7,13 @@ import {
   Button,
   Image,
   TouchableOpacity,
+  Dimensions, 
+  TouchableHighlight,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
+import { LinearGradient } from "expo-linear-gradient";
+
 /*
 
 import * as firebase from 'firebase';
@@ -50,15 +54,28 @@ export default function App() {
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <Image style={styles.logo} source={require("./assets/logo.png")} />
-        <Image
-          style={styles.background}
-          source={require("./assets/FirstPagePic.png")}
-        />
+        
+<LinearGradient
+colors={["#FCFCFC", "#EEF2ED"]}
+      style = {{
+        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+        width: Dimensions.get('window').width * 2.1,
+        height: Dimensions.get('window').width * 3,
+        left:-440,
+        top:-55,
+        position:"absolute",
+        
+      }}
+      
+    >
+      <Text> </Text>
+    </LinearGradient>
+
 
         <TouchableOpacity
           style={[styles.Gbutton, { backgroundColor: "#57694C" }]}
         >
-          <Text style={styles.buttonText}> تسجيل الدخول </Text>
+          <Text style={styles.buttonText}> إنشاء حساب </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -109,7 +126,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 25,
     fontFamily: "Bahij_TheSansArabic-Light",
   },
   logo: {
