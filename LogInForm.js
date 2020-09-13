@@ -1,13 +1,27 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import RegisterTextInput from './RegisterTextInput';
-import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity} from 'react-native';
-
+import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,  Keyboard,KeyboardAvoidingView} from 'react-native';
+import { useFonts } from "expo-font";
+import { AppLoading } from "expo";
+import { render } from 'react-dom';
 
 export default function LogInForm() {
+    let [fontsLoaded] = useFonts({
+        "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
+        "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
+      });
+    
+      if (!fontsLoaded) {
+        return <AppLoading />;
+      }
+   
     return (
-        <View style={styles.registerContainer}>
-
+     
+       
+       
+   <View style={styles.registerContainer}>
+         
            <Text style={styles.header}>تسجيل دخول  </Text>
            <Text style={styles.textInputTitle}> البريد الإلكتروني  </Text>
            {/* <TextInput style={styles.RegisterTextInput}/> */}
@@ -35,11 +49,14 @@ export default function LogInForm() {
         </View>
             </View>
             
-
-
+    
+        
         );
 
+
     }
+
+    
     const styles = StyleSheet.create({
         registerContainer: {
           backgroundColor: '#fff',
@@ -53,6 +70,7 @@ export default function LogInForm() {
             textAlign:'center',
            justifyContent: 'center',
            marginBottom: 20,
+           fontFamily: "Bahij_TheSansArabic-Light",
 
         },
         textInputTitle:{
@@ -61,6 +79,7 @@ export default function LogInForm() {
             textAlign:'right',
             color:'#404040',
             marginRight:40,
+            fontFamily: "Bahij_TheSansArabic-Light",
         }, 
          registerTextInput:{
             //  marginTop:15,
@@ -72,6 +91,7 @@ export default function LogInForm() {
              height:40,
              borderRadius:15,
              borderWidth:2,
+             fontFamily: "Bahij_TheSansArabic-Light",
 
          },
          button:{
@@ -85,9 +105,14 @@ export default function LogInForm() {
             marginLeft:10,
             marginBottom:250,
             backgroundColor: '#fff',
+           
          },
+
+
+        
          buttonText:{
              textAlign:'center',
+             fontFamily: "Bahij_TheSansArabic-Light",
             
          },
          buttonContainer:{
@@ -101,6 +126,7 @@ export default function LogInForm() {
          signinText:{
              marginTop:10,
             textAlign:'center',
+            fontFamily: "Bahij_TheSansArabic-Light",
          }
        
     
