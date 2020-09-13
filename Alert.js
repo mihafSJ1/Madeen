@@ -23,7 +23,7 @@ if (!firebase.apps.length) {
 
 export { firebase };
 
-export default function App() {
+export default function Alert() {
   let [fontsLoaded] = useFonts({
     "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
     "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),

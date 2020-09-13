@@ -5,8 +5,11 @@ import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,  Keyboard,Key
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
 import { render } from 'react-dom';
+import Home from './Home';
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function LogInForm() {
+export default function LogInForm({ navigation }) {
     let [fontsLoaded] = useFonts({
         "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
         "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
@@ -16,23 +19,22 @@ export default function LogInForm() {
         return <AppLoading />;
       }
    
-    return (
-     
-       
-       
+    return (  
    <View style={styles.registerContainer}>
          
            <Text style={styles.header}>تسجيل دخول  </Text>
            <Text style={styles.textInputTitle}> البريد الإلكتروني  </Text>
-           {/* <TextInput style={styles.RegisterTextInput}/> */}
            <RegisterTextInput/>
            <Text style={styles.textInputTitle}> كلمة السر </Text>
            <RegisterTextInput secureTextEntry={true}/>
-           <Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text onPress={()=> someAction()} style = {{ color: '#57694C' }}>   اعادة تعيين كلمة السر</Text></Text>
+           <Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text 
+          onPress={() =>navigation.navigate('ResetPassword')} style = {{ color: '#57694C' }}>   اعادة تعيين كلمة السر</Text></Text>
+          
            <View style={styles.buttonContainer}>
-        
-
-           <TouchableOpacity style={[styles.button,{backgroundColor:'#D4CEC9'}]}>
+    
+           <TouchableOpacity style={[styles.button,{backgroundColor:'#D4CEC9'}]}
+             onPress={() =>navigation.navigate('Home')}
+           >
         <Text   style={styles.buttonText}  >   إالغاء  </Text>
 
         

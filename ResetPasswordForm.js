@@ -1,10 +1,19 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity} from 'react-native';
+import { useFonts } from "expo-font";
+import { AppLoading } from "expo";
 
 import RegisterTextInput from './RegisterTextInput';
 
 export default function ResetPasswordForm() {
+  let [fontsLoaded] = useFonts({
+    "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
+    "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
     return (
         <View style={styles.registerContainer}>
      
@@ -29,6 +38,7 @@ export default function ResetPasswordForm() {
         backgroundColor: '#fff',
       },
       textInputTitle:{
+        fontFamily: "Bahij_TheSansArabic-Light",
         fontSize:20,
         margin:8,
         textAlign:'right',
@@ -40,7 +50,7 @@ export default function ResetPasswordForm() {
  
       alignSelf:'center', 
       width:200,
-      height:30,
+      height:35,
       marginTop:120,
       padding:5,
       borderRadius:15,
@@ -49,11 +59,13 @@ export default function ResetPasswordForm() {
     
        },
    buttonText:{
+    fontFamily: "Bahij_TheSansArabic-Light",
        textAlign:'center',
        color:'#fff',
       
    },
    resetMessage:{
+    fontFamily: "Bahij_TheSansArabic-Light",
     textAlign:'right',
     fontSize:15,
     margin:30,
@@ -61,6 +73,7 @@ export default function ResetPasswordForm() {
 
    },
    resetTilte:{
+    fontFamily: "Bahij_TheSansArabic-Light",
     fontSize:20,
     margin:8,
     textAlign:'right',
