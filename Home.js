@@ -21,8 +21,18 @@ import FirebaseKeys from './FirebaseKeys';
 
 
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
+  authDomain: "madeen-46af8.firebaseapp.com",
+  databaseURL: "https://madeen-46af8.firebaseio.com",
+  projectId: "madeen-46af8",
+  storageBucket: "madeen-46af8.appspot.com",
+  messagingSenderId: "289377001222",
+  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
+  measurementId: "G-KWKWGXNQRN"
+};
 if (!firebase.apps.length) {
-  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
 
