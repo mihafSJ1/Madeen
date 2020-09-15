@@ -34,6 +34,7 @@ export default function App() {
                 <Stack.Screen name="Home" component={Home} options={{ headerShown:false}} />
                <Stack.Screen name="login" component={login} options={{ headerShown:false}} />
               <Stack.Screen name="Register" component={Register} options={{ headerShown:false}} />
+              <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown:false}} />
             </>
           )}
         </Stack.Navigator>

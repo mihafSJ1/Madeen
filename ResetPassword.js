@@ -15,7 +15,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 
 
-export default function ResetPasswordٍ({ navigation }) {
+export default function ResetPassword({ navigation }) {
   let [fontsLoaded] = useFonts({
     "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
     "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
@@ -23,6 +23,17 @@ export default function ResetPasswordٍ({ navigation }) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const onResetPress = () => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(this.state.email)
+      .then(function() {
+        Alert.alert("email sent");
+      })
+      .catch(function(error) {
+        Alert.alert(error.message);
+      });
+  };
   return (
     <View style={styles.container}>
      
@@ -53,7 +64,8 @@ export default function ResetPasswordٍ({ navigation }) {
 
  </TouchableOpacity>
 
- <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}>
+ <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}
+ onPress={() => onResetPress()}>
  <Text   style={styles.buttonText}  > استعادة </Text>
 
  </TouchableOpacity>

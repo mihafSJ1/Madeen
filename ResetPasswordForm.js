@@ -21,8 +21,16 @@ export default function ResetPasswordForm() {
                         لاستعادة كلمة المرور </Text>
         <Text style={styles.resetTilte}>  البريد الإلكتروني </Text>
         {/* <TextInput style={styles.registerTextInput}/> */}
-        <RegisterTextInput/>
-
+        <InputField
+            customStyle={{ marginTop: 100 }}
+            textColor={colors.white}
+            labelText="EMAIL ADDRESS"
+            labelTextSize={14}
+            labelColor={colors.white}
+            borderBottomColor={colors.white}
+            inputType="email"
+            onChangeText={email => this.handleEmailChange(email)}
+          />
   
      <TouchableOpacity style={[styles.button,{backgroundColor:'#57694C'}]}>
      <Text   style={styles.buttonText}  >   استعادة كلمة المرور  </Text>
