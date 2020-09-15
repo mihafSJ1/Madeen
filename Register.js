@@ -4,7 +4,6 @@ import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image, Alert, 
 
 import { AppLoading } from "expo"
 import * as firebase from 'firebase';
-
 import "firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
@@ -15,9 +14,22 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import FirebaseKeys from './FirebaseKeys';
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
+  authDomain: "madeen-46af8.firebaseapp.com",
+  databaseURL: "https://madeen-46af8.firebaseio.com",
+  projectId: "madeen-46af8",
+  storageBucket: "madeen-46af8.appspot.com",
+  messagingSenderId: "289377001222",
+  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
+  measurementId: "G-KWKWGXNQRN"
+};
+
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
 
@@ -44,6 +56,7 @@ export default function  Register({ navigation}) {
  
 
   const onRegisterPress = () => {
+    
     if (password !== confirmPassword) {
         alert("Passwords don't match.")
         return
@@ -264,5 +277,6 @@ textInputTitle:{
  }
 
 });
+
 
 
