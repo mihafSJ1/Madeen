@@ -1,11 +1,13 @@
-import React from "react";
+
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+ 
 import  Register from './Register';
 import login  from './login';
 import ResetPassword  from './ResetPassword';
 import Home from './Home';
+import Alert from './Alert';
 
 
 
@@ -14,19 +16,29 @@ import Home from './Home';
 
 const Stack = createStackNavigator();
 
-function App() {
+export default function App() {
+
+    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState(null)
+  
     return (
-      <NavigationContainer>
+        <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} options={{ headerShown:false}} />
-          <Stack.Screen name="Register" component={Register} options={{ headerShown:false}} />
-         
-          <Stack.Screen name="login" component={login} options={{ headerShown:false}} />
-          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown:false}} />
+          { user ? (
+            <Stack.Screen name="Home">
+              {props => <Home {...props} extraData={user} />}
+            </Stack.Screen>
+          ) : (
+            <>
+                <Stack.Screen name="Home" component={Home} options={{ headerShown:false}} />
+               <Stack.Screen name="login" component={login} options={{ headerShown:false}} />
+              <Stack.Screen name="Register" component={Register} options={{ headerShown:false}} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
-  export default App;
-  
+// 
 
+ 

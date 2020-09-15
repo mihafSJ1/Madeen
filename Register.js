@@ -1,59 +1,136 @@
-
-import React from 'react';
+import React, { Component ,useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image} from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image, Alert, ActivityIndicator} from 'react-native';
 
-import { useFonts } from "expo-font";
 import { AppLoading } from "expo"
-import * as firebase from 'firebase';;
+import * as firebase from 'firebase';
+
+import "firebase/auth";
+import "firebase/database";
+import "firebase/firestore";
 import Logo from './Logo';
 import Home from './Home';
-import RegisterTextInput from './RegisterTextInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view-fix';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import FirebaseKeys from './FirebaseKeys';
+
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+}
 
 
 
 
 
 
-export default function Register({ navigation }) {
-  let [fontsLoaded] = useFonts({
-    "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
-    "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
-  });
+export default function  Register({ navigation}) {
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  // let [fontsLoaded] = useFonts({
+  //   "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
+  //   "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
+  // });
+
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
+  // register backend
+
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+ 
+
+  const onRegisterPress = () => {
+    if (password !== confirmPassword) {
+        alert("Passwords don't match.")
+        return
+    }
+    firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((response) => {
+            const uid = response.user.uid
+            const data = {
+                id: uid,
+                email,
+                fullName,
+            };
+            const usersRef = firebase.firestore().collection('users')
+            usersRef
+                .doc(uid)
+                .set(data)
+                .then(() => {
+                    navigation.navigate('Home', {user: data})
+                })
+                .catch((error) => {
+                    alert(error)
+                });
+        })
+        .catch((error) => {
+            alert(error)
+    });
+}
+
+
+
   return (
     <KeyboardAwareScrollView>
   
     <View style={styles.container}>
      
      <Logo/>
-     <TouchableOpacity 
-      onPress={() => navigation.navigate('Home')}
-     >
-        <Text   >   إنشاء حساب  </Text>
-       
-        </TouchableOpacity>
-    
+     
     <View style={styles.registerBackground}>
 
 
       <Text style={styles.header}>إنشاء حساب </Text>
            <Text style={styles.textInputTitle}>الاسم </Text>
           
-           <RegisterTextInput/>
+           <TextInput style={styles.textInput}
+              
+              placeholder="Name"
+              value={fullName}
+              onChangeText={(text) => setFullName(text)}
+           />
            <Text style={styles.textInputTitle}> البريد الإلكتروني  </Text>
-           <RegisterTextInput/>
+           <TextInput style={styles.textInput}
+          
+          placeholder="Email"
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+          
+             underlineColorAndroid="transparent"
+             autoCapitalize="none"
+            keyboardType='email-address'
+
+           />
            <Text style={styles.textInputTitle}> كلمة السر </Text>
-           <RegisterTextInput secureTextEntry={true}/>
+           <TextInput style={styles.textInput}
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            maxLength={15}
+            secureTextEntry={true}
+             underlineColorAndroid="transparent"
+             autoCapitalize="none"
+             />
            <Text style={styles.textInputTitle}> إعادة كلمة السر </Text>
-            <RegisterTextInput secureTextEntry={true}/>
-           <Text  style = {styles.signinText}>هل لديك حساب؟<Text style = {{ color: '#57694C' }}  onPress={() => navigation.navigate('login')} > تسجيل دخول</Text></Text>
+            <TextInput style={styles.textInput}
+            secureTextEntry={true}
+             placeholder='Confirm Password'
+             onChangeText={(text) => setConfirmPassword(text)}
+             value={confirmPassword}
+             maxLength={15}
+             underlineColorAndroid="transparent"
+             autoCapitalize="none"/>
+
+           <Text  style = {styles.signinText}>هل لديك حساب؟
+           <Text style = {{ color: '#57694C' }}  onPress={() => navigation.navigate('login')} > تسجيل دخول</Text>
+           </Text>
+
            <View style={styles.buttonContainer}>
       
        
@@ -62,7 +139,9 @@ export default function Register({ navigation }) {
         >
         <Text   style={styles.buttonText}  >   إالغاء  </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}>
+        <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}
+        onPress={() => onRegisterPress()}
+        >
         <Text style={styles.buttonText}  >   إنشاء حساب  </Text>
        
         </TouchableOpacity>
@@ -76,12 +155,13 @@ export default function Register({ navigation }) {
     </View>
     </View>
     </KeyboardAwareScrollView>
-  );
-}
+     );
+    }
 
+  
 const styles = StyleSheet.create({
   container: {
-    fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
     flex: 1,
    
     backgroundColor: '#EEF2ED',
@@ -118,7 +198,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },header:{
         
-    fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
     color: '#404040',
     fontSize:30,
     margin:20,
@@ -128,7 +208,7 @@ const styles = StyleSheet.create({
 
 },
 textInputTitle:{
-    fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
     fontSize:20,
     marginBottom:2,
    
@@ -150,7 +230,7 @@ textInputTitle:{
     backgroundColor: '#fff',
  },
  buttonText:{
-    fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
      textAlign:'center',
     
  },
@@ -163,9 +243,24 @@ textInputTitle:{
   
  },
  signinText:{
-    fontFamily: "Bahij_TheSansArabic-Light",
+  
+  backgroundColor: 'transparent',
+    // fontFamily: "Bahij_TheSansArabic-Light",
      marginTop:10,
     textAlign:'center',
+ },
+ textInput:{
+       //  marginTop:15,
+       marginLeft:30,
+       alignItems:'center',
+       borderColor:'#CBCA9E',
+       width:350,
+       backgroundColor:'#fff',
+       height:40,
+       borderRadius:15,
+       borderWidth:2,
+        textAlign:'right',
+
  }
 
 });

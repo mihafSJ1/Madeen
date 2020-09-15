@@ -9,14 +9,21 @@ import {
   TouchableOpacity,
   Dimensions, 
   TouchableHighlight,
-  
-  
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import * as firebase from 'firebase';
+import '@firebase/auth';
+import FirebaseKeys from './FirebaseKeys';
+
+
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+}
 
 
 export default function Home({ navigation }) {
