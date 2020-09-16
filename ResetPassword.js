@@ -41,18 +41,37 @@ export default function ResetPassword({ navigation }) {
   const [email, setEmail] = useState('')
 
  const submitEmail = () => {
+  if(email==''){
+    Alert.alert("أدخل البريد الإلكتروني من فضلك");
+    navigation.navigate('ResetPassword')
+  }
+else{
   firebase
     .auth()
+    
+    
+
     .sendPasswordResetEmail(email)
+    
     .then(function() {
       Alert.alert(" تم إرسال  رابط استعادة كلمة المرور على بريدك الالكتروني، لُطفًا تفقده");
+      navigation.navigate('login')
     })
     
     .catch(function(error) {
-     Alert.alert("هذا البريد الالكتروني لم يسجل مسبقا"); 
+      if (error.message == 'There is no user record corresponding to this identifier. The user may have been deleted.')
+      {
+        Alert.alert('لا يوجد مستخدم بهذا البريد الإلكتروني');
+        }
+        else if(error.message == 'The email address is badly formatted.'){
+          Alert.alert( 'فضلًا، قم بإدخال بريد إلكتروني صحيح');
+          if (error.message == 'There is no user record corresponding to this identifier. The user may have been deleted.')
+          Alert.alert( 'لا يوجد مستخدم بهذا البريد الإلكتروني');
+       }
+    
     // Alert.alert(error.massage); 
-    } );
-};
+  } );
+}};
   return (
     <View style={styles.container}>
      
