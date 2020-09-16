@@ -10,7 +10,7 @@ import ResetPassword  from './ResetPassword';
 import Home from './Home';
 import Alert from './Alert';
 import CustomAlertComponent from './CustomAlertComponent'
-
+import * as firebase from 'firebase';
 
  
 
@@ -22,6 +22,36 @@ export default function App() {
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState(null)
   
+
+    // if (loading) {	
+    //   return (	
+    //     <></>	
+    //   )	
+    // }
+  
+    useEffect(() => {
+      const usersRef = firebase.firestore().collection('users');
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          usersRef
+            .doc(user.uid)
+            .get()
+            .then((document) => {
+              const userData = document.data()
+              setLoading(false)
+              setUser(userData)
+            })
+            .catch((error) => {
+              setLoading(false)
+            });
+        } else {
+          setLoading(false)
+        }
+      });
+    }, []);
+
+
+
     return (
         <NavigationContainer>
         <Stack.Navigator>
@@ -42,6 +72,10 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     );
+
+
+
+    
   }
 // 
 

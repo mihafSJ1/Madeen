@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { Component ,useState} from 'react';
 import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,ScrollView ,Image,KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";import RegisterTextInput from './RegisterTextInput';
@@ -11,11 +11,62 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from 'firebase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view-fix'
 import '@firebase/auth';
+const firebaseConfig = {
+  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
+  authDomain: "madeen-46af8.firebaseapp.com",
+  databaseURL: "https://madeen-46af8.firebaseio.com",
+  projectId: "madeen-46af8",
+  storageBucket: "madeen-46af8.appspot.com",
+  messagingSenderId: "289377001222",
+  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
+  measurementId: "G-KWKWGXNQRN"
+};
 
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 
 export default function login({ navigation }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+
+  const onLoginPress = () => {
+
+    firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((response) => {
+        const uid = response.user.uid
+        const usersRef = firebase.database().ref('users')
+       
+       
+       
+        usersRef
+            .doc(uid)
+            .get()
+            .then(firestoreDocument => {
+                if (!firestoreDocument.exists) {
+                    alert("User does not exist anymore.")
+                    return;
+                }
+                const user = firestoreDocument.data()
+                navigation.navigate('Home', {user})
+            })
+            .catch(error => {
+                alert(error)
+            });
+    })
+    .catch(error => {
+        alert(error)
+    })
+}
+
+
   
+
 
   return (
     <KeyboardAwareScrollView>
@@ -27,15 +78,46 @@ export default function login({ navigation }) {
      />
 
     <View  style={styles.registerBackground}>
-
-      
     <Text style={styles.header}>تسجيل دخول  </Text>
+
+           {/* faild number1  */}
+
            <Text style={styles.textInputTitle}> البريد الإلكتروني  </Text>
-           <RegisterTextInput/>
+           <TextInput style={styles.textInput}
+              
+              placeholder="البريد الالكتروني "
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+           />
+          
+           {/* <RegisterTextInput/> */}
+
+
+
+          {/* faild number1  */}
            <Text style={styles.textInputTitle}> كلمة السر </Text>
+           <TextInput style={styles.textInput}
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            maxLength={15}
+            secureTextEntry={true}
+             underlineColorAndroid="transparent"
+             autoCapitalize="none"
+             />
+
+
+
+             {/* link */}
+<Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text 
+         style = {{ color: '#57694C' }} onPress={() => navigation.navigate('ResetPassword')}> 
+           اعادة تعيين كلمة السر</Text></Text> 
+
+
+           {/* <Text style={styles.textInputTitle}> كلمة السر </Text>
            <RegisterTextInput secureTextEntry={true}/>
            <Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text 
-         style = {{ color: '#57694C' }} onPress={() => navigation.navigate('ResetPassword')}>   اعادة تعيين كلمة السر</Text></Text>
+         style = {{ color: '#57694C' }} onPress={() => navigation.navigate('ResetPassword')}>   اعادة تعيين كلمة السر</Text></Text> */}
         
           
            <View style={styles.buttonContainer}>
@@ -45,12 +127,11 @@ export default function login({ navigation }) {
            >
         <Text   style={styles.buttonText}  >   إالغاء  </Text>
 
-        
-     
         </TouchableOpacity>
 
 
-        <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}>
+        <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}  
+         onPress={() => onLoginPress()}>
         <Text   style={styles.buttonText}  >   تسجيل دخول  </Text>
      
         </TouchableOpacity>
@@ -176,8 +257,21 @@ signinText:{
    marginTop:10,
   textAlign:'center',
   fontFamily: "Bahij_TheSansArabic-Light",
-}
+},
 
+textInput:{
+  //  marginTop:15,
+  marginLeft:30,
+  alignItems:'center',
+  borderColor:'#CBCA9E',
+  width:350,
+  backgroundColor:'#fff',
+  height:40,
+  borderRadius:15,
+  borderWidth:2,
+   textAlign:'right',
+
+}
 
  // Get a reference to the database service
 });
