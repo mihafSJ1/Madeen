@@ -64,6 +64,9 @@ export default function login({ navigation }) {
               "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
             );
             break;
+          case "auth/network-request-failed":
+            alert("فضلًا تحقق من اتصالك بالانترنت");
+            break;
         }
       });
 
