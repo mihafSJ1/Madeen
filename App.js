@@ -9,7 +9,7 @@ import login  from './login';
 import ResetPassword  from './ResetPassword';
 import Home from './Home';
 import Alert from './Alert';
-
+import CustomAlertComponent from './CustomAlertComponent'
 
 
  
@@ -35,6 +35,8 @@ export default function App() {
                <Stack.Screen name="login" component={login} options={{ headerShown:false}} />
               <Stack.Screen name="Register" component={Register} options={{ headerShown:false}} />
               <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown:false}} />
+              <Stack.Screen name="CustomAlertComponent" component={CustomAlertComponent} options={{ headerShown:false}} />
+              
             </>
           )}
         </Stack.Navigator>

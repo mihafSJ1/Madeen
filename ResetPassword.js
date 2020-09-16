@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component ,useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 
 import RegisterTextInput from './RegisterTextInput';
-import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image} from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image,Alert} from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
@@ -11,29 +11,48 @@ import { AntDesign } from '@expo/vector-icons';
 import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import CustomAlertComponent from './CustomAlertComponent'
+const firebaseConfig = {
+  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
+  authDomain: "madeen-46af8.firebaseapp.com",
+  databaseURL: "https://madeen-46af8.firebaseio.com",
+  projectId: "madeen-46af8",
+  storageBucket: "madeen-46af8.appspot.com",
+  messagingSenderId: "289377001222",
+  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
+  measurementId: "G-KWKWGXNQRN"
+};
 
 
-
-
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+ 
+ 
 export default function ResetPassword({ navigation }) {
-  let [fontsLoaded] = useFonts({
-    "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
-    "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-  const onResetPress = () => {
-    firebase
-      .auth()
-      .sendPasswordResetEmail(this.state.email)
-      .then(function() {
-        Alert.alert("email sent");
-      })
-      .catch(function(error) {
-        Alert.alert(error.message);
-      });
-  };
+  //let [fontsLoaded] = useFonts({
+  // "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
+  // "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
+  //});
+ // if (!fontsLoaded) {
+  // return <AppLoading />;
+  //}
+  //backend 
+  const [email, setEmail] = useState('')
+
+ const submitEmail = () => {
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(function() {
+      Alert.alert(" تم إرسال  رابط استعادة كلمة المرور على بريدك الالكتروني، لُطفًا تفقده");
+    })
+    
+    .catch(function(error) {
+     Alert.alert("هذا البريد الالكتروني لم يسجل مسبقا"); 
+    // Alert.alert(error.massage); 
+    } );
+};
   return (
     <View style={styles.container}>
      
@@ -52,7 +71,11 @@ export default function ResetPassword({ navigation }) {
                         لاستعادة كلمة المرور </Text>
         <Text style={styles.resetTilte}>  البريد الإلكتروني </Text>
         {/* <TextInput style={styles.registerTextInput}/> */}
-        <RegisterTextInput/>
+        <TextInput style={styles.textInput}
+            placeholder="email"
+            inputType="email"
+            onChangeText={email => setEmail(email)}
+          />
 
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button,{backgroundColor:'#D4CEC9'}]}
@@ -65,7 +88,7 @@ export default function ResetPassword({ navigation }) {
  </TouchableOpacity>
 
  <TouchableOpacity style={[styles.button,{backgroundColor:'#CBCA9E'}]}
- onPress={() => onResetPress()}>
+ onPress={() => submitEmail()}>
  <Text   style={styles.buttonText}  > استعادة </Text>
 
  </TouchableOpacity>
@@ -146,7 +169,19 @@ export default function ResetPassword({ navigation }) {
       backgroundColor: '#fff',
      
     },
-    
+    textInput:{
+      //  marginTop:15,
+       marginLeft:30,
+       alignItems:'center',
+       borderColor:'#CBCA9E',
+       width:350,
+       backgroundColor:'#fff',
+       height:40,
+       borderRadius:15,
+       borderWidth:2,
+        textAlign:'right',
+
+   },
     
     
     buttonText:{
@@ -179,6 +214,5 @@ export default function ResetPassword({ navigation }) {
     marginRight:40,
 
    }
-
     
   });

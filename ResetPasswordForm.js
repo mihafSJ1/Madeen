@@ -28,8 +28,8 @@ export default function ResetPasswordForm() {
             labelTextSize={14}
             labelColor={colors.white}
             borderBottomColor={colors.white}
-            inputType="email"
-            onChangeText={email => this.handleEmailChange(email)}
+            defaultValue={this.state.email}
+            onChangeText={etext => this.setState({ email: text })}
           />
   
      <TouchableOpacity style={[styles.button,{backgroundColor:'#57694C'}]}>

@@ -46,6 +46,7 @@ export default function CustomAlertComponent() {
       <View style={styles.bottomPart}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+          onPress={() =>navigation.navigate('login')}
         >
           <Text style={styles.buttonText}> حسنًا </Text>
         </TouchableOpacity>
