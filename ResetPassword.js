@@ -91,7 +91,7 @@ else{
         <Text style={styles.resetTilte}>  البريد الإلكتروني </Text>
         {/* <TextInput style={styles.registerTextInput}/> */}
         <TextInput style={styles.textInput}
-            placeholder="email"
+            placeholder="البريد الإلكتروني"
             inputType="email"
             onChangeText={email => setEmail(email)}
           />

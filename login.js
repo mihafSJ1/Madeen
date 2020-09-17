@@ -94,7 +94,7 @@ export default function login({ navigation }) {
           <Text style={styles.textInputTitle}> البريد الإلكتروني </Text>
           <TextInput
             style={styles.textInput}
-            placeholder="البريد الالكتروني "
+            placeholder="البريد الإلكتروني "
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -105,7 +105,7 @@ export default function login({ navigation }) {
           <Text style={styles.textInputTitle}> كلمة السر </Text>
           <TextInput
             style={styles.textInput}
-            placeholder="Password"
+            placeholder="كلمة السر"
             value={password}
             onChangeText={(text) => setPassword(text)}
             maxLength={15}

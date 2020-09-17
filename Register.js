@@ -125,14 +125,14 @@ export default function  Register({ navigation}) {
           
            <TextInput style={styles.textInput}
               
-              placeholder="Name"
+              placeholder="الإسم"
               value={fullName}
               onChangeText={(text) => setFullName(text)}
            />
            <Text style={styles.textInputTitle}> البريد الإلكتروني  </Text>
            <TextInput style={styles.textInput}
           
-          placeholder="Email"
+          placeholder="البريد الإلكتروني"
           onChangeText={(text) => setEmail(text)}
           value={email}
           
@@ -143,7 +143,7 @@ export default function  Register({ navigation}) {
            />
            <Text style={styles.textInputTitle}> كلمة السر </Text>
            <TextInput style={styles.textInput}
-            placeholder="Password"
+            placeholder="كلمة السر"
             value={password}
             onChangeText={(text) => setPassword(text)}
             maxLength={15}
@@ -154,7 +154,7 @@ export default function  Register({ navigation}) {
            <Text style={styles.textInputTitle}> إعادة كلمة السر </Text>
             <TextInput style={styles.textInput}
             secureTextEntry={true}
-             placeholder='Confirm Password'
+             placeholder='تأكيد كلمة المرور'
              onChangeText={(text) => setConfirmPassword(text)}
              value={confirmPassword}
              maxLength={15}
