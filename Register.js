@@ -58,33 +58,50 @@ export default function  Register({ navigation}) {
   const onRegisterPress = () => {
     
     if (password !== confirmPassword) {
-        alert("Passwords don't match.")
+        alert("تأكد من تطابق كلمة المرور مع إعادتها")
         return
     }
+
+    if (email == "" || password == "" || fullName == "" || confirmPassword == "") {
+      alert("عفوًا، جميع الحقول مطلوبة");
+         
+       return
+   }
+
     firebase
-        .auth()
+    .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then((response) => {
-            const uid = response.user.uid
-            const data = {
-                id: uid,
-                email,
-                fullName,
-            };
-            const usersRef = firebase.firestore().collection('users')
-            usersRef
-                .doc(uid)
-                .set(data)
-                .then(() => {
-                    navigation.navigate('Home', {user: data})
-                })
-                .catch((error) => {
-                    alert(error)
-                });
-        })
-        .catch((error) => {
-            alert(error)
-    });
+        .then((res) => {
+          firebase.database().ref('users/' + res.user.uid).set({
+            fullName: fullName,
+              email: email
+          
+             
+          })
+      }) .then(() => navigation.navigate("FirstPage"))
+      
+      .catch((error) => {
+        switch (error.code) {
+          case "auth/invalid-email":
+            alert("تحقق من صحة بريدك الالكتروني");
+            break;
+            case "auth/email-already-in-use":
+              alert(
+                "هذا البريد الإلكتروني مستخدم من قبل"
+              );
+              break;
+              case "auth/weak-password":
+                alert(
+                  "كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات"
+                );
+                break;
+
+                break;
+                
+        }
+        alert(error.code)
+        console.log("handleRegister");    
+      });
 }
 
 
