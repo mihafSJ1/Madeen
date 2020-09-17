@@ -46,9 +46,8 @@ export default class FirstPage extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={{ fontSize: 20 }}>
-          {" "}
-          Hi
-          <Text style={{ color: "#e93766", fontSize: 20 }}>
+          Hi{" "}
+          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
             {currentUser && currentUser.email}!
           </Text>
         </Text>
@@ -64,38 +63,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   logo: {
-//     alignItems: "center",
-//     marginLeft: 0,
-//     marginBottom: 0,
-//     width: 210,
-//     height: 170,
-//     resizeMode: "stretch",
-//     position: "absolute",
-//     left: 50,
-//     bottom: 150,
-//     zIndex: 2,
-//   },
-
-//   background: {
-//     alignItems: "center",
-//     marginLeft: 0,
-//     marginBottom: 0,
-//     width: 375,
-//     height: 385,
-//     resizeMode: "stretch",
-//     position: "absolute",
-//     left: -40,
-//     top: 2,
-//     zIndex: -1,
-//   },
-//   // Get a reference to the database service
-// });

@@ -57,12 +57,15 @@ export default function login({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-            alert("تحقق من صحة بريدك الالكتروني");
-            break;
+          // alert("تحقق من صحة بريدك الالكتروني");
+          // break;
           case "auth/wrong-password":
             alert(
               "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
             );
+            break;
+          case "auth/network-request-failed":
+            alert("فضلًا تحقق من اتصالك بالانترنت");
             break;
         }
       });
