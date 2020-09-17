@@ -49,7 +49,7 @@ export default function login({ navigation }) {
       alert("عفوًا، جميع الحقول مطلوبة");
       return;
     }
-
+    console.log("handleLogin1");
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -59,9 +59,13 @@ export default function login({ navigation }) {
           
          
           case "auth/invalid-email":
-          alert("تحقق من صحة بريدك الالكتروني");
-          break;
+
+      
+
+            alert("تحقق من صحة بريدك الالكتروني");
+            break;
           case "auth/user-not-found":
+
           case "auth/wrong-password":
             alert(
               "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
