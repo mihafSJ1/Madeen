@@ -82,6 +82,9 @@ export default function  Register({ navigation}) {
       
       .catch((error) => {
         switch (error.code) {
+          case "auth/network-request-failed":
+            alert("فضلًا تحقق من اتصالك بالانترنت");
+            break;
           case "auth/invalid-email":
             alert("تحقق من صحة بريدك الالكتروني");
             break;
@@ -89,6 +92,7 @@ export default function  Register({ navigation}) {
               alert(
                 "هذا البريد الإلكتروني مستخدم من قبل"
               );
+            
               break;
               case "auth/weak-password":
                 alert(
@@ -99,7 +103,7 @@ export default function  Register({ navigation}) {
                 break;
                 
         }
-        alert(error.code)
+        // alert(error.code)
         console.log("handleRegister");    
       });
 }
