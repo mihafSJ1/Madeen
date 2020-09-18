@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
-import RegisterTextInput from "./RegisterTextInput";
 import * as Font from "expo-font";
 import Home from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
@@ -56,26 +55,19 @@ export default function login({ navigation }) {
       .then(() => navigation.navigate("FirstPage"))
       .catch((error) => {
         switch (error.code) {
-          
-         
           case "auth/invalid-email":
-
-      
-
             alert("تحقق من صحة بريدك الالكتروني");
             break;
           case "auth/user-not-found":
-
           case "auth/wrong-password":
             alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
             );
             break;
           case "auth/network-request-failed":
             alert("فضلًا تحقق من اتصالك بالانترنت");
             break;
         }
-        
       });
 
     console.log("handleLogin");
@@ -89,7 +81,7 @@ export default function login({ navigation }) {
         <View style={styles.registerBackground}>
           <Text style={styles.header}>تسجيل دخول </Text>
 
-          {/* faild number1  */}
+          {/* field number1  */}
 
           <Text style={styles.textInputTitle}> البريد الإلكتروني </Text>
           <TextInput
@@ -115,10 +107,13 @@ export default function login({ navigation }) {
           />
 
           {/* link */}
-          <Text style={styles.signinText}>
+          <Text style={styles.resetPassText}>
             هل نسيت كلمة السر؟
             <Text
-              style={{ color: "#57694C" }}
+              style={{
+                color: "#57694C",
+                fontFamily: "Bahij_TheSansArabic-Bold",
+              }}
               onPress={() => navigation.navigate("ResetPassword")}
             >
               اعادة تعيين كلمة السر
@@ -156,7 +151,6 @@ export default function login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     backgroundColor: "#EEF2ED",
     // alignItems: 'center',
     justifyContent: "center",
@@ -190,45 +184,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
+    fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
-    fontSize: 35,
-    marginTop: 20,
+    fontSize: 30,
+    margin: 20,
+    marginBottom: 40,
     top: 30,
     textAlign: "center",
     justifyContent: "center",
-    marginBottom: 20,
-    fontFamily: "Bahij_TheSansArabic-Light",
   },
   textInputTitle: {
+    fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
-    margin: 20,
+    marginBottom: 2,
     textAlign: "right",
     color: "#404040",
-    marginRight: 40,
-    fontFamily: "Bahij_TheSansArabic-Light",
+    marginRight: 30,
   },
-  registerTextInput: {
-    //  marginTop:15,
-    marginLeft: 30,
-    alignItems: "center",
-    borderColor: "#CBCA9E",
-    width: 350,
-    backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
-    fontFamily: "Bahij_TheSansArabic-Light",
-  },
+  // registerTextInput: {
+  //   //  marginTop:15,
+  //   marginLeft: 30,
+  //   alignItems: "center",
+  //   borderColor: "#CBCA9E",
+  //   width: 350,
+  //   backgroundColor: "#fff",
+  //   height: 40,
+  //   borderRadius: 15,
+  //   borderWidth: 2,
+  //   fontFamily: "Bahij_TheSansArabic-Light",
+  // },
   button: {
     alignItems: "center",
-    width: 100,
+    width: 170,
     height: 30,
-
     marginTop: 20,
     padding: 5,
     borderRadius: 15,
     marginLeft: 10,
-    marginBottom: 250,
+    marginBottom: 350,
     backgroundColor: "#fff",
   },
 
@@ -238,20 +231,20 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    //  flex:1,
     alignItems: "center",
-    marginLeft: 80,
+    marginLeft: 25,
     fontSize: 30,
   },
-  signinText: {
-    marginTop: 10,
-    textAlign: "center",
+  resetPassText: {
+    marginTop: -10,
+    marginLeft: 35,
+    marginBottom: 20,
     fontFamily: "Bahij_TheSansArabic-Light",
   },
 
   textInput: {
-    //  marginTop:15,
-    marginLeft: 30,
+    marginBottom: 13,
+    marginLeft: 35,
     alignItems: "center",
     borderColor: "#CBCA9E",
     width: 350,
@@ -260,6 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 2,
     textAlign: "right",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
 
   // Get a reference to the database service

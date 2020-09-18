@@ -7,7 +7,7 @@ import {
   Button,
   Image,
   TouchableOpacity,
-  Dimensions, 
+  Dimensions,
   TouchableHighlight,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -15,11 +15,9 @@ import { AppLoading } from "expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as firebase from 'firebase';
-import '@firebase/auth';
-import FirebaseKeys from './FirebaseKeys';
-
-
+import * as firebase from "firebase";
+import "@firebase/auth";
+import FirebaseKeys from "./FirebaseKeys";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
@@ -29,12 +27,11 @@ const firebaseConfig = {
   storageBucket: "madeen-46af8.appspot.com",
   messagingSenderId: "289377001222",
   appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
-  measurementId: "G-KWKWGXNQRN"
+  measurementId: "G-KWKWGXNQRN",
 };
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
 
 export default function Home({ navigation }) {
   let [fontsLoaded] = useFonts({
@@ -46,41 +43,38 @@ export default function Home({ navigation }) {
     return <AppLoading />;
   }
 
-
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <Image style={styles.logo} source={require("./assets/logo.png")} />
-        
-<LinearGradient
-colors={["#FCFCFC", "#EEF2ED"]}
-      style = {{
-        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-        width: Dimensions.get('window').width * 2.1,
-        height: Dimensions.get('window').width * 3,
-        left:-440,
-        top:-55,
-        position:"absolute",
-        
-      }}
-      
-    >
-      <Text> </Text>
-    </LinearGradient>
 
+        <LinearGradient
+          colors={["#FCFCFC", "#EEF2ED"]}
+          style={{
+            borderRadius:
+              Math.round(
+                Dimensions.get("window").width + Dimensions.get("window").height
+              ) / 2,
+            width: Dimensions.get("window").width * 2.1,
+            height: Dimensions.get("window").width * 3,
+            left: -440,
+            top: -55,
+            position: "absolute",
+          }}
+        >
+          <Text> </Text>
+        </LinearGradient>
 
         <TouchableOpacity
           style={[styles.Gbutton, { backgroundColor: "#57694C" }]}
-          onPress={() =>navigation.navigate('Register')
-          }
+          onPress={() => navigation.navigate("Register")}
         >
           <Text style={styles.buttonText}> إنشاء حساب </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.Wbutton, { backgroundColor: "#FFFF" }]}
-          onPress={() =>navigation.navigate('login')
-        }
+          onPress={() => navigation.navigate("login")}
         >
           <Text style={styles.buttonText}> تسجيل الدخول </Text>
         </TouchableOpacity>
@@ -127,6 +121,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
+    marginTop: 4,
     fontSize: 25,
     fontFamily: "Bahij_TheSansArabic-Light",
   },
