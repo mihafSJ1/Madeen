@@ -19,6 +19,7 @@ import "firebase/database";
 import "firebase/firestore";
 import Logo from "./Logo";
 import Home from "./Home";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -47,6 +48,11 @@ export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const fullNameRegexAR = /[\u0600-\u06FF]/;
+  const fullNameRegexEN =/^[a-zA-Z şüöı]+$/;
+ 
+  const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
@@ -63,6 +69,17 @@ export default function Register({ navigation }) {
       alert("عفوًا، جميع الحقول مطلوبة");
 
       return;
+    }
+    
+    if (fullNameRegexEN.test(fullName) == false && fullNameRegexAR.test(fullName)==false){
+      alert('عفوًا الاسم يجب أن يحتوي على حروف فقط' );
+      return
+    }
+    if (strongPassRegex.test(password) == false){
+   
+    
+      alert('يجب ان تكون كلمة المرور مكونة من ٦ خانات وحروف وارقام ورموز' );
+      return
     }
 
     firebase
@@ -143,7 +160,7 @@ export default function Register({ navigation }) {
             placeholder="تأكيد كلمة السر"
             onChangeText={(text) => setConfirmPassword(text)}
             value={confirmPassword}
-            maxLength={15}
+           
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />
