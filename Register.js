@@ -78,7 +78,7 @@ export default function Register({ navigation }) {
     if (strongPassRegex.test(password) == false){
    
     
-      alert('يجب ان تكون كلمة المرور مكونة من ٦ خانات وحروف وارقام ورموز' );
+      alert('يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز' );
       return
     }
 
