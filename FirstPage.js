@@ -18,6 +18,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import FirebaseKeys from "./FirebaseKeys";
+import TopBar from "./TopBar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
@@ -45,6 +46,7 @@ export default class FirstPage extends React.Component {
     const { currentUser } = this.state;
     return (
       <View style={styles.container}>
+        <TopBar />
         <Text style={{ fontSize: 20 }}>
           Hi{" "}
           <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
