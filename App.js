@@ -7,6 +7,7 @@ import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import FirstPage from "./FirstPage";
+import Timeline from "./Timeline";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
@@ -81,6 +82,11 @@ export default function App() {
             <Stack.Screen
               name="FirstPage"
               component={FirstPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Timeline"
+              component={Timeline}
               options={{ headerShown: false }}
             />
           </>

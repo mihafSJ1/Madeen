@@ -11,6 +11,7 @@ import {
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
@@ -18,7 +19,7 @@ import * as Font from "expo-font";
 import Home from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import "@firebase/auth";
@@ -45,7 +46,14 @@ export default function login({ navigation }) {
   const onLoginPress = () => {
     //Null fields validation
     if (email == "" || password == "") {
-      alert("عفوًا، جميع الحقول مطلوبة");
+      Alert.alert( '', "عفوًا، جميع الحقول مطلوبة",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+      );
+        
+      
+       
       return;
     }
     console.log("handleLogin1");
@@ -56,16 +64,28 @@ export default function login({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-            alert("تحقق من صحة بريدك الالكتروني");
+            Alert.alert("", "تحقق من صحة بريدك الالكتروني",
+            [  
+             
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
           case "auth/user-not-found":
           case "auth/wrong-password":
-            alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
+            Alert.alert('',
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
+              [  
+                {text: 'حسناً'}, ],
+                {cancelable: false}  
             );
             break;
           case "auth/network-request-failed":
-            alert("فضلًا تحقق من اتصالك بالانترنت");
+            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
         }
       });

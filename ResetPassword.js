@@ -48,7 +48,11 @@ export default function ResetPassword({ navigation }) {
 
   const submitEmail = () => {
     if (email == "") {
-      Alert.alert("أدخل البريد الإلكتروني من فضلك");
+      Alert.alert("","أدخل البريد الإلكتروني من فضلك",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
       navigation.navigate("ResetPassword");
     } else {
       firebase
@@ -57,8 +61,11 @@ export default function ResetPassword({ navigation }) {
         .sendPasswordResetEmail(email)
 
         .then(function () {
-          Alert.alert(
-            " تم إرسال  رابط استعادة كلمة المرور على بريدك الالكتروني، لُطفًا تفقده"
+          Alert.alert("",
+            " تم إرسال  رابط استعادة كلمة المرور على بريدك الالكتروني، لُطفًا تفقده",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
           );
           navigation.navigate("login");
         })
@@ -68,14 +75,26 @@ export default function ResetPassword({ navigation }) {
             error.message ==
             "There is no user record corresponding to this identifier. The user may have been deleted."
           ) {
-            Alert.alert("لا يوجد مستخدم بهذا البريد الإلكتروني");
+            Alert.alert("","لا يوجد مستخدم بهذا البريد الإلكتروني",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
           } else if (error.message == "The email address is badly formatted.") {
-            Alert.alert("فضلًا، قم بإدخال بريد إلكتروني صحيح");
+            Alert.alert("","فضلًا، قم بإدخال بريد إلكتروني صحيح",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             if (
               error.message ==
               "There is no user record corresponding to this identifier. The user may have been deleted."
             )
-              Alert.alert("لا يوجد مستخدم بهذا البريد الإلكتروني");
+              Alert.alert("","لا يوجد مستخدم بهذا البريد الإلكتروني",
+              [  
+                {text: 'حسناً'}, ],
+                {cancelable: false}  
+                );
           }
 
           // Alert.alert(error.massage);
