@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
@@ -51,174 +51,186 @@ export default function Timeline({ navigation }) {
       ></LinearGradient>
 
       {/* -------------------------------------- CARD 1*/}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("FirstPage")}
-      >
-        <View style={styles.rightItems}>
-          <Ionicons
-            name="ios-arrow-back"
-            size={25}
-            color="#9B9B7A"
-            solid
-            style={{ marginTop: 30, marginRight: 45 }}
-          />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+      <ScrollView>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("FirstPage")}
+        >
+          <View style={styles.rightItems}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#9B9B7A"
+              solid
+              style={{ marginTop: 30, marginRight: 45 }}
+            />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
 
-          <View style={styles.textContainer}>
-            <Text style={styles.textLabel}>
-              الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              السبب |<Text style={styles.textData}> شراء... </Text>
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.textLabel}>
+                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                السبب |<Text style={styles.textData}> شراء... </Text>
+              </Text>
+            </View>
+            <Image
+              source={require("./assets/UserImagePlaceholder.png")}
+            ></Image>
           </View>
-          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {/* -------------------------------------- CARD 2*/}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("FirstPage")}
-      >
-        <View style={styles.rightItems}>
-          <Ionicons
-            name="ios-arrow-back"
-            size={25}
-            color="#9B9B7A"
-            solid
-            style={{ marginTop: 30, marginRight: 45 }}
-          />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+        {/* -------------------------------------- CARD 2*/}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("FirstPage")}
+        >
+          <View style={styles.rightItems}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#9B9B7A"
+              solid
+              style={{ marginTop: 30, marginRight: 45 }}
+            />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
 
-          <View style={styles.textContainer}>
-            <Text style={styles.textLabel}>
-              الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              السبب |<Text style={styles.textData}> شراء... </Text>
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.textLabel}>
+                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                السبب |<Text style={styles.textData}> شراء... </Text>
+              </Text>
+            </View>
+            <Image
+              source={require("./assets/UserImagePlaceholder.png")}
+            ></Image>
           </View>
-          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {/* -------------------------------------- CARD 3*/}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("FirstPage")}
-      >
-        <View style={styles.rightItems}>
-          <Ionicons
-            name="ios-arrow-back"
-            size={25}
-            color="#9B9B7A"
-            solid
-            style={{ marginTop: 30, marginRight: 45 }}
-          />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+        {/* -------------------------------------- CARD 3*/}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("FirstPage")}
+        >
+          <View style={styles.rightItems}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#9B9B7A"
+              solid
+              style={{ marginTop: 30, marginRight: 45 }}
+            />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
 
-          <View style={styles.textContainer}>
-            <Text style={styles.textLabel}>
-              الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              السبب |<Text style={styles.textData}> شراء... </Text>
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.textLabel}>
+                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                السبب |<Text style={styles.textData}> شراء... </Text>
+              </Text>
+            </View>
+            <Image
+              source={require("./assets/UserImagePlaceholder.png")}
+            ></Image>
           </View>
-          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {/* -------------------------------------- CARD 4*/}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("FirstPage")}
-      >
-        <View style={styles.rightItems}>
-          <Ionicons
-            name="ios-arrow-back"
-            size={25}
-            color="#9B9B7A"
-            solid
-            style={{ marginTop: 30, marginRight: 45 }}
-          />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+        {/* -------------------------------------- CARD 4*/}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("FirstPage")}
+        >
+          <View style={styles.rightItems}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#9B9B7A"
+              solid
+              style={{ marginTop: 30, marginRight: 45 }}
+            />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
 
-          <View style={styles.textContainer}>
-            <Text style={styles.textLabel}>
-              الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              السبب |<Text style={styles.textData}> شراء... </Text>
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.textLabel}>
+                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                السبب |<Text style={styles.textData}> شراء... </Text>
+              </Text>
+            </View>
+            <Image
+              source={require("./assets/UserImagePlaceholder.png")}
+            ></Image>
           </View>
-          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {/* -------------------------------------- CARD 5*/}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("FirstPage")}
-      >
-        <View style={styles.rightItems}>
-          <Ionicons
-            name="ios-arrow-back"
-            size={25}
-            color="#9B9B7A"
-            solid
-            style={{ marginTop: 30, marginRight: 45 }}
-          />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+        {/* -------------------------------------- CARD 5*/}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("FirstPage")}
+        >
+          <View style={styles.rightItems}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#9B9B7A"
+              solid
+              style={{ marginTop: 30, marginRight: 45 }}
+            />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
 
-          <View style={styles.textContainer}>
-            <Text style={styles.textLabel}>
-              الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-            </Text>
-            <Text style={styles.textLabel}>
-              السبب |<Text style={styles.textData}> شراء... </Text>
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.textLabel}>
+                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
+              </Text>
+              <Text style={styles.textLabel}>
+                السبب |<Text style={styles.textData}> شراء... </Text>
+              </Text>
+            </View>
+            <Image
+              source={require("./assets/UserImagePlaceholder.png")}
+            ></Image>
           </View>
-          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
