@@ -66,19 +66,31 @@ export default function Register({ navigation }) {
       fullName == "" ||
       confirmPassword == ""
     ) {
-      alert("عفوًا، جميع الحقول مطلوبة");
+      Alert.alert("","عفوًا، جميع الحقول مطلوبة",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
 
       return;
     }
     
     if (fullNameRegexEN.test(fullName) == false && fullNameRegexAR.test(fullName)==false){
-      alert('عفوًا الاسم يجب أن يحتوي على حروف فقط' );
+      Alert.alert("",'عفوًا الاسم يجب أن يحتوي على حروف فقط' ,
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
       return
     }
     if (strongPassRegex.test(password) == false){
    
     
-      alert('يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز' );
+      Alert.alert("",'يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز', 
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
       return
     }
 
@@ -99,17 +111,33 @@ export default function Register({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/network-request-failed":
-            alert("فضلًا تحقق من اتصالك بالانترنت");
+            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
           case "auth/invalid-email":
-            alert("تحقق من صحة بريدك الالكتروني");
+            Alert.alert("","تحقق من صحة بريدك الالكتروني",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
           case "auth/email-already-in-use":
-            alert("هذا البريد الإلكتروني مستخدم من قبل");
+            aAlert.lert("","هذا البريد الإلكتروني مستخدم من قبل",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
 
             break;
           case "auth/weak-password":
-            alert("كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات");
+            Alert.alert("","كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
         }
         // alert(error.code)
