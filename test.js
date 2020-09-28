@@ -1,17 +1,18 @@
 import { StatusBar } from "expo-status-bar";
-import React ,{useState}from "react";
+import {React,useState }from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  Modal,
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  Modal,
+  TouchableHighlight,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign } from '@expo/vector-icons'
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { Ionicons } from "@expo/vector-icons";
@@ -31,9 +32,10 @@ if (!firebase.apps.length) {
 }
 
 export default function Timeline({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View style={styles.container}>
+   
       <LinearGradient
         colors={["rgba(217,174,148,0.36)", "rgba(241,220,167,0.43)", "#EEF2ED"]}
         start={{ x: 1, y: 1 }}
@@ -57,9 +59,7 @@ export default function Timeline({ navigation }) {
       <ScrollView>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => navigation.navigate("FirstPage")}
         >
           <View style={styles.rightItems}>
             <Ionicons
@@ -95,9 +95,7 @@ export default function Timeline({ navigation }) {
         {/* -------------------------------------- CARD 2*/}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => navigation.navigate("FirstPage")}
         >
           <View style={styles.rightItems}>
             <Ionicons
@@ -133,9 +131,7 @@ export default function Timeline({ navigation }) {
         {/* -------------------------------------- CARD 3*/}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => navigation.navigate("FirstPage")}
         >
           <View style={styles.rightItems}>
             <Ionicons
@@ -171,9 +167,7 @@ export default function Timeline({ navigation }) {
         {/* -------------------------------------- CARD 4*/}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => navigation.navigate("FirstPage")}
         >
           <View style={styles.rightItems}>
             <Ionicons
@@ -209,9 +203,7 @@ export default function Timeline({ navigation }) {
         {/* -------------------------------------- CARD 5*/}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => navigation.navigate("FirstPage")}
         >
           <View style={styles.rightItems}>
             <Ionicons
@@ -244,49 +236,9 @@ export default function Timeline({ navigation }) {
           </View>
         </TouchableOpacity>
       </ScrollView>
-      {/*View request */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-       
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          <TouchableOpacity
-             
-             onPress={() => {
-               setModalVisible(!modalVisible);
-             }}
-           >
-          <AntDesign   style={styles.close} name="close" size={24} color="black" />
-           </TouchableOpacity>
-            <Text style={styles.header}>تفاصيل الطلب </Text>
-            <Text style={styles.textInputTitle}> اسم الدائن | <Text style={styles.textData}> رهام الخديدي</Text></Text>
-            <Text style={styles.textInputTitle}>نوع التسديد |   <Text style={styles.textData}> دفعة كاملة </Text></Text>
-            <Text style={styles.textInputTitle}> المبلغ|<Text style={styles.textData}> ٣٠٠٠ ريال </Text> </Text>
-            
-            <Text style={styles.textInputTitle}> التاريخ النهائي المتوقع لإكمال التسديد| <Text style={styles.textData}> ٢٠-٩-٢٠٢٠  </Text> </Text>
-            <Text style={styles.textInputTitle}>  السبب | <Text style={styles.textData}> شراء سيارة  </Text> </Text>  
-            <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-             
-            >
-              <Text style={styles.buttonText}> رفض </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-           
-            >
-              <Text style={styles.buttonText}>  قبول </Text>
-
-            </TouchableOpacity>
-          </View>
-           
-          </View>
-        </View>
-      </Modal>
+      {/* request modal  */}
+    
+      
     </View>
   );
 }
@@ -339,15 +291,11 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
-    position: 'absolute',
-    bottom: 0,
-    borderTopRightRadius: 70,
-    borderTopLeftRadius:70,
-    height:550,
-    // margin: 20,
-    backgroundColor: "#fff",
+    margin: 20,
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
+    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -355,15 +303,22 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
-    paddingBottom:100,
-
+    elevation: 5
   },
- 
-  
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
   modalText: {
     marginBottom: 15,
-    // textAlign: "center"
+    textAlign: "center"
   },
   button: {
     alignItems: "center",
@@ -382,31 +337,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight:20,
     marginLeft: 25,
     fontSize: 30,
-  },
-  header: {
-    // fontFamily: "Bahij_TheSansArabic-Light",
-    color: "#404040",
-    fontSize: 30,
-    margin: 20,
-    top: 30,
-    textAlign: "center",
-    justifyContent: "center",
-    marginBottom:60,
-  },
-  textInputTitle: {
-    // fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 18,
-    marginTop:5,
-    marginBottom: 5,
-    color: "#57694C",
-    textAlign:'right',
-   
-    marginRight: 35,
-  },
-  close:{
-    marginLeft:20,
   }
 });

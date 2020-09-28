@@ -125,7 +125,7 @@ export default function Register({ navigation }) {
               );
             break;
           case "auth/email-already-in-use":
-            aAlert.lert("","هذا البريد الإلكتروني مستخدم من قبل",
+            Alert.alert("","هذا البريد الإلكتروني مستخدم من قبل",
             [  
               {text: 'حسناً'}, ],
               {cancelable: false}  

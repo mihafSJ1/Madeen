@@ -6,8 +6,8 @@ import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
-import FirstPage from "./FirstPage";
-import Timeline from "./Timeline";
+import FirstPage from "./Request";
+import Timeline from "./App";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
@@ -24,26 +24,28 @@ export default function App() {
   //   )
   // }
 
-  // useEffect(() => {
-  //   const usersRef = firebase.firestore().collection('users');
-  //   firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       usersRef
-  //         .doc(user.uid)
-  //         .get()
-  //         .then((document) => {
-  //           const userData = document.data()
-  //           setLoading(false)
-  //           setUser(userData)
-  //         })
-  //         .catch((error) => {
-  //           setLoading(false)
-  //         });
-  //     } else {
-  //       setLoading(false)
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    // const usersRef = firebase.firestore().collection('users');
+    // firebase.auth().onAuthStateChanged(user => {
+    //   if (user) {
+    //     usersRef
+    //       .doc(user.uid)
+    //       .get()
+    //       .then((document) => {
+    //         const userData = document.data()
+    //         setLoading(false)
+    //         setUser(userData)
+    //       })
+    //       .catch((error) => {
+    //         setLoading(false)
+    //       });
+    //   } else {
+    //     setLoading(false)
+    //   }
+    // });
+   
+    
+  }, []);
 
   return (
     <NavigationContainer>

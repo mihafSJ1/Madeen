@@ -50,7 +50,7 @@ export default class FirstPage extends React.Component {
         <Text style={{ fontSize: 20 }}>
           Hi{" "}
           <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-            {currentUser && currentUser.email}!
+            {currentUser && currentUser.uid}!
           </Text>
         </Text>
       </View>

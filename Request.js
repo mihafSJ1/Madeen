@@ -2,7 +2,10 @@ import React, { Component, useReducer, useState } from "react";
 import {Formik ,setFieldValue} from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { StatusBar } from "expo-status-bar";
+import {Picker} from '@react-native-community/picker';
 import RadioButtonRN from 'radio-buttons-react-native';
+
+
 
 import {
   StyleSheet,
@@ -13,8 +16,6 @@ import {
   Image,
   ScrollView,
   ImageBackground,
-  Picker,
-  
   TouchableOpacity,
 } from "react-native";
 import{CheckBox} from 'react-native-elements';
@@ -35,23 +36,56 @@ import { createStackNavigator } from "@react-navigation/stack";
 import FirebaseKeys from "./FirebaseKeys";
 import { Value } from "react-native-reanimated";
 
+// state = { currentUser: null };
 
+//  function componentDidMount() {
+//   const { currentUser } = firebase.auth();
+//   this.setState({ currentUser });
+// }
+ 
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
 
-export default function Request({ navigation }) {
-
 const data = [
    
-     {
-      label:'السداد دفعة واحدة'
-     },
-      {
-        label:'السداد بالتقسيط'
-       },
-    ];
+  {
+   label:'السداد دفعة واحدة'
+  },
+   {
+   label:'السداد بالتقسيط'
+   
+    },
+ ];
+
+ 
+export default class Request extends React.Component {
+ 
+  state = { currentUser: null };
+
+  componentDidMount() {
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
+  };
+  onSubmitPress(values) {
+   
+    const { currentUser } = this.state;
+     const requestID = firebase.database().ref('requests/').push({
+      price: values.price,
+      expectedDate: values.expectedDate,
+      repaymentType : values.repaymentType,
+      reason:values.reason,
+      userid: currentUser.uid,
+    });
+
+    firebase.database().ref('users/' + currentUser.uid ).push({
+    
+      requestId: requestID.key,
+    });
+    alert(requestID.key)
+   
+  };
 
     // const requestSchema = yup.object( {
     //     // reason:yup.string.min(3),
@@ -63,7 +97,8 @@ const data = [
 
     //     }
     // )
-  
+
+    render() {
   
   return (
 
@@ -75,17 +110,13 @@ const data = [
    <View style={styles.registerBackground}> 
     <KeyboardAwareScrollView>
    
-
-
- 
-      {/* <View style={styles.registerBackground}> */}
       <Text style={styles.header}>إنشاء طلب  </Text>
         <Formik
         
         //   validationSchema={requestSchema}
           initialValues ={{
 
-            users: [''],
+            users: '',
               usersSelect:true,
               price:'',
               expectedDate:new Date(),
@@ -93,9 +124,12 @@ const data = [
               reason:'',
               
           }}
-          onSubmit={(values,actions)=>{
-              console.log(values)
-            //   actions.resetForm()
+          onSubmit={(values,action)=>{
+            // alert("test")
+            this.onSubmitPress(values)
+
+        
+            
 
           }}
           >
@@ -124,8 +158,9 @@ const data = [
                  </View>
                 
                  <Text style = {styles.textNote}>ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط </Text>
+        
                
-                      {props.values.usersSelect ? <DropDownPicker style={styles.DropDownPicker}
+                      {props.values.usersSelect ?  <DropDownPicker style={styles.DropDownPicker}
 
 items={[
     {label: 'رهام', value: 'رهام',selected: true, },
@@ -134,24 +169,37 @@ items={[
 
 
 value={props.values.users}
-dropDownStyle={{ borderColor:"#CBCA9E"}}
-containerStyle={{height: 40,
-    width:375,
-    borderColor:"#CBCA9E",
-    marginLeft:30
-    
-    
-  
-
-    
-}}
-style={{ marginTop:-10,
-    borderRadius:50,
-    borderBottomColor:'red',
-
+containerStyle={{
+  borderTopLeftRadius: 50, borderTopRightRadius: 50,
+  borderBottomLeftRadius: 40, borderBottomRightRadius: 50,
+  borderColor:'#CBCA9E',
 }}
 
+style={{
+  borderTopLeftRadius: 50, borderTopRightRadius: 50,
+  borderBottomLeftRadius: 40, borderBottomRightRadius: 50,
+  borderColor:'#57694C',
+  borderWidth: 1,
+  width:100,
+}}
+// dropDownStyle={{
+//   borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+//   borderColor:'#CBCA9E',
+// }}
+arrowColor= "#57694C"
+arrowSize= {18}
+containerStyle={
+  {width: 352,
+   height: 40,
+   marginLeft:35,
+ 
+   borderTopLeftRadius: 50, borderTopRightRadius: 50,
+  borderBottomLeftRadius: 60, borderBottomRightRadius: 50}}
 
+
+
+// containerStyle={{width: 150, height: 70, borderTopLeftRadius: 50, borderTopRightRadius: 50,
+//   borderBottomLeftRadius: 60, borderBottomRightRadius: 50}}
 itemStyle={{
     backgroundColor:'#fff',
     textAlign:'right',
@@ -159,7 +207,14 @@ itemStyle={{
     justifyContent: 'flex-start',
     // to make the list to the right side
 }}
+selectedLabelStyle={{
+  color: '#57694C'
+}}
 
+
+activeLabelStyle={{
+  color: '#57694C'
+}}
 
     labelStyle={{
         backgroundColor:'#fff',
@@ -178,37 +233,22 @@ onChangeItem={item => props.setFieldValue({
     users: item.value
 })}
 
-/>    
+/>  
+ 
 :null}
 
 
-
-
-  
        <Text style={styles.textInputTitle}>المبلغ </Text>
                  <TextInput
 
                style={styles.textInput}
+               placeholderTextColor="#57694C" 
                placeholder="المبلغ"        
                onChangeText={props.handleChange('price')}
                value={props.values.price}
                keyboardType='numeric'
                />
-
-        <Text style={styles.textInputTitle}>التاريخ المتوقع لإكمال السداد </Text>
-          <DateTimePicker
-          testID="dateTimePicker"
-          
-          mode={"date"}
-        //   is24Hour={true}
-        //   display="spinner"
-       minimumDate={new Date()}
-
-    onConfirm={props.handleChange('expectedDate')}
-    value={props.values.expectedDate}
-        
-        />
-<View style={styles.radio}>
+               <View style={styles.radio}>
 
 <RadioButtonRN
 initial={1}
@@ -216,73 +256,53 @@ initial={1}
   box = {false}
   circleSize = {10}
   activeColor = {'#57694C'}
-  style={{
+
+style={{
   flexDirection:'column-reverse ',
-    textAlign:'right',
+  justifyContent: 'flex-end',
 
-
+  left:160,
+  
 }}
 boxStyle={{
-
-    flexDirection: 'row-reverse',
+  justifyContent: 'flex-end',
+  textAlign:'right',
+  flexDirection:'column-reverse ',
 
     
     
 }}
 textStyle={{
     fontSize:15,
-   marginLeft:260,
+   textAlign:'right',
+left:80,
+bottom:20,
+  //  marginLeft:160,
    marginRight:-110, 
    
 }}
- 
-  selectedBtn={(e) => props.setFieldValue('repaymentType', e)}
+
+ selectedBtn={(e) => props.setFieldValue('repaymentType',e.label)}
 />
 
 
 </View>
-{props.values.repaymentType == data[1]? <DropDownPicker style={styles.DropDownPicker}
-
-items={[
-    {label: 'رهام', value: 'رهام',selected: true, },
-    {label: 'رغد', value: 'رغد'},
-]}
 
 
-value={props.values.users}
-containerStyle={{height: 40}}
 
+        <Text style={styles.textInputTitle}>التاريخ المتوقع لإكمال السداد </Text>
+          <DateTimePicker
+          testID="dateTimePicker"
+          
+          mode={"date"}
+   
+       minimumDate={new Date()}
 
-itemStyle={{
-    backgroundColor:'#fff',
-    textAlign:'right',
-    flexDirection: 'row-reverse',
-    justifyContent: 'flex-start',
-    // to make the list to the right side
-}}
-
-    labelStyle={{
-        backgroundColor:'#fff',
-        fontSize: 16,
-        textAlign: 'right',
-        color: '#000'
-    }}
- 
-
-    // activeLabelStyle={{
-    //     backgroundColor:'#F7F9F6',
-    //     }}
-    style={{
-        flexDirection: 'row-reverse',
-        // to support RTL
-    }}
-onChangeItem={item => props.setFieldValue({
-    users: item.value
-})}
-
-/>    
-: <Text style={[styles.textInputTitle,{fontSize:15},{color:'#9B9B7A'}]}> السداد بعد ٨ اسابيع من ارسال الطلب</Text> }
-
+    onConfirm={props.handleChange('expectedDate')}
+    value={props.values.expectedDate}
+        
+        />
+        
                       <Text style={styles.textInputTitle}>السبب </Text>
                       <TextInput
                  multiline
@@ -302,6 +322,7 @@ onChangeItem={item => props.setFieldValue({
             <TouchableOpacity
               style={[styles.button, { backgroundColor: "#CBCA9E" }]}
               onPress={() => props.handleSubmit()}
+            
             >
               <Text style={styles.buttonText}> إنشاء طلب </Text>
              
@@ -326,11 +347,12 @@ onChangeItem={item => props.setFieldValue({
   );
 
 }
+}
 
 const styles = StyleSheet.create({
 
   container: {
-// overflow:'scr oll',
+
  
       textAlign:'right',
     // fontFamily: "Bahij_TheSansArabic-Light",
@@ -360,7 +382,7 @@ checkbox:{
   },DropDownPicker:{
       marginTop:-10,
       borderRadius:50,
-      backgroundColor:'red'
+     
   },
 
 
@@ -396,10 +418,10 @@ checkbox:{
   textInputTitle: {
     // fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
-    marginTop:0,
+    marginTop:10,
     marginBottom: 5,
     textAlign: "right",
-    color: "#404040",
+    color: "#57694C",
     marginRight: 35,
   },
 
@@ -425,17 +447,20 @@ checkbox:{
   },
  
   textInput: {
+   
     marginBottom: 13,
     marginLeft: 35,
     alignItems: "center",
-    borderColor: "#CBCA9E",
+    borderColor: "#DBDBDB",
     width: 350,
     // backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
+    height: 38,
+    borderRadius: 6,
+    borderWidth: 1,
     marginTop:5,
     textAlign: "right",
+  
+    
     // fontFamily: "Bahij_TheSansArabic-Light",
   },
   checkboxContainer: {
@@ -445,7 +470,7 @@ checkbox:{
   },
 
   textNote:{
-      color:'red',
+      color:'#A4161A',
       fontSize:13,
       bottom:30,
       textAlign:'right',
@@ -453,5 +478,8 @@ checkbox:{
       marginRight:30,
 
   },
+  radio:{
+    marginTop:20,
+  }
 
 });
