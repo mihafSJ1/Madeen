@@ -6,7 +6,7 @@ import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
-import FirstPage from "./FirstPage";
+//import FirstPage from "./FirstPage";
 import Timeline from "./Timeline";
 import squares from "./squares";
 import Alert from "./Alert";
@@ -82,11 +82,7 @@ export default function App() {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="FirstPage"
-              component={FirstPage}
-              options={{ headerShown: false }}
-            />
+           
             <Stack.Screen
               name="Timeline"
               component={Timeline}
