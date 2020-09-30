@@ -9,6 +9,7 @@ import Home from "./Home";
 import FirstPage from "./FirstPage";
 import Timeline from "./Timeline";
 import squares from "./squares";
+import request from "./Request";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
@@ -44,8 +45,7 @@ export default function App() {
   //   //     setLoading(false)
   //   //   }
   //   // });
-   
-    
+
   // }, []);
 
   return (
@@ -93,14 +93,17 @@ export default function App() {
               options={{ headerShown: false }}
             />
 
-
-               <Stack.Screen
+            <Stack.Screen
               name="squares"
               component={squares}
               options={{ headerShown: false }}
             />
 
-
+            <Stack.Screen
+              name="request"
+              component={request}
+              options={{ headerShown: false }}
+            />
           </>
         )}
       </Stack.Navigator>
