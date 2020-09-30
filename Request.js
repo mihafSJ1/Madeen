@@ -197,7 +197,7 @@ export default class Request extends React.Component {
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
     expectedDate: yup.string().required("التاريخ المتوقع لإكمال السداد مطلوب"),
-    reason: yup.string().min(3),
+    reason: yup.string().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
     //trim spaces
   });
 
@@ -279,7 +279,7 @@ export default class Request extends React.Component {
                         borderWidth: 1,
                         width: 100,
                       }}
-                      arrowColor="#57694C"
+                      arrowColor="#9b9b7a"
                       arrowSize={18}
                       containerStyle={{
                         width: 352,
@@ -327,14 +327,14 @@ export default class Request extends React.Component {
                   <Text style={styles.textInputTitle}>المبلغ </Text>
                   <TextInput
                     style={styles.textInput}
-                    placeholderTextColor="#57694C"
+                    // placeholderTextColor="#57694C"
                     placeholder="المبلغ"
                     value={props.values.price}
                     onChangeText={props.handleChange("price")}
                     keyboardType="numeric"
                     onBlur={props.handleBlur("price")}
                   />
-                  <Text style={{ color: "#000" }}>
+                  <Text style={styles.textError}>
                     {props.touched.price && props.errors.price}
                   </Text>
                   <Text style={styles.textInputTitle}>
@@ -342,7 +342,7 @@ export default class Request extends React.Component {
                   </Text>
                   <TextInput
                     style={styles.textInput}
-                    placeholderTextColor="#57694C"
+                    // placeholderTextColor="#57694C"
                     placeholder="التاريخ "
                     value={props.values.expectedDate}
                     editable={false}
@@ -350,7 +350,9 @@ export default class Request extends React.Component {
                       (this.repaymentOnce(props.values.expectedDate),
                       this.repayementInstallments(props.values.price))
                     }
+                    onBlur={props.handleBlur("expectedDate")}
                   />
+
                   <DatePicker
                     hideText
                     style={styles.datePicker}
@@ -388,6 +390,9 @@ export default class Request extends React.Component {
                       props.setFieldValue("expectedDate", date);
                     }}
                   />
+                  <Text style={styles.textError}>
+                    {props.touched.expectedDate && props.errors.expectedDate}
+                  </Text>
                   <View style={styles.radio}>
                     <RadioButtonRN
                       initial={1}
@@ -427,6 +432,7 @@ export default class Request extends React.Component {
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
                       placeholder="إختر الفترة"
+                      placeholderStyle={{ color: "#CBCBCC" }}
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -444,7 +450,7 @@ export default class Request extends React.Component {
                         borderWidth: 1,
                         width: 100,
                       }}
-                      arrowColor="#57694C"
+                      arrowColor="#9b9b7a"
                       arrowSize={18}
                       containerStyle={{
                         width: 352,
@@ -501,7 +507,6 @@ export default class Request extends React.Component {
                       و {ArabicNumbers(days)} يوم
                     </Text>
                   ) : null}
-
                   <Text style={styles.textInputTitle}>السبب </Text>
                   <TextInput
                     multiline
@@ -509,8 +514,11 @@ export default class Request extends React.Component {
                     placeholder="السبب"
                     onChangeText={props.handleChange("reason")}
                     value={props.values.reason}
+                    onBlur={props.handleBlur("reason")}
                   />
-
+                  <Text style={styles.textError}>
+                    {props.touched.reason && props.errors.reason}
+                  </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
@@ -573,7 +581,6 @@ const styles = StyleSheet.create({
   background: {
     bottom: 400,
     position: "absolute",
-
     height: 480,
     // paddingBottom:100,
   },
@@ -599,11 +606,11 @@ const styles = StyleSheet.create({
   },
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
+    fontSize: 17,
     marginTop: 10,
     marginBottom: 5,
     textAlign: "right",
-    color: "#57694C",
+    color: "#404040",
     marginRight: 35,
   },
 
@@ -611,10 +618,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 170,
     height: 30,
-    marginTop: 10,
+    marginTop: 50,
     padding: 5,
     borderRadius: 15,
     marginLeft: 10,
+    bottom: 30,
     backgroundColor: "#fff",
   },
   buttonText: {
@@ -634,14 +642,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#DBDBDB",
     width: 350,
-    // backgroundColor: "#fff",
+    backgroundColor: "#fff",
     height: 38,
     borderRadius: 6,
     borderWidth: 1,
     marginTop: 5,
     textAlign: "right",
-
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -649,14 +658,23 @@ const styles = StyleSheet.create({
   },
 
   textNote: {
-    color: "#A4161A",
+    color: "#9B9B7A",
     fontSize: 13,
     bottom: 30,
     textAlign: "right",
     marginBottom: -10,
     marginRight: 30,
-    fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Bold",
   },
+  textError: {
+    color: "#A4161A",
+    fontSize: 13,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "right",
+    marginRight: 30,
+    bottom: 10,
+  },
+
   radio: {
     marginTop: -35,
   },

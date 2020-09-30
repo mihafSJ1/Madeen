@@ -46,46 +46,43 @@ export default function login({ navigation }) {
   const onLoginPress = () => {
     //Null fields validation
     if (email == "" || password == "") {
-      Alert.alert( '', "عفوًا، جميع الحقول مطلوبة",
-      [  
-        {text: 'حسناً'}, ],
-        {cancelable: false}  
-      );
-        
-      
-       
+      Alert.alert("", "عفوًا، جميع الحقول مطلوبة", [{ text: "حسناً" }], {
+        cancelable: false,
+      });
+
       return;
     }
     console.log("handleLogin1");
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => navigation.navigate("FirstPage"))
+      .then(() => navigation.navigate("request"))
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-            Alert.alert("", "تحقق من صحة بريدك الالكتروني",
-            [  
-             
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "تحقق من صحة بريدك الالكتروني",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/user-not-found":
           case "auth/wrong-password":
-            Alert.alert('',
+            Alert.alert(
+              "",
               "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
-              [  
-                {text: 'حسناً'}, ],
-                {cancelable: false}  
+              [{ text: "حسناً" }],
+              { cancelable: false }
             );
             break;
           case "auth/network-request-failed":
-            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "فضلًا تحقق من اتصالك بالانترنت",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
         }
       });
