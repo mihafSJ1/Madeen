@@ -85,12 +85,13 @@ export default function login({ navigation }) {
 
           <StatusBar style="auto" />
           <View></View>
-          
+        
           < BottomNavigator /> 
         </View>
        
       </View>
-    
+      
+      
     </KeyboardAwareScrollView>
   );
 }
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
        
         },
   registerBackground: {
-    overflow: "hidden",
+    //overflow: "hidden",
     flex: 1,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,

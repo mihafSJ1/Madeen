@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     // right:10,
      bottom:-9, //Here is the trick
      position:"absolute",
-     width:Dimensions.get('window').width,
+     width:'100%',
     
      
      zIndex:1, 

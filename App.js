@@ -115,11 +115,7 @@ export default function App() {
               options={{ headerShown: false }}
             />  
 
-            <Stack.Screen
-              name="request"
-              component={request}
-              options={{ headerShown: false }}
-            />
+            
           </>
         )}
       </Stack.Navigator>
