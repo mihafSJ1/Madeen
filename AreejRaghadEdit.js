@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
+import React, { Component, useState } from "react";
 
-import React from "react";
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,7 @@ import FirebaseKeys from "./FirebaseKeys";
 import TopBar from "./TopBar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { Ionicons } from "@expo/vector-icons";
+import { Value } from "react-native-reanimated";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
@@ -38,16 +39,19 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var namef ="name";
-var emailf ="email";
+var namef ="rf";
+var emailf ="ef";
 var pic="";
 var data="";
 var res= "" ;
-
-
-export default class AreejRaghad extends React.Component  {
+var fullname="yarb";
+let input="";
+export default class AreejRaghad extends React.Component {
   state = { currentUser: null };
- 
+  // saveUserInput = userInput => {
+  //   const input = userInput;
+    
+  // };
   
   componentDidMount() {
     const { currentUser } = firebase.auth();
@@ -63,9 +67,7 @@ export default class AreejRaghad extends React.Component  {
     })
      
     
-    // firebase.database().ref('users/' + currentUser.uid ).update({
-    //   fullName: "رغد الفهيد"  ,
-    // })
+
     
   //   const upload = async (filepath, filename, filemime) => {
   //     const metaData = { contentType: filemime };
@@ -101,11 +103,24 @@ export default class AreejRaghad extends React.Component  {
       
   }
 
+
+  editProfile (){
+    const { currentUser } = firebase.auth();
+    firebase.database().ref('users/' + currentUser.uid ).update({
+      fullName: input,
+     
+ })
+ this.props.navigation.navigate('AreejRaghad')
+
+}
+
+
   render() {
-    // const { navigation:navigate } = this.props;
     const { currentUser } = this.state;
 
-    
+    const saveUserInput = userInput => {
+      input = userInput;
+    };
 
     return (
       <KeyboardAwareScrollView>
@@ -126,20 +141,34 @@ export default class AreejRaghad extends React.Component  {
 
 <View style={styles.container2}>
 
-<TouchableOpacity   style={styles.ProfileEdit2}
- onPress={() => this.props.navigation.navigate('AreejRaghadEdit')} > 
-<Text style={styles.ProfileEdit} >
-  <Ionicons name="md-create" size={30} color="#808065" solid />
- </Text>
-</TouchableOpacity>
+
 
 <Image style={styles.UserImage} source={require("./assets/UserImageProfile.png")} /> 
 {/* <Image style={styles.UserImage} source={pic} />  */}
   <View style={styles.registerBackground}>
-    <Text style={styles.UserName}>{namef}</Text>
+    {/* <Text style={styles.UserName}>{namef}</Text> */}
 
 
-    
+    {/* <TextInput style={styles.textinput}
+        autoFocus = {true}
+        autoCorrect = {false}
+        autoCapitalize = "none"
+        // onPress={() => firebase.database().ref('users/' + currentUser.uid ).update({
+        //      namef: value ,
+        //   })}
+     
+        placeholder={namef}
+        editable={false}
+        /> */}
+<TextInput
+     style={styles.textinput}
+        placeholder={namef}
+        name="fullname"
+        onChangeText={userInput => saveUserInput(userInput)}
+        // onChangeText={text => this.setState({text})}
+        value={this.state.text}
+        input={this.state.text}
+    />
 
     {/* field number1  */}
 
@@ -152,22 +181,29 @@ export default class AreejRaghad extends React.Component  {
     <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
     <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
     <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-
+   
     
     </Text>
 
     <Text style={styles.subsidy}> عدد التسليف </Text>
     <Text style={styles.debts}> عدد الاستلاف </Text>
     <View style={styles.PinkRectangleShapeView}>
-        <Text style={styles.buttonText}> ١٠</Text>
+        <Text style={styles.buttonText2}> ١٠</Text>
         
     </View>
     <View style={styles.YellowRectangleShapeView}>
-        <Text style={styles.buttonText}> ١٦</Text>
+        <Text style={styles.buttonText2}> ١٦</Text>
         
     </View>
    
-    
+    <TouchableOpacity
+              style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+              onPress={() =>  this.editProfile()}
+            
+            >
+              <Text style={styles.buttonText3}>  حفظ التعديل  </Text>
+             
+            </TouchableOpacity>
 
     <StatusBar style="auto" />
   </View>
@@ -196,8 +232,8 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 140,
-    bottom: -160,
+    left: 133,
+    bottom: -220,
   },
 
   ProfileEdit: {
@@ -219,9 +255,9 @@ const styles = StyleSheet.create({
     left: 300,
     bottom: 15,
     zIndex:2,
-  
+    backgroundColor:'red',
     shadowColor: "#000000",
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.71,
     width:90,
     shadowOffset: {
       // width: 100,
@@ -294,27 +330,25 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 20,
   },
-
-
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
+    color: "#404040",
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-    bottom:-190,
-    right:-7,
+bottom:-220,
+right:5,
     textAlign: "center",
     justifyContent: "center",
-    color:'#746356',
   },
   Email: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
     marginBottom: 0,
     textAlign: "right",
-    color: "#404040",
+    color: "#57694C",
     marginRight: 0,
-    top: 150,
+    top: 220,
     right: 134,
   },
 
@@ -350,18 +384,46 @@ const styles = StyleSheet.create({
 
   textinput:{
     marginBottom: 13,
-    marginLeft: 70,
+    marginLeft: 80,
     alignItems: "center",
     borderColor: "#CBCA9E",
-    width: 250,
-    top:190,
-    backgroundColor: "#fff",
+    width: 230,
     height: 40,
+    top:220,
+    backgroundColor: "#fff",
     borderRadius: 15,
     borderWidth: 2,
     textAlign: "center",
     fontFamily: "Bahij_TheSansArabic-Light",
-  }
+    fontSize:22,
+    left:10,
+    color:'#57694C',
+  },
+  button: {
+    alignItems: "center",
+    width: 170,
+    height: 30,
+    marginTop: 150,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 120,
+    backgroundColor: "#fff",
+  },
+  buttonText3: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "center",
+
+  },
+
+
+  buttonText2: {
+    textAlign: "center",
+    top:10,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 40,
+    color: '#fff',
+   
+  },
 
 
 });
