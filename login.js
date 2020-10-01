@@ -53,7 +53,7 @@ export default function login({ navigation }) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => navigation.navigate("TopBar"))
+      .then(() => navigation.navigate("request"))
       .catch((error) => {
         switch (error.code) {
           

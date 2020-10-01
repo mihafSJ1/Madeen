@@ -262,6 +262,7 @@ export default class Request extends React.Component {
                         { label: "رهام", value: "رهام", selected: true },
                         { label: "رغد", value: "رغد" },
                       ]}
+                  
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -432,6 +433,10 @@ export default class Request extends React.Component {
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
+                    
+
+
+                      searchableError={ () => <Text style = {styles.textNote}>لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال السداد </Text>}
                       placeholder="إختر الفترة"
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={props.values.user}
