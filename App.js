@@ -6,10 +6,12 @@ import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
-//import FirstPage from "./FirstPage";
+
+
 import Timeline from "./Timeline";
 import squares from "./squares";
 import request from "./Request";
+import TopBar from "./TopBar";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
@@ -92,6 +94,11 @@ export default function App() {
             <Stack.Screen
               name="squares"
               component={squares}
+              options={{ headerShown: false }}
+            />  
+              <Stack.Screen
+              name="TopBar"
+              component={TopBar}
               options={{ headerShown: false }}
             />
 

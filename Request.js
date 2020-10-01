@@ -196,7 +196,7 @@ export default class Request extends React.Component {
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
-    expectedDate: yup.string().required("التاريخ المتوقع لإكمال السداد مطلوب"),
+    expectedDate: yup.string().required("التاريخ المتوقع لإكمال السداد مطلوب"), //need to cj
     reason: yup.string().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
     //trim spaces
   });
@@ -359,6 +359,7 @@ export default class Request extends React.Component {
                     date={props.values.expectedDate}
                     mode="date"
                     calendar="arabic"
+                    locale={'ar'}
                     placeholder="select date"
                     format="YYYY-MM-DD"
                     minDate={new Date()}
@@ -503,7 +504,7 @@ export default class Request extends React.Component {
                       ]}
                     >
                       السداد بعد {ArabicNumbers(year)} سنه و{" "}
-                      {ArabicNumbers(month)} أشهر و {ArabicNumbers(week)} إسبوع
+                      {ArabicNumbers(month)} شهر {ArabicNumbers(week)} إسبوع
                       و {ArabicNumbers(days)} يوم
                     </Text>
                   ) : null}

@@ -6,11 +6,17 @@ import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import Svg, { Defs, G, Path } from "react-native-svg";
 
-export default function TopBar() {
+export default function TopBar({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.rightItems}>
-        <TouchableOpacity style={styles.logoutButton}>
+  
+        <TouchableOpacity style={styles.logoutButton}
+         
+        onPress={() => firebase.auth().signOut().then(() => navigation.navigate("Home"))}
+      
+        >
+      
           <SimpleLineIcons
             name="logout"
             size={35}
