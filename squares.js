@@ -19,14 +19,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Svg, { Defs, G, Path } from "react-native-svg";
 //import { Imagebutton } from "react-native-image-button-text";
-
+import  BottomNavigator from "./BottomNavigator"
 export default function squares({ navigation }) {
   let [fontsLoaded] = useFonts({
     "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
     "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
   });
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity>
         <ImageBackground
           style={styles.orange}
@@ -86,13 +86,16 @@ export default function squares({ navigation }) {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
+      < BottomNavigator /> 
     </View>
   );
 }
 
 const styles = StyleSheet.create({
 
-
+  container:{
+    flex:1,
+  },
   orange: {
     alignItems: "center",
     marginLeft: 0,

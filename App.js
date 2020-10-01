@@ -14,8 +14,10 @@ import request from "./Request";
 import TopBar from "./TopBar";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
+import Profile from "./Profile"
 import * as firebase from "firebase";
-
+import BottomNavigator from "./BottomNavigator";
+//import Testnav from "./testnav";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -51,6 +53,7 @@ export default function App() {
   // }, []);
 
   return (
+    
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -101,16 +104,25 @@ export default function App() {
               component={TopBar}
               options={{ headerShown: false }}
             />
-
-            <Stack.Screen
-              name="request"
-              component={request}
+              <Stack.Screen
+              name="Profile"
+              component={Profile}
               options={{ headerShown: false }}
-            />
+            />  
+            <Stack.Screen
+              name="BottomNavigator"
+              component={BottomNavigator}
+              options={{ headerShown: false }}
+            />  
+
+            
           </>
         )}
       </Stack.Navigator>
+      
     </NavigationContainer>
+
+   
   );
 }
 //
