@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component, useState } from "react";
+
 import {
   StyleSheet,
   Text,
@@ -23,7 +24,7 @@ import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 
-
+import BottomNavigator from "./BottomNavigator";
  
 
 import { Ionicons } from "@expo/vector-icons";
@@ -39,7 +40,7 @@ export default function login({ navigation }) {
           
       <Image style={styles.UserImage} source={require("./assets/UserImageProfile.png")} /> 
 
-        <View style={styles.registerBackground}>
+        <View style={styles.registerBackground }>
           <Text style={styles.UserName}>أريج الجريوي</Text>
 
           {/* field number1  */}
@@ -62,8 +63,9 @@ export default function login({ navigation }) {
           </View>
           <View style={styles.YellowRectangleShapeView}>
               <Text style={styles.buttonText}> ١٦</Text>
-              
+           
           </View>
+          
           {/* <RegisterTextInput/> */}
 
           {/* faild number1  */}
@@ -77,11 +79,18 @@ export default function login({ navigation }) {
            <Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text 
          style = {{ color: '#57694C' }} onPress={() => navigation.navigate('ResetPassword')}>   اعادة تعيين كلمة السر</Text></Text> */}
 
-          
+
+
+
 
           <StatusBar style="auto" />
+          <View></View>
+          
+          < BottomNavigator /> 
         </View>
+       
       </View>
+    
     </KeyboardAwareScrollView>
   );
 }
@@ -89,8 +98,9 @@ export default function login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  // zIndex:-10,
     backgroundColor: "#EEF2ED",
-    // alignItems: 'center',
+    //alignItems: 'center',
     justifyContent: "center",
     fontSize: 25,
   },
