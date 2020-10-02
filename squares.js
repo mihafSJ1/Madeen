@@ -13,13 +13,14 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useFonts } from "expo-font";
+import TopBar from "./TopBar";
 import * as Font from "expo-font";
 import * as firebase from "firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Svg, { Defs, G, Path } from "react-native-svg";
 //import { Imagebutton } from "react-native-image-button-text";
-import  BottomNavigator from "./BottomNavigator"
+import BottomNavigator from "./BottomNavigator";
 export default function squares({ navigation }) {
   let [fontsLoaded] = useFonts({
     "Bahij_TheSansArabic-Bold": require("./assets/fonts/Bahij_TheSansArabic-Bold.ttf"),
@@ -27,6 +28,7 @@ export default function squares({ navigation }) {
   });
   return (
     <View style={styles.container}>
+      <TopBar />
       <TouchableOpacity>
         <ImageBackground
           style={styles.orange}
@@ -86,15 +88,14 @@ export default function squares({ navigation }) {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
-      < BottomNavigator /> 
+      <BottomNavigator />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
-  container:{
-    flex:1,
+  container: {
+    flex: 1,
   },
   orange: {
     alignItems: "center",
@@ -106,8 +107,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     height: 201,
     width: 333,
-
-
   },
 
   orangeText: {
@@ -125,8 +124,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: 150,
     paddingBottom: 28,
-     paddingTop:20,
-   
+    paddingTop: 20,
   },
 
   blue: {
@@ -151,7 +149,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     zIndex: 1,
     fontFamily: "Bahij_TheSansArabic-Light",
-   
+
     paddingRight: 150,
     paddingBottom: 40,
     paddingLeft: 30,
@@ -179,8 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: "Bahij_TheSansArabic-Light",
     paddingLeft: 215,
-    paddingTop:10,
-
+    paddingTop: 10,
   },
 
   green: {
@@ -206,14 +203,12 @@ const styles = StyleSheet.create({
     fontSize: 25,
     zIndex: 1,
     fontFamily: "Bahij_TheSansArabic-Light",
-    
+
     paddingRight: 150,
     paddingLeft: 30,
     paddingBottom: 20,
-    paddingTop:30,
+    paddingTop: 30,
   },
-
-
 
   // Get a reference to the database service
 });

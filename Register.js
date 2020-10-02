@@ -49,10 +49,11 @@ export default function Register({ navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const fullNameRegexAR = /[\u0600-\u06FF]/;
-  const fullNameRegexEN =/^[a-zA-Z şüöı]+$/;
- 
-  const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+  const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
 
+  const strongPassRegex = new RegExp(
+    "^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"
+  );
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
@@ -66,33 +67,34 @@ export default function Register({ navigation }) {
       fullName == "" ||
       confirmPassword == ""
     ) {
-      Alert.alert("","عفوًا، جميع الحقول مطلوبة",
-      [  
-        {text: 'حسناً'}, ],
-        {cancelable: false}  
-        );
+      Alert.alert("", "عفوًا، جميع الحقول مطلوبة", [{ text: "حسناً" }], {
+        cancelable: false,
+      });
 
       return;
     }
-    
-    if (fullNameRegexEN.test(fullName) == false && fullNameRegexAR.test(fullName)==false){
-      Alert.alert("",'عفوًا الاسم يجب أن يحتوي على حروف فقط' ,
-      [  
-        {text: 'حسناً'}, ],
-        {cancelable: false}  
-        );
-      return
+
+    if (
+      fullNameRegexEN.test(fullName) == false &&
+      fullNameRegexAR.test(fullName) == false
+    ) {
+      Alert.alert(
+        "",
+        "عفوًا الاسم يجب أن يحتوي على حروف فقط",
+        [{ text: "حسناً" }],
+        { cancelable: false }
+      );
+      return;
     }
-    if (strongPassRegex.test(password) == false){
-   
-    
-      Alert.alert("",'يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز', 
-      [  
-        {text: 'حسناً'}, ],
-        {cancelable: false}  
-        );
-      return
-    }
+    // if (strongPassRegex.test(password) == false) {
+    //   Alert.alert(
+    //     "",
+    //     "يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز",
+    //     [{ text: "حسناً" }],
+    //     { cancelable: false }
+    //   );
+    //   return;
+    // }
 
     firebase
       .auth()
@@ -106,38 +108,42 @@ export default function Register({ navigation }) {
             email: email,
           });
       })
-      .then(() => navigation.navigate("FirstPage"))
+      .then(() => navigation.navigate("request"))
 
       .catch((error) => {
         switch (error.code) {
           case "auth/network-request-failed":
-            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "فضلًا تحقق من اتصالك بالانترنت",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/invalid-email":
-            Alert.alert("","تحقق من صحة بريدك الالكتروني",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "تحقق من صحة بريدك الالكتروني",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/email-already-in-use":
-            Alert.alert("","هذا البريد الإلكتروني مستخدم من قبل",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "هذا البريد الإلكتروني مستخدم من قبل",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
 
             break;
           case "auth/weak-password":
-            Alert.alert("","كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
         }
         // alert(error.code)
@@ -188,7 +194,6 @@ export default function Register({ navigation }) {
             placeholder="تأكيد كلمة السر"
             onChangeText={(text) => setConfirmPassword(text)}
             value={confirmPassword}
-           
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />

@@ -7,14 +7,14 @@ import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 
-
 import Timeline from "./Timeline";
 import squares from "./squares";
 import request from "./Request";
 import TopBar from "./TopBar";
 import Alert from "./Alert";
+import FirstPage from "./FirstPage";
 import CustomAlertComponent from "./CustomAlertComponent";
-import Profile from "./Profile"
+import Profile from "./Profile";
 import * as firebase from "firebase";
 import BottomNavigator from "./BottomNavigator";
 //import Testnav from "./testnav";
@@ -53,7 +53,6 @@ export default function App() {
   // }, []);
 
   return (
-    
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -87,42 +86,45 @@ export default function App() {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
-           
             <Stack.Screen
               name="Timeline"
               component={Timeline}
               options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="squares"
               component={squares}
               options={{ headerShown: false }}
-            />  
-              <Stack.Screen
+            />
+            <Stack.Screen
               name="TopBar"
               component={TopBar}
               options={{ headerShown: false }}
             />
-              <Stack.Screen
+            <Stack.Screen
               name="Profile"
               component={Profile}
               options={{ headerShown: false }}
-            />  
+            />
             <Stack.Screen
               name="BottomNavigator"
               component={BottomNavigator}
               options={{ headerShown: false }}
-            />  
-
-            
+            />
+            <Stack.Screen
+              name="request"
+              component={request}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FirstPage"
+              component={FirstPage}
+              options={{ headerShown: false }}
+            />
           </>
         )}
       </Stack.Navigator>
-      
     </NavigationContainer>
-
-   
   );
 }
 //

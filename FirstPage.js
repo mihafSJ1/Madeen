@@ -34,28 +34,13 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export default class FirstPage extends React.Component {
-  state = { currentUser: null };
-
-  componentDidMount() {
-    const { currentUser } = firebase.auth();
-    this.setState({ currentUser });
-  }
-
-  render() {
-    const { currentUser } = this.state;
-    return (
-      <View style={styles.container}>
-        <TopBar />
-        <Text style={{ fontSize: 20 }}>
-          Hi{" "}
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-            {currentUser && currentUser.email}!
-          </Text>
-        </Text>
-      </View>
-    );
-  }
+export default function FirstPage({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <TopBar />
+      <Text style={{ fontSize: 20 }}>Hi </Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

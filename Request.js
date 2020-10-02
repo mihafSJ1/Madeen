@@ -22,6 +22,7 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
+import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
@@ -78,6 +79,8 @@ var dateDiffDays,
   dateDiffMonths,
   dateDiffYears = new Date();
 
+var userNameFromDB = "";
+
 export default class Request extends React.Component {
   constructor(props) {
     super(props);
@@ -89,6 +92,7 @@ export default class Request extends React.Component {
       submittedDateState: moment().format("YYYY-MM-DD"),
     };
   }
+
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
     const submittedDate = moment();
@@ -166,6 +170,14 @@ export default class Request extends React.Component {
 
   onSubmitPress(values) {
     const { currentUser } = this.state;
+
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+        userNameFromDB = snapshot.val().fullName;
+      });
+
     const requestID = firebase.database().ref("requests/").push({
       price: values.price,
       expectedDate: values.expectedDate,
@@ -173,19 +185,12 @@ export default class Request extends React.Component {
       repaymentType: values.repaymentType,
       reason: values.reason,
       userid: currentUser.uid,
+      userName: userNameFromDB,
       rqeuestStatus: "Waiting",
       installemntPrice: this.state.priceState,
       installemntDuration: this.state.durationState,
       installmentsType: this.state.installmentsState,
     });
-
-    firebase
-      .database()
-      .ref("users/" + currentUser.uid)
-      .push({
-        requestId: requestID.key,
-      });
-    alert(requestID.key);
   }
 
   requestSchema = yup.object({
@@ -201,10 +206,11 @@ export default class Request extends React.Component {
     //trim spaces
   });
 
-  //-------------------------------------------- Rencdring react component
+  //-------------------------------------------- Rendering react component
   render() {
     return (
       <View style={styles.container}>
+        <TopBar />
         <Image
           style={styles.background}
           source={require("./assets/RequestBackground.png")}
@@ -232,9 +238,7 @@ export default class Request extends React.Component {
               {(props, setFieldValue) => (
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
-                    <Text style={styles.checkboxLabel}>
-                      التدين من شخص محدد{" "}
-                    </Text>
+                    <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
                     <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
@@ -262,7 +266,6 @@ export default class Request extends React.Component {
                         { label: "رهام", value: "رهام", selected: true },
                         { label: "رغد", value: "رغد" },
                       ]}
-                  
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -360,7 +363,7 @@ export default class Request extends React.Component {
                     date={props.values.expectedDate}
                     mode="date"
                     calendar="arabic"
-                    locale={'ar'}
+                    locale={"ar"}
                     placeholder="select date"
                     format="YYYY-MM-DD"
                     minDate={new Date()}
@@ -433,10 +436,12 @@ export default class Request extends React.Component {
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
-                    
-
-
-                      searchableError={ () => <Text style = {styles.textNote}>لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال السداد </Text>}
+                      searchableError={() => (
+                        <Text style={styles.textError}>
+                          لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
+                          السداد{" "}
+                        </Text>
+                      )}
                       placeholder="إختر الفترة"
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={props.values.user}
@@ -509,8 +514,8 @@ export default class Request extends React.Component {
                       ]}
                     >
                       السداد بعد {ArabicNumbers(year)} سنه و{" "}
-                      {ArabicNumbers(month)} شهر {ArabicNumbers(week)} إسبوع
-                      و {ArabicNumbers(days)} يوم
+                      {ArabicNumbers(month)} شهر {ArabicNumbers(week)} إسبوع و{" "}
+                      {ArabicNumbers(days)} يوم
                     </Text>
                   ) : null}
                   <Text style={styles.textInputTitle}>السبب </Text>

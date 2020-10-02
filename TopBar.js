@@ -1,35 +1,52 @@
-import { StatusBar } from "expo-status-bar";
-import React from "react";
+// import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import Svg, { Defs, G, Path } from "react-native-svg";
 
+var userName = "";
 export default function TopBar({ navigation }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const { currentUser } = firebase.auth();
+    setCurrentUser({ currentUser });
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+        userName = snapshot.val().fullName;
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.rightItems}>
-  
-        <TouchableOpacity style={styles.logoutButton}
-         
-        onPress={() => firebase.auth().signOut().then(() => navigation.navigate("Home"))}
-      
-        >
-      
-          <SimpleLineIcons
-            name="logout"
-            size={35}
-            color="#9B9B7A"
-            solid
-          ></SimpleLineIcons>
-        </TouchableOpacity>
-        <Text style={styles.topBarText}>مرحبًا رغد!</Text>
+        <Text style={styles.topBarText}>مرحبًا {userName}!</Text>
         <Image
           source={require("./assets/UserProfileImage.png")}
           style={styles.profileImage}
         ></Image>
       </View>
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={() =>
+          firebase
+            .auth()
+            .signOut()
+            .then(
+              () => console.log("successfully logged out"),
+              navigation.navigate("Home")
+            )
+        }
+      >
+        <SimpleLineIcons
+          name="logout"
+          size={27}
+          color="#9B9B7A"
+          solid
+        ></SimpleLineIcons>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -41,13 +58,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
     zIndex: 1,
-    marginBottom: 90,
+    marginBottom: -600,
   },
 
   rightItems: {
     backgroundColor: "#fff",
     marginBottom: 10,
     width: "100%",
+    height: 85,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     shadowColor: "#000",
@@ -60,23 +78,28 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
   },
+
   profileImage: {
     resizeMode: "stretch",
-    width: 73.19,
-    height: 73.2,
+    width: 52.19,
+    height: 52.2,
   },
 
   topBarText: {
     color: "#404040",
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
-    fontSize: 20,
-    marginTop: 20,
+    fontSize: 18,
+    marginTop: 10,
     marginRight: 10,
   },
 
   logoutButton: {
-    marginTop: 20,
-    marginRight: 170,
+    // flexDirection: "row-reverse",
+    // backgroundColor: "#000",
+    justifyContent: "flex-start",
+    zIndex: 2,
+    top: -60,
+    right: 170,
   },
 });

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React ,{useState}from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { Ionicons } from "@expo/vector-icons";
@@ -53,46 +53,15 @@ export default function Timeline({ navigation }) {
         }}
       ></LinearGradient>
 
-      {/* -------------------------------------- CARD 1*/}
-      <ScrollView>
+      <ScrollView style={{ width: "100%" }}>
+        {/* -------------------------------------- CARDS*/}
         <TouchableOpacity
-          style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          style={styles.profileImage}
+          onPress={() => navigation.navigate("ResetPassword")}
         >
-          <View style={styles.rightItems}>
-            <Ionicons
-              name="ios-arrow-back"
-              size={25}
-              color="#9B9B7A"
-              solid
-              style={{ marginTop: 30, marginRight: 45 }}
-            />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textLabel}>
-                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                السبب |<Text style={styles.textData}> شراء... </Text>
-              </Text>
-            </View>
-            <Image
-              source={require("./assets/UserImagePlaceholder.png")}
-            ></Image>
-          </View>
+          <Image source={require("./assets/UserImagePlaceholder.png")}></Image>
         </TouchableOpacity>
 
-        {/* -------------------------------------- CARD 2*/}
         <TouchableOpacity
           style={styles.card}
           onPress={() => {
@@ -124,166 +93,60 @@ export default function Timeline({ navigation }) {
                 السبب |<Text style={styles.textData}> شراء... </Text>
               </Text>
             </View>
-            <Image
-              source={require("./assets/UserImagePlaceholder.png")}
-            ></Image>
-          </View>
-        </TouchableOpacity>
-
-        {/* -------------------------------------- CARD 3*/}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
-        >
-          <View style={styles.rightItems}>
-            <Ionicons
-              name="ios-arrow-back"
-              size={25}
-              color="#9B9B7A"
-              solid
-              style={{ marginTop: 30, marginRight: 45 }}
-            />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textLabel}>
-                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                السبب |<Text style={styles.textData}> شراء... </Text>
-              </Text>
-            </View>
-            <Image
-              source={require("./assets/UserImagePlaceholder.png")}
-            ></Image>
-          </View>
-        </TouchableOpacity>
-
-        {/* -------------------------------------- CARD 4*/}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
-        >
-          <View style={styles.rightItems}>
-            <Ionicons
-              name="ios-arrow-back"
-              size={25}
-              color="#9B9B7A"
-              solid
-              style={{ marginTop: 30, marginRight: 45 }}
-            />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textLabel}>
-                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                السبب |<Text style={styles.textData}> شراء... </Text>
-              </Text>
-            </View>
-            <Image
-              source={require("./assets/UserImagePlaceholder.png")}
-            ></Image>
-          </View>
-        </TouchableOpacity>
-
-        {/* -------------------------------------- CARD 5*/}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => {
-            setModalVisible(true);
-          }}
-        >
-          <View style={styles.rightItems}>
-            <Ionicons
-              name="ios-arrow-back"
-              size={25}
-              color="#9B9B7A"
-              solid
-              style={{ marginTop: 30, marginRight: 45 }}
-            />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-            <Ionicons name="ios-star" size={17} color="#ECD246" solid />
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textLabel}>
-                الإسم |<Text style={styles.textData}> رهام الخديدي</Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                المبلغ |<Text style={styles.textData}> ٣٠٠٠ ريال سعودي </Text>
-              </Text>
-              <Text style={styles.textLabel}>
-                السبب |<Text style={styles.textData}> شراء... </Text>
-              </Text>
-            </View>
-            <Image
-              source={require("./assets/UserImagePlaceholder.png")}
-            ></Image>
           </View>
         </TouchableOpacity>
       </ScrollView>
-      {/*View request */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-       
-      >
+
+      {/*--------------------------------------------- View request */}
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <TouchableOpacity
-             
-             onPress={() => {
-               setModalVisible(!modalVisible);
-             }}
-           >
-          <AntDesign   style={styles.close} name="close" size={24} color="black" />
-           </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <AntDesign
+                style={styles.close}
+                name="close"
+                size={24}
+                color="black"
+              />
+            </TouchableOpacity>
             <Text style={styles.header}>تفاصيل الطلب </Text>
-            <Text style={styles.textInputTitle}> اسم الدائن | <Text style={styles.textData}> رهام الخديدي</Text></Text>
-            <Text style={styles.textInputTitle}>نوع التسديد |   <Text style={styles.textData}> دفعة كاملة </Text></Text>
-            <Text style={styles.textInputTitle}> المبلغ|<Text style={styles.textData}> ٣٠٠٠ ريال </Text> </Text>
-            
-            <Text style={styles.textInputTitle}> التاريخ النهائي المتوقع لإكمال التسديد| <Text style={styles.textData}> ٢٠-٩-٢٠٢٠  </Text> </Text>
-            <Text style={styles.textInputTitle}>  السبب | <Text style={styles.textData}> شراء سيارة  </Text> </Text>  
-            <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-             
-            >
-              <Text style={styles.buttonText}> رفض </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-           
-            >
-              <Text style={styles.buttonText}>  قبول </Text>
+            <Text style={styles.textInputTitle}>
+              {" "}
+              اسم الدائن | <Text style={styles.textData}> رهام الخديدي</Text>
+            </Text>
+            <Text style={styles.textInputTitle}>
+              نوع التسديد | <Text style={styles.textData}> دفعة كاملة </Text>
+            </Text>
+            <Text style={styles.textInputTitle}>
+              {" "}
+              المبلغ|<Text style={styles.textData}> ٣٠٠٠ ريال </Text>{" "}
+            </Text>
 
-            </TouchableOpacity>
-          </View>
-           
+            <Text style={styles.textInputTitle}>
+              {" "}
+              التاريخ النهائي المتوقع لإكمال التسديد|{" "}
+              <Text style={styles.textData}> ٢٠-٩-٢٠٢٠ </Text>{" "}
+            </Text>
+            <Text style={styles.textInputTitle}>
+              {" "}
+               السبب | <Text style={styles.textData}> شراء سيارة </Text>{" "}
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+              >
+                <Text style={styles.buttonText}> رفض </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+              >
+                <Text style={styles.buttonText}> قبول </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -301,8 +164,9 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "#fff",
-    marginBottom: 10,
+    marginBottom: -50,
     width: "100%",
+    flexDirection: "column-reverse",
     shadowColor: "#000",
     shadowOpacity: 0.11,
     shadowOffset: {
@@ -311,10 +175,17 @@ const styles = StyleSheet.create({
     },
   },
 
+  profileImage: {
+    zIndex: 2,
+    top: 90,
+    left: 340,
+  },
+
   rightItems: {
     flexDirection: "row",
     justifyContent: "flex-end",
     padding: 20,
+    right: 60,
   },
 
   textContainer: {
@@ -323,27 +194,27 @@ const styles = StyleSheet.create({
 
   textLabel: {
     color: "#404040",
-    // fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 16,
   },
 
   textData: {
     color: "#CBCA9E",
-    // fontFamily: "Bahij_TheSansArabic-Bold",
+    fontFamily: "Bahij_TheSansArabic-Bold",
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     borderTopRightRadius: 70,
-    borderTopLeftRadius:70,
-    height:550,
+    borderTopLeftRadius: 70,
+    height: 550,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -351,16 +222,14 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    paddingBottom:100,
-
+    paddingBottom: 100,
   },
- 
-  
+
   modalText: {
     marginBottom: 15,
     // textAlign: "center"
@@ -382,7 +251,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight:20,
+    marginRight: 20,
     marginLeft: 25,
     fontSize: 30,
   },
@@ -394,19 +263,19 @@ const styles = StyleSheet.create({
     top: 30,
     textAlign: "center",
     justifyContent: "center",
-    marginBottom:60,
+    marginBottom: 60,
   },
   textInputTitle: {
     // fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 18,
-    marginTop:5,
+    marginTop: 5,
     marginBottom: 5,
     color: "#57694C",
-    textAlign:'right',
-   
+    textAlign: "right",
+
     marginRight: 35,
   },
-  close:{
-    marginLeft:20,
-  }
+  close: {
+    marginLeft: 20,
+  },
 });
