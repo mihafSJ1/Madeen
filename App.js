@@ -17,81 +17,44 @@ import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import Profile from "./Profile"
 import * as firebase from "firebase";
+import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-function Homenav(){
+function squaresScreens(){
   return(
-  <Stack.Navigator>
-  
-   
-     
+    <Stack.Navigator>
+      
+      <Stack.Screen
 
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="login"
-          component={login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
-          name="ResetPassword"
-          component={ResetPassword}
-          options={{ headerShown: false }}
-        /> */}
-        <Stack.Screen
-          name="CustomAlertComponent"
-          component={CustomAlertComponent}
-          options={{ headerShown: false }}
-        />
-           
-        {/* <Stack.Screen
-          name="Timeline"
-          component={Timeline}
-          options={{ headerShown: false }}
-        />
-
-         <Stack.Screen
-          name="squares"
-          component={squares}
-          options={{ headerShown: false }}
-        />  
-          <Stack.Screen
-          name="TopBar"
-          component={TopBar}
-          options={{ headerShown: false }}
-        />
-          <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ headerShown: false }}
-        />  
-       
-        
-     */}
-  </Stack.Navigator>
-  ); 
+  name="squares"
+  component={squares}
+  options={{ headerShown: false }}
+/>
+<Stack.Screen
+  name="Timeline"
+  component={Timeline}
+  options={{ headerShown: false }}
+/>
+</Stack.Navigator>
+  );
 }
 
-function Homenav2(){
+
+function Homenav(){
+  
   return(
     <Tab.Navigator
     
-    initialRouteName="Home"
+    initialRouteName="squers"
     tabBarOptions={{
-      activeTintColor: '#e91e63',
-     
-      style:{
-        //flex:1,
-        justifyContent: 'center',
+      activeTintColor: '#746356', 
+      inactiveTintColor: '#9B9B7A', 
+    style:{
+      
+       showIcon: true,
+       
+       // justifyContent: 'center',
         borderTopRightRadius:20,
         borderTopLeftRadius:20,
         shadowOpacity: 0.50 ,
@@ -102,37 +65,33 @@ function Homenav2(){
     
             height: 3, width: 2
         },
-        height:60,
+        //height:80,
         justifyContent: 'center',
-      }
+      }}
       
-    }}
+    }
   >
-   
-
    <Tab.Screen
-    name="Profile"
-    component={Profile}
+    name="squares"
+    component={squares}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
-       
-          <MaterialIcons    name="person-outline"  size={30} color="#9B9B7A" zIndex={10}/>
+          <Feather name="home" size={27}  color={ color } style={{ textAlignVertical: 'center' }}/>
       ),
- 
     }}
   />
-  <Tab.Screen
-    name="Timeline"
-    component={Timeline}
+<Tab.Screen
+    name="TopBar"
+    component={TopBar}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
-       <MaterialIcons  name="chat-bubble-outline"  size={27} color="#9B9B7A"  />
+        <MaterialIcons name="notifications-none"  size={32} color={ color } style={{ textAlignVertical: 'center' }}/>
       ),
     }}
   />
-  <Tab.Screen
+   <Tab.Screen
     name="ResetPassword"
     component={ResetPassword}
     options={{
@@ -140,28 +99,33 @@ function Homenav2(){
       tabBarIcon: ({ color, size }) => (
         <SvgComponent bottom={20} shadowOpacity= {0.50} shadowColor="#707070"
         shadowRadius={4}
+       
          />
       ),
-    }}
+    }} 
   />
-   <Tab.Screen
-    name="TopBar"
-    component={TopBar}
+  <Tab.Screen
+    name="Timeline"
+    component={squaresScreens}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
-        <MaterialIcons name="notifications-none"  size={32} color="#9B9B7A" marginStart={40}/>
+       <MaterialIcons  name="chat-bubble-outline"  size={27} color={ color } style={{ textAlignVertical: 'center' }} />
       ),
     }}
   />
+ 
+   
    <Tab.Screen
-    name="squares"
-    component={squares}
+    name="Profile"
+    component={Profile}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
-          <Feather name="home" size={27} color="#9B9B7A"/>
+       
+          <MaterialIcons    name="person-outline"  size={30} color={ color } zIndex={10}/>
       ),
+ 
     }}
   />
      </Tab.Navigator>
@@ -206,27 +170,48 @@ export default function App() {
   return (
     
     <NavigationContainer>
- <Stack.Navigator>
- {user ? (
+      <Stack.Navigator>
+  
+      {user ? (
       <Stack.Screen name="Home">
         {(props) => <Home {...props} extraData={user} />}
       </Stack.Screen>
     ) : (
       <>
- <Stack.Screen
+      
+<Stack.Screen
           name="Home"
-          component={Homenav}
+          component={Home}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Homenav2"
-          component={Homenav2}
+          name="login"
+          component={login}
           options={{ headerShown: false }}
         />
-        </>
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
+       <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{ headerShown: false }}
+        /> 
+        <Stack.Screen
+          name="CustomAlertComponent"
+          component={CustomAlertComponent}
+          options={{ headerShown: false }}
+        />
+  <Stack.Screen
+          name="squares"
+          component={Homenav}
+          options={{ headerShown: false }}
+        />
+   </>
     )}
- </Stack.Navigator>
-     
+  </Stack.Navigator>
     </NavigationContainer>
 
    
