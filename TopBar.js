@@ -31,13 +31,31 @@ export default function TopBar({ navigation }) {
       <TouchableOpacity
         style={styles.logoutButton}
         onPress={() =>
-          firebase
-            .auth()
-            .signOut()
-            .then(
-              () => console.log("successfully logged out"),
-              navigation.navigate("Home")
-            )
+          Alert.alert(
+            "تنبيه!",
+            "هل أنت متأكد من تسجيل الخروج؟",
+            [
+              {
+                text: "إلغاء",
+                onPress: () => {
+                  return;
+                },
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () =>
+                  firebase
+                    .auth()
+                    .signOut()
+                    .then(
+                      () => console.log("successfully logged out"),
+                      navigation.navigate("Home")
+                    ),
+              },
+            ],
+            { cancelable: false }
+          )
         }
       >
         <SimpleLineIcons

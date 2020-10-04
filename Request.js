@@ -22,7 +22,8 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
-import TopBar from "./TopBar";
+import BackgroundComponent from "./BackgroundComponent";
+// import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
@@ -76,8 +77,12 @@ var year,
   month = 0;
 
 var dateDiffDays,
+  dateDiffWeeks,
   dateDiffMonths,
   dateDiffYears = new Date();
+
+var tomorrow,
+  today = moment();
 
 var userNameFromDB = "";
 
@@ -95,69 +100,82 @@ export default class Request extends React.Component {
 
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
+    var time = new Date(eDate).getTime() - new Date().getTime();
+    var totalDays = time / (1000 * 3600 * 24);
+
+    year = Math.floor(totalDays / 365);
+    totalDays = totalDays % 365;
+
+    month = Math.floor(totalDays / 30);
+    totalDays = totalDays % 30;
+
+    week = Math.floor(totalDays / 7);
+    totalDays = totalDays % 7;
+
+    days = Math.floor(totalDays);
+  }
+
+  repayementInstallments(price, eDate) {
     const submittedDate = moment();
     const expectedDate = moment(eDate);
     dateDiffDays = expectedDate.diff(submittedDate, "days");
+    dateDiffWeeks = expectedDate.diff(submittedDate, "weeks");
     dateDiffMonths = expectedDate.diff(submittedDate, "months");
     dateDiffYears = expectedDate.diff(submittedDate, "years");
-
-    year = Math.round(dateDiffDays / 365);
-    week = Math.round((dateDiffDays % 365) / 7);
-    month = Math.round((dateDiffDays % 365) / 30);
-    days = Math.round((dateDiffDays % 365) % 7);
-  }
-
-  repayementInstallments(price) {
-    if (year != 0) {
-      var yearlyPrice = Math.round(price / year);
+    if (dateDiffYears != 0) {
+      var yearlyPrice = (price / dateDiffYears).toFixed(2);
       installmentsArray[0].label =
         ArabicNumbers(yearlyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(year) +
+        ArabicNumbers(dateDiffYears) +
         " سنة";
       installmentsArray[0].priceValueArr = yearlyPrice;
-      installmentsArray[0].durationValueArr = year;
+      installmentsArray[0].durationValueArr = dateDiffYears;
       installmentsArray[0].installmentsTypeArr = "yearly";
     }
 
-    if (month != 0) {
-      var monthlyPrice = Math.round(price / month);
+    if (dateDiffMonths != 0) {
+      var monthlyPrice = (price / dateDiffMonths).toFixed(2);
       installmentsArray[1].label =
         ArabicNumbers(monthlyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(month) +
+        ArabicNumbers(dateDiffMonths) +
         " شهر";
       installmentsArray[1].priceValueArr = monthlyPrice;
-      installmentsArray[1].durationValueArr = month;
+      installmentsArray[1].durationValueArr = dateDiffMonths;
       installmentsArray[1].installmentsTypeArr = "monthly";
     }
 
-    if (week != 0) {
-      var weeklyPrice = Math.round(price / week);
+    if (dateDiffWeeks != 0) {
+      var weeklyPrice = (price / dateDiffWeeks).toFixed(2);
       installmentsArray[2].label =
         ArabicNumbers(weeklyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(week) +
+        ArabicNumbers(dateDiffWeeks) +
         " اسبوع";
       installmentsArray[2].priceValueArr = weeklyPrice;
-      installmentsArray[2].durationValueArr = week;
+      installmentsArray[2].durationValueArr = dateDiffWeeks;
       installmentsArray[2].installmentsTypeArr = "weekly";
     }
 
-    if (days != 0) {
-      var dailyPrice = Math.round(price / days);
+    if (dateDiffDays != 0) {
+      var dailyPrice = (price / dateDiffDays).toFixed(2);
       installmentsArray[3].label =
         ArabicNumbers(dailyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(days) +
+        ArabicNumbers(dateDiffDays) +
         " يوم";
       installmentsArray[3].priceValueArr = dailyPrice;
-      installmentsArray[3].durationValueArr = days;
+      installmentsArray[3].durationValueArr = dateDiffDays;
       installmentsArray[3].installmentsTypeArr = "daily";
     }
 
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
-      if (installmentsArray[i].durationValueArr == 0) continue;
+      if (
+        installmentsArray[i].durationValueArr == 0 ||
+        installmentsArray[i].durationValueArr == 1
+      )
+        continue;
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
   }
@@ -178,30 +196,51 @@ export default class Request extends React.Component {
         userNameFromDB = snapshot.val().fullName;
       });
 
-    const requestID = firebase.database().ref("requests/").push({
-      price: values.price,
-      expectedDate: values.expectedDate,
-      submittedDate: this.state.submittedDateState,
-      repaymentType: values.repaymentType,
-      reason: values.reason,
-      userid: currentUser.uid,
-      userName: userNameFromDB,
-      rqeuestStatus: "Waiting",
-      installemntPrice: this.state.priceState,
-      installemntDuration: this.state.durationState,
-      installmentsType: this.state.installmentsState,
-    });
+    const requestID = firebase
+      .database()
+      .ref("requests/")
+      .push(
+        {
+          price: values.price,
+          expectedDate: values.expectedDate,
+          submittedDate: this.state.submittedDateState,
+          repaymentType: values.repaymentType,
+          reason: values.reason,
+          userid: currentUser.uid,
+          userName: userNameFromDB,
+          rqeuestStatus: "Waiting",
+          installemntPrice: this.state.priceState,
+          installemntDuration: this.state.durationState,
+          installmentsType: this.state.installmentsState,
+        },
+        function (error) {
+          if (error) {
+            alert(error);
+          } else {
+            alert("تم إرسال الطلب بنجاح");
+          }
+        }
+      );
   }
 
   requestSchema = yup.object({
     price: yup
       .number()
       .typeError("المبلغ لا بد أن يكون بأرقام إنجليزية")
-      .required("ادخال المبلغ مطلوب")
+      .required("المبلغ مطلوب")
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
-    expectedDate: yup.string().required("التاريخ المتوقع لإكمال السداد مطلوب"), //need to cj
+    expectedDate: yup
+      .date()
+      .min(moment(today.add(1, "days")), "التاريخ المتوقع لإكمال السداد مطلوب"),
+    // .test(
+    //   "enteranceExpectedDate",
+    //   "التاريخ المتوقع لإكمال السداد مطلوب",
+    //   (val) => {
+    //     return props.values.expectedDate == new Date();
+    //   }
+    // ), //need to cj
     reason: yup.string().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
     //trim spaces
   });
@@ -210,11 +249,10 @@ export default class Request extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TopBar />
-        <Image
-          style={styles.background}
-          source={require("./assets/RequestBackground.png")}
-        />
+        <View style={styles.background}>
+          <BackgroundComponent />
+        </View>
+
         <View style={styles.registerBackground}>
           <KeyboardAwareScrollView>
             <Text style={styles.header}>إنشاء طلب </Text>
@@ -231,7 +269,6 @@ export default class Request extends React.Component {
                 submittedDate: new Date(),
               }}
               onSubmit={(values, action) => {
-                alert(this.state.installmentsState);
                 this.onSubmitPress(values);
               }}
             >
@@ -289,11 +326,11 @@ export default class Request extends React.Component {
                         width: 352,
                         height: 40,
                         marginLeft: 35,
-
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
                         borderBottomLeftRadius: 60,
                         borderBottomRightRadius: 50,
+                        marginBottom: 25,
                       }}
                       itemStyle={{
                         backgroundColor: "#fff",
@@ -328,7 +365,10 @@ export default class Request extends React.Component {
                     />
                   ) : null}
 
-                  <Text style={styles.textInputTitle}>المبلغ </Text>
+                  <Text style={styles.textInputTitle}>
+                    المبلغ <Text style={styles.textError}> *</Text>
+                  </Text>
+
                   <TextInput
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
@@ -343,6 +383,7 @@ export default class Request extends React.Component {
                   </Text>
                   <Text style={styles.textInputTitle}>
                     التاريخ المتوقع لإكمال السداد{" "}
+                    <Text style={styles.textError}> *</Text>
                   </Text>
                   <TextInput
                     style={styles.textInput}
@@ -352,7 +393,10 @@ export default class Request extends React.Component {
                     editable={false}
                     onChangeText={
                       (this.repaymentOnce(props.values.expectedDate),
-                      this.repayementInstallments(props.values.price))
+                      this.repayementInstallments(
+                        props.values.price,
+                        props.values.expectedDate
+                      ))
                     }
                     onBlur={props.handleBlur("expectedDate")}
                   />
@@ -366,7 +410,7 @@ export default class Request extends React.Component {
                     locale={"ar"}
                     placeholder="select date"
                     format="YYYY-MM-DD"
-                    minDate={new Date()}
+                    minDate={moment(tomorrow).add(1, "days")}
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
                     iconComponent={<CalendarIconComponent />}
@@ -395,7 +439,7 @@ export default class Request extends React.Component {
                       props.setFieldValue("expectedDate", date);
                     }}
                   />
-                  <Text style={styles.textError}>
+                  <Text style={[styles.textError, { top: -50 }]}>
                     {props.touched.expectedDate && props.errors.expectedDate}
                   </Text>
                   <View style={styles.radio}>
@@ -409,7 +453,7 @@ export default class Request extends React.Component {
                         flexDirection: "row-reverse ",
                         justifyContent: "flex-end",
                         left: 160,
-
+                        marginTop: -15,
                         textAlign: "right",
                       }}
                       boxStyle={{
@@ -437,7 +481,7 @@ export default class Request extends React.Component {
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
                       searchableError={() => (
-                        <Text style={styles.textError}>
+                        <Text style={[styles.textError, { marginRight: 4 }]}>
                           لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
                           السداد{" "}
                         </Text>
@@ -471,6 +515,7 @@ export default class Request extends React.Component {
                         borderTopRightRadius: 50,
                         borderBottomLeftRadius: 60,
                         borderBottomRightRadius: 50,
+                        marginBottom: 35,
                       }}
                       itemStyle={{
                         backgroundColor: "#fff",
@@ -506,22 +551,39 @@ export default class Request extends React.Component {
                         })
                       }
                     />
-                  ) : (((year == month) == days) == week) == 0 ? (
+                  ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
+                    (year == -1 && month == -1 && days == -1 && week == -1) ? (
+                    <Text style={styles.repaymentTextError}>
+                      لظهور المدة حدد التاريخ المتوقع لإكمال السداد{" "}
+                    </Text>
+                  ) : (
                     <Text
                       style={[
                         styles.textNote,
                         { color: "#9B9B7A", top: -75, right: 10 },
                       ]}
                     >
-                      السداد بعد {ArabicNumbers(year)} سنه و{" "}
-                      {ArabicNumbers(month)} شهر {ArabicNumbers(week)} إسبوع و{" "}
-                      {ArabicNumbers(days)} يوم
+                      السداد بعد
+                      {year != 0 ? (
+                        <Text> {ArabicNumbers(year)} سنه </Text>
+                      ) : null}
+                      {month != 0 ? (
+                        <Text> {ArabicNumbers(month)} شهر </Text>
+                      ) : null}
+                      {week != 0 ? (
+                        <Text> {ArabicNumbers(week)} إسبوع </Text>
+                      ) : null}
+                      {days != 0 ? (
+                        <Text> {ArabicNumbers(days)} يوم </Text>
+                      ) : null}
                     </Text>
-                  ) : null}
-                  <Text style={styles.textInputTitle}>السبب </Text>
+                  )}
+                  <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
+                    السبب{" "}
+                  </Text>
                   <TextInput
                     multiline
-                    style={[styles.textInput, { height: 100 }]}
+                    style={[styles.textInput, { height: 75 }]}
                     placeholder="السبب"
                     onChangeText={props.handleChange("reason")}
                     value={props.values.reason}
@@ -535,7 +597,7 @@ export default class Request extends React.Component {
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={() => navigation.navigate("Home")}
                     >
-                      <Text style={styles.buttonText}> إالغاء </Text>
+                      <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
@@ -577,30 +639,25 @@ const styles = StyleSheet.create({
     marginLeft: -20,
   },
 
-  registerBackground: {
-    flex: 1,
-    height: 200,
-    borderTopRightRadius: 40,
-    borderTopLeftRadius: 40,
-    backgroundColor: "#fff",
-  },
   DropDownPicker: {
     marginTop: -10,
     borderRadius: 50,
   },
 
   background: {
-    bottom: 400,
+    bottom: 500,
     position: "absolute",
     height: 480,
     // paddingBottom:100,
   },
+
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
     margin: 20,
-    top: 30,
+    top: 0,
+    marginBottom: 0,
     textAlign: "center",
     justifyContent: "center",
   },
@@ -610,7 +667,6 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     flex: 1,
     height: 700,
-
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     backgroundColor: "#fff",
@@ -618,7 +674,7 @@ const styles = StyleSheet.create({
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 17,
-    marginTop: 10,
+    marginTop: 1,
     marginBottom: 5,
     textAlign: "right",
     color: "#404040",
@@ -685,7 +741,15 @@ const styles = StyleSheet.create({
     marginRight: 30,
     bottom: 10,
   },
-
+  repaymentTextError: {
+    color: "#A4161A",
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 13,
+    bottom: 75,
+    textAlign: "right",
+    marginBottom: -10,
+    marginRight: 30,
+  },
   radio: {
     marginTop: -35,
   },
