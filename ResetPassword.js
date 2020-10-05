@@ -21,7 +21,7 @@ import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomAlertComponent from "./CustomAlertComponent";
-import BottomNavigator from "./BottomNavigator";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",

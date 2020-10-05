@@ -11,6 +11,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import * as yup from "yup";
@@ -30,6 +31,7 @@ if (!firebase.apps.length) {
 }
 
 //-------------------------------------------- Data
+let applicationUsers = [];
 const numericKeyboard = /[^0-9]/;
 
 const data = [
@@ -81,8 +83,11 @@ var dateDiffDays,
   dateDiffMonths,
   dateDiffYears = new Date();
 
-var tomorrow,
-  today = moment();
+// var tomorrow,
+//   today = moment();
+  const today = new Date()
+const tomorrow = new Date(today)
+tomorrow.setDate(tomorrow.getDate() + 1)
 
 var userNameFromDB = "";
 
@@ -95,6 +100,7 @@ export default class Request extends React.Component {
       priceState: 0,
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
+      userValue:[]
     };
   }
 
@@ -102,6 +108,7 @@ export default class Request extends React.Component {
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
     var totalDays = time / (1000 * 3600 * 24);
+    
 
     year = Math.floor(totalDays / 365);
     totalDays = totalDays % 365;
@@ -172,10 +179,12 @@ export default class Request extends React.Component {
 
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
-        installmentsArray[i].durationValueArr == 0 ||
-        installmentsArray[i].durationValueArr == 1
+        installmentsArray[i].durationValueArr == 0 && installmentsArray[i].priceValueArr == 0
+   
       )
         continue;
+  
+     
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
   }
@@ -184,7 +193,29 @@ export default class Request extends React.Component {
   componentDidMount() {
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
+    firebase
+      .database()
+      .ref("users/")
+      .on("value", (snapshot) => {
+        snapshot.forEach((child)=>{
+          if (child.val().email != currentUser.email){
+          applicationUsers.push({
+             fullName:child.val().fullName,
+             label: child.val().email,
+           
+          })
+        }
+        })
+       
+      });
+      // alert(applicationUsers);
+      this.setState({
+        userValue: applicationUsers,
+      })
+     
+
   }
+
 
   onSubmitPress(values) {
     const { currentUser } = this.state;
@@ -212,12 +243,29 @@ export default class Request extends React.Component {
           installemntPrice: this.state.priceState,
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
+          creditor: values.user,
         },
         function (error) {
           if (error) {
             alert(error);
           } else {
-            alert("تم إرسال الطلب بنجاح");
+            Alert.alert(
+              "تنبيه!",
+              "تم إرسال الطلب بنجاح   ",
+              [
+              
+                {
+                  text: "حسنا",
+                  onPress: () =>
+                  navigation.navigate("squares")
+                    
+                },
+              ],
+              { cancelable: false }
+            );
+            
+             
+           
           }
         }
       );
@@ -233,22 +281,33 @@ export default class Request extends React.Component {
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
     expectedDate: yup
       .date()
-      .min(moment(today.add(1, "days")), "التاريخ المتوقع لإكمال السداد مطلوب"),
+      .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
     // .test(
     //   "enteranceExpectedDate",
     //   "التاريخ المتوقع لإكمال السداد مطلوب",
     //   (val) => {
     //     return props.values.expectedDate == new Date();
     //   }
-    // ), //need to cj
-    reason: yup.string().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
-    //trim spaces
+    // ), 
+    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
+   
+    usersSelect: yup.bool(),
+    user: yup.string().notRequired()
+    .when('usersSelect', {
+    is: (val) => val == true,
+    then: yup.string().required('اختيار المدين مطلوب'),
+    otherwise: yup.string().notRequired()
+    })
+    
+    
   });
 
   //-------------------------------------------- Rendering react component
   render() {
     return (
+  
       <View style={styles.container}>
+     
         <View style={styles.background}>
           <BackgroundComponent />
         </View>
@@ -262,7 +321,7 @@ export default class Request extends React.Component {
                 user: "",
                 usersSelect: false,
                 price: "",
-                expectedDate: new Date(),
+                expectedDate:today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
@@ -276,6 +335,8 @@ export default class Request extends React.Component {
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
                     <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
+                  
+               
                     <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
@@ -287,22 +348,31 @@ export default class Request extends React.Component {
                           "usersSelect",
                           !props.values.usersSelect
                         )
+                        
+                        
+                    
+                        
+
                       }
                       checked={props.values.usersSelect}
                     />
+                    
+              
                   </View>
-
+              
+                 
                   <Text style={styles.textNote}>
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
+                
                   {props.values.usersSelect ? (
                     <DropDownPicker
                       style={styles.DropDownPicker}
-                      items={[
-                        { label: "رهام", value: "رهام", selected: true },
-                        { label: "رغد", value: "رغد" },
-                      ]}
+                      items={applicationUsers}
+                      placeholder="اختر دائن "
+                      placeholderStyle={{ color: "#CBCBCC" }}
+                     
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -360,11 +430,14 @@ export default class Request extends React.Component {
                         // to support RTL
                       }}
                       onChangeItem={(item) =>
-                        props.setFieldValue(users, item.label)
+                        props.setFieldValue("user", item.label)
                       }
                     />
+                    
                   ) : null}
-
+                    <Text style={[styles.textError, { top: -20 }]}>
+                    { props.errors.user}
+                  </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
                   </Text>
@@ -388,7 +461,7 @@ export default class Request extends React.Component {
                   <TextInput
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
-                    placeholder="التاريخ "
+                    placeholder="التاريخ"
                     value={props.values.expectedDate}
                     editable={false}
                     onChangeText={
@@ -405,12 +478,15 @@ export default class Request extends React.Component {
                     hideText
                     style={styles.datePicker}
                     date={props.values.expectedDate}
+                    // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
-                    placeholder="select date"
+                    placeholder={new yup.date()}
                     format="YYYY-MM-DD"
-                    minDate={moment(tomorrow).add(1, "days")}
+                    minDate= {tomorrow}
+                    showDateSelect
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
                     iconComponent={<CalendarIconComponent />}
@@ -435,9 +511,11 @@ export default class Request extends React.Component {
                         fontSize: 17,
                       },
                     }}
+                  
                     onDateChange={(date) => {
                       props.setFieldValue("expectedDate", date);
                     }}
+                   
                   />
                   <Text style={[styles.textError, { top: -50 }]}>
                     {props.touched.expectedDate && props.errors.expectedDate}
@@ -568,12 +646,21 @@ export default class Request extends React.Component {
                         <Text> {ArabicNumbers(year)} سنه </Text>
                       ) : null}
                       {month != 0 ? (
+                         year != 0?(
+                          <Text> و {ArabicNumbers(month)} شهر</Text>
+                          ):
                         <Text> {ArabicNumbers(month)} شهر </Text>
                       ) : null}
-                      {week != 0 ? (
+                      { week != 0   ? (
+                        
+                        year != 0 || month!= 0 ?(
+                          <Text> و {ArabicNumbers(week)} إسبوع</Text>
+                        ):
                         <Text> {ArabicNumbers(week)} إسبوع </Text>
                       ) : null}
                       {days != 0 ? (
+                          year != 0 || month!= 0 || week !=0 ?(
+                            <Text> و {ArabicNumbers(days)} يوم</Text>):
                         <Text> {ArabicNumbers(days)} يوم </Text>
                       ) : null}
                     </Text>

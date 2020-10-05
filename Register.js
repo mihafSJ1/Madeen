@@ -64,7 +64,7 @@ export default function Register({ navigation }) {
     if (
       email == "" ||
       password == "" ||
-      fullName == "" ||
+      fullName.trim() == "" ||
       confirmPassword == ""
     ) {
       Alert.alert("", "عفوًا، جميع الحقول مطلوبة", [{ text: "حسناً" }], {

@@ -1,6 +1,6 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity ,Alert} from "react-native";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -43,7 +43,7 @@ export default function TopBar({ navigation }) {
                 style: "cancel",
               },
               {
-                text: "OK",
+                text: "موافق",
                 onPress: () =>
                   firebase
                     .auth()

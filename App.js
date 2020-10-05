@@ -6,6 +6,7 @@ import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
+import {Button} from 'react-native';
 
 import Timeline from "./Timeline";
 import squares from "./squares";
@@ -16,7 +17,36 @@ import FirstPage from "./FirstPage";
 import CustomAlertComponent from "./CustomAlertComponent";
 import Profile from "./Profile";
 import * as firebase from "firebase";
-import BottomNavigator from "./BottomNavigator";
+// import {AppBar} from "./AppBar";
+import { fromUnixTime } from "date-fns";
+ const Logout= () =>{
+  Alert.alert(
+    "تنبيه!",
+    "هل أنت متأكد من تسجيل الخروج؟",
+    [
+      {
+        text: "إلغاء",
+        onPress: () => {
+          return;
+        },
+        style: "cancel",
+      },
+      {
+        text: "موافق",
+        onPress: () =>
+          firebase
+            .auth()
+            .signOut()
+            .then(
+              () => console.log("successfully logged out"),
+              navigation.navigate("Home")
+            ),
+      },
+    ],
+    { cancelable: false }
+  )
+ }
+
 //import Testnav from "./testnav";
 const Stack = createStackNavigator();
 
@@ -94,7 +124,16 @@ export default function App() {
             <Stack.Screen
               name="squares"
               component={squares}
-              options={{ headerShown: false }}
+              options={{ headerShown: true ,
+                headerLeft: () => (
+                  <Button
+                
+                    onPress={() => alert('This is a button!')}
+                    title="Info"
+                    color="#fff"
+                  />
+                )
+              }}
             />
             <Stack.Screen
               name="TopBar"
@@ -106,15 +145,29 @@ export default function App() {
               component={Profile}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="BottomNavigator"
-              component={BottomNavigator}
-              options={{ headerShown: false }}
-            />
+            
             <Stack.Screen
               name="request"
               component={request}
-              options={{ headerShown: false }}
+
+              options={{ headerShown: false ,
+                // headerStyle: {        
+                //   backgroundColor: "transparent"      
+                }}
+              //   headerTitleStyle: {
+              //     textAlign:"left",
+              //     fontWeight: "bold",
+              //     color: "#fff",
+              //   },
+              //   header: props => <AppBar {...props} />,
+              //   headerLeft: () => (
+              //     <Button 
+                  
+              //       onPress={() =>Logout()}
+                 
+              //     />
+              //   )
+              // }}
             />
             <Stack.Screen
               name="FirstPage"
