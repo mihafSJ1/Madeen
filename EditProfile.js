@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   TextInput,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
 import { LinearGradient } from "expo-linear-gradient";
@@ -24,6 +25,7 @@ import TopBar from "./TopBar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { Ionicons } from "@expo/vector-icons";
 import { Value } from "react-native-reanimated";
+import * as ImagePicker from 'expo-image-picker';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
@@ -41,18 +43,75 @@ if (!firebase.apps.length) {
 
 var namef ="rf";
 var emailf ="ef";
-var pic="";
+let pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
 var data="";
 var res= "" ;
 var fullname="yarb";
 let input="";
-export default class AreejRaghad extends React.Component {
+export default class EditProfile extends React.Component {
   state = { currentUser: null };
   // saveUserInput = userInput => {
   //   const input = userInput;
     
   // };
+  editImage(URL) {
+    const { currentUser } = firebase.auth();
+    console.log("before update")
+    console.log(URL);
+    firebase.database().ref('users/' + currentUser.uid ).update({
+
+      UserImage: URL,
+  })
+
+  console.log("after update")
+  console.log(URL);
+}
+  ;
+
+
+  uplaodImage = async (uri, draftName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var ref = firebase
+    .storage()
+    .ref()
+    .child("Draft/" + draftName);
+    return ref.put(blob);
+  };
+
+  onChooseImagePress = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync(); 
+    if (!result.cancelled){
+      this.uplaodImage(result.uri, "test")
+      .then(()=> {
+        const {imageName} = "test";
+  let imageRef = firebase.storage().ref("Draft/"+"test");
+  console.log("bey Bride2")
+  imageRef
+    .getDownloadURL()
+    .then((url) => {
+      console.log("bey Bride3")
+      //from url you can fetched the uploaded image easily
+      this.setState({profileImageUrl: url});
+      console.log("bey Bride4")
+      console.log(this.state.profileImageUrl);
+      this.editImage(this.state.profileImageUrl);
+      console.log("bey Bride5")
+      console.log(this.state.profileImageUrl)
+      console.log("bey Bride")
+    })
+    .catch((e) => console.log('getting downloadURL of image error => ', e));
   
+      })
+      .catch((error) => {
+        Alert.alert(error);
+      });
+    }
+
+  };
+
+
   componentDidMount() {
     const { currentUser } = firebase.auth();
     firebase.database().ref('users/' + currentUser.uid ).on('value',(snapshot)=>{
@@ -60,9 +119,9 @@ export default class AreejRaghad extends React.Component {
 
       namef   = snapshot.val().fullName;
       emailf   = snapshot.val().email;
-      // pic=snapshot.val(). profileImage;
+      pic=snapshot.val().UserImage;
 
-
+      this.setState({ currentUser });
     
     })
      
@@ -104,13 +163,30 @@ export default class AreejRaghad extends React.Component {
   }
 
 
-  editProfile (){
+  editProfile(URL){
     const { currentUser } = firebase.auth();
-    firebase.database().ref('users/' + currentUser.uid ).update({
-      fullName: input,
-     
- })
- this.props.navigation.navigate('AreejRaghad')
+    console.log("before update")
+    // console.log(URL);
+    // if(URL == undefined ){
+    //   console.log("تسلب");
+    //   console.log("2تسلب");
+    //   console.log(pic);
+      // this.setState({  URL : this.state.pic })
+      if (input == null) {
+        this.props.navigation.navigate('viewProfile')
+        return 
+      }
+      firebase.database().ref('users/' + currentUser.uid ).update({
+        fullName: input,
+        // UserImage: pic,
+      })
+    //   this.props.navigation.navigate('AreejRaghad2')
+    //   return
+    // }
+
+ console.log("after update")
+ console.log(URL);
+ this.props.navigation.navigate('viewProfile')
 
 }
 
@@ -141,9 +217,23 @@ export default class AreejRaghad extends React.Component {
 
 <View style={styles.container2}>
 
+<TouchableOpacity
+style={styles. UserImagetuch}
+onPress={() => this.onChooseImagePress()}
 
+> 
+{/* <Image style={styles.UserImage}  source={require(this.state.profileImageUrl)} />  */}
+{/* <Image
+ style={styles.UserImage}
+ source={require("./assets/UserImageProfile.png")} 
+/> */}
+<Image
+ style={styles.UserImage}
+ source={{uri: pic}} 
+/>
+      
+</TouchableOpacity>
 
-<Image style={styles.UserImage} source={require("./assets/UserImageProfile.png")} /> 
 {/* <Image style={styles.UserImage} source={pic} />  */}
   <View style={styles.registerBackground}>
     {/* <Text style={styles.UserName}>{namef}</Text> */}
@@ -160,6 +250,23 @@ export default class AreejRaghad extends React.Component {
         placeholder={namef}
         editable={false}
         /> */}
+       
+
+<TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('viewProfile')
+                ;
+              }}
+            >
+              <AntDesign
+                style={styles.close}
+                name="close"
+                size={24}
+                color="black"
+              />
+            </TouchableOpacity>
+
+
 <TextInput
      style={styles.textinput}
         placeholder={namef}
@@ -198,12 +305,21 @@ export default class AreejRaghad extends React.Component {
    
     <TouchableOpacity
               style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-              onPress={() =>  this.editProfile()}
+              onPress={() =>  this.editProfile(this.state.profileImageUrl)}
             
             >
               <Text style={styles.buttonText3}>  حفظ التعديل  </Text>
              
             </TouchableOpacity>
+
+            {/* <TouchableOpacity
+              style={[styles.button2, { backgroundColor: "#D4CEC9" }]}
+              onPress={() =>  this.editProfile()}
+            
+            >
+              <Text style={styles.buttonText3}>  الغاء</Text>
+             
+            </TouchableOpacity> */}
 
     <StatusBar style="auto" />
   </View>
@@ -270,36 +386,37 @@ const styles = StyleSheet.create({
 
 
   PinkRectangleShapeView: {
-    width: 148,
-    height: 100,
+    width: 120,
+    height: 70,
     marginTop: 0,
     padding: 5,
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left:192,
-    top: 200,
+    left:197,
+    top: 220,
     backgroundColor: "#D9AE94",
     borderColor: '#D3CECA',
     borderWidth: 2,
    
     },
     YellowRectangleShapeView: {
-        alignItems: "center",
-        width: 148,
-        height: 100,
-        marginTop: 0,
-        padding: 5,
-        borderRadius: 15,
-        marginLeft: 33,
-        marginBottom: 0,
-        right:-3,
-        top: 100,
-        backgroundColor: "#F1DCA7",
-        borderColor: '#D3CECA',
-        borderWidth: 2,
-       
-        },
+      alignItems: "center",
+      width: 120,
+      height: 70,
+      marginTop: 0,
+      padding: 5,
+      borderRadius: 15,
+      marginLeft: 33,
+      marginBottom: 0,
+      right:-25,
+      top: 150,
+      backgroundColor: "#F1DCA7",
+      borderColor: '#D3CECA',
+      borderWidth: 2,
+     
+      },
+    
   registerBackground: {
     overflow: "hidden",
     flex: 1,
@@ -317,15 +434,35 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 130,
-    top: -50,
+    left: 65,
+    top: -30,
     zIndex: 2,
     width: 160,
     height: 160,
     resizeMode: "stretch",
+    borderRadius: 100,
+    borderColor:"#CBCA9E",
+    borderWidth:4,
+
+    
   },
 
+  UserImagetuch: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    left: 60,
+    top: -30,
+    zIndex: 2,
+    width: 160,
+    height: 160,
+    resizeMode: "stretch",
+    borderRadius: 100,
   
+
+    
+  },
 
   scrollView: {
     paddingHorizontal: 20,
@@ -355,21 +492,21 @@ right:5,
 
   debts: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 21,
+    fontSize: 18,
     textAlign: "left",
     color: "#404040",
-    top: 200,
-    left: 54,
+    top: 220,
+    left: 70,
     zIndex: 2,
 
   },
   subsidy: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 21,
+    fontSize: 18,
     textAlign: "right",
     color: "#404040",
-    top: 230,
-    right: 58,
+    top: 249,
+    right: 70,
 
   },
   buttonText: {
@@ -401,14 +538,32 @@ right:5,
   },
   button: {
     alignItems: "center",
-    width: 170,
+    width: 120,
     height: 30,
     marginTop: 150,
     padding: 5,
     borderRadius: 15,
-    marginLeft: 120,
+    marginLeft: 146,
     backgroundColor: "#fff",
+    top:50,
   },
+
+  button2: {
+    alignItems: "center",
+    width: 120,
+    height: 30,
+    marginTop: 150,
+    padding: 5,
+    left:40,
+    top:-130,
+    borderRadius: 15,
+    marginLeft: 32,
+    backgroundColor: "#fff",
+    zIndex:2,
+  },
+
+
+
   buttonText3: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
@@ -418,11 +573,17 @@ right:5,
 
   buttonText2: {
     textAlign: "center",
-    top:10,
+    top:-1,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 40,
     color: '#fff',
    
+  },
+
+  close: {
+    left: 20,
+    top:20,
+    zIndex:2,
   },
 
 
