@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import Svg, { Defs, G, Path } from "react-native-svg";
+//import Svg, { Defs, G, Path } from "react-native-svg";
 
 export default function TopBar({ navigation }) {
   return (
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 
   topBarText: {
     color: "#404040",
-    fontFamily: "Bahij_TheSansArabic-Light",
+    //fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 20,
     marginTop: 20,

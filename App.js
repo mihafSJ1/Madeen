@@ -8,10 +8,11 @@ import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import { AntDesign,MaterialIcons,Feather } from '@expo/vector-icons';
 import SvgComponent from './Svgnav';
+import SvgComponent2 from './TabbarSVG'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Timeline from "./Timeline";
 import squares from "./squares";
-import request from "./Request";
+import Request from "./Request";
 import TopBar from "./TopBar";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
@@ -44,12 +45,14 @@ function squaresScreens(){
 function Homenav(){
   
   return(
+   
     <Tab.Navigator
-    
+  
     initialRouteName="squers"
     tabBarOptions={{
       activeTintColor: '#746356', 
       inactiveTintColor: '#9B9B7A', 
+      
     style:{
       
        showIcon: true,
@@ -65,12 +68,14 @@ function Homenav(){
     
             height: 3, width: 2
         },
-        //height:80,
+        //height:60,
         justifyContent: 'center',
       }}
       
     }
+    
   >
+  
    <Tab.Screen
     name="squares"
     component={squares}
@@ -92,12 +97,12 @@ function Homenav(){
     }}
   />
    <Tab.Screen
-    name="ResetPassword"
-    component={ResetPassword}
+    name="Request"
+    component={Request}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
-        <SvgComponent bottom={20} shadowOpacity= {0.50} shadowColor="#707070"
+        <SvgComponent bottom={10} shadowOpacity= {0.50} shadowColor="#707070"
         shadowRadius={4}
        
          />
@@ -128,7 +133,9 @@ function Homenav(){
  
     }}
   />
+  
      </Tab.Navigator>
+     
   );
 }
 
@@ -212,6 +219,7 @@ export default function App() {
    </>
     )}
   </Stack.Navigator>
+  
     </NavigationContainer>
 
    

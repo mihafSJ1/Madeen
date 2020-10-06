@@ -106,7 +106,7 @@ export default function Register({ navigation }) {
             email: email,
           });
       })
-      .then(() => navigation.navigate("FirstPage"))
+      .then(() => navigation.navigate("squares"))
 
       .catch((error) => {
         switch (error.code) {
