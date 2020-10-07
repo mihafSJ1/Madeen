@@ -198,7 +198,7 @@ export default function Register({ navigation }) {
               style={[styles.button, { backgroundColor: "#D4CEC9" }]}
               onPress={() => navigation.navigate("Home")}
             >
-              <Text style={styles.buttonText}> إالغاء </Text>
+              <Text style={styles.buttonText}> إلغاء </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: "#CBCA9E" }]}

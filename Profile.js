@@ -24,7 +24,7 @@ import CustomAlertComponent from "./CustomAlertComponent";
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 
-import BottomNavigator from "./BottomNavigator";
+// import BottomNavigator from "./BottomNavigator";
  
 
 import { Ionicons } from "@expo/vector-icons";
@@ -86,7 +86,7 @@ export default function login({ navigation }) {
           <StatusBar style="auto" />
           <View></View>
         
-          < BottomNavigator /> 
+          {/* < BottomNavigator />  */}
         </View>
        
       </View>

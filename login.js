@@ -135,7 +135,7 @@ export default function login({ navigation }) {
               style={[styles.button, { backgroundColor: "#D4CEC9" }]}
               onPress={() => navigation.navigate("Home")}
             >
-              <Text style={styles.buttonText}> إالغاء </Text>
+              <Text style={styles.buttonText}> إلغاء </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -190,22 +190,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
+    marginBottom:30,
+    fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
-    fontSize: 35,
-    marginTop: 20,
+    fontSize: 30,
+    margin: 20,
     top: 30,
     textAlign: "center",
     justifyContent: "center",
-    marginBottom: 20,
-    fontFamily: "Bahij_TheSansArabic-Light",
   },
   textInputTitle: {
+    fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
-    margin: 20,
+    marginBottom: 2,
     textAlign: "right",
     color: "#404040",
-    marginRight: 40,
-    fontFamily: "Bahij_TheSansArabic-Light",
+    marginRight: 35,
   },
   registerTextInput: {
     //  marginTop:15,
@@ -219,18 +219,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     fontFamily: "Bahij_TheSansArabic-Light",
   },
-  button: {
-    alignItems: "center",
-    width: 100,
-    height: 30,
-
-    marginTop: 20,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    marginBottom: 250,
-    backgroundColor: "#fff",
-  },
+ 
+    button: {
+      alignItems: "center",
+      width: 170,
+      height: 30,
+      marginTop: 10,
+      padding: 5,
+      borderRadius: 15,
+      marginLeft: 10,
+      backgroundColor: "#fff",
+    },
+  
 
   buttonText: {
     textAlign: "center",
@@ -238,10 +238,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    //  flex:1,
     alignItems: "center",
-    marginLeft: 80,
+    marginLeft: 25,
     fontSize: 30,
+    marginBottom:200,
   },
   signinText: {
     marginTop: 10,
@@ -250,8 +250,8 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    //  marginTop:15,
-    marginLeft: 30,
+    marginBottom: 13,
+    marginLeft: 35,
     alignItems: "center",
     borderColor: "#CBCA9E",
     width: 350,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 2,
     textAlign: "right",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
 
-  // Get a reference to the database service
 });
