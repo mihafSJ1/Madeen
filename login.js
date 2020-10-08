@@ -53,7 +53,7 @@ export default function login({ navigation }) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => navigation.navigate("request"))
+      .then(() => navigation.navigate("squares"))
       .catch((error) => {
         switch (error.code) {
           
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 15,
     borderWidth: 2,
-    fontFamily: "Bahij_TheSansArabic-Light",
+    //fontFamily: "Bahij_TheSansArabic-Light",
   },
  
     button: {
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-    fontFamily: "Bahij_TheSansArabic-Light",
+   // fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   signinText: {
     marginTop: 10,
     textAlign: "center",
-    fontFamily: "Bahij_TheSansArabic-Light",
+    //fontFamily: "Bahij_TheSansArabic-Light",
   },
 
   textInput: {

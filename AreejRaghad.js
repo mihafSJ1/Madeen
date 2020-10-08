@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-
 import React from "react";
 import {
   StyleSheet,
@@ -10,7 +9,6 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableHighlight,
-  TextInput,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
@@ -38,14 +36,10 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var namef ="name";
-var emailf ="email";
-var pic="";
-var data="";
-var res= "" ;
+var namef ="rf";
+var emailf ="ef";
 
-
-export default class AreejRaghad extends React.Component  {
+export default class AreejRaghad extends React.Component {
   state = { currentUser: null };
  
   
@@ -56,53 +50,20 @@ export default class AreejRaghad extends React.Component  {
 
       namef   = snapshot.val().fullName;
       emailf   = snapshot.val().email;
-      // pic=snapshot.val(). profileImage;
 
 
     
     })
-     
-    
-    // firebase.database().ref('users/' + currentUser.uid ).update({
-    //   fullName: "رغد الفهيد"  ,
-    // })
-    
-  //   const upload = async (filepath, filename, filemime) => {
-  //     const metaData = { contentType: filemime };
-  //    res = await firebase
-  //         .storage()
-  //         .ref(`./assets/orange.png/${filename}`)
-  //         .putFile(filepath, metaData); // put image file to GCS
-  //     return res;
+      
+ 
   
-  //   };  
-  //   async ()=>{
-  // const userId = firebase.auth().currentUser.uid;
-  //  res =  await upload(`orange.png`, `/assets/orange.png`, `orange/png`); // function in step 1
-  // data = {
-  //    fullName:namef,
-  //    email:emailf,
-  //     pic: res.downloadURL, // retrieve image URL
-  // }
-  // };
-
-  // firebase.database().ref('users/' + currentUser.uid ).set({
-
-  //   fullName:namef,
-  //   email:emailf,
-  //    pic: res.downloadURL, 
-
-  // });
-
-
-
+    
     this.setState({ currentUser });
   
       
   }
 
   render() {
-    // const { navigation:navigate } = this.props;
     const { currentUser } = this.state;
 
     
@@ -125,21 +86,12 @@ export default class AreejRaghad extends React.Component  {
 
 
 <View style={styles.container2}>
-
-<TouchableOpacity   style={styles.ProfileEdit2}
- onPress={() => this.props.navigation.navigate('AreejRaghadEdit')} > 
-<Text style={styles.ProfileEdit} >
-  <Ionicons name="md-create" size={30} color="#808065" solid />
+<Text style={styles.ProfileEdit} ><Ionicons name="md-create" size={30} color="#808065" solid />
  </Text>
-</TouchableOpacity>
-
 <Image style={styles.UserImage} source={require("./assets/UserImageProfile.png")} /> 
-{/* <Image style={styles.UserImage} source={pic} />  */}
+
   <View style={styles.registerBackground}>
     <Text style={styles.UserName}>{namef}</Text>
-
-
-    
 
     {/* field number1  */}
 
@@ -196,13 +148,13 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 140,
-    bottom: -160,
+    left: 133,
+    bottom: -180,
   },
 
   ProfileEdit: {
-    left: 50,
-    bottom: 5,
+    left: 360,
+    bottom: 15,
     zIndex:2,
     shadowColor: "#000000",
     shadowOpacity: 0.71,
@@ -211,27 +163,7 @@ const styles = StyleSheet.create({
       height: 100,
     },
 
-    
   },
-
-
-  ProfileEdit2: {
-    left: 300,
-    bottom: 15,
-    zIndex:2,
-  
-    shadowColor: "#000000",
-    shadowOpacity: 0.30,
-    width:90,
-    shadowOffset: {
-      // width: 100,
-      // height: 100,
-    },
-
-    
-  },
-
-
 
   PinkRectangleShapeView: {
     width: 148,
@@ -281,11 +213,11 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 130,
-    top: -50,
+    left: 110,
+    top: -40,
     zIndex: 2,
-    width: 160,
-    height: 160,
+    width: 180,
+    height: 180,
     resizeMode: "stretch",
   },
 
@@ -294,18 +226,16 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 20,
   },
-
-
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
+    color: "#404040",
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-    bottom:-190,
-    right:-7,
+bottom:-220,
+right:5,
     textAlign: "center",
     justifyContent: "center",
-    color:'#746356',
   },
   Email: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -314,7 +244,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#404040",
     marginRight: 0,
-    top: 150,
+    top: 180,
     right: 134,
   },
 
@@ -347,21 +277,6 @@ const styles = StyleSheet.create({
    
   },
   
-
-  textinput:{
-    marginBottom: 13,
-    marginLeft: 70,
-    alignItems: "center",
-    borderColor: "#CBCA9E",
-    width: 250,
-    top:190,
-    backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
-    textAlign: "center",
-    fontFamily: "Bahij_TheSansArabic-Light",
-  }
 
 
 });
