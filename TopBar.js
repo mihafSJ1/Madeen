@@ -4,13 +4,19 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import Svg, { Defs, G, Path } from "react-native-svg";
+//import Svg, { Defs, G, Path } from "react-native-svg";
 
-export default function TopBar() {
+export default function TopBar({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.rightItems}>
-        <TouchableOpacity style={styles.logoutButton}>
+  
+        <TouchableOpacity style={styles.logoutButton}
+         
+        onPress={() => firebase.auth().signOut().then(() => navigation.navigate("Home"))}
+      
+        >
+      
           <SimpleLineIcons
             name="logout"
             size={35}
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
 
   topBarText: {
     color: "#404040",
-    fontFamily: "Bahij_TheSansArabic-Light",
+    //fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 20,
     marginTop: 20,
