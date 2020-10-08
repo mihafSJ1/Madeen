@@ -11,6 +11,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import * as yup from "yup";
@@ -22,12 +23,15 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
+// import BackgroundComponent from "./BackgroundComponent";
+// import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
 
 //-------------------------------------------- Data
+let applicationUsers = [];
 const numericKeyboard = /[^0-9]/;
 
 const data = [
@@ -75,8 +79,17 @@ var year,
   month = 0;
 
 var dateDiffDays,
+  dateDiffWeeks,
   dateDiffMonths,
   dateDiffYears = new Date();
+
+// var tomorrow,
+//   today = moment();
+  const today = new Date()
+const tomorrow = new Date(today)
+tomorrow.setDate(tomorrow.getDate() + 1)
+
+var userNameFromDB = "";
 
 export default class Request extends React.Component {
   constructor(props) {
@@ -87,73 +100,91 @@ export default class Request extends React.Component {
       priceState: 0,
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
+      userValue:[]
     };
   }
+
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
+    var time = new Date(eDate).getTime() - new Date().getTime();
+    var totalDays = time / (1000 * 3600 * 24);
+    
+
+    year = Math.floor(totalDays / 365);
+    totalDays = totalDays % 365;
+
+    month = Math.floor(totalDays / 30);
+    totalDays = totalDays % 30;
+
+    week = Math.floor(totalDays / 7);
+    totalDays = totalDays % 7;
+
+    days = Math.floor(totalDays);
+  }
+
+  repayementInstallments(price, eDate) {
     const submittedDate = moment();
     const expectedDate = moment(eDate);
     dateDiffDays = expectedDate.diff(submittedDate, "days");
+    dateDiffWeeks = expectedDate.diff(submittedDate, "weeks");
     dateDiffMonths = expectedDate.diff(submittedDate, "months");
     dateDiffYears = expectedDate.diff(submittedDate, "years");
-
-    year = Math.round(dateDiffDays / 365);
-    week = Math.round((dateDiffDays % 365) / 7);
-    month = Math.round((dateDiffDays % 365) / 30);
-    days = Math.round((dateDiffDays % 365) % 7);
-  }
-
-  repayementInstallments(price) {
-    if (year != 0) {
-      var yearlyPrice = Math.round(price / year);
+    if (dateDiffYears != 0) {
+      var yearlyPrice = (price / dateDiffYears).toFixed(2);
       installmentsArray[0].label =
         ArabicNumbers(yearlyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(year) +
+        ArabicNumbers(dateDiffYears) +
         " سنة";
       installmentsArray[0].priceValueArr = yearlyPrice;
-      installmentsArray[0].durationValueArr = year;
+      installmentsArray[0].durationValueArr = dateDiffYears;
       installmentsArray[0].installmentsTypeArr = "yearly";
     }
 
-    if (month != 0) {
-      var monthlyPrice = Math.round(price / month);
+    if (dateDiffMonths != 0) {
+      var monthlyPrice = (price / dateDiffMonths).toFixed(2);
       installmentsArray[1].label =
         ArabicNumbers(monthlyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(month) +
+        ArabicNumbers(dateDiffMonths) +
         " شهر";
       installmentsArray[1].priceValueArr = monthlyPrice;
-      installmentsArray[1].durationValueArr = month;
+      installmentsArray[1].durationValueArr = dateDiffMonths;
       installmentsArray[1].installmentsTypeArr = "monthly";
     }
 
-    if (week != 0) {
-      var weeklyPrice = Math.round(price / week);
+    if (dateDiffWeeks != 0) {
+      var weeklyPrice = (price / dateDiffWeeks).toFixed(2);
       installmentsArray[2].label =
         ArabicNumbers(weeklyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(week) +
+        ArabicNumbers(dateDiffWeeks) +
         " اسبوع";
       installmentsArray[2].priceValueArr = weeklyPrice;
-      installmentsArray[2].durationValueArr = week;
+      installmentsArray[2].durationValueArr = dateDiffWeeks;
       installmentsArray[2].installmentsTypeArr = "weekly";
     }
 
-    if (days != 0) {
-      var dailyPrice = Math.round(price / days);
+    if (dateDiffDays != 0) {
+      var dailyPrice = (price / dateDiffDays).toFixed(2);
       installmentsArray[3].label =
         ArabicNumbers(dailyPrice) +
         " ريال سعودي لمدة " +
-        ArabicNumbers(days) +
+        ArabicNumbers(dateDiffDays) +
         " يوم";
       installmentsArray[3].priceValueArr = dailyPrice;
-      installmentsArray[3].durationValueArr = days;
+      installmentsArray[3].durationValueArr = dateDiffDays;
       installmentsArray[3].installmentsTypeArr = "daily";
     }
 
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
-      if (installmentsArray[i].durationValueArr == 0) continue;
+      if (
+        installmentsArray[i].durationValueArr == 0 && installmentsArray[i].priceValueArr == 0
+   
+      )
+        continue;
+  
+     
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
   }
@@ -162,53 +193,125 @@ export default class Request extends React.Component {
   componentDidMount() {
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
+    firebase
+      .database()
+      .ref("users/")
+      .on("value", (snapshot) => {
+        snapshot.forEach((child)=>{
+          if (child.val().email != currentUser.email){
+          applicationUsers.push({
+             fullName:child.val().fullName,
+             label: child.val().email,
+           
+          })
+        }
+        })
+       
+      });
+      // alert(applicationUsers);
+      this.setState({
+        userValue: applicationUsers,
+      })
+     
+
   }
+
 
   onSubmitPress(values) {
     const { currentUser } = this.state;
-    const requestID = firebase.database().ref("requests/").push({
-      price: values.price,
-      expectedDate: values.expectedDate,
-      submittedDate: this.state.submittedDateState,
-      repaymentType: values.repaymentType,
-      reason: values.reason,
-      userid: currentUser.uid,
-      rqeuestStatus: "Waiting",
-      installemntPrice: this.state.priceState,
-      installemntDuration: this.state.durationState,
-      installmentsType: this.state.installmentsState,
-    });
 
     firebase
       .database()
       .ref("users/" + currentUser.uid)
-      .push({
-        requestId: requestID.key,
+      .on("value", (snapshot) => {
+        userNameFromDB = snapshot.val().fullName;
       });
-    alert(requestID.key);
+
+    const requestID = firebase
+      .database()
+      .ref("requests/")
+      .push(
+        {
+          price: values.price,
+          expectedDate: values.expectedDate,
+          submittedDate: this.state.submittedDateState,
+          repaymentType: values.repaymentType,
+          reason: values.reason,
+          userid: currentUser.uid,
+          userName: userNameFromDB,
+          rqeuestStatus: "Waiting",
+          installemntPrice: this.state.priceState,
+          installemntDuration: this.state.durationState,
+          installmentsType: this.state.installmentsState,
+          creditor: values.user,
+        },
+        function (error) {
+          if (error) {
+            alert(error);
+          } else {
+            Alert.alert(
+              "تنبيه!",
+              "تم إرسال الطلب بنجاح   ",
+              [
+              
+                {
+                  text: "حسنا",
+                  // onPress: () =>
+                  // // navigation.navigate("squares")
+                    
+                },
+              ],
+              { cancelable: false }
+            );
+            
+             
+           
+          }
+        }
+      );
   }
 
   requestSchema = yup.object({
     price: yup
       .number()
       .typeError("المبلغ لا بد أن يكون بأرقام إنجليزية")
-      .required("ادخال المبلغ مطلوب")
+      .required("المبلغ مطلوب")
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
-    expectedDate: yup.string().required("التاريخ المتوقع لإكمال السداد مطلوب"), //need to cj
-    reason: yup.string().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
-    //trim spaces
+    expectedDate: yup
+      .date()
+      .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
+    // .test(
+    //   "enteranceExpectedDate",
+    //   "التاريخ المتوقع لإكمال السداد مطلوب",
+    //   (val) => {
+    //     return props.values.expectedDate == new Date();
+    //   }
+    // ), 
+    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
+   
+    usersSelect: yup.bool(),
+    user: yup.string().notRequired()
+    .when('usersSelect', {
+    is: (val) => val == true,
+    then: yup.string().required('اختيار المدين مطلوب'),
+    otherwise: yup.string().notRequired()
+    })
+    
+    
   });
 
-  //-------------------------------------------- Rencdring react component
+  //-------------------------------------------- Rendering react component
   render() {
     return (
+  
       <View style={styles.container}>
-        <Image
-          style={styles.background}
-          source={require("./assets/RequestBackground.png")}
-        />
+     
+        <View style={styles.background}>
+          {/* <BackgroundComponent /> */}
+        </View>
+
         <View style={styles.registerBackground}>
           <KeyboardAwareScrollView>
             <Text style={styles.header}>إنشاء طلب </Text>
@@ -218,23 +321,22 @@ export default class Request extends React.Component {
                 user: "",
                 usersSelect: false,
                 price: "",
-                expectedDate: new Date(),
+                expectedDate:today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
               onSubmit={(values, action) => {
-                alert(this.state.installmentsState);
                 this.onSubmitPress(values);
               }}
             >
               {(props, setFieldValue) => (
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
-                    <Text style={styles.checkboxLabel}>
-                      التدين من شخص محدد{" "}
-                    </Text>
+                    <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
+                  
+               
                     <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
@@ -246,23 +348,31 @@ export default class Request extends React.Component {
                           "usersSelect",
                           !props.values.usersSelect
                         )
+                        
+                        
+                    
+                        
+
                       }
                       checked={props.values.usersSelect}
                     />
+                    
+              
                   </View>
-
+              
+                 
                   <Text style={styles.textNote}>
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
+                
                   {props.values.usersSelect ? (
                     <DropDownPicker
                       style={styles.DropDownPicker}
-                      items={[
-                        { label: "رهام", value: "رهام", selected: true },
-                        { label: "رغد", value: "رغد" },
-                      ]}
-                  
+                      items={applicationUsers}
+                      placeholder="اختر دائن "
+                      placeholderStyle={{ color: "#CBCBCC" }}
+                     
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -286,11 +396,11 @@ export default class Request extends React.Component {
                         width: 352,
                         height: 40,
                         marginLeft: 35,
-
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
                         borderBottomLeftRadius: 60,
                         borderBottomRightRadius: 50,
+                        marginBottom: 25,
                       }}
                       itemStyle={{
                         backgroundColor: "#fff",
@@ -320,12 +430,18 @@ export default class Request extends React.Component {
                         // to support RTL
                       }}
                       onChangeItem={(item) =>
-                        props.setFieldValue(users, item.label)
+                        props.setFieldValue("user", item.label)
                       }
                     />
+                    
                   ) : null}
+                    <Text style={[styles.textError, { top: -20 }]}>
+                    { props.errors.user}
+                  </Text>
+                  <Text style={styles.textInputTitle}>
+                    المبلغ <Text style={styles.textError}> *</Text>
+                  </Text>
 
-                  <Text style={styles.textInputTitle}>المبلغ </Text>
                   <TextInput
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
@@ -340,16 +456,20 @@ export default class Request extends React.Component {
                   </Text>
                   <Text style={styles.textInputTitle}>
                     التاريخ المتوقع لإكمال السداد{" "}
+                    <Text style={styles.textError}> *</Text>
                   </Text>
                   <TextInput
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
-                    placeholder="التاريخ "
+                    placeholder="التاريخ"
                     value={props.values.expectedDate}
                     editable={false}
                     onChangeText={
                       (this.repaymentOnce(props.values.expectedDate),
-                      this.repayementInstallments(props.values.price))
+                      this.repayementInstallments(
+                        props.values.price,
+                        props.values.expectedDate
+                      ))
                     }
                     onBlur={props.handleBlur("expectedDate")}
                   />
@@ -358,12 +478,15 @@ export default class Request extends React.Component {
                     hideText
                     style={styles.datePicker}
                     date={props.values.expectedDate}
+                    // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
                     mode="date"
                     calendar="arabic"
-                    locale={'ar'}
-                    placeholder="select date"
+                    locale={"ar"}
+                    placeholder={new yup.date()}
                     format="YYYY-MM-DD"
-                    minDate={new Date()}
+                    minDate= {tomorrow}
+                    showDateSelect
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
                     iconComponent={<CalendarIconComponent />}
@@ -388,11 +511,13 @@ export default class Request extends React.Component {
                         fontSize: 17,
                       },
                     }}
+                  
                     onDateChange={(date) => {
                       props.setFieldValue("expectedDate", date);
                     }}
+                   
                   />
-                  <Text style={styles.textError}>
+                  <Text style={[styles.textError, { top: -50 }]}>
                     {props.touched.expectedDate && props.errors.expectedDate}
                   </Text>
                   <View style={styles.radio}>
@@ -406,7 +531,7 @@ export default class Request extends React.Component {
                         flexDirection: "row-reverse ",
                         justifyContent: "flex-end",
                         left: 160,
-
+                        marginTop: -15,
                         textAlign: "right",
                       }}
                       boxStyle={{
@@ -433,10 +558,12 @@ export default class Request extends React.Component {
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
-                    
-
-
-                      searchableError={ () => <Text style = {styles.textNote}>لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال السداد </Text>}
+                      searchableError={() => (
+                        <Text style={[styles.textError, { marginRight: 4 }]}>
+                          لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
+                          السداد{" "}
+                        </Text>
+                      )}
                       placeholder="إختر الفترة"
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={props.values.user}
@@ -466,6 +593,7 @@ export default class Request extends React.Component {
                         borderTopRightRadius: 50,
                         borderBottomLeftRadius: 60,
                         borderBottomRightRadius: 50,
+                        marginBottom: 35,
                       }}
                       itemStyle={{
                         backgroundColor: "#fff",
@@ -501,22 +629,48 @@ export default class Request extends React.Component {
                         })
                       }
                     />
-                  ) : (((year == month) == days) == week) == 0 ? (
+                  ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
+                    (year == -1 && month == -1 && days == -1 && week == -1) ? (
+                    <Text style={styles.repaymentTextError}>
+                      لظهور المدة حدد التاريخ المتوقع لإكمال السداد{" "}
+                    </Text>
+                  ) : (
                     <Text
                       style={[
                         styles.textNote,
                         { color: "#9B9B7A", top: -75, right: 10 },
                       ]}
                     >
-                      السداد بعد {ArabicNumbers(year)} سنه و{" "}
-                      {ArabicNumbers(month)} شهر {ArabicNumbers(week)} إسبوع
-                      و {ArabicNumbers(days)} يوم
+                      السداد بعد
+                      {year != 0 ? (
+                        <Text> {ArabicNumbers(year)} سنه </Text>
+                      ) : null}
+                      {month != 0 ? (
+                         year != 0?(
+                          <Text> و {ArabicNumbers(month)} شهر</Text>
+                          ):
+                        <Text> {ArabicNumbers(month)} شهر </Text>
+                      ) : null}
+                      { week != 0   ? (
+                        
+                        year != 0 || month!= 0 ?(
+                          <Text> و {ArabicNumbers(week)} إسبوع</Text>
+                        ):
+                        <Text> {ArabicNumbers(week)} إسبوع </Text>
+                      ) : null}
+                      {days != 0 ? (
+                          year != 0 || month!= 0 || week !=0 ?(
+                            <Text> و {ArabicNumbers(days)} يوم</Text>):
+                        <Text> {ArabicNumbers(days)} يوم </Text>
+                      ) : null}
                     </Text>
-                  ) : null}
-                  <Text style={styles.textInputTitle}>السبب </Text>
+                  )}
+                  <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
+                    السبب{" "}
+                  </Text>
                   <TextInput
                     multiline
-                    style={[styles.textInput, { height: 100 }]}
+                    style={[styles.textInput, { height: 75 }]}
                     placeholder="السبب"
                     onChangeText={props.handleChange("reason")}
                     value={props.values.reason}
@@ -530,7 +684,7 @@ export default class Request extends React.Component {
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={() => navigation.navigate("Home")}
                     >
-                      <Text style={styles.buttonText}> إالغاء </Text>
+                      <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
@@ -572,30 +726,25 @@ const styles = StyleSheet.create({
     marginLeft: -20,
   },
 
-  registerBackground: {
-    flex: 1,
-    height: 200,
-    borderTopRightRadius: 40,
-    borderTopLeftRadius: 40,
-    backgroundColor: "#fff",
-  },
   DropDownPicker: {
     marginTop: -10,
     borderRadius: 50,
   },
 
   background: {
-    bottom: 400,
+    bottom: 500,
     position: "absolute",
     height: 480,
     // paddingBottom:100,
   },
+
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
     margin: 20,
-    top: 30,
+    top: 0,
+    marginBottom: 0,
     textAlign: "center",
     justifyContent: "center",
   },
@@ -605,7 +754,6 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     flex: 1,
     height: 700,
-
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     backgroundColor: "#fff",
@@ -613,7 +761,7 @@ const styles = StyleSheet.create({
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 17,
-    marginTop: 10,
+    marginTop: 1,
     marginBottom: 5,
     textAlign: "right",
     color: "#404040",
@@ -680,7 +828,15 @@ const styles = StyleSheet.create({
     marginRight: 30,
     bottom: 10,
   },
-
+  repaymentTextError: {
+    color: "#A4161A",
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 13,
+    bottom: 75,
+    textAlign: "right",
+    marginBottom: -10,
+    marginRight: 30,
+  },
   radio: {
     marginTop: -35,
   },

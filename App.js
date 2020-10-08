@@ -17,7 +17,7 @@ import TopBar from "./TopBar";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import Profile from "./Profile"
-import * as firebase from "firebase";
+// import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
