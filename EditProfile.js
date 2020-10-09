@@ -11,7 +11,6 @@ import {
   Dimensions,
   TouchableHighlight,
   TextInput,
-  Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";

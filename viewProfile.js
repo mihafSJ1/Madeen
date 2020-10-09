@@ -11,7 +11,6 @@ import {
   Dimensions,
   TouchableHighlight,
   TextInput,
-  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
