@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
   Image,
@@ -61,9 +60,8 @@ export default function login({ navigation }) {
       .then(() => navigation.navigate("squares"))
       .catch((error) => {
         switch (error.code) {
-          
-         
           case "auth/invalid-email":
+<<<<<<< HEAD
 
             Alert.alert("","تحقق من صحة بريدك الالكتروني",
             [  
@@ -71,16 +69,34 @@ export default function login({ navigation }) {
               {cancelable: false}  
               );
 
+||||||| merged common ancestors
+
+      
+
+            alert("تحقق من صحة بريدك الالكتروني");
+=======
+            alert("تحقق من صحة بريدك الالكتروني");
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
             break;
           case "auth/user-not-found":
           
           case "auth/wrong-password":
+<<<<<<< HEAD
             
             Alert.alert("","من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
             [  
               {text: 'حسناً'}, ],
               {cancelable: false}  
               );
+||||||| merged common ancestors
+            alert(
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
+            );
+=======
+            alert(
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
+            );
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
             break;
           case "auth/network-request-failed":
             Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
@@ -91,7 +107,6 @@ export default function login({ navigation }) {
           
             break;
         }
-        
       });
 
     console.log("handleLogin");
@@ -239,7 +254,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-   // fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",

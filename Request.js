@@ -26,7 +26,7 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
-// import BackgroundComponent from "./BackgroundComponent";
+import RequestBackgroundComp from "./RequestBackgroundComp";
 // import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
@@ -88,9 +88,9 @@ var dateDiffDays,
 
 // var tomorrow,
 //   today = moment();
-  const today = new Date()
-const tomorrow = new Date(today)
-tomorrow.setDate(tomorrow.getDate() + 1)
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 var userNameFromDB = "";
 
@@ -103,7 +103,7 @@ var userNameFromDB = "";
       priceState: 0,
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
-      userValue:[]
+      userValue: [],
     };
   }
 
@@ -111,7 +111,6 @@ var userNameFromDB = "";
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
     var totalDays = time / (1000 * 3600 * 24);
-    
 
     year = Math.floor(totalDays / 365);
     totalDays = totalDays % 365;
@@ -182,12 +181,11 @@ var userNameFromDB = "";
 
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
-        installmentsArray[i].durationValueArr == 0 && installmentsArray[i].priceValueArr == 0
-   
+        installmentsArray[i].durationValueArr == 0 &&
+        installmentsArray[i].priceValueArr == 0
       )
         continue;
-  
-     
+
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
   }
@@ -200,17 +198,16 @@ var userNameFromDB = "";
       .database()
       .ref("users/")
       .on("value", (snapshot) => {
-        snapshot.forEach((child)=>{
-          if (child.val().email != currentUser.email){
-          applicationUsers.push({
-             fullName:child.val().fullName,
-             label: child.val().email,
-           
-          })
-        }
-        })
-       
+        snapshot.forEach((child) => {
+          if (child.val().email != currentUser.email) {
+            applicationUsers.push({
+              fullName: child.val().fullName,
+              label: child.val().email,
+            });
+          }
+        });
       });
+<<<<<<< HEAD
       // alert(applicationUsers);
       this.setState({
         userValue: applicationUsers,
@@ -218,10 +215,30 @@ var userNameFromDB = "";
      
 
 
+||||||| merged common ancestors
+      // alert(applicationUsers);
+      this.setState({
+        userValue: applicationUsers,
+      })
+     
+
+=======
+    // alert(applicationUsers);
+    this.setState({
+      userValue: applicationUsers,
+    });
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
   }
 
+<<<<<<< HEAD
 
   onSubmitPress(values, props) {
+||||||| merged common ancestors
+
+  onSubmitPress(values) {
+=======
+  onSubmitPress(values) {
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
     const { currentUser } = this.state;
 
     firebase
@@ -257,15 +274,38 @@ var userNameFromDB = "";
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
               [
+<<<<<<< HEAD
                
                 { text: "موافق", onPress: () =>  props.navigate('squares') }
+||||||| merged common ancestors
+              
+                {
+                  text: "حسنا",
+                  // onPress: () =>
+                  // // navigation.navigate("squares")
+                    
+                },
+=======
+                {
+                  text: "حسنا",
+                  // onPress: () =>
+                  // // navigation.navigate("squares")
+                },
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
               ],
               { cancelable: false }
             );
+<<<<<<< HEAD
         
           
              
            
+||||||| merged common ancestors
+            
+             
+           
+=======
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
           }
         }
       );
@@ -288,18 +328,18 @@ var userNameFromDB = "";
     //   (val) => {
     //     return props.values.expectedDate == new Date();
     //   }
-    // ), 
+    // ),
     reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
-   
+
     usersSelect: yup.bool(),
-    user: yup.string().notRequired()
-    .when('usersSelect', {
-    is: (val) => val == true,
-    then: yup.string().required('اختيار المدين مطلوب'),
-    otherwise: yup.string().notRequired()
-    })
-    
-    
+    user: yup
+      .string()
+      .notRequired()
+      .when("usersSelect", {
+        is: (val) => val == true,
+        then: yup.string().required("اختيار المدين مطلوب"),
+        otherwise: yup.string().notRequired(),
+      }),
   });
 
   //-------------------------------------------- Rendering react component
@@ -307,11 +347,9 @@ var userNameFromDB = "";
  
  
     return (
-  
       <View style={styles.container}>
-     
         <View style={styles.background}>
-          {/* <BackgroundComponent /> */}
+          <RequestBackgroundComp />
         </View>
 
         <View style={styles.registerBackground}>
@@ -323,7 +361,7 @@ var userNameFromDB = "";
                 user: "",
                 usersSelect: false,
                 price: "",
-                expectedDate:today,
+                expectedDate: today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
@@ -346,8 +384,7 @@ var userNameFromDB = "";
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
                     <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
-                  
-               
+
                     <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
@@ -359,32 +396,38 @@ var userNameFromDB = "";
                           "usersSelect",
                           !formprops.values.usersSelect
                         )
-                        
-                        
-                    
-                        
-
                       }
                       checked={formprops.values.usersSelect}
                     />
-                    
-              
                   </View>
-              
-                 
+
                   <Text style={styles.textNote}>
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
+<<<<<<< HEAD
                 
                   {formprops.values.usersSelect ? (
+||||||| merged common ancestors
+                
+                  {props.values.usersSelect ? (
+=======
+                  {props.values.usersSelect ? (
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
+<<<<<<< HEAD
                      
                       value={formprops.values.user}
+||||||| merged common ancestors
+                     
+                      value={props.values.user}
+=======
+                      value={props.values.user}
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -444,10 +487,17 @@ var userNameFromDB = "";
                         formprops.setFieldValue("user", item.label)
                       }
                     />
-                    
                   ) : null}
+<<<<<<< HEAD
                     <Text style={[styles.textError, { top: -20 }]}>
                     { formprops.errors.user}
+||||||| merged common ancestors
+                    <Text style={[styles.textError, { top: -20 }]}>
+                    { props.errors.user}
+=======
+                  <Text style={[styles.textError, { top: -20 }]}>
+                    {props.errors.user}
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
@@ -490,13 +540,21 @@ var userNameFromDB = "";
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+<<<<<<< HEAD
                     onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
+||||||| merged common ancestors
+                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+=======
+                    onOpenModal={() => {
+                      props.setFieldValue("expectedDate", tomorrow);
+                    }}
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
                     placeholder={new yup.date()}
                     format="YYYY-MM-DD"
-                    minDate= {tomorrow}
+                    minDate={tomorrow}
                     showDateSelect
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
@@ -522,11 +580,9 @@ var userNameFromDB = "";
                         fontSize: 17,
                       },
                     }}
-                  
                     onDateChange={(date) => {
                       formprops.setFieldValue("expectedDate", date);
                     }}
-                   
                   />
                   <Text style={[styles.textError, { top: -50 }]}>
                     {formprops.touched.expectedDate && formprops.errors.expectedDate}
@@ -657,22 +713,25 @@ var userNameFromDB = "";
                         <Text> {ArabicNumbers(year)} سنه </Text>
                       ) : null}
                       {month != 0 ? (
-                         year != 0?(
+                        year != 0 ? (
                           <Text> و {ArabicNumbers(month)} شهر</Text>
-                          ):
-                        <Text> {ArabicNumbers(month)} شهر </Text>
+                        ) : (
+                          <Text> {ArabicNumbers(month)} شهر </Text>
+                        )
                       ) : null}
-                      { week != 0   ? (
-                        
-                        year != 0 || month!= 0 ?(
+                      {week != 0 ? (
+                        year != 0 || month != 0 ? (
                           <Text> و {ArabicNumbers(week)} إسبوع</Text>
-                        ):
-                        <Text> {ArabicNumbers(week)} إسبوع </Text>
+                        ) : (
+                          <Text> {ArabicNumbers(week)} إسبوع </Text>
+                        )
                       ) : null}
                       {days != 0 ? (
-                          year != 0 || month!= 0 || week !=0 ?(
-                            <Text> و {ArabicNumbers(days)} يوم</Text>):
-                        <Text> {ArabicNumbers(days)} يوم </Text>
+                        year != 0 || month != 0 || week != 0 ? (
+                          <Text> و {ArabicNumbers(days)} يوم</Text>
+                        ) : (
+                          <Text> {ArabicNumbers(days)} يوم </Text>
+                        )
                       ) : null}
                     </Text>
                   )}
@@ -728,7 +787,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontFamily: "Bahij_TheSansArabic-Light",
     flex: 1,
-    //  overflow:"hidden",
+    marginTop: -40,
     backgroundColor: "#F2F4F1",
     justifyContent: "center",
     fontSize: 25,
@@ -862,6 +921,12 @@ const styles = StyleSheet.create({
     left: 56,
     paddingRight: 340,
   },
+<<<<<<< HEAD
 });
 
 export default withNavigation(Request);
+||||||| merged common ancestors
+});
+=======
+});
+>>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d

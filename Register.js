@@ -53,6 +53,9 @@ export default function Register({ navigation }) {
  
   // const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
+  const strongPassRegex = new RegExp(
+    "^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"
+  );
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
@@ -68,7 +71,7 @@ export default function Register({ navigation }) {
     if (
       email == "" ||
       password == "" ||
-      fullName == "" ||
+      fullName.trim() == "" ||
       confirmPassword == ""
     ) {
       
@@ -119,33 +122,37 @@ export default function Register({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/network-request-failed":
-            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "فضلًا تحقق من اتصالك بالانترنت",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/invalid-email":
-            Alert.alert("","تحقق من صحة بريدك الالكتروني",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "تحقق من صحة بريدك الالكتروني",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/email-already-in-use":
-            Alert.alert("","هذا البريد الإلكتروني مستخدم من قبل",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "هذا البريد الإلكتروني مستخدم من قبل",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
 
             break;
           case "auth/weak-password":
-            Alert.alert("","كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "كلمة المرور ضعيفة، يجب أن تكون أكثر من ٦ خانات",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
         }
         // alert(error.code)
@@ -196,7 +203,6 @@ export default function Register({ navigation }) {
             placeholder="تأكيد كلمة السر"
             onChangeText={(text) => setConfirmPassword(text)}
             value={confirmPassword}
-           
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />

@@ -28,71 +28,62 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 
 
+
+
+// import BottomNavigator from "./BottomNavigator";
+ 
+
 import { Ionicons } from "@expo/vector-icons";
 
-
 export default function login({ navigation }) {
-   
-  
-
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
-          
-      <Image style={styles.UserImage} source={require("./assets/UserImageProfile.png")} /> 
+        <Image
+          style={styles.UserImage}
+          source={require("./assets/UserImageProfile.png")}
+        />
 
-        <View style={styles.registerBackground }>
+        <View style={styles.registerBackground}>
           <Text style={styles.UserName}>أريج الجريوي</Text>
 
           {/* field number1  */}
 
           <Text style={styles.Email}> Areej@gmail.com </Text>
-          
 
           <Text style={styles.RateStarts}>
-          <Ionicons name="ios-star" size={33} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={33} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={33} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={33} color="#ECD246" solid />
-          <Ionicons name="ios-star" size={33} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={33} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={33} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={33} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={33} color="#ECD246" solid />
+            <Ionicons name="ios-star" size={33} color="#ECD246" solid />
           </Text>
           <Text style={styles.subsidy}> عدد التسليف </Text>
           <Text style={styles.debts}> عدد الاستلاف </Text>
           <View style={styles.PinkRectangleShapeView}>
-              <Text style={styles.buttonText}> ١٠</Text>
-              
+            <Text style={styles.buttonText}> ١٠</Text>
           </View>
           <View style={styles.YellowRectangleShapeView}>
-              <Text style={styles.buttonText}> ١٦</Text>
-           
+            <Text style={styles.buttonText}> ١٦</Text>
           </View>
-          
+
           {/* <RegisterTextInput/> */}
 
           {/* faild number1  */}
-          
 
           {/* link */}
-          
 
           {/* <Text style={styles.textInputTitle}> كلمة السر </Text>
            <RegisterTextInput secureTextEntry={true}/>
            <Text style = {styles.signinText}>هل نسيت كلمة السر؟<Text 
          style = {{ color: '#57694C' }} onPress={() => navigation.navigate('ResetPassword')}>   اعادة تعيين كلمة السر</Text></Text> */}
 
-
-
-
-
           <StatusBar style="auto" />
           <View></View>
         
           {/* < BottomNavigator />  */}
         </View>
-       
       </View>
-      
-      
     </KeyboardAwareScrollView>
   );
 }
@@ -100,7 +91,7 @@ export default function login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  // zIndex:-10,
+    // zIndex:-10,
     backgroundColor: "#EEF2ED",
     //alignItems: 'center',
     justifyContent: "center",
@@ -120,36 +111,34 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left:192,
+    left: 192,
     top: 200,
     backgroundColor: "#D9AE94",
-    borderColor: '#D3CECA',
+    borderColor: "#D3CECA",
     borderWidth: 2,
-   
-    },
-    YellowRectangleShapeView: {
-        alignItems: "center",
-        width: 148,
-        height: 100,
-        marginTop: 0,
-        padding: 5,
-        borderRadius: 15,
-        marginLeft: 33,
-        marginBottom: 0,
-        right:-3,
-        top: 100,
-        backgroundColor: "#F1DCA7",
-        borderColor: '#D3CECA',
-        borderWidth: 2,
-       
-        },
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 148,
+    height: 100,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -3,
+    top: 100,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
   registerBackground: {
     //overflow: "hidden",
     flex: 1,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,
-   bottom: 115,
-   height:750,
+    bottom: 115,
+    height: 750,
     backgroundColor: "#fff",
   },
 
@@ -166,8 +155,6 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
   },
 
-  
-
   scrollView: {
     paddingHorizontal: 20,
   },
@@ -177,8 +164,8 @@ const styles = StyleSheet.create({
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-bottom:-220,
-right:5,
+    bottom: -220,
+    right: 5,
     textAlign: "center",
     justifyContent: "center",
   },
@@ -193,7 +180,6 @@ right:5,
     right: 134,
   },
 
-
   debts: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 21,
@@ -202,7 +188,6 @@ right:5,
     top: 200,
     left: 54,
     zIndex: 2,
-
   },
   subsidy: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -211,19 +196,14 @@ right:5,
     color: "#404040",
     top: 230,
     right: 58,
-
   },
   buttonText: {
     textAlign: "center",
-    top:10,
+    top: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 40,
-    color: '#fff',
-   
+    color: "#fff",
   },
-  
-
-
 
   // Get a reference to the database service
 });
