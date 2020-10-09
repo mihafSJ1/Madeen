@@ -11,6 +11,7 @@ import {
   ImageBackground,
   ImageButton,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import TopBar from "./TopBar";
