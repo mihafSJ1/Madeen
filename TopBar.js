@@ -21,7 +21,7 @@ export default function TopBar({ navigation }) {
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        setUserName(snapshot.val().fullName);
+        // setUserName(snapshot.val().fullName);
       });
   }, []);
 

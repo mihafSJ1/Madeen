@@ -207,7 +207,6 @@ var userNameFromDB = "";
           }
         });
       });
-<<<<<<< HEAD
       // alert(applicationUsers);
       this.setState({
         userValue: applicationUsers,
@@ -215,30 +214,10 @@ var userNameFromDB = "";
      
 
 
-||||||| merged common ancestors
-      // alert(applicationUsers);
-      this.setState({
-        userValue: applicationUsers,
-      })
-     
-
-=======
-    // alert(applicationUsers);
-    this.setState({
-      userValue: applicationUsers,
-    });
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
   }
 
-<<<<<<< HEAD
 
   onSubmitPress(values, props) {
-||||||| merged common ancestors
-
-  onSubmitPress(values) {
-=======
-  onSubmitPress(values) {
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
     const { currentUser } = this.state;
 
     firebase
@@ -274,38 +253,15 @@ var userNameFromDB = "";
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
               [
-<<<<<<< HEAD
                
                 { text: "موافق", onPress: () =>  props.navigate('squares') }
-||||||| merged common ancestors
-              
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                    
-                },
-=======
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                },
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
               ],
               { cancelable: false }
             );
-<<<<<<< HEAD
         
           
              
            
-||||||| merged common ancestors
-            
-             
-           
-=======
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
           }
         }
       );
@@ -368,11 +324,11 @@ var userNameFromDB = "";
                 submittedDate: new Date(),
               }}
             
-              onReset={(values,action)=>{
-                action.resetForm()
-                this.props.navigation.navigate("squares")
+              // onReset={(values,action)=>{
+              //   action.resetForm()
+              //   // this.props.navigation.navigate("squares")
 
-              }}
+              // }}
               onSubmit={(values, action) => {
                 action.resetForm()
                
@@ -405,29 +361,15 @@ var userNameFromDB = "";
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
-<<<<<<< HEAD
                 
                   {formprops.values.usersSelect ? (
-||||||| merged common ancestors
-                
-                  {props.values.usersSelect ? (
-=======
-                  {props.values.usersSelect ? (
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
-<<<<<<< HEAD
                      
                       value={formprops.values.user}
-||||||| merged common ancestors
-                     
-                      value={props.values.user}
-=======
-                      value={props.values.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -488,16 +430,8 @@ var userNameFromDB = "";
                       }
                     />
                   ) : null}
-<<<<<<< HEAD
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { formprops.errors.user}
-||||||| merged common ancestors
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { props.errors.user}
-=======
                   <Text style={[styles.textError, { top: -20 }]}>
-                    {props.errors.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
+                    {formprops.errors.user}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
@@ -540,15 +474,7 @@ var userNameFromDB = "";
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-<<<<<<< HEAD
                     onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
-||||||| merged common ancestors
-                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-=======
-                    onOpenModal={() => {
-                      props.setFieldValue("expectedDate", tomorrow);
-                    }}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
@@ -755,7 +681,9 @@ var userNameFromDB = "";
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={() =>  
                         this.props.navigation.navigate("squares")
-                        // formprops.onReset(formprops.values)
+                     
+                        // formprops.handleReset()
+                      
                       }
                       
                     >
@@ -921,12 +849,6 @@ const styles = StyleSheet.create({
     left: 56,
     paddingRight: 340,
   },
-<<<<<<< HEAD
 });
 
 export default withNavigation(Request);
-||||||| merged common ancestors
-});
-=======
-});
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
