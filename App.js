@@ -62,8 +62,7 @@ function Homenav() {
             height: 3,
             width: 2,
           },
-          padding: 10,
-          height: 60,
+          // height: 60,
           justifyContent: "center",
         },
       }}
