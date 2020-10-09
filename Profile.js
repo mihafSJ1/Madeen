@@ -71,8 +71,8 @@ export default function login({ navigation }) {
 
           <StatusBar style="auto" />
           <View></View>
-
-          {/* < BottomNavigator />  */}
+        
+        
         </View>
       </View>
     </KeyboardAwareScrollView>

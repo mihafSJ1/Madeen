@@ -140,7 +140,7 @@ export default function ResetPassword({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <BottomNavigator/>
+    
     </View>
   );
 }

@@ -6,48 +6,142 @@ import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
-import { Button } from "react-native";
-
+import { AntDesign,MaterialIcons,Feather } from '@expo/vector-icons';
+import SvgComponent from './Svgnav';
+import SvgComponent2 from './TabbarSVG'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Timeline from "./Timeline";
 import squares from "./squares";
-import request from "./Request";
+import Request from "./Request";
 import TopBar from "./TopBar";
 import Alert from "./Alert";
 import FirstPage from "./FirstPage";
 import CustomAlertComponent from "./CustomAlertComponent";
-import Profile from "./Profile";
-import * as firebase from "firebase";
+import Profile from "./Profile"
+// import * as firebase from "firebase";
+import { color } from "react-native-reanimated";
 
-// const Logout = () => {
-//   Alert.alert(
-//     "تنبيه!",
-//     "هل أنت متأكد من تسجيل الخروج؟",
-//     [
-//       {
-//         text: "إلغاء",
-//         onPress: () => {
-//           return;
-//         },
-//         style: "cancel",
-//       },
-//       {
-//         text: "موافق",
-//         onPress: () =>
-//           firebase
-//             .auth()
-//             .signOut()
-//             .then(
-//               () => console.log("successfully logged out"),
-//               navigation.navigate("Home")
-//             ),
-//       },
-//     ],
-//     { cancelable: false }
-//   );
-// };
-
-//import Testnav from "./testnav";
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+function squaresScreens(){
+  return(
+    <Stack.Navigator>
+      
+      <Stack.Screen
+
+  name="squares"
+  component={squares}
+  options={{ headerShown: false }}
+/>
+<Stack.Screen
+  name="Timeline"
+  component={Timeline}
+  options={{ headerShown: false }}
+/>
+</Stack.Navigator>
+  );
+}
+
+
+function Homenav(){
+  
+  return(
+   
+    <Tab.Navigator
+  
+    initialRouteName="squers"
+    tabBarOptions={{
+      activeTintColor: '#746356', 
+      inactiveTintColor: '#9B9B7A', 
+      
+    style:{
+      
+       showIcon: true,
+       
+       // justifyContent: 'center',
+        borderTopRightRadius:20,
+        borderTopLeftRadius:20,
+        shadowOpacity: 0.50 ,
+        shadowColor:"#707070",
+        shadowRadius: 5,
+        
+        shadowOffset: {
+    
+            height: 3, width: 2
+        },
+        //height:60,
+        justifyContent: 'center',
+      }}
+      
+    }
+    
+  >
+  
+   <Tab.Screen
+    name="squares"
+    component={squares}
+    options={{
+      tabBarLabel: '',
+      tabBarIcon: ({ color, size }) => (
+          <Feather name="home" size={27}  color={ color } style={{ textAlignVertical: 'center' }}/>
+      ),
+    }}
+  />
+<Tab.Screen
+    name="TopBar"
+    component={TopBar}
+    options={{
+      tabBarLabel: '',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialIcons name="notifications-none"  size={32} color={ color } style={{ textAlignVertical: 'center' }}/>
+      ),
+    }}
+  />
+   <Tab.Screen
+    name="Request"
+    component={Request}
+    options={{
+      tabBarLabel: '',
+      tabBarIcon: ({ color, size }) => (
+        <SvgComponent bottom={10} shadowOpacity= {0.50} shadowColor="#707070"
+        shadowRadius={4}
+       
+         />
+      ),
+    }} 
+  />
+  <Tab.Screen
+    name="Timeline"
+    component={squaresScreens}
+    options={{
+      tabBarLabel: '',
+      tabBarIcon: ({ color, size }) => (
+       <MaterialIcons  name="chat-bubble-outline"  size={27} color={ color } style={{ textAlignVertical: 'center' }} />
+      ),
+    }}
+  />
+ 
+   
+   <Tab.Screen
+    name="Profile"
+    component={Profile}
+    options={{
+      tabBarLabel: '',
+      tabBarIcon: ({ color, size }) => (
+       
+          <MaterialIcons    name="person-outline"  size={30} color={ color } zIndex={10}/>
+      ),
+ 
+    }}
+  />
+  
+     </Tab.Navigator>
+     
+  );
+}
+
+     
+
 
 export default function App({ navigation }) {
   const [loading, setLoading] = useState(true);
@@ -84,91 +178,48 @@ export default function App({ navigation }) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user ? (
-          <Stack.Screen name="Home">
-            {(props) => <Home {...props} extraData={user} />}
-          </Stack.Screen>
-        ) : (
-          <>
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="login"
-              component={login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Register"
-              component={Register}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPassword}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CustomAlertComponent"
-              component={CustomAlertComponent}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Timeline"
-              component={Timeline}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                headerLeft: () => <Button onPress={() => Logout()} />,
-              }}
-            />
-            <Stack.Screen
-              name="squares"
-              component={squares}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                // headerStyle: {
-                //   backgroundColor: "transparent",
-                // },
-                header: (props) => <TopBar {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="TopBar"
-              component={TopBar}
-              options={{ headerShown: false, navigation: { navigation } }}
-            />
-            <Stack.Screen
-              name="Profile"
-              component={Profile}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                headerLeft: () => <Button onPress={() => Logout()} />,
-              }}
-            />
-
-            <Stack.Screen
-              name="request"
-              component={request}
-              options={{
-                headerShown: false,
-                navigation: { navigation },
-              }}
-            />
-            <Stack.Screen
-              name="FirstPage"
-              component={FirstPage}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
+  
+      {user ? (
+      <Stack.Screen name="Home">
+        {(props) => <Home {...props} extraData={user} />}
+      </Stack.Screen>
+    ) : (
+      <>
+      
+<Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="login"
+          component={login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
+       <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{ headerShown: false }}
+        /> 
+        <Stack.Screen
+          name="CustomAlertComponent"
+          component={CustomAlertComponent}
+          options={{ headerShown: false }}
+        />
+  <Stack.Screen
+          name="squares"
+          component={Homenav}
+          options={{ headerShown: false }}
+        />
+   </>
+    )}
+  </Stack.Navigator>
+  
     </NavigationContainer>
   );
 }

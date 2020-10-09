@@ -49,7 +49,9 @@ export default function Register({ navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const fullNameRegexAR = /[\u0600-\u06FF]/;
-  const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
+  const fullNameRegexEN =/^[a-zA-Z şüöı]+$/;
+ 
+  // const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
   const strongPassRegex = new RegExp(
     "^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"
@@ -73,27 +75,24 @@ export default function Register({ navigation }) {
 
       return;
     }
-
-    if (
-      fullNameRegexEN.test(fullName) == false &&
-      fullNameRegexAR.test(fullName) == false
-    ) {
-      Alert.alert(
-        "",
-        "عفوًا الاسم يجب أن يحتوي على حروف فقط",
-        [{ text: "حسناً" }],
-        { cancelable: false }
-      );
-      return;
+    
+    if (fullNameRegexEN.test(fullName) == false && fullNameRegexAR.test(fullName)==false){
+      Alert.alert("",'عفوًا الاسم يجب أن يحتوي على حروف فقط' ,
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+      return
     }
-    // if (strongPassRegex.test(password) == false) {
-    //   Alert.alert(
-    //     "",
-    //     "يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز",
-    //     [{ text: "حسناً" }],
-    //     { cancelable: false }
-    //   );
-    //   return;
+    // if (strongPassRegex.test(password) == false){
+   
+    
+    //   Alert.alert("",'يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز', 
+    //   [  
+    //     {text: 'حسناً'}, ],
+    //     {cancelable: false}  
+    //     );
+    //   return
     // }
 
     firebase
@@ -106,9 +105,10 @@ export default function Register({ navigation }) {
           .set({
             fullName: fullName,
             email: email,
+            UserImage: "https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a",
           });
       })
-      .then(() => navigation.navigate("request"))
+      .then(() => navigation.navigate("squares"))
 
       .catch((error) => {
         switch (error.code) {

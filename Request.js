@@ -23,7 +23,7 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
-import BackgroundComponent from "./BackgroundComponent";
+// import BackgroundComponent from "./BackgroundComponent";
 // import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
@@ -256,8 +256,8 @@ export default class Request extends React.Component {
               
                 {
                   text: "حسنا",
-                  onPress: () =>
-                  navigation.navigate("squares")
+                  // onPress: () =>
+                  // // navigation.navigate("squares")
                     
                 },
               ],
@@ -309,7 +309,7 @@ export default class Request extends React.Component {
       <View style={styles.container}>
      
         <View style={styles.background}>
-          <BackgroundComponent />
+          {/* <BackgroundComponent /> */}
         </View>
 
         <View style={styles.registerBackground}>

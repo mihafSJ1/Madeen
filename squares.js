@@ -35,7 +35,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.orangeText}
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate("Timeline")}
           >
             {" "}
             الطلبات العامه
@@ -87,6 +87,7 @@ export default function squares({ navigation }) {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
+   
     </View>
   );
 }

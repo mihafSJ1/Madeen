@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 
   topBarText: {
     color: "#404040",
-    fontFamily: "Bahij_TheSansArabic-Light",
+    //fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 18,
     marginTop: 10,
