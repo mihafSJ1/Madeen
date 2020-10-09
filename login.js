@@ -53,29 +53,23 @@ export default function login({ navigation }) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => navigation.navigate("request"))
+      .then(() => navigation.navigate("Profile"))
       .catch((error) => {
         switch (error.code) {
-          
-         
           case "auth/invalid-email":
-
-      
-
             alert("تحقق من صحة بريدك الالكتروني");
             break;
           case "auth/user-not-found":
 
           case "auth/wrong-password":
             alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
             );
             break;
           case "auth/network-request-failed":
             alert("فضلًا تحقق من اتصالك بالانترنت");
             break;
         }
-        
       });
 
     console.log("handleLogin");

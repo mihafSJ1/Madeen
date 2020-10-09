@@ -1,13 +1,21 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity ,Alert} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
-var userName = "";
+// var userName = "";
 export default function TopBar({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userName, setUserName] = useState("");
   useEffect(() => {
     const { currentUser } = firebase.auth();
     setCurrentUser({ currentUser });
@@ -15,7 +23,7 @@ export default function TopBar({ navigation }) {
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        userName = snapshot.val().fullName;
+        setUserName(snapshot.val().fullName);
       });
   }, []);
 
@@ -76,7 +84,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
     zIndex: 1,
-    marginBottom: -600,
+    marginBottom: -70,
+    // backgroundColor: "#000",
   },
 
   rightItems: {

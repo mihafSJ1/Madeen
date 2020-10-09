@@ -28,7 +28,6 @@ export default function squares({ navigation }) {
   });
   return (
     <View style={styles.container}>
-      <TopBar />
       <TouchableOpacity>
         <ImageBackground
           style={styles.orange}
@@ -88,7 +87,6 @@ export default function squares({ navigation }) {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
-      <BottomNavigator />
     </View>
   );
 }
