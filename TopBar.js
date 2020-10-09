@@ -1,4 +1,3 @@
-// import React from "react";
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -12,7 +11,6 @@ import * as firebase from "firebase";
 import "@firebase/auth";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
-// var userName = "";
 export default function TopBar({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState("");
@@ -84,8 +82,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
     zIndex: 1,
-    marginBottom: -70,
-    // backgroundColor: "#000",
+    height: 85,
   },
 
   rightItems: {
@@ -114,7 +111,7 @@ const styles = StyleSheet.create({
 
   topBarText: {
     color: "#404040",
-    //fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 18,
     marginTop: 10,
@@ -122,8 +119,6 @@ const styles = StyleSheet.create({
   },
 
   logoutButton: {
-    // flexDirection: "row-reverse",
-    // backgroundColor: "#000",
     justifyContent: "flex-start",
     zIndex: 2,
     top: -60,

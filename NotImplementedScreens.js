@@ -34,11 +34,10 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export default function FirstPage({ navigation }) {
+export default function NotImplementedScreens({ navigation }) {
   return (
     <View style={styles.container}>
-      <TopBar />
-      <Text style={{ fontSize: 20 }}>Hi </Text>
+      <Text style={{ fontSize: 20 }}>Not Implemented Yet... </Text>
     </View>
   );
 }

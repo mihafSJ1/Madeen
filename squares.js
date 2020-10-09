@@ -87,7 +87,6 @@ export default function squares({ navigation }) {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
-   
     </View>
   );
 }

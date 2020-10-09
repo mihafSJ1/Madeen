@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
   Image,
@@ -228,7 +227,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-   // fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",
