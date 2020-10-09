@@ -50,7 +50,7 @@ export default function ResetPassword({ navigation }) {
   const [email, setEmail] = useState("");
 
   const submitEmail = () => {
-    if (email == "") {
+    if (email.trim() == "") {
       Alert.alert("","أدخل البريد الإلكتروني من فضلك",
       [  
         {text: 'حسناً'}, ],
@@ -115,7 +115,7 @@ export default function ResetPassword({ navigation }) {
           {" "}
           لُطفًا أدخل بريدك الالكتروني المسجل لدينا لاستعادة كلمة المرور{" "}
         </Text>
-        <Text style={styles.resetTilte}>  البريد الإلكتروني </Text>
+        <Text style={styles.resetTilte}>  البريد الإلكتروني <Text style={styles.textError}> *</Text></Text>
         {/* <TextInput style={styles.registerTextInput}/> */}
         <TextInput
           style={styles.textInput}
@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
   },
   resetHeader: {
     fontSize: 30,
-    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontFamily: "Bahij_TheSansArabic-Light",
+ 
     textAlign: "right",
     marginRight: 15,
     bottom: 55,
@@ -198,17 +199,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   textInput: {
-    marginBottom: 10,
+    marginBottom: 13,
     marginLeft: 35,
     alignItems: "center",
-    borderColor: "#CBCA9E",
+    borderColor: "#DBDBDB",
     width: 350,
     backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 5,
     textAlign: "right",
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
   },
 
   buttonText: {
@@ -235,5 +239,13 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#404040",
     marginRight: 40,
+  },
+  textError: {
+    color: "#A4161A",
+    fontSize: 13,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "right",
+    marginRight: 30,
+    bottom: 10,
   },
 });

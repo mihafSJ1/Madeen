@@ -12,11 +12,14 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Button,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
+import { withNavigation } from 'react-navigation';
+
 import * as firebase from "firebase";
 import "firebase/auth";
 import "firebase/database";
@@ -91,7 +94,7 @@ tomorrow.setDate(tomorrow.getDate() + 1)
 
 var userNameFromDB = "";
 
-export default class Request extends React.Component {
+ class Request extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -214,17 +217,18 @@ export default class Request extends React.Component {
       })
      
 
+
   }
 
 
-  onSubmitPress(values) {
+  onSubmitPress(values, props) {
     const { currentUser } = this.state;
 
     firebase
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        userNameFromDB = snapshot.val().fullName;
+        // userNameFromDB = snapshot.val().fullName;
       });
 
     const requestID = firebase
@@ -250,20 +254,16 @@ export default class Request extends React.Component {
             alert(error);
           } else {
             Alert.alert(
-              "تنبيه!",
+              "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
               [
-              
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                    
-                },
+               
+                { text: "موافق", onPress: () =>  props.navigate('squares') }
               ],
               { cancelable: false }
             );
-            
+        
+          
              
            
           }
@@ -304,6 +304,8 @@ export default class Request extends React.Component {
 
   //-------------------------------------------- Rendering react component
   render() {
+ 
+ 
     return (
   
       <View style={styles.container}>
@@ -327,11 +329,20 @@ export default class Request extends React.Component {
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
+            
+              onReset={(values,action)=>{
+                action.resetForm()
+                this.props.navigation.navigate("squares")
+
+              }}
               onSubmit={(values, action) => {
-                this.onSubmitPress(values);
+                action.resetForm()
+               
+                this.onSubmitPress(values,this.props.navigation);
+              
               }}
             >
-              {(props, setFieldValue) => (
+              {(formprops, setFieldValue) => (
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
                     <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
@@ -344,9 +355,9 @@ export default class Request extends React.Component {
                       iconType="material"
                       uncheckedIcon="check-box-outline-blank"
                       onPress={() =>
-                        props.setFieldValue(
+                        formprops.setFieldValue(
                           "usersSelect",
-                          !props.values.usersSelect
+                          !formprops.values.usersSelect
                         )
                         
                         
@@ -354,7 +365,7 @@ export default class Request extends React.Component {
                         
 
                       }
-                      checked={props.values.usersSelect}
+                      checked={formprops.values.usersSelect}
                     />
                     
               
@@ -366,14 +377,14 @@ export default class Request extends React.Component {
                   </Text>
 
                 
-                  {props.values.usersSelect ? (
+                  {formprops.values.usersSelect ? (
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
                      
-                      value={props.values.user}
+                      value={formprops.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -430,13 +441,13 @@ export default class Request extends React.Component {
                         // to support RTL
                       }}
                       onChangeItem={(item) =>
-                        props.setFieldValue("user", item.label)
+                        formprops.setFieldValue("user", item.label)
                       }
                     />
                     
                   ) : null}
                     <Text style={[styles.textError, { top: -20 }]}>
-                    { props.errors.user}
+                    { formprops.errors.user}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
@@ -446,13 +457,13 @@ export default class Request extends React.Component {
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
                     placeholder="المبلغ"
-                    value={props.values.price}
-                    onChangeText={props.handleChange("price")}
+                    value={formprops.values.price}
+                    onChangeText={formprops.handleChange("price")}
                     keyboardType="numeric"
-                    onBlur={props.handleBlur("price")}
+                    onBlur={formprops.handleBlur("price")}
                   />
                   <Text style={styles.textError}>
-                    {props.touched.price && props.errors.price}
+                    {formprops.touched.price && formprops.errors.price}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     التاريخ المتوقع لإكمال السداد{" "}
@@ -462,24 +473,24 @@ export default class Request extends React.Component {
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
                     placeholder="التاريخ"
-                    value={props.values.expectedDate}
+                    value={formprops.values.expectedDate}
                     editable={false}
                     onChangeText={
-                      (this.repaymentOnce(props.values.expectedDate),
+                      (this.repaymentOnce(formprops.values.expectedDate),
                       this.repayementInstallments(
-                        props.values.price,
-                        props.values.expectedDate
+                        formprops.values.price,
+                        formprops.values.expectedDate
                       ))
                     }
-                    onBlur={props.handleBlur("expectedDate")}
+                    onBlur={formprops.handleBlur("expectedDate")}
                   />
 
                   <DatePicker
                     hideText
                     style={styles.datePicker}
-                    date={props.values.expectedDate}
+                    date={formprops.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+                    onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
@@ -513,12 +524,12 @@ export default class Request extends React.Component {
                     }}
                   
                     onDateChange={(date) => {
-                      props.setFieldValue("expectedDate", date);
+                      formprops.setFieldValue("expectedDate", date);
                     }}
                    
                   />
                   <Text style={[styles.textError, { top: -50 }]}>
-                    {props.touched.expectedDate && props.errors.expectedDate}
+                    {formprops.touched.expectedDate && formprops.errors.expectedDate}
                   </Text>
                   <View style={styles.radio}>
                     <RadioButtonRN
@@ -550,11 +561,11 @@ export default class Request extends React.Component {
                         // backgroundColor: "#000",
                       }}
                       selectedBtn={(e) =>
-                        props.setFieldValue("repaymentType", e.label)
+                        formprops.setFieldValue("repaymentType", e.label)
                       }
                     />
                   </View>
-                  {props.values.repaymentType == data[1].label ? (
+                  {formprops.values.repaymentType == data[1].label ? (
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
@@ -566,7 +577,7 @@ export default class Request extends React.Component {
                       )}
                       placeholder="إختر الفترة"
                       placeholderStyle={{ color: "#CBCBCC" }}
-                      value={props.values.user}
+                      value={formprops.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -672,25 +683,31 @@ export default class Request extends React.Component {
                     multiline
                     style={[styles.textInput, { height: 75 }]}
                     placeholder="السبب"
-                    onChangeText={props.handleChange("reason")}
-                    value={props.values.reason}
-                    onBlur={props.handleBlur("reason")}
+                    onChangeText={formprops.handleChange("reason")}
+                    value={formprops.values.reason}
+                    onBlur={formprops.handleBlur("reason")}
                   />
                   <Text style={styles.textError}>
-                    {props.touched.reason && props.errors.reason}
+                    {formprops.touched.reason && formprops.errors.reason}
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
+                    
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() => navigation.navigate("Home")}
+                      onPress={() =>  
+                        this.props.navigation.navigate("squares")
+                        // formprops.onReset(formprops.values)
+                      }
+                      
                     >
+                       {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                       onPress={
-                        (() => props.setFieldValue("installmentsType", "ww"),
-                        () => props.handleSubmit())
+                        // (() => formprops.setFieldValue("installmentsType", "ww"),
+                        () => formprops.handleSubmit()
                       }
                     >
                       <Text style={styles.buttonText}> إنشاء طلب </Text>
@@ -846,3 +863,5 @@ const styles = StyleSheet.create({
     paddingRight: 340,
   },
 });
+
+export default withNavigation(Request);

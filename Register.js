@@ -56,7 +56,12 @@ export default function Register({ navigation }) {
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      alert("تأكد من تطابق كلمة المرور مع إعادتها");
+      Alert.alert("","تأكد من تطابق كلمة المرور مع إعادتها",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+     
       return;
     }
 
@@ -66,6 +71,8 @@ export default function Register({ navigation }) {
       fullName == "" ||
       confirmPassword == ""
     ) {
+      
+      
       Alert.alert("","عفوًا، جميع الحقول مطلوبة",
       [  
         {text: 'حسناً'}, ],
@@ -153,7 +160,7 @@ export default function Register({ navigation }) {
 
         <View style={styles.registerBackground}>
           <Text style={styles.header}>إنشاء حساب </Text>
-          <Text style={styles.textInputTitle}>الاسم </Text>
+          <Text style={styles.textInputTitle}>الاسم<Text style={styles.textError}> *</Text> </Text>
 
           <TextInput
             style={styles.textInput}
@@ -161,7 +168,7 @@ export default function Register({ navigation }) {
             value={fullName}
             onChangeText={(text) => setFullName(text)}
           />
-          <Text style={styles.textInputTitle}> البريد الإلكتروني </Text>
+          <Text style={styles.textInputTitle}> البريد الإلكتروني <Text style={styles.textError}> *</Text></Text>
           <TextInput
             style={styles.textInput}
             placeholder="البريد الإلكتروني"
@@ -171,7 +178,7 @@ export default function Register({ navigation }) {
             autoCapitalize="none"
             keyboardType="email-address"
           />
-          <Text style={styles.textInputTitle}> كلمة السر </Text>
+          <Text style={styles.textInputTitle}> كلمة السر <Text style={styles.textError}> *</Text></Text>
           <TextInput
             style={styles.textInput}
             placeholder="كلمة السر"
@@ -182,7 +189,7 @@ export default function Register({ navigation }) {
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />
-          <Text style={styles.textInputTitle}> تأكيد كلمة السر </Text>
+          <Text style={styles.textInputTitle}> تأكيد كلمة السر <Text style={styles.textError}> *</Text></Text>
           <TextInput
             style={styles.textInput}
             secureTextEntry={true}
@@ -313,13 +320,24 @@ const styles = StyleSheet.create({
     marginBottom: 13,
     marginLeft: 35,
     alignItems: "center",
-    borderColor: "#CBCA9E",
+    borderColor: "#DBDBDB",
     width: 350,
     backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 5,
     textAlign: "right",
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+  },
+  textError: {
+    color: "#A4161A",
+    fontSize: 13,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "right",
+    marginRight: 30,
+    bottom: 10,
   },
 });

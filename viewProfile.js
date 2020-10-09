@@ -26,18 +26,18 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
-  authDomain: "madeen-46af8.firebaseapp.com",
-  databaseURL: "https://madeen-46af8.firebaseio.com",
-  projectId: "madeen-46af8",
-  storageBucket: "madeen-46af8.appspot.com",
-  messagingSenderId: "289377001222",
-  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
-  measurementId: "G-KWKWGXNQRN",
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
+//   authDomain: "madeen-46af8.firebaseapp.com",
+//   databaseURL: "https://madeen-46af8.firebaseio.com",
+//   projectId: "madeen-46af8",
+//   storageBucket: "madeen-46af8.appspot.com",
+//   messagingSenderId: "289377001222",
+//   appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
+//   measurementId: "G-KWKWGXNQRN",
+// };
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
 
 var namef ="name";
@@ -162,6 +162,7 @@ export default class viewProfile extends React.Component  {
 
   render() {
     // const { navigation:navigate } = this.props;
+    
     const { currentUser } = this.state;
     
 

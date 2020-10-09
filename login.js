@@ -45,8 +45,13 @@ export default function login({ navigation }) {
 
   const onLoginPress = () => {
     //Null fields validation
-    if (email == "" || password == "") {
-      alert("عفوًا، جميع الحقول مطلوبة");
+    if (email.trim() == "" || password.trim() == "") {
+      Alert.alert("","عفوًا، جميع الحقول مطلوبة",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+     
       return;
     }
     console.log("handleLogin1");
@@ -60,19 +65,30 @@ export default function login({ navigation }) {
          
           case "auth/invalid-email":
 
-      
+            Alert.alert("","تحقق من صحة بريدك الالكتروني",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
 
-            alert("تحقق من صحة بريدك الالكتروني");
             break;
           case "auth/user-not-found":
-
+          
           case "auth/wrong-password":
-            alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
-            );
+            
+            Alert.alert("","من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
           case "auth/network-request-failed":
-            alert("فضلًا تحقق من اتصالك بالانترنت");
+            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
+          
             break;
         }
         
@@ -91,7 +107,7 @@ export default function login({ navigation }) {
 
           {/* faild number1  */}
 
-          <Text style={styles.textInputTitle}> البريد الإلكتروني </Text>
+          <Text style={styles.textInputTitle}> البريد الإلكتروني  <Text style={styles.textError}> *</Text> </Text>
           <TextInput
             style={styles.textInput}
             placeholder="البريد الالكتروني "
@@ -102,7 +118,7 @@ export default function login({ navigation }) {
           {/* <RegisterTextInput/> */}
 
           {/* faild number1  */}
-          <Text style={styles.textInputTitle}> كلمة السر </Text>
+          <Text style={styles.textInputTitle}> كلمة السر   <Text style={styles.textError}> *</Text></Text>
           <TextInput
             style={styles.textInput}
             placeholder="كلمة المرور"
@@ -190,7 +206,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    marginBottom:30,
+    marginBottom:55,
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
@@ -207,18 +223,7 @@ const styles = StyleSheet.create({
     color: "#404040",
     marginRight: 35,
   },
-  registerTextInput: {
-    //  marginTop:15,
-    marginLeft: 30,
-    alignItems: "center",
-    borderColor: "#CBCA9E",
-    width: 350,
-    backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
-    //fontFamily: "Bahij_TheSansArabic-Light",
-  },
+ 
  
     button: {
       alignItems: "center",
@@ -249,18 +254,42 @@ const styles = StyleSheet.create({
     //fontFamily: "Bahij_TheSansArabic-Light",
   },
 
+  // textInput: {
+  //   marginBottom: 13,
+  //   marginLeft: 35,
+  //   alignItems: "center",
+  //   borderColor: "#CBCA9E",
+  //   width: 350,
+  //   backgroundColor: "#fff",
+  //   height: 40,
+  //   borderRadius: 15,
+  //   borderWidth: 2,
+  //   textAlign: "right",
+  //   fontFamily: "Bahij_TheSansArabic-Light",
+  // },
   textInput: {
     marginBottom: 13,
     marginLeft: 35,
     alignItems: "center",
-    borderColor: "#CBCA9E",
+    borderColor: "#DBDBDB",
     width: 350,
     backgroundColor: "#fff",
-    height: 40,
-    borderRadius: 15,
-    borderWidth: 2,
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 5,
     textAlign: "right",
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+  },
+  textError: {
+    color: "#A4161A",
+    fontSize: 13,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "right",
+    marginRight: 30,
+    bottom: 10,
   },
 
 });

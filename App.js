@@ -17,6 +17,7 @@ import TopBar from "./TopBar";
 import Alert from "./Alert";
 import CustomAlertComponent from "./CustomAlertComponent";
 import Profile from "./Profile"
+import viewProfile from "./viewProfile";
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -32,6 +33,7 @@ function squaresScreens(){
   component={squares}
   options={{ headerShown: false }}
 />
+
 <Stack.Screen
   name="Timeline"
   component={Timeline}
@@ -122,8 +124,8 @@ function Homenav(){
  
    
    <Tab.Screen
-    name="Profile"
-    component={Profile}
+    name="viewProfile"
+    component={viewProfile}
     options={{
       tabBarLabel: '',
       tabBarIcon: ({ color, size }) => (
