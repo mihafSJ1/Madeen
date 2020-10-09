@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
   Image,
@@ -56,26 +55,20 @@ export default function login({ navigation }) {
       .then(() => navigation.navigate("squares"))
       .catch((error) => {
         switch (error.code) {
-          
-         
           case "auth/invalid-email":
-
-      
-
             alert("تحقق من صحة بريدك الالكتروني");
             break;
           case "auth/user-not-found":
 
           case "auth/wrong-password":
             alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!" 
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
             );
             break;
           case "auth/network-request-failed":
             alert("فضلًا تحقق من اتصالك بالانترنت");
             break;
         }
-        
       });
 
     console.log("handleLogin");
@@ -234,7 +227,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-   // fontFamily: "Bahij_TheSansArabic-Light",
+    // fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",

@@ -22,6 +22,7 @@
     "date-fns": "^2.16.1",
     "expo": "^38.0.10",
     "expo-font": "~8.2.1",
+    "expo-image-picker": "^9.1.1",
     "expo-status-bar": "^1.0.2",
     "firebase": "^7.22.0",
     "formik": "^2.1.5",
@@ -60,6 +61,7 @@
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.11.7",
     "react-navigation-material-bottom-tabs": "^2.3.1",
+    "time-difference-js": "^1.0.1",
     "yup": "^0.29.3"
   },
   "devDependencies": {

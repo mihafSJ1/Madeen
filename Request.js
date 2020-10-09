@@ -23,7 +23,7 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
-// import BackgroundComponent from "./BackgroundComponent";
+import RequestBackgroundComp from "./RequestBackgroundComp";
 // import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
@@ -85,9 +85,9 @@ var dateDiffDays,
 
 // var tomorrow,
 //   today = moment();
-  const today = new Date()
-const tomorrow = new Date(today)
-tomorrow.setDate(tomorrow.getDate() + 1)
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 var userNameFromDB = "";
 
@@ -100,7 +100,7 @@ export default class Request extends React.Component {
       priceState: 0,
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
-      userValue:[]
+      userValue: [],
     };
   }
 
@@ -108,7 +108,6 @@ export default class Request extends React.Component {
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
     var totalDays = time / (1000 * 3600 * 24);
-    
 
     year = Math.floor(totalDays / 365);
     totalDays = totalDays % 365;
@@ -179,12 +178,11 @@ export default class Request extends React.Component {
 
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
-        installmentsArray[i].durationValueArr == 0 && installmentsArray[i].priceValueArr == 0
-   
+        installmentsArray[i].durationValueArr == 0 &&
+        installmentsArray[i].priceValueArr == 0
       )
         continue;
-  
-     
+
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
   }
@@ -197,25 +195,20 @@ export default class Request extends React.Component {
       .database()
       .ref("users/")
       .on("value", (snapshot) => {
-        snapshot.forEach((child)=>{
-          if (child.val().email != currentUser.email){
-          applicationUsers.push({
-             fullName:child.val().fullName,
-             label: child.val().email,
-           
-          })
-        }
-        })
-       
+        snapshot.forEach((child) => {
+          if (child.val().email != currentUser.email) {
+            applicationUsers.push({
+              fullName: child.val().fullName,
+              label: child.val().email,
+            });
+          }
+        });
       });
-      // alert(applicationUsers);
-      this.setState({
-        userValue: applicationUsers,
-      })
-     
-
+    // alert(applicationUsers);
+    this.setState({
+      userValue: applicationUsers,
+    });
   }
-
 
   onSubmitPress(values) {
     const { currentUser } = this.state;
@@ -253,19 +246,14 @@ export default class Request extends React.Component {
               "تنبيه!",
               "تم إرسال الطلب بنجاح   ",
               [
-              
                 {
                   text: "حسنا",
                   // onPress: () =>
                   // // navigation.navigate("squares")
-                    
                 },
               ],
               { cancelable: false }
             );
-            
-             
-           
           }
         }
       );
@@ -288,28 +276,26 @@ export default class Request extends React.Component {
     //   (val) => {
     //     return props.values.expectedDate == new Date();
     //   }
-    // ), 
+    // ),
     reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
-   
+
     usersSelect: yup.bool(),
-    user: yup.string().notRequired()
-    .when('usersSelect', {
-    is: (val) => val == true,
-    then: yup.string().required('اختيار المدين مطلوب'),
-    otherwise: yup.string().notRequired()
-    })
-    
-    
+    user: yup
+      .string()
+      .notRequired()
+      .when("usersSelect", {
+        is: (val) => val == true,
+        then: yup.string().required("اختيار المدين مطلوب"),
+        otherwise: yup.string().notRequired(),
+      }),
   });
 
   //-------------------------------------------- Rendering react component
   render() {
     return (
-  
       <View style={styles.container}>
-     
         <View style={styles.background}>
-          {/* <BackgroundComponent /> */}
+          <RequestBackgroundComp />
         </View>
 
         <View style={styles.registerBackground}>
@@ -321,7 +307,7 @@ export default class Request extends React.Component {
                 user: "",
                 usersSelect: false,
                 price: "",
-                expectedDate:today,
+                expectedDate: today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
@@ -335,8 +321,7 @@ export default class Request extends React.Component {
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
                     <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
-                  
-               
+
                     <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
@@ -348,31 +333,21 @@ export default class Request extends React.Component {
                           "usersSelect",
                           !props.values.usersSelect
                         )
-                        
-                        
-                    
-                        
-
                       }
                       checked={props.values.usersSelect}
                     />
-                    
-              
                   </View>
-              
-                 
+
                   <Text style={styles.textNote}>
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
-                
                   {props.values.usersSelect ? (
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
-                     
                       value={props.values.user}
                       containerStyle={{
                         borderTopLeftRadius: 50,
@@ -433,10 +408,9 @@ export default class Request extends React.Component {
                         props.setFieldValue("user", item.label)
                       }
                     />
-                    
                   ) : null}
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { props.errors.user}
+                  <Text style={[styles.textError, { top: -20 }]}>
+                    {props.errors.user}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
@@ -479,13 +453,15 @@ export default class Request extends React.Component {
                     style={styles.datePicker}
                     date={props.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
+                    onOpenModal={() => {
+                      props.setFieldValue("expectedDate", tomorrow);
+                    }}
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
                     placeholder={new yup.date()}
                     format="YYYY-MM-DD"
-                    minDate= {tomorrow}
+                    minDate={tomorrow}
                     showDateSelect
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
@@ -511,11 +487,9 @@ export default class Request extends React.Component {
                         fontSize: 17,
                       },
                     }}
-                  
                     onDateChange={(date) => {
                       props.setFieldValue("expectedDate", date);
                     }}
-                   
                   />
                   <Text style={[styles.textError, { top: -50 }]}>
                     {props.touched.expectedDate && props.errors.expectedDate}
@@ -646,22 +620,25 @@ export default class Request extends React.Component {
                         <Text> {ArabicNumbers(year)} سنه </Text>
                       ) : null}
                       {month != 0 ? (
-                         year != 0?(
+                        year != 0 ? (
                           <Text> و {ArabicNumbers(month)} شهر</Text>
-                          ):
-                        <Text> {ArabicNumbers(month)} شهر </Text>
+                        ) : (
+                          <Text> {ArabicNumbers(month)} شهر </Text>
+                        )
                       ) : null}
-                      { week != 0   ? (
-                        
-                        year != 0 || month!= 0 ?(
+                      {week != 0 ? (
+                        year != 0 || month != 0 ? (
                           <Text> و {ArabicNumbers(week)} إسبوع</Text>
-                        ):
-                        <Text> {ArabicNumbers(week)} إسبوع </Text>
+                        ) : (
+                          <Text> {ArabicNumbers(week)} إسبوع </Text>
+                        )
                       ) : null}
                       {days != 0 ? (
-                          year != 0 || month!= 0 || week !=0 ?(
-                            <Text> و {ArabicNumbers(days)} يوم</Text>):
-                        <Text> {ArabicNumbers(days)} يوم </Text>
+                        year != 0 || month != 0 || week != 0 ? (
+                          <Text> و {ArabicNumbers(days)} يوم</Text>
+                        ) : (
+                          <Text> {ArabicNumbers(days)} يوم </Text>
+                        )
                       ) : null}
                     </Text>
                   )}
@@ -711,7 +688,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontFamily: "Bahij_TheSansArabic-Light",
     flex: 1,
-    //  overflow:"hidden",
+    marginTop: -40,
     backgroundColor: "#F2F4F1",
     justifyContent: "center",
     fontSize: 25,
