@@ -277,7 +277,7 @@ var userNameFromDB = "";
       .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
     expectedDate: yup
       .date()
-      .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
+      .min(tomorrow, "التاريخ مطلوب ولا بد أن يكون بعد ٢٤ ساعة "),
     // .test(
     //   "enteranceExpectedDate",
     //   "التاريخ المتوقع لإكمال السداد مطلوب",
@@ -339,7 +339,7 @@ var userNameFromDB = "";
               {(formprops, setFieldValue) => (
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
-                    <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
+                    <Text style={styles.checkboxLabel}> الاستلاف من شخص محدد</Text>
 
                     <CheckBox
                       style={styles.checkbox}
