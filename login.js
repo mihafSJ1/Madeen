@@ -61,14 +61,23 @@ export default function login({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-            alert("تحقق من صحة بريدك الالكتروني");
+
+            Alert.alert("","تحقق من صحة بريدك الالكتروني",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
+
             break;
           case "auth/user-not-found":
           
           case "auth/wrong-password":
-            alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
-            );
+            
+            Alert.alert("","من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
+            [  
+              {text: 'حسناً'}, ],
+              {cancelable: false}  
+              );
             break;
           case "auth/network-request-failed":
             Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
