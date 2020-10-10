@@ -46,7 +46,7 @@ const data = [
   },
 ];
 
-const installmentsArray = [
+var  installmentsArray = [
   {
     label: "",
     priceValueArr: "",
@@ -125,6 +125,7 @@ var userNameFromDB = "";
   }
 
   repayementInstallments(price, eDate) {
+   
     const submittedDate = moment();
     const expectedDate = moment(eDate);
     dateDiffDays = expectedDate.diff(submittedDate, "days");
@@ -133,6 +134,7 @@ var userNameFromDB = "";
     dateDiffYears = expectedDate.diff(submittedDate, "years");
     if (dateDiffYears != 0) {
       var yearlyPrice = (price / dateDiffYears).toFixed(2);
+      if(yearlyPrice !=0){
       installmentsArray[0].label =
         ArabicNumbers(yearlyPrice) +
         " ريال سعودي لمدة " +
@@ -142,9 +144,11 @@ var userNameFromDB = "";
       installmentsArray[0].durationValueArr = dateDiffYears;
       installmentsArray[0].installmentsTypeArr = "yearly";
     }
+  }
 
     if (dateDiffMonths != 0) {
       var monthlyPrice = (price / dateDiffMonths).toFixed(2);
+      if(monthlyPrice !=0){
       installmentsArray[1].label =
         ArabicNumbers(monthlyPrice) +
         " ريال سعودي لمدة " +
@@ -154,8 +158,10 @@ var userNameFromDB = "";
       installmentsArray[1].durationValueArr = dateDiffMonths;
       installmentsArray[1].installmentsTypeArr = "monthly";
     }
+  }
 
     if (dateDiffWeeks != 0) {
+      if(weeklyPrice !=0){
       var weeklyPrice = (price / dateDiffWeeks).toFixed(2);
       installmentsArray[2].label =
         ArabicNumbers(weeklyPrice) +
@@ -166,9 +172,10 @@ var userNameFromDB = "";
       installmentsArray[2].durationValueArr = dateDiffWeeks;
       installmentsArray[2].installmentsTypeArr = "weekly";
     }
-
+  }
     if (dateDiffDays != 0) {
       var dailyPrice = (price / dateDiffDays).toFixed(2);
+      if(dailyPrice !=0){
       installmentsArray[3].label =
         ArabicNumbers(dailyPrice) +
         " ريال سعودي لمدة " +
@@ -178,7 +185,7 @@ var userNameFromDB = "";
       installmentsArray[3].durationValueArr = dateDiffDays;
       installmentsArray[3].installmentsTypeArr = "daily";
     }
-
+  }
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
         installmentsArray[i].durationValueArr == 0 &&
@@ -207,7 +214,7 @@ var userNameFromDB = "";
           }
         });
       });
-<<<<<<< HEAD
+    
       // alert(applicationUsers);
       this.setState({
         userValue: applicationUsers,
@@ -215,31 +222,16 @@ var userNameFromDB = "";
      
 
 
-||||||| merged common ancestors
-      // alert(applicationUsers);
-      this.setState({
-        userValue: applicationUsers,
-      })
-     
-
-=======
-    // alert(applicationUsers);
-    this.setState({
-      userValue: applicationUsers,
-    });
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
   }
 
-<<<<<<< HEAD
 
   onSubmitPress(values, props) {
-||||||| merged common ancestors
-
-  onSubmitPress(values) {
-=======
-  onSubmitPress(values) {
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
+    
     const { currentUser } = this.state;
+    if (values.usersSelect == false){
+      values.user = "";
+    }
+    alert(values.user)
 
     firebase
       .database()
@@ -247,6 +239,7 @@ var userNameFromDB = "";
       .on("value", (snapshot) => {
         // userNameFromDB = snapshot.val().fullName;
       });
+     
 
     const requestID = firebase
       .database()
@@ -274,38 +267,15 @@ var userNameFromDB = "";
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
               [
-<<<<<<< HEAD
                
                 { text: "موافق", onPress: () =>  props.navigate('squares') }
-||||||| merged common ancestors
-              
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                    
-                },
-=======
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                },
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
               ],
               { cancelable: false }
             );
-<<<<<<< HEAD
         
           
              
            
-||||||| merged common ancestors
-            
-             
-           
-=======
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
           }
         }
       );
@@ -318,7 +288,7 @@ var userNameFromDB = "";
       .required("المبلغ مطلوب")
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
-      .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
+      .min(10, "المبلغ لا بد أن يكون أكبر من أو يساوي ١٠ ريال"),
     expectedDate: yup
       .date()
       .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
@@ -329,7 +299,7 @@ var userNameFromDB = "";
     //     return props.values.expectedDate == new Date();
     //   }
     // ),
-    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
+    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ خانات فأكثر"),
 
     usersSelect: yup.bool(),
     user: yup
@@ -368,11 +338,11 @@ var userNameFromDB = "";
                 submittedDate: new Date(),
               }}
             
-              onReset={(values,action)=>{
-                action.resetForm()
-                this.props.navigation.navigate("squares")
+              // onReset={(values,action)=>{
+              //   action.resetForm()
+              //   // this.props.navigation.navigate("squares")
 
-              }}
+              // }}
               onSubmit={(values, action) => {
                 action.resetForm()
                
@@ -405,29 +375,14 @@ var userNameFromDB = "";
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
-<<<<<<< HEAD
-                
                   {formprops.values.usersSelect ? (
-||||||| merged common ancestors
-                
-                  {props.values.usersSelect ? (
-=======
-                  {props.values.usersSelect ? (
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
-<<<<<<< HEAD
                      
                       value={formprops.values.user}
-||||||| merged common ancestors
-                     
-                      value={props.values.user}
-=======
-                      value={props.values.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -488,20 +443,14 @@ var userNameFromDB = "";
                       }
                     />
                   ) : null}
-<<<<<<< HEAD
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { formprops.errors.user}
-||||||| merged common ancestors
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { props.errors.user}
-=======
                   <Text style={[styles.textError, { top: -20 }]}>
-                    {props.errors.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
+                    {formprops.errors.user}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
                   </Text>
+{/* 
+{alert(formprops.values.expectedDate)} */}
 
                   <TextInput
                     style={styles.textInput}
@@ -540,15 +489,7 @@ var userNameFromDB = "";
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-<<<<<<< HEAD
                     onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
-||||||| merged common ancestors
-                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-=======
-                    onOpenModal={() => {
-                      props.setFieldValue("expectedDate", tomorrow);
-                    }}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
@@ -580,6 +521,9 @@ var userNameFromDB = "";
                         fontSize: 17,
                       },
                     }}
+                    onPressCancel ={()=>
+                      formprops.setFieldValue("expectedDate", today)
+                    }
                     onDateChange={(date) => {
                       formprops.setFieldValue("expectedDate", date);
                     }}
@@ -755,7 +699,9 @@ var userNameFromDB = "";
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={() =>  
                         this.props.navigation.navigate("squares")
-                        // formprops.onReset(formprops.values)
+                     
+                        // formprops.handleReset()
+                      
                       }
                       
                     >
@@ -921,12 +867,6 @@ const styles = StyleSheet.create({
     left: 56,
     paddingRight: 340,
   },
-<<<<<<< HEAD
 });
 
-export default withNavigation(Request);
-||||||| merged common ancestors
-});
-=======
-});
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
+export default withNavigation(Request)

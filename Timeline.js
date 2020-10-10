@@ -38,16 +38,16 @@ if (!firebase.apps.length) {
 var requestArray = [];
 var usersArray = [];
 
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
-const currentUser = firebase.auth();
+// firebase
+//   .database()
+//   .ref("users")
+//   .once("value", function (snapshot) {
+//     snapshot.forEach(function (childSnapshot) {
+      
+//       usersArray.push(childSnapshot.val());
+//     });
+//   });
+
 firebase
   .database()
   .ref("requests")
@@ -64,36 +64,106 @@ firebase
       // var rqeuestStatus=childSnapshot.rqeuestStatus;
       //  var submittedDate=childSnapshot.submittedDate;
       // var userid = childSnapshot.userid;
-      if (Data.userid != currentUser.userid) {
-        if (Data.creditor == "") {
+      
           requestArray.push(Data);
-        }
-      }
-      console.log(Data);
+           console.log(Data);
     });
   });
-
+//   // firebase
+//   // .database()
+//   // .ref("users")
+//   // .once("value", function (snapshot) {
+//   //   snapshot.forEach(function (childSnapshot) {
+//   //     var user = childSnapshot.val();
+//   //     // var expectedDate = childSnapshot.expectedDate;
+//   //     // var installemntDuration = childSnapshot.installemntDuration;
+//   //     // var installemntPrice = childSnapshot.installemntPrice;
+//   //     //  var installmentsType = childSnapshot.installmentsType;
+//   //     // var price = childSnapshot.price;
+//   //     // var reason=childSnapshot.reason;
+//   //     // var repaymentType=childSnapshot.repaymentType;
+//   //     // var rqeuestStatus=childSnapshot.rqeuestStatus;
+//   //     //  var submittedDate=childSnapshot.submittedDate;
+//   //     // var userid = childSnapshot.userid;
+      
+//   //        usersArray.push(user);
+//   //          console.log(user);
+//   //   });
+//   // });
+firebase
+        .database()
+        .ref("users/")
+        .on("value", (snapshot) => {
+          snapshot.forEach((child) => {
+            //console.log(child.val().uid);
+              usersArray.push(child.val());
+            
+          });
+        });
 export default class Timeline extends React.Component {
-  state = { currentUser: null };
+  //state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
-  state = {
-    modalVisible: false,
-  };
+  
+  
+ 
+ state = {
+      modalVisible: false,
+      pic:"https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a",
+    };
+
+
+  
+  
+  componentDidMount() {
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
+    firebase
+      .database()
+      .ref("requests/")
+      .on("value", (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().uid != currentUser.uid) {
+            requestArray.push(child.val());
+          }
+        });
+      });
+    }
+    
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+  
   openModalWithItem(item) {
     this.setState({
       modalVisible: true,
       Name: item.userName,
-      Type: item.installmentsType,
+      Type: item.repaymentType,
       Price: item.price,
       EDate: item.expectedDate,
       Reason: item.reason,
+    Duration:item.installemntDuration,
+    Tprice:item.installemntPrice,
+    iType:item.installmentsType,
     });
   }
+  
+
+ 
+  setPic(picNew) {
+    this.setState({ pic: picNew });
+  }
+
+
   list = () => {
+    const currentUser = firebase.auth().currentUser.uid;
+   
     return requestArray.map((c) => {
+      
+      if (c.userid != currentUser) {
+      
+        if (c.creditor == "") {
+       
+         
       return (
         <View>
           <TouchableOpacity
@@ -133,8 +203,9 @@ export default class Timeline extends React.Component {
                   )}
                 </Text>
               </View>
+            
               <Image
-                source={require("./assets/UserImagePlaceholder.png")}
+                 source={require("./assets/UserImagePlaceholder.png")}
               ></Image>
             </View>
           </TouchableOpacity>
@@ -167,6 +238,7 @@ export default class Timeline extends React.Component {
                   نوع التسديد |{" "}
                   <Text style={styles.textData}> {this.state.Type} </Text>
                 </Text>
+           
                 <Text style={styles.textInputTitle}>
                   {" "}
                   المبلغ|
@@ -185,6 +257,27 @@ export default class Timeline extends React.Component {
                     <Text style={styles.textData}> {this.state.Reason} </Text>
                   )}
                 </Text>
+                <Text style={styles.textInputTitle}>
+
+                  {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
+                  {this.state.Duration == "" ? null : (
+                    <Text style={styles.textData}> {this.state.Duration} </Text>
+                  )}
+                </Text>
+                <Text style={styles.textInputTitle}>
+                  {" "}
+                  {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
+                  {this.state.iType == "" ? null : (
+                    <Text style={styles.textData}> {this.state.iType} </Text>
+                  )}
+                </Text>
+                <Text style={styles.textInputTitle}>
+                  {" "}
+                  {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
+                  {this.state.Tprice == "" ? null : (
+                    <Text style={styles.textData}> {this.state.Tprice} </Text>
+                  )}
+                </Text>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={[styles.button, { backgroundColor: "#D4CEC9" }]}
@@ -201,7 +294,7 @@ export default class Timeline extends React.Component {
             </View>
           </Modal>
         </View>
-      );
+      );}}
     });
   };
 
@@ -362,4 +455,14 @@ const styles = StyleSheet.create({
   close: {
     marginLeft: 20,
   },
+  imageT:{
+    width: 60,
+    height: 60,
+    resizeMode: "stretch",
+  
+    zIndex:2, 
+    borderWidth:10,
+    borderColor:'red',
+  },
+  
 });
