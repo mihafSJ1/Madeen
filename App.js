@@ -27,6 +27,7 @@ const Tab = createBottomTabNavigator();
 function squaresScreens() {
   return (
     <Stack.Navigator>
+      
       <Stack.Screen
         name="squares"
         component={squares}
@@ -181,7 +182,10 @@ export default function App({ navigation }) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+      
+      >
+        
         {user ? (
           <Stack.Screen name="Home">
             {(props) => <Home {...props} extraData={user} />}
@@ -220,6 +224,9 @@ export default function App({ navigation }) {
                 headerShown: true,
                 navigation: { navigation },
                 header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              
               }}
             />
           </>
