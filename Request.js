@@ -14,7 +14,7 @@ import {
   Alert,
   Button,
 } from "react-native";
-import { CheckBox } from "react-native-elements";
+import { CheckBox, ThemeConsumer } from "react-native-elements";
 import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
@@ -27,6 +27,7 @@ import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
 import RequestBackgroundComp from "./RequestBackgroundComp";
+import { da } from "date-fns/locale";
 // import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
@@ -35,6 +36,7 @@ if (!firebase.apps.length) {
 
 //-------------------------------------------- Data
 let applicationUsers = [];
+let installmentsDropDownArray = [];
 const numericKeyboard = /[^0-9]/;
 
 const data = [
@@ -46,13 +48,13 @@ const data = [
   },
 ];
 
-var  installmentsArray = [
+const  installmentsArray = [
   {
     label: "",
     priceValueArr: "",
     durationValueArr: "",
     installmentsTypeArr: "yearly",
-    selected: true,
+   
   },
   {
     label: "",
@@ -74,7 +76,7 @@ var  installmentsArray = [
   },
 ];
 
-const installmentsDropDownArray = [];
+ 
 
 var year,
   days,
@@ -104,7 +106,9 @@ var userNameFromDB = "";
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
+      // repaymentType : [],
     };
+
   }
 
   //-------------------------------------------- Calculations
@@ -195,8 +199,13 @@ var userNameFromDB = "";
 
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
+  // this.setState({
+  //   repaymentType: installmentsDropDownArray})
+ 
+      
   }
 
+  
   //-------------------------------------------- Form Submission
   componentDidMount() {
     const { currentUser } = firebase.auth();
@@ -215,10 +224,10 @@ var userNameFromDB = "";
         });
       });
     
-      // alert(applicationUsers);
       this.setState({
         userValue: applicationUsers,
       })
+    
      
 
 
@@ -231,7 +240,6 @@ var userNameFromDB = "";
     if (values.usersSelect == false){
       values.user = "";
     }
-    alert(values.user)
 
     firebase
       .database()
@@ -258,6 +266,7 @@ var userNameFromDB = "";
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
           creditor: values.user,
+          
         },
         function (error) {
           if (error) {
@@ -288,9 +297,9 @@ var userNameFromDB = "";
       .required("المبلغ مطلوب")
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
-      .min(10, "المبلغ لا بد أن يكون أكبر من أو يساوي ١٠ ريال"),
+      .min(10, "المبلغ  مطلوب و لا بد أن يكون أكبر من أو يساوي ١٠ ريال"),
     expectedDate: yup
-      .date()
+      .date() 
       .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
     // .test(
     //   "enteranceExpectedDate",
@@ -328,21 +337,19 @@ var userNameFromDB = "";
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
+                installmentRepayment:"",
                 user: "",
                 usersSelect: false,
-                price: "",
+                price: 0,
                 expectedDate: today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
-            
-              // onReset={(values,action)=>{
-              //   action.resetForm()
-              //   // this.props.navigation.navigate("squares")
 
-              // }}
+              onReset= {(values, { resetForm })=> {
+              }}
               onSubmit={(values, action) => {
                 action.resetForm()
                
@@ -488,7 +495,6 @@ var userNameFromDB = "";
                     hideText
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
-                    // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
                     onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
                     mode="date"
                     calendar="arabic"
@@ -521,13 +527,16 @@ var userNameFromDB = "";
                         fontSize: 17,
                       },
                     }}
-                    onPressCancel ={()=>
-                      formprops.setFieldValue("expectedDate", today)
-                    }
+
                     onDateChange={(date) => {
-                      formprops.setFieldValue("expectedDate", date);
+                    
+                        formprops.setFieldValue("expectedDate", date);
+                     
+                      
+                      // formprops.setFieldValue("expectedDate", date);
                     }}
                   />
+                    { console.log(formprops.values.expectedDate)}
                   <Text style={[styles.textError, { top: -50 }]}>
                     {formprops.touched.expectedDate && formprops.errors.expectedDate}
                   </Text>
@@ -564,15 +573,22 @@ var userNameFromDB = "";
                         formprops.setFieldValue("repaymentType", e.label)
                       }
                     />
+                      { console.log(formprops.values.installmentRepayment)}
                   </View>
                   {formprops.values.repaymentType == data[1].label ? (
+                    formprops.values.expectedDate == today   ||formprops.values.price <10 || formprops.values.expectedDate == tomorrow || (dateDiffDays == 0 && dateDiffMonths == 0 && dateDiffYears == 0 && dateDiffWeeks == 0) ||
+                    (year == -1 && month == -1 && days == -1 && week == -1) ?
+                    <Text style={[styles.repaymentTextError, { top:-22,marginBottom:4 }]}>
+                    لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
+                    السداد{" "}
+                  </Text> :
+                  
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={installmentsDropDownArray}
                       searchableError={() => (
                         <Text style={[styles.textError, { marginRight: 4 }]}>
-                          لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
-                          السداد{" "}
+                        لطفًا التاريخ  لا يكون  ضمن الآربع وعشرون ساعة القادمة   
                         </Text>
                       )}
                       placeholder="إختر الفترة"
@@ -638,8 +654,11 @@ var userNameFromDB = "";
                           priceState: item.priceValueArr,
                           durationState: item.durationValueArr,
                         })
+                        // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
+                     
                       }
                     />
+                   
                   ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ? (
                     <Text style={styles.repaymentTextError}>
@@ -679,6 +698,7 @@ var userNameFromDB = "";
                       ) : null}
                     </Text>
                   )}
+                  
                   <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
                     السبب{" "}
                   </Text>
@@ -695,15 +715,8 @@ var userNameFromDB = "";
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                    
-                      style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() =>  
-                        this.props.navigation.navigate("squares")
-                     
-                        // formprops.handleReset()
-                      
-                      }
-                      
+                          style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      onPress={() => formprops.handleReset(), () => this.props.navigation.navigate("squares")}               
                     >
                        {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
@@ -771,11 +784,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   registerBackground: {
-    marginTop: 70,
+    marginTop: 160,
     // overflow:'scroll',
     // overflow: "hidden",
     flex: 1,
     height: 700,
+    
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     backgroundColor: "#fff",
@@ -869,4 +883,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(Request)
+export default withNavigation(Request);
+

@@ -10,6 +10,8 @@ import {
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
+  Alert,
+  
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
