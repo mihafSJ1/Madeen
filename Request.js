@@ -224,9 +224,6 @@ var userNameFromDB = "";
         });
       });
     
-      // this.setState({
-      //   repaymentType: installmentsDropDownArray})
-      // alert(applicationUsers);
       this.setState({
         userValue: applicationUsers,
       })
@@ -243,8 +240,6 @@ var userNameFromDB = "";
     if (values.usersSelect == false){
       values.user = "";
     }
-
-    // vif (values.repaymentType == ""){
 
     firebase
       .database()
@@ -360,15 +355,9 @@ var userNameFromDB = "";
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
-              onReset= {(values, { resetForm })=> {
-                // resetForm.resetForm()
-                // this.props.navigation.navigate("squares")
-              }}
-              // onReset={(values,action)=>{
-              //   action.resetForm()
-              //   this.props.navigation.navigate("squares")
 
-              // }}
+              onReset= {(values, { resetForm })=> {
+              }}
               onSubmit={(values, action) => {
                 action.resetForm()
                
@@ -514,7 +503,6 @@ var userNameFromDB = "";
                     hideText
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
-         
                     onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
                     mode="date"
                     calendar="arabic"
@@ -547,15 +535,7 @@ var userNameFromDB = "";
                         fontSize: 17,
                       },
                     }}
-                    // onPressCancel={
-                    //   ()=>this.setState({
-                    //     repaymentType:[]
-                    //   }),
-                    //     ()=> formprops.setFieldValue("expectedDate", today)
-                    // }
 
-               
-                 
                     onDateChange={(date) => {
                     
                         formprops.setFieldValue("expectedDate", date);
@@ -743,19 +723,8 @@ var userNameFromDB = "";
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                    
-                      style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() => formprops.handleReset(), () => this.props.navigation.navigate("squares")}
-              
-                      
-                     
-                      // formprops.setFieldValue("expectedDate",tomorrow),
-                      // () =>  formprops.setFieldValue("price",0),
-
-                      //   () =>  formprops.setFieldValue("reason",""),
-                      //   () =>this.props.navigation.navigate("squares")
-                      // }
-                      
+                          style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      onPress={() => formprops.handleReset(), () => this.props.navigation.navigate("squares")}               
                     >
                        {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
@@ -923,3 +892,4 @@ const styles = StyleSheet.create({
 });
 
 export default withNavigation(Request);
+
