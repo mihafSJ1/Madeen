@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
     zIndex: 1,
-    height: 85,
+    // height: 85,
   },
 
   rightItems: {
     backgroundColor: "#fff",
     marginBottom: 10,
     width: "100%",
-    height: 85,
+    // height: 822,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     shadowColor: "#000",

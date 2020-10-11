@@ -220,6 +220,7 @@ export default function App({ navigation }) {
                 headerShown: true,
                 navigation: { navigation },
                 header: (props) => <TopBar {...props} />,
+                headerTransparent: true,
               }}
             />
           </>

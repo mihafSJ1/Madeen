@@ -18,7 +18,7 @@ import { CheckBox } from "react-native-elements";
 import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from "react-navigation";
 
 import * as firebase from "firebase";
 import "firebase/auth";
@@ -94,7 +94,7 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 
 var userNameFromDB = "";
 
- class Request extends React.Component {
+class Request extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -207,38 +207,13 @@ var userNameFromDB = "";
           }
         });
       });
-<<<<<<< HEAD
-      // alert(applicationUsers);
-      this.setState({
-        userValue: applicationUsers,
-      })
-     
-
-
-||||||| merged common ancestors
-      // alert(applicationUsers);
-      this.setState({
-        userValue: applicationUsers,
-      })
-     
-
-=======
     // alert(applicationUsers);
     this.setState({
       userValue: applicationUsers,
     });
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
   }
 
-<<<<<<< HEAD
-
   onSubmitPress(values, props) {
-||||||| merged common ancestors
-
-  onSubmitPress(values) {
-=======
-  onSubmitPress(values) {
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
     const { currentUser } = this.state;
 
     firebase
@@ -273,39 +248,9 @@ var userNameFromDB = "";
             Alert.alert(
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
-              [
-<<<<<<< HEAD
-               
-                { text: "موافق", onPress: () =>  props.navigate('squares') }
-||||||| merged common ancestors
-              
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                    
-                },
-=======
-                {
-                  text: "حسنا",
-                  // onPress: () =>
-                  // // navigation.navigate("squares")
-                },
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
-              ],
+              [{ text: "موافق", onPress: () => props.navigate("squares") }],
               { cancelable: false }
             );
-<<<<<<< HEAD
-        
-          
-             
-           
-||||||| merged common ancestors
-            
-             
-           
-=======
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
           }
         }
       );
@@ -344,8 +289,6 @@ var userNameFromDB = "";
 
   //-------------------------------------------- Rendering react component
   render() {
- 
- 
     return (
       <View style={styles.container}>
         <View style={styles.background}>
@@ -367,17 +310,14 @@ var userNameFromDB = "";
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
-            
-              onReset={(values,action)=>{
-                action.resetForm()
-                this.props.navigation.navigate("squares")
-
+              onReset={(values, action) => {
+                action.resetForm();
+                this.props.navigation.navigate("squares");
               }}
               onSubmit={(values, action) => {
-                action.resetForm()
-               
-                this.onSubmitPress(values,this.props.navigation);
-              
+                action.resetForm();
+
+                this.onSubmitPress(values, this.props.navigation);
               }}
             >
               {(formprops, setFieldValue) => (
@@ -405,29 +345,13 @@ var userNameFromDB = "";
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
                   </Text>
 
-<<<<<<< HEAD
-                
                   {formprops.values.usersSelect ? (
-||||||| merged common ancestors
-                
-                  {props.values.usersSelect ? (
-=======
-                  {props.values.usersSelect ? (
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     <DropDownPicker
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
                       placeholderStyle={{ color: "#CBCBCC" }}
-<<<<<<< HEAD
-                     
                       value={formprops.values.user}
-||||||| merged common ancestors
-                     
-                      value={props.values.user}
-=======
-                      value={props.values.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                       containerStyle={{
                         borderTopLeftRadius: 50,
                         borderTopRightRadius: 50,
@@ -488,16 +412,8 @@ var userNameFromDB = "";
                       }
                     />
                   ) : null}
-<<<<<<< HEAD
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { formprops.errors.user}
-||||||| merged common ancestors
-                    <Text style={[styles.textError, { top: -20 }]}>
-                    { props.errors.user}
-=======
                   <Text style={[styles.textError, { top: -20 }]}>
-                    {props.errors.user}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
+                    {formprops.errors.user}
                   </Text>
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
@@ -540,15 +456,9 @@ var userNameFromDB = "";
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
                     // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-<<<<<<< HEAD
-                    onOpenModal={()=>{formprops.setFieldValue("expectedDate", tomorrow)}}
-||||||| merged common ancestors
-                    onOpenModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
-=======
                     onOpenModal={() => {
-                      props.setFieldValue("expectedDate", tomorrow);
+                      formprops.setFieldValue("expectedDate", tomorrow);
                     }}
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
                     mode="date"
                     calendar="arabic"
                     locale={"ar"}
@@ -585,7 +495,8 @@ var userNameFromDB = "";
                     }}
                   />
                   <Text style={[styles.textError, { top: -50 }]}>
-                    {formprops.touched.expectedDate && formprops.errors.expectedDate}
+                    {formprops.touched.expectedDate &&
+                      formprops.errors.expectedDate}
                   </Text>
                   <View style={styles.radio}>
                     <RadioButtonRN
@@ -751,15 +662,13 @@ var userNameFromDB = "";
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                    
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() =>  
-                        this.props.navigation.navigate("squares")
+                      onPress={
+                        () => this.props.navigation.navigate("squares")
                         // formprops.onReset(formprops.values)
                       }
-                      
                     >
-                       {/* <button type='reset'></button> */}
+                      {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -825,7 +734,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   registerBackground: {
-    marginTop: 70,
+    marginTop: 160,
     // overflow:'scroll',
     // overflow: "hidden",
     flex: 1,
@@ -921,12 +830,6 @@ const styles = StyleSheet.create({
     left: 56,
     paddingRight: 340,
   },
-<<<<<<< HEAD
 });
 
 export default withNavigation(Request);
-||||||| merged common ancestors
-});
-=======
-});
->>>>>>> 7c9bda37a23dcf6f9f37c5afabb1f663d1470a3d
