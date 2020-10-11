@@ -18,6 +18,7 @@ import Alert from "./Alert";
 import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
+import EditProfile from './EditProfile';
 
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
@@ -33,6 +34,7 @@ function squaresScreens() {
         component={squares}
         options={{ headerShown: false }}
       />
+        
       <Stack.Screen
         name="Timeline"
         component={Timeline}
@@ -129,6 +131,7 @@ function Homenav() {
           ),
         }}
       />
+      
       <Tab.Screen
         name="squares"
         component={squaresScreens}
@@ -197,6 +200,7 @@ export default function App({ navigation }) {
               component={Home}
               options={{ headerShown: false }}
             />
+           
             <Stack.Screen
               name="login"
               component={login}

@@ -129,6 +129,7 @@ var userNameFromDB = "";
   }
 
   repayementInstallments(price, eDate) {
+    installmentsDropDownArray = [];
    
     const submittedDate = moment();
     const expectedDate = moment(eDate);
@@ -193,7 +194,7 @@ var userNameFromDB = "";
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
         installmentsArray[i].durationValueArr == 0 &&
-        installmentsArray[i].priceValueArr == 0
+        installmentsArray[i].priceValueArr == 0 || installmentsArray[i].durationValueArr == 1 
       )
         continue;
 
@@ -316,7 +317,7 @@ var userNameFromDB = "";
       .notRequired()
       .when("usersSelect", {
         is: (val) => val == true,
-        then: yup.string().required("اختيار المدين مطلوب"),
+        then: yup.string().required("اختيار الدائن مطلوب"),
         otherwise: yup.string().notRequired(),
       }),
   });
@@ -349,7 +350,9 @@ var userNameFromDB = "";
               }}
 
               onReset= {(values, { resetForm })=> {
-              }}
+         this.props.navigation.navigate("squares")
+              }
+              }
               onSubmit={(values, action) => {
                 action.resetForm()
                
@@ -578,10 +581,20 @@ var userNameFromDB = "";
                   {formprops.values.repaymentType == data[1].label ? (
                     formprops.values.expectedDate == today   ||formprops.values.price <10 || formprops.values.expectedDate == tomorrow || (dateDiffDays == 0 && dateDiffMonths == 0 && dateDiffYears == 0 && dateDiffWeeks == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ?
+                
                     <Text style={[styles.repaymentTextError, { top:-22,marginBottom:4 }]}>
                     لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
+                  
                     السداد{" "}
-                  </Text> :
+                    </Text>
+
+              
+                
+                  
+// {formprops.setFieldValue('expectedDate',tomorrow)}
+                 
+                  
+                   :
                   
                     <DropDownPicker
                       style={styles.DropDownPicker}
@@ -716,7 +729,8 @@ var userNameFromDB = "";
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() => formprops.handleReset(), () => this.props.navigation.navigate("squares")}               
+                      onPress={ ()=> formprops.handleReset()}
+                                   
                     >
                        {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
