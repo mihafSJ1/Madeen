@@ -51,11 +51,9 @@ export default function Register({ navigation }) {
   const fullNameRegexAR = /[\u0600-\u06FF]/;
   const fullNameRegexEN =/^[a-zA-Z şüöı]+$/;
  
-  // const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
-  const strongPassRegex = new RegExp(
-    "^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"
-  );
+  
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
@@ -93,16 +91,16 @@ export default function Register({ navigation }) {
         );
       return
     }
-    // if (strongPassRegex.test(password) == false){
+    if (strongPassRegex.test(password) == false){
    
     
-    //   Alert.alert("",'يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز', 
-    //   [  
-    //     {text: 'حسناً'}, ],
-    //     {cancelable: false}  
-    //     );
-    //   return
-    // }
+      Alert.alert("",'يجب ان تكون كلمة المرور مكونة من ٨ خانات وحروف وارقام ورموز', 
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+      return
+    }
 
     firebase
       .auth()

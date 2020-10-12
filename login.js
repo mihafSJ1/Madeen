@@ -10,6 +10,7 @@ import {
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
@@ -59,13 +60,22 @@ export default function login({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-            alert("تحقق من صحة بريدك الالكتروني");
+            Alert.alert(
+              "",
+              "تحقق من صحة بريدك الالكتروني",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
+
             break;
           case "auth/user-not-found":
 
           case "auth/wrong-password":
-            alert(
-              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!"
+            Alert.alert(
+              "",
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
+              [{ text: "حسناً" }],
+              { cancelable: false }
             );
             break;
           case "auth/network-request-failed":
@@ -229,7 +239,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-    // fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -241,7 +251,7 @@ const styles = StyleSheet.create({
   signinText: {
     marginTop: 10,
     textAlign: "center",
-    //fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
 
   // textInput: {

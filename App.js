@@ -18,7 +18,7 @@ import Alert from "./Alert";
 import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
-
+import EditProfile from "./EditProfile";
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -220,6 +220,18 @@ export default function App({ navigation }) {
                 headerShown: true,
                 navigation: { navigation },
                 header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+            <Stack.Screen
+              name="EditProfile"
+              component={EditProfile}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
                 headerTransparent: true,
               }}
             />

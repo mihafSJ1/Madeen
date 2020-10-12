@@ -11,6 +11,7 @@ import {
   ImageBackground,
   ImageButton,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import TopBar from "./TopBar";
@@ -50,7 +51,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.blueText}
-            onPress={() => navigation.navigate("login")}
+            onPress={() => navigation.navigate("NotImplementedScreens")}
           >
             {" "}
             طلباتي
@@ -65,7 +66,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.silverText}
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate("NotImplementedScreens")}
           >
             {" "}
             التقويم
@@ -80,7 +81,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.greenText}
-            onPress={() => navigation.navigate("ResetPassword")}
+            onPress={() => navigation.navigate("NotImplementedScreens")}
           >
             {" "}
             الحاسبة
@@ -94,8 +95,11 @@ export default function squares({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:40,
   },
   orange: {
+   
+    resizeMode: "stretch",
     alignItems: "center",
     marginLeft: 0,
     marginRight: 0,
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
     marginBottom: -20,
     zIndex: 2,
-    height: 201,
+    height: 191,
     width: 333,
   },
 
@@ -129,12 +133,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 0,
     marginRight: 0,
-    left: 47,
+    left: 40,
     marginTop: -55,
     marginBottom: -20,
     zIndex: 1,
-    height: 189,
-    width: 318,
+    height: 174,
+    width: 333,
   },
 
   blueText: {
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: -40,
     zIndex: 1,
-    height: 237,
+    height: 223,
     width: 315,
   },
 
@@ -179,6 +183,7 @@ const styles = StyleSheet.create({
   },
 
   green: {
+    resizeMode: "stretch",
     alignItems: "center",
     marginLeft: 0,
     marginRight: 0,
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
     marginTop: -110,
     marginBottom: -40,
     zIndex: 1,
-    height: 237,
+    height: 207,
     width: 333,
   },
 
@@ -196,8 +201,9 @@ const styles = StyleSheet.create({
     // fontSize: 25,
     // zIndex: 1,
     // fontFamily: "Bahij_TheSansArabic-Light",
+   
 
-    top: 120,
+    top: 90,
     fontSize: 25,
     zIndex: 1,
     fontFamily: "Bahij_TheSansArabic-Light",

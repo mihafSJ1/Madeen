@@ -14,7 +14,7 @@ import {
   Alert,
   Button,
 } from "react-native";
-import { CheckBox } from "react-native-elements";
+import { CheckBox, ThemeConsumer } from "react-native-elements";
 import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
@@ -27,6 +27,7 @@ import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
 import RequestBackgroundComp from "./RequestBackgroundComp";
+import { da } from "date-fns/locale";
 // import TopBar from "./TopBar";
 
 if (!firebase.apps.length) {
@@ -35,6 +36,7 @@ if (!firebase.apps.length) {
 
 //-------------------------------------------- Data
 let applicationUsers = [];
+let installmentsDropDownArray = [];
 const numericKeyboard = /[^0-9]/;
 
 const data = [
@@ -52,7 +54,6 @@ const installmentsArray = [
     priceValueArr: "",
     durationValueArr: "",
     installmentsTypeArr: "yearly",
-    selected: true,
   },
   {
     label: "",
@@ -73,8 +74,6 @@ const installmentsArray = [
     installmentsTypeArr: "daily",
   },
 ];
-
-const installmentsDropDownArray = [];
 
 var year,
   days,
@@ -104,6 +103,7 @@ class Request extends React.Component {
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
+      // repaymentType : [],
     };
   }
 
@@ -133,52 +133,58 @@ class Request extends React.Component {
     dateDiffYears = expectedDate.diff(submittedDate, "years");
     if (dateDiffYears != 0) {
       var yearlyPrice = (price / dateDiffYears).toFixed(2);
-      installmentsArray[0].label =
-        ArabicNumbers(yearlyPrice) +
-        " ريال سعودي لمدة " +
-        ArabicNumbers(dateDiffYears) +
-        " سنة";
-      installmentsArray[0].priceValueArr = yearlyPrice;
-      installmentsArray[0].durationValueArr = dateDiffYears;
-      installmentsArray[0].installmentsTypeArr = "yearly";
+      if (yearlyPrice != 0) {
+        installmentsArray[0].label =
+          ArabicNumbers(yearlyPrice) +
+          " ريال سعودي لمدة " +
+          ArabicNumbers(dateDiffYears) +
+          " سنة";
+        installmentsArray[0].priceValueArr = yearlyPrice;
+        installmentsArray[0].durationValueArr = dateDiffYears;
+        installmentsArray[0].installmentsTypeArr = "yearly";
+      }
     }
 
     if (dateDiffMonths != 0) {
       var monthlyPrice = (price / dateDiffMonths).toFixed(2);
-      installmentsArray[1].label =
-        ArabicNumbers(monthlyPrice) +
-        " ريال سعودي لمدة " +
-        ArabicNumbers(dateDiffMonths) +
-        " شهر";
-      installmentsArray[1].priceValueArr = monthlyPrice;
-      installmentsArray[1].durationValueArr = dateDiffMonths;
-      installmentsArray[1].installmentsTypeArr = "monthly";
+      if (monthlyPrice != 0) {
+        installmentsArray[1].label =
+          ArabicNumbers(monthlyPrice) +
+          " ريال سعودي لمدة " +
+          ArabicNumbers(dateDiffMonths) +
+          " شهر";
+        installmentsArray[1].priceValueArr = monthlyPrice;
+        installmentsArray[1].durationValueArr = dateDiffMonths;
+        installmentsArray[1].installmentsTypeArr = "monthly";
+      }
     }
 
     if (dateDiffWeeks != 0) {
-      var weeklyPrice = (price / dateDiffWeeks).toFixed(2);
-      installmentsArray[2].label =
-        ArabicNumbers(weeklyPrice) +
-        " ريال سعودي لمدة " +
-        ArabicNumbers(dateDiffWeeks) +
-        " اسبوع";
-      installmentsArray[2].priceValueArr = weeklyPrice;
-      installmentsArray[2].durationValueArr = dateDiffWeeks;
-      installmentsArray[2].installmentsTypeArr = "weekly";
+      if (weeklyPrice != 0) {
+        var weeklyPrice = (price / dateDiffWeeks).toFixed(2);
+        installmentsArray[2].label =
+          ArabicNumbers(weeklyPrice) +
+          " ريال سعودي لمدة " +
+          ArabicNumbers(dateDiffWeeks) +
+          " اسبوع";
+        installmentsArray[2].priceValueArr = weeklyPrice;
+        installmentsArray[2].durationValueArr = dateDiffWeeks;
+        installmentsArray[2].installmentsTypeArr = "weekly";
+      }
     }
-
     if (dateDiffDays != 0) {
       var dailyPrice = (price / dateDiffDays).toFixed(2);
-      installmentsArray[3].label =
-        ArabicNumbers(dailyPrice) +
-        " ريال سعودي لمدة " +
-        ArabicNumbers(dateDiffDays) +
-        " يوم";
-      installmentsArray[3].priceValueArr = dailyPrice;
-      installmentsArray[3].durationValueArr = dateDiffDays;
-      installmentsArray[3].installmentsTypeArr = "daily";
+      if (dailyPrice != 0) {
+        installmentsArray[3].label =
+          ArabicNumbers(dailyPrice) +
+          " ريال سعودي لمدة " +
+          ArabicNumbers(dateDiffDays) +
+          " يوم";
+        installmentsArray[3].priceValueArr = dailyPrice;
+        installmentsArray[3].durationValueArr = dateDiffDays;
+        installmentsArray[3].installmentsTypeArr = "daily";
+      }
     }
-
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
       if (
         installmentsArray[i].durationValueArr == 0 &&
@@ -188,6 +194,8 @@ class Request extends React.Component {
 
       installmentsDropDownArray[j++] = installmentsArray[i];
     }
+    // this.setState({
+    //   repaymentType: installmentsDropDownArray})
   }
 
   //-------------------------------------------- Form Submission
@@ -207,7 +215,7 @@ class Request extends React.Component {
           }
         });
       });
-    // alert(applicationUsers);
+
     this.setState({
       userValue: applicationUsers,
     });
@@ -215,6 +223,9 @@ class Request extends React.Component {
 
   onSubmitPress(values, props) {
     const { currentUser } = this.state;
+    if (values.usersSelect == false) {
+      values.user = "";
+    }
 
     firebase
       .database()
@@ -263,10 +274,10 @@ class Request extends React.Component {
       .required("المبلغ مطلوب")
       .integer("المبلغ لا بد أن  يكون عدد صحيح")
       .max(20000, "المبلغ لا بد أن يكون أقل من أو يساوي ٢٠ ألف ريال")
-      .min(1, "المبلغ لا بد أن يكون أكبر من أو يساوي ريال"),
+      .min(10, "المبلغ  مطلوب و لا بد أن يكون أكبر من أو يساوي ١٠ ريال"),
     expectedDate: yup
       .date()
-      .min(tomorrow, "التاريخ مطلوب ولا بد أن لا يكون  ضمن ٢٤ ساعة القادمة"),
+      .min(tomorrow, "التاريخ مطلوب ولا بد أن يكون بعد ٢٤ ساعة "),
     // .test(
     //   "enteranceExpectedDate",
     //   "التاريخ المتوقع لإكمال السداد مطلوب",
@@ -274,7 +285,7 @@ class Request extends React.Component {
     //     return props.values.expectedDate == new Date();
     //   }
     // ),
-    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ أحرف فأكثر"),
+    reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ خانات فأكثر"),
 
     usersSelect: yup.bool(),
     user: yup
@@ -301,19 +312,17 @@ class Request extends React.Component {
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
+                installmentRepayment: "",
                 user: "",
                 usersSelect: false,
-                price: "",
+                price: 0,
                 expectedDate: today,
                 repaymentType: "",
                 reason: "",
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
-              onReset={(values, action) => {
-                action.resetForm();
-                this.props.navigation.navigate("squares");
-              }}
+              onReset={(values, { resetForm }) => {}}
               onSubmit={(values, action) => {
                 action.resetForm();
 
@@ -323,7 +332,10 @@ class Request extends React.Component {
               {(formprops, setFieldValue) => (
                 <View style={styles.requestContainer}>
                   <View style={styles.checkboxContainer}>
-                    <Text style={styles.checkboxLabel}>التدين من شخص محدد</Text>
+                    <Text style={styles.checkboxLabel}>
+                      {" "}
+                      الاستلاف من شخص محدد
+                    </Text>
 
                     <CheckBox
                       style={styles.checkbox}
@@ -418,6 +430,8 @@ class Request extends React.Component {
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
                   </Text>
+                  {/* 
+{alert(formprops.values.expectedDate)} */}
 
                   <TextInput
                     style={styles.textInput}
@@ -455,7 +469,6 @@ class Request extends React.Component {
                     hideText
                     style={styles.datePicker}
                     date={formprops.values.expectedDate}
-                    // onCloseModal={()=>{props.setFieldValue("expectedDate", tomorrow)}}
                     onOpenModal={() => {
                       formprops.setFieldValue("expectedDate", tomorrow);
                     }}
@@ -492,8 +505,11 @@ class Request extends React.Component {
                     }}
                     onDateChange={(date) => {
                       formprops.setFieldValue("expectedDate", date);
+
+                      // formprops.setFieldValue("expectedDate", date);
                     }}
                   />
+                  {console.log(formprops.values.expectedDate)}
                   <Text style={[styles.textError, { top: -50 }]}>
                     {formprops.touched.expectedDate &&
                       formprops.errors.expectedDate}
@@ -531,82 +547,102 @@ class Request extends React.Component {
                         formprops.setFieldValue("repaymentType", e.label)
                       }
                     />
+                    {console.log(formprops.values.installmentRepayment)}
                   </View>
                   {formprops.values.repaymentType == data[1].label ? (
-                    <DropDownPicker
-                      style={styles.DropDownPicker}
-                      items={installmentsDropDownArray}
-                      searchableError={() => (
-                        <Text style={[styles.textError, { marginRight: 4 }]}>
-                          لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
-                          السداد{" "}
-                        </Text>
-                      )}
-                      placeholder="إختر الفترة"
-                      placeholderStyle={{ color: "#CBCBCC" }}
-                      value={formprops.values.user}
-                      containerStyle={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#CBCA9E",
-                      }}
-                      style={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#57694C",
-                        borderWidth: 1,
-                        width: 100,
-                      }}
-                      arrowColor="#9b9b7a"
-                      arrowSize={18}
-                      containerStyle={{
-                        width: 352,
-                        height: 40,
-                        marginLeft: 35,
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 60,
-                        borderBottomRightRadius: 50,
-                        marginBottom: 35,
-                      }}
-                      itemStyle={{
-                        backgroundColor: "#fff",
-                        textAlign: "right",
-                        flexDirection: "row-reverse",
-                        justifyContent: "flex-start",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                        // to make the list to the right side
-                      }}
-                      selectedLabelStyle={{
-                        color: "#57694C",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      activeLabelStyle={{
-                        color: "#57694C",
-                      }}
-                      labelStyle={{
-                        backgroundColor: "#fff",
-                        fontSize: 16,
-                        textAlign: "right",
-                        color: "#000",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      style={{
-                        flexDirection: "row-reverse",
-                        // to support RTL
-                      }}
-                      onChangeItem={(item) =>
-                        this.setState({
-                          installmentsState: item.installmentsTypeArr,
-                          priceState: item.priceValueArr,
-                          durationState: item.durationValueArr,
-                        })
-                      }
-                    />
+                    formprops.values.expectedDate == today ||
+                    formprops.values.price < 10 ||
+                    formprops.values.expectedDate == tomorrow ||
+                    (dateDiffDays == 0 &&
+                      dateDiffMonths == 0 &&
+                      dateDiffYears == 0 &&
+                      dateDiffWeeks == 0) ||
+                    (year == -1 && month == -1 && days == -1 && week == -1) ? (
+                      <Text
+                        style={[
+                          styles.repaymentTextError,
+                          { top: -22, marginBottom: 4 },
+                        ]}
+                      >
+                        لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال السداد{" "}
+                      </Text>
+                    ) : (
+                      <DropDownPicker
+                        style={styles.DropDownPicker}
+                        items={installmentsDropDownArray}
+                        searchableError={() => (
+                          <Text style={[styles.textError, { marginRight: 4 }]}>
+                            لطفًا التاريخ لا يكون ضمن الآربع وعشرون ساعة القادمة
+                          </Text>
+                        )}
+                        placeholder="إختر الفترة"
+                        placeholderStyle={{ color: "#CBCBCC" }}
+                        value={formprops.values.user}
+                        containerStyle={{
+                          borderTopLeftRadius: 50,
+                          borderTopRightRadius: 50,
+                          borderBottomLeftRadius: 40,
+                          borderBottomRightRadius: 50,
+                          borderColor: "#CBCA9E",
+                        }}
+                        style={{
+                          borderTopLeftRadius: 50,
+                          borderTopRightRadius: 50,
+                          borderBottomLeftRadius: 40,
+                          borderBottomRightRadius: 50,
+                          borderColor: "#57694C",
+                          borderWidth: 1,
+                          width: 100,
+                        }}
+                        arrowColor="#9b9b7a"
+                        arrowSize={18}
+                        containerStyle={{
+                          width: 352,
+                          height: 40,
+                          marginLeft: 35,
+                          borderTopLeftRadius: 50,
+                          borderTopRightRadius: 50,
+                          borderBottomLeftRadius: 60,
+                          borderBottomRightRadius: 50,
+                          marginBottom: 35,
+                        }}
+                        itemStyle={{
+                          backgroundColor: "#fff",
+                          textAlign: "right",
+                          flexDirection: "row-reverse",
+                          justifyContent: "flex-start",
+                          fontFamily: "Bahij_TheSansArabic-Light",
+                          // to make the list to the right side
+                        }}
+                        selectedLabelStyle={{
+                          color: "#57694C",
+                          fontFamily: "Bahij_TheSansArabic-Light",
+                        }}
+                        activeLabelStyle={{
+                          color: "#57694C",
+                        }}
+                        labelStyle={{
+                          backgroundColor: "#fff",
+                          fontSize: 16,
+                          textAlign: "right",
+                          color: "#000",
+                          fontFamily: "Bahij_TheSansArabic-Light",
+                        }}
+                        style={{
+                          flexDirection: "row-reverse",
+                          // to support RTL
+                        }}
+                        onChangeItem={
+                          (item) =>
+                            this.setState({
+                              installmentsState: item.installmentsTypeArr,
+                              priceState: item.priceValueArr,
+                              durationState: item.durationValueArr,
+                            })
+                          // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
+                        }
+                      />
+                    )
                   ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ? (
                     <Text style={styles.repaymentTextError}>
@@ -646,6 +682,7 @@ class Request extends React.Component {
                       ) : null}
                     </Text>
                   )}
+
                   <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
                     السبب{" "}
                   </Text>
@@ -664,8 +701,8 @@ class Request extends React.Component {
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={
-                        () => this.props.navigation.navigate("squares")
-                        // formprops.onReset(formprops.values)
+                        (() => formprops.handleReset(),
+                        () => this.props.navigation.navigate("squares"))
                       }
                     >
                       {/* <button type='reset'></button> */}
@@ -739,6 +776,7 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     flex: 1,
     height: 700,
+
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     backgroundColor: "#fff",
