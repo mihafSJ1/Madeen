@@ -14,6 +14,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 export default function TopBar({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
   useEffect(() => {
     const { currentUser } = firebase.auth();
     setCurrentUser({ currentUser });
@@ -22,6 +23,7 @@ export default function TopBar({ navigation }) {
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
         setUserName(snapshot.val().fullName);
+        setUserImage(snapshot.val().UserImage);
       });
   }, []);
 
@@ -29,10 +31,7 @@ export default function TopBar({ navigation }) {
     <View style={styles.container}>
       <View style={styles.rightItems}>
         <Text style={styles.topBarText}>مرحبًا {userName}!</Text>
-        <Image
-          source={require("./assets/UserProfileImage.png")}
-          style={styles.profileImage}
-        ></Image>
+        <Image source={{ uri: userImage }} style={styles.profileImage}></Image>
       </View>
       <TouchableOpacity
         style={styles.logoutButton}
@@ -107,6 +106,9 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
     width: 52.19,
     height: 52.2,
+    borderRadius: 100,
+    borderColor: "#CBCA9E",
+    borderWidth: 1,
   },
 
   topBarText: {

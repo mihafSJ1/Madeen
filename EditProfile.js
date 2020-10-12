@@ -26,182 +26,221 @@ import TopBar from "./TopBar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { Ionicons } from "@expo/vector-icons";
 import { Value } from "react-native-reanimated";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
-  authDomain: "madeen-46af8.firebaseapp.com",
-  databaseURL: "https://madeen-46af8.firebaseio.com",
-  projectId: "madeen-46af8",
-  storageBucket: "madeen-46af8.appspot.com",
-  messagingSenderId: "289377001222",
-  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
-  measurementId: "G-KWKWGXNQRN",
+  apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
+  authDomain: "madeendb2.firebaseapp.com",
+  databaseURL: "https://madeendb2.firebaseio.com",
+  projectId: "madeendb2",
+  storageBucket: "madeendb2.appspot.com",
+  messagingSenderId: "814154412010",
+  appId: "1:814154412010:web:435cac99ae40206a1ecc93",
+  measurementId: "G-SXS9Z8NESC",
 };
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var namef ="rf";
-var emailf ="ef";
-let pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var data="";
-var res= "" ;
-var fullname="yarb";
-let input="";
+// var namef ="rf";
+// var emailf ="ef";
+// let pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
+// var data="";
+// var res= "" ;
+// var fullname="yarb";
+let input = "";
+const fullNameRegexAR = /[\u0600-\u06FF]/;
+const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
 export default class EditProfile extends React.Component {
   state = { currentUser: null };
   // saveUserInput = userInput => {
   //   const input = userInput;
-    
+
   // };
+  state = {
+    namef: "name",
+    emailf: "email",
+    pic:
+      "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+  };
+
+  setName(name) {
+    this.setState({ namef: name });
+  }
+
+  setEmail(email) {
+    this.setState({ emailf: email });
+  }
+
+  setPic(picNew) {
+    this.setState({ pic: picNew });
+  }
   editImage(URL) {
     const { currentUser } = firebase.auth();
-    console.log("before update")
+    console.log("before update");
     console.log(URL);
-    firebase.database().ref('users/' + currentUser.uid ).update({
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .update({
+        UserImage: URL,
+      });
 
-      UserImage: URL,
-  })
-
-  console.log("after update")
-  console.log(URL);
-}
-  ;
-
-
+    console.log("after update");
+    console.log(URL);
+  }
   uplaodImage = async (uri, draftName) => {
     const response = await fetch(uri);
     const blob = await response.blob();
 
     var ref = firebase
-    .storage()
-    .ref()
-    .child("Draft/" + draftName);
+      .storage()
+      .ref()
+      .child("draft/" + draftName);
     return ref.put(blob);
   };
 
   onChooseImagePress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync(); 
-    if (!result.cancelled){
-      this.uplaodImage(result.uri, "test")
-      .then(()=> {
-        const {imageName} = "test";
-  let imageRef = firebase.storage().ref("Draft/"+"test");
-  console.log("bey Bride2")
-  imageRef
-    .getDownloadURL()
-    .then((url) => {
-      console.log("bey Bride3")
-      //from url you can fetched the uploaded image easily
-      this.setState({profileImageUrl: url});
-      console.log("bey Bride4")
-      console.log(this.state.profileImageUrl);
-      this.editImage(this.state.profileImageUrl);
-      console.log("bey Bride5")
-      console.log(this.state.profileImageUrl)
-      console.log("bey Bride")
-    })
-    .catch((e) => console.log('getting downloadURL of image error => ', e));
-  
-      })
-      .catch((error) => {
-        Alert.alert(error);
-      });
+    const { currentUser } = firebase.auth();
+    let result = await ImagePicker.launchImageLibraryAsync();
+    if (!result.cancelled) {
+      this.uplaodImage(result.uri, "" + currentUser.uid)
+        .then(() => {
+          const { imageName } = "" + currentUser.uid;
+          let imageRef = firebase
+            .storage()
+            .ref("draft/" + "" + currentUser.uid);
+          console.log("bey Bride2");
+          imageRef
+            .getDownloadURL()
+            .then((url) => {
+              console.log("bey Bride3");
+              //from url you can fetched the uploaded image easily
+              this.setState({ profileImageUrl: url });
+              console.log("bey Bride4");
+              console.log(this.state.profileImageUrl);
+              this.editImage(this.state.profileImageUrl);
+              console.log("bey Bride5");
+              console.log(this.state.profileImageUrl);
+              console.log("bey Bride");
+            })
+            .catch((e) =>
+              console.log("getting downloadURL of image error => ", e)
+            );
+        })
+        .catch((error) => {
+          Alert.alert(error);
+        });
     }
-
   };
-
 
   componentDidMount() {
     const { currentUser } = firebase.auth();
-    firebase.database().ref('users/' + currentUser.uid ).on('value',(snapshot)=>{
-       
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+        // namef   = snapshot.val().fullName;
+        // emailf   = snapshot.val().email;
+        // pic=snapshot.val().UserImage;
 
-      namef   = snapshot.val().fullName;
-      emailf   = snapshot.val().email;
-      pic=snapshot.val().UserImage;
+        this.setName(snapshot.val().fullName),
+          this.setEmail(snapshot.val().email),
+          this.setPic(snapshot.val().UserImage);
 
-      this.setState({ currentUser });
-    
-    })
-     
-    
+        this.setState({ currentUser });
+      });
 
-    
-  //   const upload = async (filepath, filename, filemime) => {
-  //     const metaData = { contentType: filemime };
-  //    res = await firebase
-  //         .storage()
-  //         .ref(`./assets/orange.png/${filename}`)
-  //         .putFile(filepath, metaData); // put image file to GCS
-  //     return res;
-  
-  //   };  
-  //   async ()=>{
-  // const userId = firebase.auth().currentUser.uid;
-  //  res =  await upload(`orange.png`, `/assets/orange.png`, `orange/png`); // function in step 1
-  // data = {
-  //    fullName:namef,
-  //    email:emailf,
-  //     pic: res.downloadURL, // retrieve image URL
-  // }
-  // };
+    //   const upload = async (filepath, filename, filemime) => {
+    //     const metaData = { contentType: filemime };
+    //    res = await firebase
+    //         .storage()
+    //         .ref(`./assets/orange.png/${filename}`)
+    //         .putFile(filepath, metaData); // put image file to GCS
+    //     return res;
 
-  // firebase.database().ref('users/' + currentUser.uid ).set({
+    //   };
+    //   async ()=>{
+    // const userId = firebase.auth().currentUser.uid;
+    //  res =  await upload(`orange.png`, `/assets/orange.png`, `orange/png`); // function in step 1
+    // data = {
+    //    fullName:namef,
+    //    email:emailf,
+    //     pic: res.downloadURL, // retrieve image URL
+    // }
+    // };
 
-  //   fullName:namef,
-  //   email:emailf,
-  //    pic: res.downloadURL, 
+    // firebase.database().ref('users/' + currentUser.uid ).set({
 
-  // });
+    //   fullName:namef,
+    //   email:emailf,
+    //    pic: res.downloadURL,
 
-
+    // });
 
     this.setState({ currentUser });
-  
-      
   }
 
-
-  editProfile(URL){
+  editProfile(URL) {
     const { currentUser } = firebase.auth();
-    console.log("before update")
+    console.log("before update");
     // console.log(URL);
     // if(URL == undefined ){
     //   console.log("تسلب");
     //   console.log("2تسلب");
     //   console.log(pic);
-      // this.setState({  URL : this.state.pic })
-      if (input == null) {
-        this.props.navigation.navigate('viewProfile')
-        return 
-      }
-      firebase.database().ref('users/' + currentUser.uid ).update({
+    // this.setState({  URL : this.state.pic })
+    if (input == "") {
+      this.props.navigation.navigate("viewProfile");
+      return;
+    }
+    console.log("i reach");
+    if (input.trim() == "") {
+      Alert.alert(
+        "",
+        "عفوًا الاسم يجب أن يحتوي على حروف فقط",
+        [{ text: "حسناً" }],
+        { cancelable: false }
+      );
+      return;
+    }
+    if (
+      fullNameRegexEN.test(input) == false &&
+      fullNameRegexAR.test(input) == false
+    ) {
+      Alert.alert(
+        "",
+        "عفوًا الاسم يجب أن يحتوي على حروف فقط",
+        [{ text: "حسناً" }],
+        { cancelable: false }
+      );
+      return;
+    }
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .update({
         fullName: input,
         // UserImage: pic,
-      })
+      });
     //   this.props.navigation.navigate('AreejRaghad2')
     //   return
     // }
 
- console.log("after update")
- console.log(URL);
- this.props.navigation.navigate('viewProfile')
-
-}
-
+    console.log("after update");
+    console.log(URL);
+    this.props.navigation.navigate("viewProfile");
+  }
 
   render() {
     const { currentUser } = this.state;
 
-    const saveUserInput = userInput => {
+    const saveUserInput = (userInput) => {
       input = userInput;
     };
 
     return (
       <KeyboardAwareScrollView>
-      <View style={styles.container3}>
         <TopBar />
         {/* <Text style={{ fontSize: 20 }}>
           Hi{" "}
@@ -213,34 +252,28 @@ export default class EditProfile extends React.Component {
           </Text>
         </Text> */}
 
-      
-
-
-<View style={styles.container2}>
-
-<TouchableOpacity
-style={styles. UserImagetuch}
-onPress={() => this.onChooseImagePress()}
-
-> 
-{/* <Image style={styles.UserImage}  source={require(this.state.profileImageUrl)} />  */}
-{/* <Image
+        <View style={styles.container3}>
+          <View style={styles.container2}>
+            <TouchableOpacity
+              style={styles.UserImagetuch}
+              onPress={() => this.onChooseImagePress()}
+            >
+              {/* <Image style={styles.UserImage}  source={require(this.state.profileImageUrl)} />  */}
+              {/* <Image
  style={styles.UserImage}
  source={require("./assets/UserImageProfile.png")} 
 /> */}
-<Image
- style={styles.UserImage}
- source={{uri: pic}} 
-/>
-      
-</TouchableOpacity>
+              <Image
+                style={styles.UserImage}
+                source={{ uri: this.state.pic }}
+              />
+            </TouchableOpacity>
 
-{/* <Image style={styles.UserImage} source={pic} />  */}
-  <View style={styles.registerBackground}>
-    {/* <Text style={styles.UserName}>{namef}</Text> */}
+            {/* <Image style={styles.UserImage} source={pic} />  */}
+            <View style={styles.registerBackground}>
+              {/* <Text style={styles.UserName}>{namef}</Text> */}
 
-
-    {/* <TextInput style={styles.textinput}
+              {/* <TextInput style={styles.textinput}
         autoFocus = {true}
         autoCorrect = {false}
         autoCapitalize = "none"
@@ -251,69 +284,59 @@ onPress={() => this.onChooseImagePress()}
         placeholder={namef}
         editable={false}
         /> */}
-       
 
-<TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('viewProfile')
-                ;
-              }}
-            >
-              <AntDesign
-                style={styles.close}
-                name="close"
-                size={24}
-                color="black"
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("viewProfile");
+                }}
+              >
+                <AntDesign
+                  style={styles.close}
+                  name="close"
+                  size={24}
+                  color="#9B9B7A"
+                />
+              </TouchableOpacity>
+
+              <TextInput
+                style={styles.textinput}
+                placeholder={this.state.namef}
+                name="fullname"
+                onChangeText={(userInput) => saveUserInput(userInput)}
+                // onChangeText={text => this.setState({text})}
+                value={this.state.text}
+                input={this.state.text}
               />
-            </TouchableOpacity>
 
+              {/* field number1  */}
 
-<TextInput
-     style={styles.textinput}
-        placeholder={namef}
-        name="fullname"
-        onChangeText={userInput => saveUserInput(userInput)}
-        // onChangeText={text => this.setState({text})}
-        value={this.state.text}
-        input={this.state.text}
-    />
+              <Text style={styles.Email}> {this.state.emailf} </Text>
 
-    {/* field number1  */}
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+              </Text>
 
-    <Text style={styles.Email}> {emailf} </Text>
-    
+              <Text style={styles.subsidy}> عدد التسليف </Text>
+              <Text style={styles.debts}> عدد الاستلاف </Text>
+              <View style={styles.PinkRectangleShapeView}>
+                <Text style={styles.buttonText2}> ٠ </Text>
+              </View>
+              <View style={styles.YellowRectangleShapeView}>
+                <Text style={styles.buttonText2}> ٠ </Text>
+              </View>
 
-    <Text style={styles.RateStarts}>
-    <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-    <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-    <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-    <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-    <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-   
-    
-    </Text>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                onPress={() => this.editProfile(this.state.profileImageUrl)}
+              >
+                <Text style={styles.buttonText3}> حفظ التعديل </Text>
+              </TouchableOpacity>
 
-    <Text style={styles.subsidy}> عدد التسليف </Text>
-    <Text style={styles.debts}> عدد الاستلاف </Text>
-    <View style={styles.PinkRectangleShapeView}>
-        <Text style={styles.buttonText2}> ١٠</Text>
-        
-    </View>
-    <View style={styles.YellowRectangleShapeView}>
-        <Text style={styles.buttonText2}> ١٦</Text>
-        
-    </View>
-   
-    <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-              onPress={() =>  this.editProfile(this.state.profileImageUrl)}
-            
-            >
-              <Text style={styles.buttonText3}>  حفظ التعديل  </Text>
-             
-            </TouchableOpacity>
-
-            {/* <TouchableOpacity
+              {/* <TouchableOpacity
               style={[styles.button2, { backgroundColor: "#D4CEC9" }]}
               onPress={() =>  this.editProfile()}
             
@@ -322,22 +345,21 @@ onPress={() => this.onChooseImagePress()}
              
             </TouchableOpacity> */}
 
-    <StatusBar style="auto" />
-  </View>
-</View>
-
-
-</View>
-</KeyboardAwareScrollView>
-    );//end return
-  }//end render 
-}// end function
+              <StatusBar style="auto" />
+            </View>
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+    ); //end return
+  } //end render
+} // end function
 
 const styles = StyleSheet.create({
   container3: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    top: 130,
   },
 
   container2: {
@@ -356,35 +378,28 @@ const styles = StyleSheet.create({
   ProfileEdit: {
     left: 50,
     bottom: 5,
-    zIndex:2,
+    zIndex: 2,
     shadowColor: "#000000",
     shadowOpacity: 0.71,
     shadowOffset: {
       width: 100,
       height: 100,
     },
-
-    
   },
-
 
   ProfileEdit2: {
     left: 300,
     bottom: 15,
-    zIndex:2,
-    backgroundColor:'red',
+    zIndex: 2,
+    backgroundColor: "red",
     shadowColor: "#000000",
     shadowOpacity: 0.71,
-    width:90,
+    width: 90,
     shadowOffset: {
       // width: 100,
       // height: 100,
     },
-
-    
   },
-
-
 
   PinkRectangleShapeView: {
     width: 120,
@@ -394,39 +409,37 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left:197,
+    left: 197,
     top: 220,
     backgroundColor: "#D9AE94",
-    borderColor: '#D3CECA',
+    borderColor: "#D3CECA",
     borderWidth: 2,
-   
-    },
-    YellowRectangleShapeView: {
-      alignItems: "center",
-      width: 120,
-      height: 70,
-      marginTop: 0,
-      padding: 5,
-      borderRadius: 15,
-      marginLeft: 33,
-      marginBottom: 0,
-      right:-25,
-      top: 150,
-      backgroundColor: "#F1DCA7",
-      borderColor: '#D3CECA',
-      borderWidth: 2,
-     
-      },
-    
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -25,
+    top: 150,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+
   registerBackground: {
     overflow: "hidden",
     flex: 1,
     borderTopRightRadius: 60,
     borderTopLeftRadius: 60,
-   bottom: 0,
-   top: -250,
-   height:750,
-   width: 410,
+    bottom: 0,
+    top: -250,
+    height: 750,
+    width: 410,
     backgroundColor: "#fff",
   },
 
@@ -442,10 +455,8 @@ const styles = StyleSheet.create({
     height: 160,
     resizeMode: "stretch",
     borderRadius: 100,
-    borderColor:"#CBCA9E",
-    borderWidth:4,
-
-    
+    borderColor: "#CBCA9E",
+    borderWidth: 4,
   },
 
   UserImagetuch: {
@@ -460,9 +471,6 @@ const styles = StyleSheet.create({
     height: 160,
     resizeMode: "stretch",
     borderRadius: 100,
-  
-
-    
   },
 
   scrollView: {
@@ -474,8 +482,8 @@ const styles = StyleSheet.create({
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-bottom:-220,
-right:5,
+    bottom: -220,
+    right: 5,
     textAlign: "center",
     justifyContent: "center",
   },
@@ -490,7 +498,6 @@ right:5,
     right: 134,
   },
 
-
   debts: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 18,
@@ -499,7 +506,6 @@ right:5,
     top: 220,
     left: 70,
     zIndex: 2,
-
   },
   subsidy: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -508,34 +514,46 @@ right:5,
     color: "#404040",
     top: 249,
     right: 70,
-
   },
   buttonText: {
     textAlign: "center",
-    top:10,
+    top: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 40,
-    color: '#fff',
-   
+    color: "#fff",
   },
-  
 
-  textinput:{
+  textinput: {
     marginBottom: 13,
-    marginLeft: 80,
+    marginLeft: 18,
     alignItems: "center",
     borderColor: "#CBCA9E",
     width: 230,
     height: 40,
-    top:220,
+    top: 220,
     backgroundColor: "#fff",
     borderRadius: 15,
     borderWidth: 2,
     textAlign: "center",
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize:22,
-    left:10,
-    color:'#57694C',
+    fontSize: 22,
+    left: 10,
+    color: "#57694C",
+
+    // marginBottom: 13,
+    // marginLeft: 35,
+    // alignItems: "center",
+    borderColor: "#DBDBDB",
+    width: 350,
+    // backgroundColor: "#fff",
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 1,
+    // marginTop: 5,
+    // textAlign: "right",
+    // paddingRight: 10,
+    // fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
   },
   button: {
     alignItems: "center",
@@ -546,7 +564,7 @@ right:5,
     borderRadius: 15,
     marginLeft: 146,
     backgroundColor: "#fff",
-    top:50,
+    top: 50,
   },
 
   button2: {
@@ -555,37 +573,31 @@ right:5,
     height: 30,
     marginTop: 150,
     padding: 5,
-    left:40,
-    top:-130,
+    left: 40,
+    top: -130,
     borderRadius: 15,
     marginLeft: 32,
     backgroundColor: "#fff",
-    zIndex:2,
+    zIndex: 2,
   },
-
-
 
   buttonText3: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
-
   },
-
 
   buttonText2: {
     textAlign: "center",
-    top:-1,
+    top: -1,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 40,
-    color: '#fff',
-   
+    color: "#fff",
   },
 
   close: {
     left: 20,
-    top:20,
-    zIndex:2,
+    top: 20,
+    zIndex: 2,
+    borderColor: "#CBCA9E",
   },
-
-
 });
