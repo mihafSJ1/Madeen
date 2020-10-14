@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     marginBottom: 10,
-    width: "100%",
+    width: 400,
     shadowColor: "#000",
     shadowOpacity: 0.11,
     shadowOffset: {
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -250,
+    left: -120,
   },
 
   leftItems: {
