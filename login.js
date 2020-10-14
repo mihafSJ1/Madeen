@@ -11,7 +11,6 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   Alert,
-  
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
@@ -47,12 +46,10 @@ export default function login({ navigation }) {
   const onLoginPress = () => {
     //Null fields validation
     if (email.trim() == "" || password.trim() == "") {
-      Alert.alert("","عفوًا، جميع الحقول مطلوبة",
-      [  
-        {text: 'حسناً'}, ],
-        {cancelable: false}  
-        );
-     
+      Alert.alert("", "عفوًا، جميع الحقول مطلوبة", [{ text: "حسناً" }], {
+        cancelable: false,
+      });
+
       return;
     }
     console.log("handleLogin1");
@@ -63,31 +60,32 @@ export default function login({ navigation }) {
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-
-            Alert.alert("","تحقق من صحة بريدك الالكتروني",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "تحقق من صحة بريدك الالكتروني",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
 
             break;
           case "auth/user-not-found":
-          
+
           case "auth/wrong-password":
-            
-            Alert.alert("","من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
+            Alert.alert(
+              "",
+              "من فضلك تحقق من البريد الالكتروني أو كلمة المرور المسجلة لدى مدين!",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
             break;
           case "auth/network-request-failed":
-            Alert.alert("","فضلًا تحقق من اتصالك بالانترنت",
-            [  
-              {text: 'حسناً'}, ],
-              {cancelable: false}  
-              );
-          
+            Alert.alert(
+              "",
+              "فضلًا تحقق من اتصالك بالانترنت",
+              [{ text: "حسناً" }],
+              { cancelable: false }
+            );
+
             break;
         }
       });
@@ -105,7 +103,10 @@ export default function login({ navigation }) {
 
           {/* faild number1  */}
 
-          <Text style={styles.textInputTitle}> البريد الإلكتروني  <Text style={styles.textError}> *</Text> </Text>
+          <Text style={styles.textInputTitle}>
+            {" "}
+            البريد الإلكتروني <Text style={styles.textError}> *</Text>{" "}
+          </Text>
           <TextInput
             style={styles.textInput}
             placeholder="البريد الالكتروني "
@@ -116,7 +117,10 @@ export default function login({ navigation }) {
           {/* <RegisterTextInput/> */}
 
           {/* faild number1  */}
-          <Text style={styles.textInputTitle}> كلمة السر   <Text style={styles.textError}> *</Text></Text>
+          <Text style={styles.textInputTitle}>
+            {" "}
+            كلمة السر <Text style={styles.textError}> *</Text>
+          </Text>
           <TextInput
             style={styles.textInput}
             placeholder="كلمة المرور"
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    marginBottom:55,
+    marginBottom: 55,
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
@@ -221,35 +225,33 @@ const styles = StyleSheet.create({
     color: "#404040",
     marginRight: 35,
   },
- 
- 
-    button: {
-      alignItems: "center",
-      width: 170,
-      height: 30,
-      marginTop: 10,
-      padding: 5,
-      borderRadius: 15,
-      marginLeft: 10,
-      backgroundColor: "#fff",
-    },
-  
+
+  button: {
+    alignItems: "center",
+    width: 170,
+    height: 30,
+    marginTop: 10,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    backgroundColor: "#fff",
+  },
 
   buttonText: {
     textAlign: "center",
-    // fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 25,
     fontSize: 30,
-    marginBottom:200,
+    marginBottom: 200,
   },
   signinText: {
     marginTop: 10,
     textAlign: "center",
-    //fontFamily: "Bahij_TheSansArabic-Light",
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
 
   // textInput: {
@@ -289,5 +291,4 @@ const styles = StyleSheet.create({
     marginRight: 30,
     bottom: 10,
   },
-
 });

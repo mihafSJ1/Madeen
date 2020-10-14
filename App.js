@@ -18,8 +18,7 @@ import Alert from "./Alert";
 import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
-import EditProfile from './EditProfile';
-
+import EditProfile from "./EditProfile";
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -28,7 +27,6 @@ const Tab = createBottomTabNavigator();
 function squaresScreens() {
   return (
     <Stack.Navigator>
-      
       <Stack.Screen
         name="squares"
         component={squares}
@@ -185,10 +183,7 @@ export default function App({ navigation }) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-      
-      >
-        
+      <Stack.Navigator>
         {user ? (
           <Stack.Screen name="Home">
             {(props) => <Home {...props} extraData={user} />}
@@ -230,9 +225,17 @@ export default function App({ navigation }) {
                 header: (props) => <TopBar {...props} />,
                 // headerMode:screen,
                 headerTransparent: true,
-              //////
-
-              
+              }}
+            />
+            <Stack.Screen
+              name="EditProfile"
+              component={EditProfile}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
               }}
             />
           </>
