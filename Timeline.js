@@ -80,6 +80,7 @@ firebase
 const currentUser = firebase.auth();
 //this.setState({ currentUser });
 firebase
+
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
@@ -103,20 +104,21 @@ export default class Timeline extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
 
-  // componentDidMount() {
-  //   const { currentUser } = firebase.auth();
-  //   this.setState({ currentUser });
-  //   firebase
-  //     .database()
-  //     .ref("requests/")
-  //     .on("value", (snapshot) => {
-  //       snapshot.forEach((child) => {
-  //         if (child.val().uid != currentUser.uid) {
-  //           requestArray.push(child.val());
-  //         }
-  //       });
-  //     });
-  //   }
+  componentDidMount() {
+    requestArray=[]
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
+    firebase
+      .database()
+      .ref("requests/")
+      .on("value", (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().uid != currentUser.uid) {
+            requestArray.push(child.val());
+          }
+        });
+      });
+    }
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -194,6 +196,7 @@ export default class Timeline extends React.Component {
       Duration: item.installemntDuration,
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
+      submittedDate:item.submittedDate
     });
 
     //  this.openModalWithItem2(item)
@@ -279,12 +282,10 @@ export default class Timeline extends React.Component {
                       {" "}
                       المبلغ |<Text style={styles.textData}> {c.price} </Text>
                     </Text>
-
+        
                     <Text style={styles.textLabel}>
-                      {c.reason == "" ? null : <Text> السبب |</Text>}
-                      {c.reason == "" ? null : (
-                        <Text style={styles.textData}> {c.reason} </Text>
-                      )}
+                      {" "}
+                      تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
                   </View>
                   {/* <TouchableOpacity style={styles.imageT} 
