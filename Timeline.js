@@ -370,8 +370,29 @@ export default class Timeline extends React.Component {
                           {" "}
                           {this.state.Reason}{" "}
                         </Text>
+                        
                       )}
                     </Text>
+                    <Text style={styles.textInputTitle}>
+
+                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
+                       {this.state.Duration == "" ? null : (
+                    <Text style={styles.textData}> {this.state.Duration} </Text>
+                       )}
+                      </Text><Text style={styles.textInputTitle}>{" "}
+                      {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
+                       {this.state.iType == "" ? null : (
+                      <Text style={styles.textData}> {this.state.iType} </Text>
+                       )}
+                      </Text>
+                        <Text style={styles.textInputTitle}>
+                        {" "}
+                       {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
+                        {this.state.Tprice == "" ? null : (
+                       <Text style={styles.textData}> {this.state.Tprice} </Text>
+                        )}
+                        </Text>
+
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
                         style={[styles.button, { backgroundColor: "#D4CEC9" }]}
