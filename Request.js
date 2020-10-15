@@ -28,6 +28,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import FirebaseKeys from "./FirebaseKeys";
 import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
+import { Inter_500Medium } from "@expo-google-fonts/inter";
 // import TopBar from "./TopBar";
 
 
@@ -54,7 +55,7 @@ const installmentsArray = [
     label: "",
     priceValueArr: "",
     durationValueArr: "",
-    installmentsTypeArr: "yearly",
+    installmentsTypeArr: "yerly",
   },
   {
     label: "",
@@ -85,12 +86,14 @@ var dateDiffDays,
   dateDiffWeeks,
   dateDiffMonths,
   dateDiffYears = new Date();
-
 // var tomorrow,
 //   today = moment();
 const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
+const maximumDate =  new Date(today);
+maximumDate.setDate(maximumDate.getDate() + 1825);
+// to get the maximum date for datePicker 
 
 var userNameFromDB = "";
 
@@ -234,7 +237,7 @@ class Request extends React.Component {
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        // userNameFromDB = snapshot.val().fullName;
+        userNameFromDB = snapshot.val().fullName;
       });
 
     const requestID = firebase
@@ -362,6 +365,32 @@ class Request extends React.Component {
 
                   {formprops.values.usersSelect ? (
                     <DropDownPicker
+                    
+                    searchable={true}
+                    searchablePlaceholder="البحث عن دائن"
+                 searchablePlaceholderTextColor= {"#CBCBCC" }
+                 searchablePlaceholderStyle={{
+                   fontSize:50,
+                  textAlign: "right",
+
+                  flexDirection: "row-reverse",
+                  justifyContent: "flex-start",
+                  fontFamily: "Bahij_TheSansArabic-Light" 
+                 }
+
+                 }
+                 searchableStyle={{
+                   fontSize:15,
+                 textAlign: "right",
+                 fontFamily: "Bahij_TheSansArabic-Light"
+                   }}
+                    // seachableStyle={{
+                 
+
+                   
+   
+
+                    searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
                       style={styles.DropDownPicker}
                       items={applicationUsers}
                       placeholder="اختر دائن "
@@ -382,6 +411,7 @@ class Request extends React.Component {
                         borderColor: "#57694C",
                         borderWidth: 1,
                         width: 100,
+                
                       }}
                       arrowColor="#9b9b7a"
                       arrowSize={18}
@@ -404,6 +434,7 @@ class Request extends React.Component {
 
                         // to make the list to the right side
                       }}
+                      dropDownStyle={{height:300,}}
                       selectedLabelStyle={{
                         color: "#57694C",
                         fontFamily: "Bahij_TheSansArabic-Light",
@@ -411,6 +442,7 @@ class Request extends React.Component {
                       activeLabelStyle={{
                         color: "#57694C",
                       }}
+                      dropDownStyle={{height:900,}}
                       labelStyle={{
                         backgroundColor: "#fff",
                         fontSize: 16,
@@ -425,6 +457,7 @@ class Request extends React.Component {
                       onChangeItem={(item) =>
                         formprops.setFieldValue("user", item.label)
                       }
+
                     />
                   ) : null}
                   <Text style={[styles.textError, { top: -20 }]}>
@@ -481,6 +514,7 @@ class Request extends React.Component {
                     placeholder={new yup.date()}
                     format="YYYY-MM-DD"
                     minDate={tomorrow}
+                    maxDate = {maximumDate}
                     showDateSelect
                     confirmBtnText="تم"
                     cancelBtnText="إلغاء"
