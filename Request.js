@@ -55,25 +55,25 @@ const installmentsArray = [
     label: "",
     priceValueArr: "",
     durationValueArr: "",
-    installmentsTypeArr: "yerly",
+    installmentsTypeArr: "سنويًا",
   },
   {
     label: "",
     priceValueArr: "",
     durationValueArr: "",
-    installmentsTypeArr: "monthly",
+    installmentsTypeArr: "شهريًا",
   },
   {
     label: "",
     priceValueArr: "",
     durationValueArr: "",
-    installmentsTypeArr: "weekly",
+    installmentsTypeArr: "أسبوعيًا",
   },
   {
     label: "",
     priceValueArr: "",
     durationValueArr: "",
-    installmentsTypeArr: "daily",
+    installmentsTypeArr: "يوميًا",
   },
 ];
 
@@ -147,7 +147,7 @@ class Request extends React.Component {
           " سنة";
         installmentsArray[0].priceValueArr = yearlyPrice;
         installmentsArray[0].durationValueArr = dateDiffYears;
-        installmentsArray[0].installmentsTypeArr = "yearly";
+        installmentsArray[0].installmentsTypeArr = "سنويًا";
       }
     }
 
@@ -161,7 +161,7 @@ class Request extends React.Component {
           " شهر";
         installmentsArray[1].priceValueArr = monthlyPrice;
         installmentsArray[1].durationValueArr = dateDiffMonths;
-        installmentsArray[1].installmentsTypeArr = "monthly";
+        installmentsArray[1].installmentsTypeArr = "شهريًا";
       }
     }
 
@@ -175,7 +175,7 @@ class Request extends React.Component {
           " اسبوع";
         installmentsArray[2].priceValueArr = weeklyPrice;
         installmentsArray[2].durationValueArr = dateDiffWeeks;
-        installmentsArray[2].installmentsTypeArr = "weekly";
+        installmentsArray[2].installmentsTypeArr = "أسبوعيًا";
       }
     }
     if (dateDiffDays != 0) {
@@ -188,7 +188,7 @@ class Request extends React.Component {
           " يوم";
         installmentsArray[3].priceValueArr = dailyPrice;
         installmentsArray[3].durationValueArr = dateDiffDays;
-        installmentsArray[3].installmentsTypeArr = "daily";
+        installmentsArray[3].installmentsTypeArr = "أسبوعيًا";
       }
     }
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
@@ -252,7 +252,7 @@ class Request extends React.Component {
           reason: values.reason,
           userid: currentUser.uid,
           userName: userNameFromDB,
-          rqeuestStatus: "Waiting",
+          rqeuestStatus: "قيد الإنتظار",
           installemntPrice: this.state.priceState,
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
