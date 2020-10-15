@@ -30,6 +30,7 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 // import TopBar from "./TopBar";
 
+
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
@@ -125,13 +126,8 @@ class Request extends React.Component {
   }
 
   repayementInstallments(price, eDate) {
-<<<<<<< HEAD
     installmentsDropDownArray = [];
    
-||||||| merged common ancestors
-   
-=======
->>>>>>> 65d9dbb9a05e6ea9ffaba20fe8e643cd6da414e2
     const submittedDate = moment();
     const expectedDate = moment(eDate);
     dateDiffDays = expectedDate.diff(submittedDate, "days");
@@ -329,19 +325,7 @@ class Request extends React.Component {
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
               }}
-<<<<<<< HEAD
-
-              onReset= {(values, { resetForm })=> {
-         this.props.navigation.navigate("squares")
-              }
-              }
-||||||| merged common ancestors
-
-              onReset= {(values, { resetForm })=> {
-              }}
-=======
               onReset={(values, { resetForm }) => {}}
->>>>>>> 65d9dbb9a05e6ea9ffaba20fe8e643cd6da414e2
               onSubmit={(values, action) => {
                 action.resetForm();
 
@@ -569,7 +553,6 @@ class Request extends React.Component {
                     {console.log(formprops.values.installmentRepayment)}
                   </View>
                   {formprops.values.repaymentType == data[1].label ? (
-<<<<<<< HEAD
                     formprops.values.expectedDate == today   ||formprops.values.price <10 || formprops.values.expectedDate == tomorrow || (dateDiffDays == 0 && dateDiffMonths == 0 && dateDiffYears == 0 && dateDiffWeeks == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ?
                 
@@ -663,185 +646,6 @@ class Request extends React.Component {
                       }
                     />
                    
-||||||| merged common ancestors
-                    formprops.values.expectedDate == today   ||formprops.values.price <10 || formprops.values.expectedDate == tomorrow || (dateDiffDays == 0 && dateDiffMonths == 0 && dateDiffYears == 0 && dateDiffWeeks == 0) ||
-                    (year == -1 && month == -1 && days == -1 && week == -1) ?
-                    <Text style={[styles.repaymentTextError, { top:-22,marginBottom:4 }]}>
-                    لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال
-                    السداد{" "}
-                  </Text> :
-                  
-                    <DropDownPicker
-                      style={styles.DropDownPicker}
-                      items={installmentsDropDownArray}
-                      searchableError={() => (
-                        <Text style={[styles.textError, { marginRight: 4 }]}>
-                        لطفًا التاريخ  لا يكون  ضمن الآربع وعشرون ساعة القادمة   
-                        </Text>
-                      )}
-                      placeholder="إختر الفترة"
-                      placeholderStyle={{ color: "#CBCBCC" }}
-                      value={formprops.values.user}
-                      containerStyle={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#CBCA9E",
-                      }}
-                      style={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#57694C",
-                        borderWidth: 1,
-                        width: 100,
-                      }}
-                      arrowColor="#9b9b7a"
-                      arrowSize={18}
-                      containerStyle={{
-                        width: 352,
-                        height: 40,
-                        marginLeft: 35,
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 60,
-                        borderBottomRightRadius: 50,
-                        marginBottom: 35,
-                      }}
-                      itemStyle={{
-                        backgroundColor: "#fff",
-                        textAlign: "right",
-                        flexDirection: "row-reverse",
-                        justifyContent: "flex-start",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                        // to make the list to the right side
-                      }}
-                      selectedLabelStyle={{
-                        color: "#57694C",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      activeLabelStyle={{
-                        color: "#57694C",
-                      }}
-                      labelStyle={{
-                        backgroundColor: "#fff",
-                        fontSize: 16,
-                        textAlign: "right",
-                        color: "#000",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      style={{
-                        flexDirection: "row-reverse",
-                        // to support RTL
-                      }}
-                      onChangeItem={(item) =>
-                        this.setState({
-                          installmentsState: item.installmentsTypeArr,
-                          priceState: item.priceValueArr,
-                          durationState: item.durationValueArr,
-                        })
-                        // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
-                     
-                      }
-                    />
-                   
-=======
-                    formprops.values.expectedDate == today ||
-                    formprops.values.price < 10 ||
-                    formprops.values.expectedDate == tomorrow ||
-                    (dateDiffDays == 0 &&
-                      dateDiffMonths == 0 &&
-                      dateDiffYears == 0 &&
-                      dateDiffWeeks == 0) ||
-                    (year == -1 && month == -1 && days == -1 && week == -1) ? (
-                      <Text
-                        style={[
-                          styles.repaymentTextError,
-                          { top: -22, marginBottom: 4 },
-                        ]}
-                      >
-                        لظهور الفترات حدد المبلغ و التاريخ المتوقع لإكمال السداد{" "}
-                      </Text>
-                    ) : (
-                      <DropDownPicker
-                        style={styles.DropDownPicker}
-                        items={installmentsDropDownArray}
-                        searchableError={() => (
-                          <Text style={[styles.textError, { marginRight: 4 }]}>
-                            لطفًا التاريخ لا يكون ضمن الآربع وعشرون ساعة القادمة
-                          </Text>
-                        )}
-                        placeholder="إختر الفترة"
-                        placeholderStyle={{ color: "#CBCBCC" }}
-                        value={formprops.values.user}
-                        containerStyle={{
-                          borderTopLeftRadius: 50,
-                          borderTopRightRadius: 50,
-                          borderBottomLeftRadius: 40,
-                          borderBottomRightRadius: 50,
-                          borderColor: "#CBCA9E",
-                        }}
-                        style={{
-                          borderTopLeftRadius: 50,
-                          borderTopRightRadius: 50,
-                          borderBottomLeftRadius: 40,
-                          borderBottomRightRadius: 50,
-                          borderColor: "#57694C",
-                          borderWidth: 1,
-                          width: 100,
-                        }}
-                        arrowColor="#9b9b7a"
-                        arrowSize={18}
-                        containerStyle={{
-                          width: 352,
-                          height: 40,
-                          marginLeft: 35,
-                          borderTopLeftRadius: 50,
-                          borderTopRightRadius: 50,
-                          borderBottomLeftRadius: 60,
-                          borderBottomRightRadius: 50,
-                          marginBottom: 35,
-                        }}
-                        itemStyle={{
-                          backgroundColor: "#fff",
-                          textAlign: "right",
-                          flexDirection: "row-reverse",
-                          justifyContent: "flex-start",
-                          fontFamily: "Bahij_TheSansArabic-Light",
-                          // to make the list to the right side
-                        }}
-                        selectedLabelStyle={{
-                          color: "#57694C",
-                          fontFamily: "Bahij_TheSansArabic-Light",
-                        }}
-                        activeLabelStyle={{
-                          color: "#57694C",
-                        }}
-                        labelStyle={{
-                          backgroundColor: "#fff",
-                          fontSize: 16,
-                          textAlign: "right",
-                          color: "#000",
-                          fontFamily: "Bahij_TheSansArabic-Light",
-                        }}
-                        style={{
-                          flexDirection: "row-reverse",
-                          // to support RTL
-                        }}
-                        onChangeItem={
-                          (item) =>
-                            this.setState({
-                              installmentsState: item.installmentsTypeArr,
-                              priceState: item.priceValueArr,
-                              durationState: item.durationValueArr,
-                            })
-                          // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
-                        }
-                      />
-                    )
->>>>>>> 65d9dbb9a05e6ea9ffaba20fe8e643cd6da414e2
                   ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ? (
                     <Text style={styles.repaymentTextError}>
@@ -898,20 +702,9 @@ class Request extends React.Component {
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
-<<<<<<< HEAD
                           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
                       onPress={ ()=> formprops.handleReset()}
                                    
-||||||| merged common ancestors
-                          style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={() => formprops.handleReset(), () => this.props.navigation.navigate("squares")}               
-=======
-                      style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={
-                        (() => formprops.handleReset(),
-                        () => this.props.navigation.navigate("squares"))
-                      }
->>>>>>> 65d9dbb9a05e6ea9ffaba20fe8e643cd6da414e2
                     >
                       {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
