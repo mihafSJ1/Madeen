@@ -187,6 +187,7 @@ export default class Timeline extends React.Component {
 
   openModalWithItem(item) {
     this.setState({
+      submmitedDate: item.submmitedDate,
       modalVisible: true,
       Name: item.userName,
       Type: item.repaymentType,
@@ -280,9 +281,11 @@ export default class Timeline extends React.Component {
 
                     <Text style={styles.textLabel}>
                       {" "}
-                      المبلغ |<Text style={styles.textData}> {c.price} </Text>
+                      المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
                     </Text>
-        
+
+                    
+
                     <Text style={styles.textLabel}>
                       {" "}
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
@@ -327,6 +330,15 @@ export default class Timeline extends React.Component {
                       اسم الدائن |{" "}
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
+
+                    {/* <Text style={styles.textInputTitle}>
+                      {" "}
+                  تاريخ الطلب |{" "}
+                      <Text style={styles.textData}>
+                        {" "}
+                        {this.state.submmitedDate}{" "}
+                      </Text>{" "}
+                    </Text> */}
                     <Text style={styles.textInputTitle}>
                       نوع التسديد |{" "}
                       <Text style={styles.textData}> {this.state.Type} </Text>
@@ -337,7 +349,9 @@ export default class Timeline extends React.Component {
                       <Text style={styles.textData}>
                         {" "}
                         {this.state.Price}{" "}
+                        <Text>ريال سعودي </Text>
                       </Text>{" "}
+                    
                     </Text>
 
                     <Text style={styles.textInputTitle}>
@@ -447,10 +461,10 @@ export default class Timeline extends React.Component {
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={styles.buttonText}> ٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
-                      <Text style={styles.buttonText}> ٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
                     </View>
 
                     <View style={styles.buttonContainer}>
@@ -620,7 +634,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
-    fontSize: 10,
+    fontSize: 50,
+    color:'#fff',
+    fontWeight:"bold",
   },
   buttonContainer: {
     flexDirection: "row",

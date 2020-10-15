@@ -32,6 +32,7 @@ function squaresScreens() {
         component={squares}
         options={{ headerShown: false }}
       />
+        
       <Stack.Screen
         name="Timeline"
         component={Timeline}
@@ -46,6 +47,7 @@ function Homenav() {
     <Tab.Navigator
       initialRouteName="squares"
       tabBarOptions={{
+        unmountOnBlur: true,
         activeTintColor: "#CBCA9E",
         inactiveTintColor: "#9B9B7A",
 
@@ -71,6 +73,7 @@ function Homenav() {
         name="viewProfile"
         component={viewProfile}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
@@ -86,6 +89,7 @@ function Homenav() {
         name="NotImplementedScreens"
         component={NotImplementedScreens}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
@@ -99,8 +103,10 @@ function Homenav() {
       />
       <Tab.Screen
         name="Request"
+        
         component={Request}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
             <SvgComponent
@@ -118,6 +124,7 @@ function Homenav() {
         component={NotImplementedScreens}
         options={{
           tabBarLabel: "",
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="notifications-none"
@@ -128,10 +135,12 @@ function Homenav() {
           ),
         }}
       />
+      
       <Tab.Screen
         name="squares"
         component={squaresScreens}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
             <Feather
@@ -193,6 +202,7 @@ export default function App({ navigation }) {
               component={Home}
               options={{ headerShown: false }}
             />
+           
             <Stack.Screen
               name="login"
               component={login}
