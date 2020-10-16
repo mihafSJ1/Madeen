@@ -18,9 +18,9 @@ import "@firebase/auth";
 import { Ionicons } from "@expo/vector-icons";
 import FirebaseKeys from './FirebaseKeys';
 
-if (!firebase.apps.length) {
+// if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseKeys.firebaseConfig);
-}
+// }
 
 export default function Timeline({ navigation }) {
 

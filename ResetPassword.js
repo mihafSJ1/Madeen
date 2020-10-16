@@ -26,7 +26,7 @@ import FirebaseKeys from './FirebaseKeys'
 
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
 export default function ResetPassword({ navigation }) {
