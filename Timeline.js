@@ -1,4 +1,4 @@
-// كودنا المدموج
+
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -39,13 +39,6 @@ if (!firebase.apps.length) {
 }
 var requestArray = [];
 var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-
 firebase
   .database()
   .ref("users")
@@ -55,46 +48,19 @@ firebase
       usersArray.push(Data);
     });
   });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
-
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
 
 const currentUser = firebase.auth();
-//this.setState({ currentUser });
 firebase
-
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
       requestArray.push(child.val());
-      //  }
     });
   });
 
 export default class Timeline extends React.Component {
   state = { currentUser: null };
-  //const [modalVisible, setModalVisible] = useState(false);
-
   state = {
     modalVisible: false,
     modalVisible2: false,
@@ -126,10 +92,6 @@ export default class Timeline extends React.Component {
   setModalVisible2(visible) {
     this.setState({ modalVisible2: visible });
   }
-
-  // setPic(picNew) {
-  //   this.setState({ pic: picNew });
-  // }
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
@@ -139,38 +101,24 @@ export default class Timeline extends React.Component {
   }
   viewProfileFunction(item) {
     firebase.auth();
-    // console.log(item.userName);
-    console.log("شوفي فوق ");
-
     firebase
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-        console.log("جوا البيس");
+      
 
         this.setprofilePic(snapshot.val().UserImage);
 
         console.log(this.state.profilePic);
       });
-
-    console.log("بتنحل");
-
-    console.log("here");
-
-    console.log("here");
-
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-    console.log("يارب١");
-    //  console.log(item.userid);
-    console.log("يارب٢");
-    //  console.log(this.state.namef);
-    //   this.findImage(this.state.UserIDImage);
+  
   }
-  //Areej Test
+ 
 
   viewTimelineImageFunction(item) {
     firebase.auth();
@@ -199,11 +147,7 @@ export default class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate
     });
-
-    //  this.openModalWithItem2(item)
   }
-
-  //رجعيها اذا ما ضبط الحال
 
   openModalWithItem2(item) {
     console.log(item.userid);
@@ -212,19 +156,28 @@ export default class Timeline extends React.Component {
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-        console.log(" الثانيه  جوا البيس");
-        // console.log(item.userid);
-        //  console.log(snapshot.val().UserImage);
-
-        // this.setName(snapshot.val().fullName),
-        // this.setEmail(snapshot.val().email),
         console.log("inside retrive");
         this.setTimelinePic(snapshot.val().UserImage);
-        // emailf=snapshot.val().email;
-        // pic=snapshot.val().UserImage;
+
       });
     console.log(this.state.pic);
-    console.log("انتهى رتريف الصورة");
+    
+  }
+  updatestate(k){
+    console.log(k);
+    const { currentUser } = firebase.auth();
+    // let Ref = this.database.ref('requests/' +k);
+    //  Ref.update({'creditor':currentUser.uid,
+    //  'rqeuestStatus':"Underway"});
+    //  console.log('Data updated.');
+    firebase
+    .database()
+    .ref('requests/' +k)
+    .update({
+      creditor:currentUser.uid,
+      rqeuestStatus: "Underway",
+    })
+    .then(() => console.log('Data updated.'));
   }
 
   list = () => {
@@ -235,21 +188,10 @@ export default class Timeline extends React.Component {
         if (c.creditor == "") {
           return (
             <View>
-              {/* {this.openModalWithItem2(c)} */}
               <TouchableOpacity
-                // margin={10}
                 style={styles.card}
                 onPress={() => {
-                  console.log("نداااء");
-                  // console.log(c.UserID);
                   this.openModalWithItem(c);
-                  // this.openModalWithItem2(c);
-                  // this.viewProfileFunction(c);
-                  console.log("رغد الحلوه");
-                  //   console.log(c);
-                  //   console.log(c.userid);
-                  //  console.log(this.state.UserID);
-                  // this.viewProfileFunction(this.state.UserID);
                 }}
               >
                 <View style={styles.leftItems}>
@@ -291,17 +233,7 @@ export default class Timeline extends React.Component {
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
                   </View>
-                  {/* <TouchableOpacity style={styles.imageT} 
-           onPress={() => {
-            // this.setModalVisible2(!this.state.modalVisible2);
-             this.viewProfileFunction(c);
-           }}>  */}
-                  {/* {console.log(this.state.pic)} */}
-                  {/* <Image style={styles.imageT}
-            // source={{uri: this.state.pic}}
-            source={{uri: this.state.pic}}
-          ></Image> */}
-                  {/* </TouchableOpacity> */}
+                 
                 </View>
               </TouchableOpacity>
 
@@ -331,14 +263,7 @@ export default class Timeline extends React.Component {
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
 
-                    {/* <Text style={styles.textInputTitle}>
-                      {" "}
-                  تاريخ الطلب |{" "}
-                      <Text style={styles.textData}>
-                        {" "}
-                        {this.state.submmitedDate}{" "}
-                      </Text>{" "}
-                    </Text> */}
+                  
                     <Text style={styles.textInputTitle}>
                       نوع التسديد |{" "}
                       <Text style={styles.textData}> {this.state.Type} </Text>
@@ -432,20 +357,7 @@ export default class Timeline extends React.Component {
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
-                    {/* namef   = snapshot.val().fullName;
-      emailf   = snapshot.val().email;
-      pic */}
-
-                    {/* <Text style={styles.header}> الملف الشخصي </Text> */}
-                    {/* {console.log(c.userName)} */}
-                    {/* {console.log(this.state.UserID)} */}
                     <Text style={styles.UserName}>{this.state.namef}</Text>
-                    {/* <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}> {this.state.Name}</Text>
-            <Text style={styles.UserName}> hiiiiiiiiiii</Text> */}
-
-                    {/* {c.userName} */}
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
