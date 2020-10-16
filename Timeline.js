@@ -18,24 +18,15 @@ import * as firebase from "firebase";
 import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
-//import database from '@react-native-firebase/database';
+import FirebaseKeys from './FirebaseKeys';
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
-  authDomain: "madeendb2.firebaseapp.com",
-  databaseURL: "https://madeendb2.firebaseio.com",
-  projectId: "madeendb2",
-  storageBucket: "madeendb2.appspot.com",
-  messagingSenderId: "814154412010",
-  appId: "1:814154412010:web:435cac99ae40206a1ecc93",
-  measurementId: "G-SXS9Z8NESC",
-};
+
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
 var requestArray = [];
 var usersArray = [];
