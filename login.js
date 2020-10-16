@@ -19,23 +19,15 @@ import * as Font from "expo-font";
 import Home from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import FirebaseKeys from './FirebaseKeys';
 
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import "@firebase/auth";
-const firebaseConfig = {
-  apiKey: "AIzaSyAmXanlf80n5Sd_mEQiV9O9hEj4Z3i4B1g",
-  authDomain: "madeen-46af8.firebaseapp.com",
-  databaseURL: "https://madeen-46af8.firebaseio.com",
-  projectId: "madeen-46af8",
-  storageBucket: "madeen-46af8.appspot.com",
-  messagingSenderId: "289377001222",
-  appId: "1:289377001222:web:9aba3ddf0baa5ef74b0887",
-  measurementId: "G-KWKWGXNQRN",
-};
+
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(FirebaseKeys.firebaseConfig);
 }
 
 export default function login({ navigation }) {

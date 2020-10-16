@@ -365,15 +365,13 @@ class Request extends React.Component {
 
                   {formprops.values.usersSelect ? (
                     <DropDownPicker
-                    
                     searchable={true}
                     searchablePlaceholder="البحث عن دائن"
-                 searchablePlaceholderTextColor= {"#CBCBCC" }
-                 searchablePlaceholderStyle={{
+                    searchablePlaceholderTextColor= {"#CBCBCC" }
+                    searchablePlaceholderStyle={{
                    fontSize:50,
-                  textAlign: "right",
-
-                  flexDirection: "row-reverse",
+                    textAlign: "right",
+                    flexDirection: "row-reverse",
                   justifyContent: "flex-start",
                   fontFamily: "Bahij_TheSansArabic-Light" 
                  }
