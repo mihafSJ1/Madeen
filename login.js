@@ -25,9 +25,18 @@ import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import "@firebase/auth";
 
-
+const firebaseConfig = {
+  apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
+  authDomain: "madeendb2.firebaseapp.com",
+  databaseURL: "https://madeendb2.firebaseio.com",
+  projectId: "madeendb2",
+  storageBucket: "madeendb2.appspot.com",
+  messagingSenderId: "814154412010",
+  appId: "1:814154412010:web:435cac99ae40206a1ecc93",
+  measurementId: "G-SXS9Z8NESC",
+};
 if (!firebase.apps.length) {
-  firebase.initializeApp(FirebaseKeys.firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
 export default function login({ navigation }) {
