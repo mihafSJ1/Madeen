@@ -19,6 +19,7 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
+import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -37,6 +38,19 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
+var creditor;
+var expectedDate;
+var installemntDuration;
+var installemntPrice;
+var installmentsType;
+var price;
+var reason;
+var repaymentType;
+var rqeuestStatus;
+var submittedDate;
+var userName;
+var userid;
+var key;
 var requestArray = [];
 var usersArray = [];
 firebase
@@ -55,23 +69,52 @@ firebase
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      requestArray.push(child.val());
+            requestArray.push({
+             creditor:child.val().creditor,
+              expectedDate:child.val().expectedDate,
+              installemntPrice:child.val().installemntPrice,
+               installmentsType:child.val().installmentsType,
+               price:child.val().price,
+              reason:child.val().reason,
+               repaymentType:child.val().repaymentType,
+             rqeuestStatus:child.val().rqeuestStatus,
+               submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+               key:child.key,});
     });
   });
-
+var count =0;
 export default class Timeline extends React.Component {
-  state = { currentUser: null };
-  state = {
-    modalVisible: false,
-    modalVisible2: false,
-    pic:
-      "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-    profilePic:
-      "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: null,
+      modalVisible: false,
+      modalVisible2: false,
+      requestArray:[],
+      pic:
+        "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+      profilePic:
+        "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    };
+  }
+  // state = { currentUser: null };
+  // state = {
+  //   modalVisible: false,
+  //   modalVisible2: false,
+  //   requestArray:[],
+  //   pic:
+  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+  //   profilePic:
+  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+  // };
 
   componentDidMount() {
-    requestArray=[]
+  
+    requestArray=[];
+   
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -80,7 +123,19 @@ export default class Timeline extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (child.val().uid != currentUser.uid) {
-            requestArray.push(child.val());
+           requestArray.push({
+              creditor:child.val().creditor,
+               expectedDate:child.val().expectedDate,
+               installemntPrice:child.val().installemntPrice,
+                installmentsType:child.val().installmentsType,
+                price:child.val().price,
+               reason:child.val().reason,
+                repaymentType:child.val().repaymentType,
+              rqeuestStatus:child.val().rqeuestStatus,
+                submittedDate:child.val().submittedDate,
+               userName:child.val().userName,
+               userid:child.val().userid,
+                key:child.key,});
           }
         });
       });
@@ -145,7 +200,7 @@ export default class Timeline extends React.Component {
       Duration: item.installemntDuration,
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
-      submittedDate:item.submittedDate
+      submittedDate:item.submittedDate,
     });
   }
 
@@ -163,29 +218,44 @@ export default class Timeline extends React.Component {
     console.log(this.state.pic);
     
   }
-  updatestate(k){
-    console.log(k);
+  conformupdate(k,props){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد قبول الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestate(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  updatestate(k,props){
+    
+    this.setModalVisible(!this.state.modalVisible);
+   props.navigate("squares");
     const { currentUser } = firebase.auth();
-    // let Ref = this.database.ref('requests/' +k);
-    //  Ref.update({'creditor':currentUser.uid,
-    //  'rqeuestStatus':"Underway"});
-    //  console.log('Data updated.');
     firebase
     .database()
     .ref('requests/' +k)
     .update({
       creditor:currentUser.uid,
-      rqeuestStatus: "Underway",
+      rqeuestStatus: "قيد التنفيذ",
     })
     .then(() => console.log('Data updated.'));
+    
+   // props.navigate("Timeline");
   }
 
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
     return requestArray.map((c) => {
+     count++;
       if (c.userid != currentUser) {
         if (c.creditor == "") {
+         
           return (
             <View>
               <TouchableOpacity
@@ -298,15 +368,16 @@ export default class Timeline extends React.Component {
                         
                       )}
                     </Text>
-                    <Text style={styles.textInputTitle}>
-
-                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-                       {this.state.Duration == "" ? null : (
-                    <Text style={styles.textData}> {this.state.Duration} </Text>
-                       )}
-                      </Text><Text style={styles.textInputTitle}>{" "}
-                      {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
+                
+                      <Text style={styles.textInputTitle}>{" "}
+                      {this.state.iType == "" ? null : <Text> فترات التقسيط |</Text>}
                        {this.state.iType == "" ? null : (
+                      <Text style={styles.textData}> {this.state.Duration} فترات</Text>
+                       )}
+                      </Text>
+                      <Text style={styles.textInputTitle}>{" "}
+                      {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
+                       {this.state.iType == ""? null : (
                       <Text style={styles.textData}> {this.state.iType} </Text>
                        )}
                       </Text>
@@ -319,13 +390,11 @@ export default class Timeline extends React.Component {
                         </Text>
 
                     <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      >
-                        <Text style={styles.buttonText}> رفض </Text>
-                      </TouchableOpacity>
+                     
                       <TouchableOpacity
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                        onPress={() => {
+                          this. conformupdate(c.key,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -415,7 +484,7 @@ export default class Timeline extends React.Component {
           );
         }
       }
-    });
+      });
   };
 
   render() {
@@ -525,7 +594,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
-    height: 550,
+    width:"100%",
+    height: 620,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -574,8 +644,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 20,
-    marginLeft: 25,
+   // marginRight: 20,
+    marginLeft: 79,
+
     fontSize: 10,
   },
   header: {
