@@ -22,6 +22,9 @@ import EditProfile from "./EditProfile";
 import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
 
+import AddSubscription from './AddSubscriptionScreen';
+import AddSubscriptionView from './AddSubscriptionView';
+import PaymentFormView from './PaymentFormView';
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -261,6 +264,39 @@ export default function App({ navigation }) {
             <Stack.Screen
               name="EditProfile"
               component={EditProfile}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="AddSubscriptionView"
+              component={AddSubscriptionView}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="AddSubscription"
+              component={AddSubscription}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="PaymentFormView"
+              component={PaymentFormView}
               options={{
                 headerShown: true,
                 navigation: { navigation },

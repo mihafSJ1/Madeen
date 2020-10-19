@@ -12,6 +12,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import { withNavigation } from "react-navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -55,27 +56,7 @@ firebase
       usersArray.push(Data);
     });
   });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
 
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
 
 const currentUser = firebase.auth();
 //this.setState({ currentUser });
@@ -91,7 +72,7 @@ firebase
     });
   });
 
-export default class Timeline extends React.Component {
+ class Timeline extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
 
@@ -400,6 +381,8 @@ export default class Timeline extends React.Component {
                         <Text style={styles.buttonText}> رفض </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
+                      
+                      onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
@@ -831,3 +814,4 @@ const styles = StyleSheet.create({
 
   //end
 });
+export default withNavigation(Timeline);
