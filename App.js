@@ -19,6 +19,9 @@ import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
+import myRequest from "./myRequest";
+import ReqAsCreditor from "./ReqAsCreditor";
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -36,6 +39,19 @@ function squaresScreens() {
       <Stack.Screen
         name="Timeline"
         component={Timeline}
+        options={{ headerShown: false }}
+      />
+      
+
+      <Stack.Screen
+        name="myRequest"
+        component={myRequest}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="ReqAsCreditor"
+        component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -85,6 +101,7 @@ function Homenav() {
           ),
         }}
       />
+      
       <Tab.Screen
         name="NotImplementedScreens"
         component={NotImplementedScreens}
@@ -223,6 +240,13 @@ export default function App({ navigation }) {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
+             {/* <Stack.Screen
+              name="myRequestRA"
+              component={myRequestRA}
+              options={{ headerShown: false }}
+            /> */}
+
+
             <Stack.Screen
               name="squares"
               component={Homenav}
