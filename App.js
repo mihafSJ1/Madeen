@@ -19,6 +19,12 @@ import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
+import myRequest from "./myRequest";
+import ReqAsCreditor from "./ReqAsCreditor";
+
+import AddSubscription from './AddSubscriptionScreen';
+import AddSubscriptionView from './AddSubscriptionView';
+import PaymentFormView from './PaymentFormView';
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -36,6 +42,19 @@ function squaresScreens() {
       <Stack.Screen
         name="Timeline"
         component={Timeline}
+        options={{ headerShown: false }}
+      />
+      
+
+      <Stack.Screen
+        name="myRequest"
+        component={myRequest}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="ReqAsCreditor"
+        component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -85,6 +104,7 @@ function Homenav() {
           ),
         }}
       />
+      
       <Tab.Screen
         name="NotImplementedScreens"
         component={NotImplementedScreens}
@@ -223,6 +243,13 @@ export default function App({ navigation }) {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
+             {/* <Stack.Screen
+              name="myRequestRA"
+              component={myRequestRA}
+              options={{ headerShown: false }}
+            /> */}
+
+
             <Stack.Screen
               name="squares"
               component={Homenav}
@@ -237,6 +264,39 @@ export default function App({ navigation }) {
             <Stack.Screen
               name="EditProfile"
               component={EditProfile}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="AddSubscriptionView"
+              component={AddSubscriptionView}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="AddSubscription"
+              component={AddSubscription}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="PaymentFormView"
+              component={PaymentFormView}
               options={{
                 headerShown: true,
                 navigation: { navigation },
