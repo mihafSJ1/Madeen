@@ -25,6 +25,7 @@ import ReqAsCreditor from "./ReqAsCreditor";
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
+import PaymentButton from './PaymentButton';
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -51,6 +52,11 @@ function squaresScreens() {
         component={myRequest}
         options={{ headerShown: false }}
       />
+       <Stack.Screen
+      name="PaymentButton"
+      component={PaymentButton}
+      options={{ headerShown: false }}
+    />
 
 <Stack.Screen
         name="ReqAsCreditor"

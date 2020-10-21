@@ -12,7 +12,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { withNavigation } from "react-navigation";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -87,7 +87,7 @@ firebase
   });
 
 var count =0;
-export default class Timeline extends React.Component {
+ class Timeline extends React.Component {
 
   constructor(props) {
     super(props);
@@ -128,17 +128,17 @@ export default class Timeline extends React.Component {
           if (child.val().uid != currentUser.uid) {
            requestArray.push({
               creditor:child.val().creditor,
-               expectedDate:child.val().expectedDate,
-               installemntPrice:child.val().installemntPrice,
-                installmentsType:child.val().installmentsType,
-                price:child.val().price,
-               reason:child.val().reason,
-                repaymentType:child.val().repaymentType,
+              expectedDate:child.val().expectedDate,
+              installemntPrice:child.val().installemntPrice,
+              installmentsType:child.val().installmentsType,
+              price:child.val().price,
+              reason:child.val().reason,
+              repaymentType:child.val().repaymentType,
               rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
-               userName:child.val().userName,
-               userid:child.val().userid,
-                key:child.key,});
+              submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+              key:child.key,});
           }
         });
       });
@@ -396,10 +396,12 @@ export default class Timeline extends React.Component {
                      
                       <TouchableOpacity
                       
-                      onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                    
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                        onPress={() => {
-                          this. conformupdate(c.key,this.props.navigation)}}
+                      
+                         onPress = {()=>  {this.setModalVisible(!this.state.modalVisible),
+                           this.props.navigation.navigate("PaymentButton",{requestId:Rkey})}}
+                    
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -600,7 +602,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
     width:"100%",
-    height: 620,
+    height: 420,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -621,19 +623,21 @@ const styles = StyleSheet.create({
     // textAlign: "center"
   },
   button: {
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-    // fontSize:10,
     alignItems: "center",
     width: 170,
     height: 30,
     marginTop: 10,
+    padding: 5,
+    marginBottom:500,
+    borderRadius: 15,
+    marginLeft: 10,
+    // backgroundColor: "#fff",
+    fontSize:10,
+    alignItems: "center",
+    width: 170,
+    height: 30,
+
+    // marginTop: 10,
     padding: 5,
     borderRadius: 15,
     marginLeft: 10,
@@ -647,11 +651,12 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
   },
   buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    // flexDirection: "row",
+    // alignItems: "center",
    // marginRight: 20,
+   bottom:100,
     marginLeft: 79,
-
+ 
     fontSize: 10,
   },
   header: {
