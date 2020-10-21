@@ -12,7 +12,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { withNavigation } from "react-navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -87,7 +86,7 @@ firebase
   });
 
 var count =0;
-export default class Timeline extends React.Component {
+class Timeline extends React.Component {
 
   constructor(props) {
     super(props);
@@ -204,6 +203,7 @@ export default class Timeline extends React.Component {
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
+      Rkey: item.key,
     });
   }
 
@@ -237,11 +237,11 @@ export default class Timeline extends React.Component {
   updatestate(k,props){
     
     this.setModalVisible(!this.state.modalVisible);
-   props.navigate("squares");
+   props.navigate("AddSubscription");
     const { currentUser } = firebase.auth();
     firebase
     .database()
-    .ref('requests/' +k)
+    .ref('requests/' + k)
     .update({
       creditor:currentUser.uid,
       rqeuestStatus: "قيد التنفيذ",
@@ -399,7 +399,7 @@ export default class Timeline extends React.Component {
                       onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                         onPress={() => {
-                          this. conformupdate(c.key,this.props.navigation)}}
+                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
