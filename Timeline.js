@@ -20,7 +20,7 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
-import { withNavigation } from "react-navigation";
+//import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -204,6 +204,7 @@ export default class Timeline extends React.Component {
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
+      Rkey: item.key,
     });
   }
 
@@ -241,7 +242,7 @@ export default class Timeline extends React.Component {
     const { currentUser } = firebase.auth();
     firebase
     .database()
-    .ref('requests/' +k)
+    .ref('requests/' + k)
     .update({
       creditor:currentUser.uid,
       rqeuestStatus: "قيد التنفيذ",
@@ -399,7 +400,7 @@ export default class Timeline extends React.Component {
                       onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                         onPress={() => {
-                          this. conformupdate(c.key,this.props.navigation)}}
+                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -819,4 +820,4 @@ const styles = StyleSheet.create({
 
   //end
 });
-export default withNavigation(Timeline);
+//export default withNavigation(Timeline);
