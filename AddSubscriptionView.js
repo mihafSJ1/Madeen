@@ -1,32 +1,53 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
-import BackgroundComponent from "./BackgroundComponent";
+import { LinearGradient } from "expo-linear-gradient";
+
 /**
  * The class renders a view with PaymentFormView
  */
 export default class AddSubscriptionView extends React.Component {
   render() {
     return (
+      //test
       <View style={styles.container}>
-        {/* <View>
-        <BackgroundComponent/>
-        </View> */}
-        
-        <ScrollView style={styles.container} ref={ref => (this.scrollViewRef = ref)}>
+     <LinearGradient
+          colors={[
+            "rgba(217,174,148,0.36)",
+            "rgba(241,220,167,0.43)",
+            "#EEF2ED",
+          ]}
+          start={{ x: 1, y: 1 }}
+          end={{ x: 0.5, y: 0 }}
+          useAngle
+          angle={180}
+          style={{
+            borderRadius:
+              Math.round(
+                Dimensions.get("window").width + Dimensions.get("window").height
+              ) / 2,
+            width: Dimensions.get("window").width * 2.1,
+            height: Dimensions.get("window").width * 3.1,
+            right: -660,
+            top: -630,
+            position: "absolute",
+          }}
+        ></LinearGradient>
+
+        <ScrollView style={styles.background} ref={ref => (this.scrollViewRef = ref)}>
       
           <View style={styles.textWrapper}>
           
 
-            <Text style={styles.textInputTitle}>
+            <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Bold", fontSize:30}]}>
           الدفع 
             </Text>
           </View>
           <View style={styles.textWrapper}>
-            <Text style={styles.textInputTitle}>
+            <Text style={[styles.textInputTitle, {marginBottom:30}]}>
            
-             المبلغ المستحق :١٠٠٠ ريال سعودي
+             المبلغ المستحق | {} ريال سعودي
             </Text>
           </View>
      
@@ -44,14 +65,20 @@ export default class AddSubscriptionView extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  container: {
+  container:{
     flex: 1,
-    top: 50,
-    backgroundColor:'#fff',
-  
+    backgroundColor: "#F2F4F1",
+  },
+  background: {
+    flex: 1,
+    top: 100,
+    height: 700,
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
+    backgroundColor: "#fff",
   },
   textWrapper: {
-    margin: 10
+    margin: 10,
   },
   infoText: {
     fontSize: 18,
@@ -59,7 +86,7 @@ const styles = StyleSheet.create({
   },
   cardFormWrapper: {
     padding: 10,
-    margin: 10
+    margin: 10,
   },
   textInputTitle: {
  

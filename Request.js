@@ -254,6 +254,7 @@ class Request extends React.Component {
       .ref("requests/")
       .push(
         {
+          remaining: values.price,
           price: values.price,
           expectedDate: values.expectedDate,
           submittedDate: this.state.submittedDateState,
@@ -473,8 +474,7 @@ class Request extends React.Component {
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
                   </Text>
-                  {/* 
-{alert(formprops.values.expectedDate)} */}
+        
 
                   <TextInput
                     style={styles.textInput}
@@ -606,7 +606,7 @@ class Request extends React.Component {
               
                 
                   
-// {formprops.setFieldValue('expectedDate',tomorrow)}
+
                  
                   
                    :
