@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
  */
 export default class AddSubscriptionView extends React.Component {
   render() {
+    const { amount } = this.props;
     return (
       <View style={styles.container}>
 
@@ -47,7 +48,7 @@ export default class AddSubscriptionView extends React.Component {
           <View style={styles.textWrapper}>
             <Text style={[styles.textInputTitle, {marginBottom:30}]}>
            
-             المبلغ المستحق | {} ريال سعودي
+             المبلغ المستحق | {amount} ريال سعودي
             </Text>
           </View>
      

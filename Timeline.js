@@ -51,6 +51,7 @@ var submittedDate;
 var userName;
 var userid;
 var key;
+var remAmount;
 var requestArray = [];
 var usersArray = [];
 firebase
@@ -81,7 +82,8 @@ firebase
                submittedDate:child.val().submittedDate,
               userName:child.val().userName,
               userid:child.val().userid,
-               key:child.key,});
+               key:child.key,
+               remAmount: child.val().remAmount});
     });
   });
 
@@ -137,7 +139,8 @@ class Timeline extends React.Component {
                 submittedDate:child.val().submittedDate,
                userName:child.val().userName,
                userid:child.val().userid,
-                key:child.key,});
+                key:child.key,
+                remAmount: child.val().remAmount});
           }
         });
       });
@@ -204,6 +207,7 @@ class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rkey: item.key,
+      rAmount: item.remAmount
     });
   }
 
@@ -237,7 +241,7 @@ class Timeline extends React.Component {
   updatestate(k,props){
     
     this.setModalVisible(!this.state.modalVisible);
-   props.navigate("AddSubscription");
+   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount});
     const { currentUser } = firebase.auth();
     firebase
     .database()

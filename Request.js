@@ -266,6 +266,7 @@ class Request extends React.Component {
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
           creditor: values.user,
+          remAmount: values.price
         },
         function (error) {
           if (error) {
