@@ -21,6 +21,12 @@ import "firebase/database";
 import { withNavigation } from "react-navigation";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
+<<<<<<< HEAD
+||||||| merged common ancestors
+import { withNavigation } from "react-navigation";
+=======
+//import { withNavigation } from "react-navigation";
+>>>>>>> 89e3087eb97d6aa83993d5041e17be9042b2d6fd
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -206,7 +212,14 @@ var count =0;
       Duration: item.installemntDuration,
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
+<<<<<<< HEAD
       submittedDate:item.submittedDate
+||||||| merged common ancestors
+      submittedDate:item.submittedDate,
+=======
+      submittedDate:item.submittedDate,
+      Rkey: item.key,
+>>>>>>> 89e3087eb97d6aa83993d5041e17be9042b2d6fd
     });
 
     //  this.openModalWithItem2(item)
@@ -233,7 +246,71 @@ var count =0;
         // pic=snapshot.val().UserImage;
       });
     console.log(this.state.pic);
+<<<<<<< HEAD
     console.log("انتهى رتريف الصورة");
+||||||| merged common ancestors
+    
+  }
+  conformupdate(k,props){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد قبول الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestate(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  updatestate(k,props){
+    
+    this.setModalVisible(!this.state.modalVisible);
+   props.navigate("squares");
+    const { currentUser } = firebase.auth();
+    firebase
+    .database()
+    .ref('requests/' +k)
+    .update({
+      creditor:currentUser.uid,
+      rqeuestStatus: "قيد التنفيذ",
+    })
+    .then(() => console.log('Data updated.'));
+    
+   // props.navigate("Timeline");
+=======
+    
+  }
+  conformupdate(k,props){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد قبول الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestate(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  updatestate(k,props){
+    
+    this.setModalVisible(!this.state.modalVisible);
+   props.navigate("squares");
+    const { currentUser } = firebase.auth();
+    firebase
+    .database()
+    .ref('requests/' + k)
+    .update({
+      creditor:currentUser.uid,
+      rqeuestStatus: "قيد التنفيذ",
+    })
+    .then(() => console.log('Data updated.'));
+    
+   // props.navigate("Timeline");
+>>>>>>> 89e3087eb97d6aa83993d5041e17be9042b2d6fd
   }
 
   list = () => {
@@ -412,10 +489,18 @@ var count =0;
                       
                     
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+<<<<<<< HEAD
                       
                          onPress = {()=>  {this.setModalVisible(!this.state.modalVisible),
                            this.props.navigation.navigate("PaymentButton",{requestId:20})}}
                     
+||||||| merged common ancestors
+                        onPress={() => {
+                          this. conformupdate(c.key,this.props.navigation)}}
+=======
+                        onPress={() => {
+                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
+>>>>>>> 89e3087eb97d6aa83993d5041e17be9042b2d6fd
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -851,4 +936,4 @@ const styles = StyleSheet.create({
 
   //end
 });
-export default withNavigation(Timeline);
+//export default withNavigation(Timeline);

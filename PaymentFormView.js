@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
-// import { withNavigation } from "react-navigation";
+
 
 import { FontAwesome } from '@expo/vector-icons';
 /**
@@ -153,4 +153,3 @@ const styles = StyleSheet.create({
 
 
 });
-// export default withNavigation(PaymentFormView);
