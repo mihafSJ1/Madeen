@@ -1,4 +1,4 @@
-
+// كودنا المدموج
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -20,7 +20,6 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
-import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -39,21 +38,15 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-var creditor;
-var expectedDate;
-var installemntDuration;
-var installemntPrice;
-var installmentsType;
-var price;
-var reason;
-var repaymentType;
-var rqeuestStatus;
-var submittedDate;
-var userName;
-var userid;
-var key;
 var requestArray = [];
 var usersArray = [];
+var namef = "name";
+var emailf = "email";
+// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
+var UserIDImage = "2";
+var UserID = "3";
+let namefff = "999999";
+
 firebase
   .database()
   .ref("users")
@@ -64,60 +57,36 @@ firebase
     });
   });
 
+
 const currentUser = firebase.auth();
+//this.setState({ currentUser });
 firebase
+
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-            requestArray.push({
-             creditor:child.val().creditor,
-              expectedDate:child.val().expectedDate,
-              installemntPrice:child.val().installemntPrice,
-               installmentsType:child.val().installmentsType,
-               price:child.val().price,
-              reason:child.val().reason,
-               repaymentType:child.val().repaymentType,
-             rqeuestStatus:child.val().rqeuestStatus,
-               submittedDate:child.val().submittedDate,
-              userName:child.val().userName,
-              userid:child.val().userid,
-               key:child.key,});
+      //if (child.val().uid != currentUser.uid) {
+      requestArray.push(child.val());
+      //  }
     });
   });
 
-var count =0;
-export default class Timeline extends React.Component {
+ class Timeline extends React.Component {
+  state = { currentUser: null };
+  //const [modalVisible, setModalVisible] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: null,
-      modalVisible: false,
-      modalVisible2: false,
-      requestArray:[],
-      pic:
-        "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-      profilePic:
-        "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-    };
-  }
-  // state = { currentUser: null };
-  // state = {
-  //   modalVisible: false,
-  //   modalVisible2: false,
-  //   requestArray:[],
-  //   pic:
-  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-  //   profilePic:
-  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-  // };
-
+  state = {
+    modalVisible: false,
+    modalVisible2: false,
+    pic:
+      "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    profilePic:
+      "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+  };
 
   componentDidMount() {
-  
-    requestArray=[];
-   
+    requestArray=[]
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -126,19 +95,7 @@ export default class Timeline extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (child.val().uid != currentUser.uid) {
-           requestArray.push({
-              creditor:child.val().creditor,
-               expectedDate:child.val().expectedDate,
-               installemntPrice:child.val().installemntPrice,
-                installmentsType:child.val().installmentsType,
-                price:child.val().price,
-               reason:child.val().reason,
-                repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
-               userName:child.val().userName,
-               userid:child.val().userid,
-                key:child.key,});
+            requestArray.push(child.val());
           }
         });
       });
@@ -150,6 +107,10 @@ export default class Timeline extends React.Component {
   setModalVisible2(visible) {
     this.setState({ modalVisible2: visible });
   }
+
+  // setPic(picNew) {
+  //   this.setState({ pic: picNew });
+  // }
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
@@ -159,24 +120,38 @@ export default class Timeline extends React.Component {
   }
   viewProfileFunction(item) {
     firebase.auth();
+    // console.log(item.userName);
+    console.log("شوفي فوق ");
+
     firebase
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-      
+        console.log("جوا البيس");
 
         this.setprofilePic(snapshot.val().UserImage);
 
         console.log(this.state.profilePic);
       });
+
+    console.log("بتنحل");
+
+    console.log("here");
+
+    console.log("here");
+
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-  
+    console.log("يارب١");
+    //  console.log(item.userid);
+    console.log("يارب٢");
+    //  console.log(this.state.namef);
+    //   this.findImage(this.state.UserIDImage);
   }
- 
+  //Areej Test
 
   viewTimelineImageFunction(item) {
     firebase.auth();
@@ -203,9 +178,13 @@ export default class Timeline extends React.Component {
       Duration: item.installemntDuration,
       Tprice: item.installemntPrice,
       iType: item.installmentsType,
-      submittedDate:item.submittedDate,
+      submittedDate:item.submittedDate
     });
+
+    //  this.openModalWithItem2(item)
   }
+
+  //رجعيها اذا ما ضبط الحال
 
   openModalWithItem2(item) {
     console.log(item.userid);
@@ -214,57 +193,44 @@ export default class Timeline extends React.Component {
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
+        console.log(" الثانيه  جوا البيس");
+        // console.log(item.userid);
+        //  console.log(snapshot.val().UserImage);
+
+        // this.setName(snapshot.val().fullName),
+        // this.setEmail(snapshot.val().email),
         console.log("inside retrive");
         this.setTimelinePic(snapshot.val().UserImage);
-
+        // emailf=snapshot.val().email;
+        // pic=snapshot.val().UserImage;
       });
     console.log(this.state.pic);
-    
-  }
-  conformupdate(k,props){
-    Alert.alert(
-      "تنبيه ",
-      "هل تريد قبول الطلب ",
-      [{ text: "نعم", onPress: () => this.updatestate(k,props) },
-      {
-        text: 'لا',
-        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
-        style: 'cancel'
-      },],
-      { cancelable: false }
-    );
-  }
-  updatestate(k,props){
-    
-    this.setModalVisible(!this.state.modalVisible);
-   props.navigate("squares");
-    const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' +k)
-    .update({
-      creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
-    
-   // props.navigate("Timeline");
+    console.log("انتهى رتريف الصورة");
   }
 
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
     return requestArray.map((c) => {
-     count++;
       if (c.userid != currentUser) {
         if (c.creditor == "") {
-         
           return (
             <View>
+              {/* {this.openModalWithItem2(c)} */}
               <TouchableOpacity
+                // margin={10}
                 style={styles.card}
                 onPress={() => {
+                  console.log("نداااء");
+                  // console.log(c.UserID);
                   this.openModalWithItem(c);
+                  // this.openModalWithItem2(c);
+                  // this.viewProfileFunction(c);
+                  console.log("رغد الحلوه");
+                  //   console.log(c);
+                  //   console.log(c.userid);
+                  //  console.log(this.state.UserID);
+                  // this.viewProfileFunction(this.state.UserID);
                 }}
               >
                 <View style={styles.leftItems}>
@@ -306,7 +272,17 @@ export default class Timeline extends React.Component {
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
                   </View>
-                 
+                  {/* <TouchableOpacity style={styles.imageT} 
+           onPress={() => {
+            // this.setModalVisible2(!this.state.modalVisible2);
+             this.viewProfileFunction(c);
+           }}>  */}
+                  {/* {console.log(this.state.pic)} */}
+                  {/* <Image style={styles.imageT}
+            // source={{uri: this.state.pic}}
+            source={{uri: this.state.pic}}
+          ></Image> */}
+                  {/* </TouchableOpacity> */}
                 </View>
               </TouchableOpacity>
 
@@ -336,7 +312,14 @@ export default class Timeline extends React.Component {
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
 
-                  
+                    {/* <Text style={styles.textInputTitle}>
+                      {" "}
+                  تاريخ الطلب |{" "}
+                      <Text style={styles.textData}>
+                        {" "}
+                        {this.state.submmitedDate}{" "}
+                      </Text>{" "}
+                    </Text> */}
                     <Text style={styles.textInputTitle}>
                       نوع التسديد |{" "}
                       <Text style={styles.textData}> {this.state.Type} </Text>
@@ -371,16 +354,15 @@ export default class Timeline extends React.Component {
                         
                       )}
                     </Text>
-                
-                      <Text style={styles.textInputTitle}>{" "}
-                      {this.state.iType == "" ? null : <Text> فترات التقسيط |</Text>}
-                       {this.state.iType == "" ? null : (
-                      <Text style={styles.textData}> {this.state.Duration} فترات</Text>
+                    <Text style={styles.textInputTitle}>
+
+                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
+                       {this.state.Duration == "" ? null : (
+                    <Text style={styles.textData}> {this.state.Duration} </Text>
                        )}
-                      </Text>
-                      <Text style={styles.textInputTitle}>{" "}
+                      </Text><Text style={styles.textInputTitle}>{" "}
                       {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
-                       {this.state.iType == ""? null : (
+                       {this.state.iType == "" ? null : (
                       <Text style={styles.textData}> {this.state.iType} </Text>
                        )}
                       </Text>
@@ -393,13 +375,15 @@ export default class Timeline extends React.Component {
                         </Text>
 
                     <View style={styles.buttonContainer}>
-                     
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      >
+                        <Text style={styles.buttonText}> رفض </Text>
+                      </TouchableOpacity>
                       <TouchableOpacity
                       
                       onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                        onPress={() => {
-                          this. conformupdate(c.key,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -431,7 +415,20 @@ export default class Timeline extends React.Component {
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
+                    {/* namef   = snapshot.val().fullName;
+      emailf   = snapshot.val().email;
+      pic */}
+
+                    {/* <Text style={styles.header}> الملف الشخصي </Text> */}
+                    {/* {console.log(c.userName)} */}
+                    {/* {console.log(this.state.UserID)} */}
                     <Text style={styles.UserName}>{this.state.namef}</Text>
+                    {/* <Text style={styles.UserName}>{this.state.UserID}</Text>
+            <Text style={styles.UserName}>{this.state.UserID}</Text>
+            <Text style={styles.UserName}> {this.state.Name}</Text>
+            <Text style={styles.UserName}> hiiiiiiiiiii</Text> */}
+
+                    {/* {c.userName} */}
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -489,7 +486,7 @@ export default class Timeline extends React.Component {
           );
         }
       }
-      });
+    });
   };
 
   render() {
@@ -599,8 +596,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
-    width:"100%",
-    height: 620,
+    height: 550,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -649,9 +645,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-   // marginRight: 20,
-    marginLeft: 79,
-
+    marginRight: 20,
+    marginLeft: 25,
     fontSize: 10,
   },
   header: {
