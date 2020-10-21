@@ -78,7 +78,7 @@ export default class AddSubscription extends React.Component {
       this.setState({ submitted: false, error: SERVER_ERROR });
     } else {
       this.setState({ submitted: false, error: null });
-      navigation.navigate('Home')
+      navigation.navigate('squares')
     }
   };
   
@@ -86,7 +86,6 @@ export default class AddSubscription extends React.Component {
   render() {
     const { submitted, error } = this.state;
     return (
-
         <AddSubscriptionView
           error={error}
           submitted={submitted}
