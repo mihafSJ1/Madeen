@@ -51,7 +51,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.blueText}
-            onPress={() => navigation.navigate("myRequest")}
+            onPress={() => navigation.navigate("NotImplementedScreens")}
           >
             {" "}
             طلباتي

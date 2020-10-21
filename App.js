@@ -19,9 +19,6 @@ import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
-import myRequest from "./myRequest";
-import ReqAsCreditor from "./ReqAsCreditor";
-
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
@@ -110,7 +107,6 @@ function Homenav() {
           ),
         }}
       />
-      
       <Tab.Screen
         name="NotImplementedScreens"
         component={NotImplementedScreens}
@@ -249,13 +245,6 @@ export default function App({ navigation }) {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
-             {/* <Stack.Screen
-              name="myRequestRA"
-              component={myRequestRA}
-              options={{ headerShown: false }}
-            /> */}
-
-
             <Stack.Screen
               name="squares"
               component={Homenav}

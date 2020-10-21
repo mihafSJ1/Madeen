@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
+// import { withNavigation } from "react-navigation";
 
 import { FontAwesome } from '@expo/vector-icons';
 /**
@@ -15,7 +16,7 @@ export default class PaymentFormView extends React.Component {
   render() {
     const { onSubmit, submitted, error } = this.props;
     return (
-      <View>
+      <View style = {styles.background}>
         <View>
           <CreditCardInput requiresName onChange={(cardData) => this.setState({ cardData })} 
    
@@ -31,7 +32,6 @@ export default class PaymentFormView extends React.Component {
      
       
       inputContainerStyle = {{ borderBottomWidth: 0, borderBottomColor: "black" ,
-      flexDirection:"rtl",
    }}
      
           />
@@ -39,6 +39,13 @@ export default class PaymentFormView extends React.Component {
         </View>
         <View style={styles.buttonWrapper}>
         <View style={styles.buttonContainer}>
+        <TouchableOpacity
+        // onPress = {()=>this.props.navigation.navigate("Timline")}
+          style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+         >
+            <Text style={styles.buttonText}> إلغاء </Text>
+        </TouchableOpacity>
+
           <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
             
             disabled={!this.state.cardData.valid || submitted}
@@ -69,7 +76,7 @@ export default class PaymentFormView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonWrapper: {
     padding: 10,
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 5,
     borderRadius: 15,
-    marginLeft: 60,
+    marginLeft: 10,
     bottom: 30,
     backgroundColor: "#fff",
   },
@@ -119,36 +126,31 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 25,
+    top:60,
+    marginRight: 20,
     fontSize: 30,
   },
     textInput: {
-    //   paddingLeft:30,
-  
-// marginHorizontal:10,
-//    marginLeft:30,
-//    marginRight:30,
     borderColor: "#DBDBDB",
-
     backgroundColor: "#fff",
- 
     borderRadius: 6,
     borderWidth: 1,
-    height:35,
-    
+    height:35,  
     textAlign: "right",
-  paddingRight: 10,
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 12,
   },
   textInputTitle: {
- 
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 13,
     marginTop: 1,
     marginBottom: 5,
     textAlign: "right",
     color: "#404040",
- marginRight: 2.5,
+     marginRight: 2.5,
   },
+
+
 });
+// export default withNavigation(PaymentFormView);
