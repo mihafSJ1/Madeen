@@ -18,6 +18,7 @@ import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import "firebase/database";
+import { withNavigation } from "react-navigation";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
 
@@ -413,7 +414,7 @@ var count =0;
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                       
                          onPress = {()=>  {this.setModalVisible(!this.state.modalVisible),
-                           this.props.navigation.navigate("PaymentButton",{requestId:Rkey})}}
+                           this.props.navigation.navigate("PaymentButton",{requestId:20})}}
                     
                       >
                         <Text style={styles.buttonText}> قبول </Text>
