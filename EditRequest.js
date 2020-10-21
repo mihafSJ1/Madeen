@@ -106,7 +106,7 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 
 var userNameFromDB = "";
 
-class Request extends React.Component {
+class EditRequest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -235,7 +235,8 @@ class Request extends React.Component {
       userValue: applicationUsers,
     });
   }
-
+//read req to view info
+//update not push
   onSubmitPress(values, props) {
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
@@ -323,7 +324,7 @@ class Request extends React.Component {
 
         <View style={styles.registerBackground}>
           <KeyboardAwareScrollView>
-            <Text style={styles.header}>إنشاء طلب </Text>
+            <Text style={styles.header}> تعديل الطلب  </Text>
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
@@ -912,4 +913,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(Request);
+export default withNavigation(EditRequest);
