@@ -10,8 +10,8 @@ import { LinearGradient } from "expo-linear-gradient";
 export default class AddSubscriptionView extends React.Component {
   render() {
     return (
+      //test
       <View style={styles.container}>
-
      <LinearGradient
           colors={[
             "rgba(217,174,148,0.36)",
