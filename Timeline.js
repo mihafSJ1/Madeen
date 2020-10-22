@@ -244,7 +244,7 @@ export default class Timeline extends React.Component {
     .database()
     .ref('requests/' + k)
     .update({
-      creditor:currentUser.uid,
+      creditor:currentUser.email,
       rqeuestStatus: "قيد التنفيذ",
     })
     .then(() => console.log('Data updated.'));

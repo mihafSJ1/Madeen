@@ -85,7 +85,8 @@ const installmentsArray = [
     installmentsTypeArr: "يوميًا",
   },
 ];
-
+var keyC ;
+var Cname;
 var year,
   days,
   week,
@@ -197,7 +198,7 @@ class Request extends React.Component {
           " يوم";
         installmentsArray[3].priceValueArr = dailyPrice;
         installmentsArray[3].durationValueArr = dateDiffDays;
-        installmentsArray[3].installmentsTypeArr = "أسبوعيًا";
+        installmentsArray[3].installmentsTypeArr = "يوميًا";
       }
     }
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
@@ -236,12 +237,32 @@ class Request extends React.Component {
     });
   }
 
+bringid(k){
+  console.log("bring");
+  firebase
+  .database()
+  .ref("users/")
+  .on("value", (snapshot) => {
+    snapshot.forEach((child) => {
+      if (child.val().email == k) {
+        console.log("return")
+        keyC= child.key;
+        Cname=child.val().fullName;
+  
+}
+});
+});
+}
   onSubmitPress(values, props) {
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
+      keyC = "";
+      Cname="";
     }
-
+else{
+  this.bringid(values.user);
+}
     firebase
       .database()
       .ref("users/" + currentUser.uid)
@@ -265,7 +286,11 @@ class Request extends React.Component {
           installemntPrice: this.state.priceState,
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
-          creditor: values.user,
+          creditor: keyC,
+          creditorName:Cname,
+          creditorEmail:values.user,
+         
+          
         },
         function (error) {
           if (error) {
