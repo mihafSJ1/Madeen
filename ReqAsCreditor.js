@@ -189,6 +189,7 @@ export default class ReqAsCreditor extends React.Component {
 
   openModalWithItem(item) {
     this.setState({
+
       submmitedDate: item.submmitedDate,
       modalVisible: true,
       Name: item.userName,
@@ -201,7 +202,8 @@ export default class ReqAsCreditor extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
-      creditorID: item.creditor
+      creditorID: item.creditor,
+      
     });
 
     //  this.openModalWithItem2(item)
@@ -370,6 +372,7 @@ export default class ReqAsCreditor extends React.Component {
                       null
                       
                      )}
+                      
 
                 
                 <View style={styles.rightItems}>
@@ -598,6 +601,7 @@ export default class ReqAsCreditor extends React.Component {
   
  ): null }
                     </View>
+                   
 
 {/* <View style={styles.buttonContainer}>
                      
@@ -980,6 +984,53 @@ const styles = StyleSheet.create({
     color: "#746356",
   },
 
+  PinkRectangleShapeView: {
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    left: 185,
+    top: -35,
+    backgroundColor: "#D9AE94",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -25,
+    top: -104,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+
+  debts: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "left",
+    color: "#404040",
+    top: -37,
+    left: 70,
+    zIndex: 2,
+  },
+  subsidy: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "right",
+    color: "#404040",
+    top: -10,
+    right: 75,
+  },
   RateStarts: {
     left: 140,
     bottom: 50,
