@@ -315,7 +315,6 @@ class Request extends React.Component {
 
   //-------------------------------------------- Rendering react component
   render() {
-   
     return (
       <View style={styles.container}>
         <View style={styles.background}>
