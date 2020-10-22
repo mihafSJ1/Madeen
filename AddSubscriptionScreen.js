@@ -65,12 +65,12 @@ export default class AddSubscription extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput,requestId) => {
+  onSubmit = async (creditCardInput,reqID) => {
     const { navigation } = this.props;
     const { currentUser } = firebase.auth();
       firebase
       .database()
-      .ref('requests/' + requestId)
+      .ref('requests/' + reqID)
       .update({
         creditor:currentUser.uid,
         rqeuestStatus: "قيد التنفيذ",
@@ -111,15 +111,15 @@ export default class AddSubscription extends React.Component {
   render() {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
-    const {requestId} = this.props.route.params;
-
+    const {reqID} = this.props.route.params;
+    alert(reqID)
     return (
         <AddSubscriptionView
           error={error}
           submitted={submitted}
-          onSubmit={this.onSubmit()}
+          onSubmit={this.onSubmit}
           amount = {amount}
-          requestId = {requestId}
+          reqId = {reqID}
         />
     );
   }

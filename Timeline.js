@@ -50,6 +50,7 @@ var submittedDate;
 var userName;
 var userid;
 var key;
+var remAmount;
 var requestArray = [];
 var usersArray = [];
 firebase
@@ -80,7 +81,8 @@ firebase
                submittedDate:child.val().submittedDate,
               userName:child.val().userName,
               userid:child.val().userid,
-               key:child.key,});
+               key:child.key,
+               remAmount: child.val().remAmount});
     });
   });
 
@@ -136,7 +138,8 @@ class Timeline extends React.Component {
                 submittedDate:child.val().submittedDate,
                userName:child.val().userName,
                userid:child.val().userid,
-                key:child.key,});
+                key:child.key,
+                remAmount: child.val().remAmount});
           }
         });
       });
@@ -203,6 +206,7 @@ class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rkey: item.key,
+      rAmount: item.remAmount
     });
   }
 
@@ -236,7 +240,7 @@ class Timeline extends React.Component {
   // updatestate(k,props){
     
   //   this.setModalVisible(!this.state.modalVisible);
-  //  this.props.navigation.navigate("AddSubscription",{amount:1000});
+  //   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey});
   //   const { currentUser } = firebase.auth();
   //   firebase
   //   .database()
@@ -395,11 +399,10 @@ class Timeline extends React.Component {
                      
                       <TouchableOpacity
                       
-                      onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                         onPress={() => {
-                          this.props.navigation.navigate("AddSubscription",{amount:this.state.Price,requestId: this.state.Rkey});}}
-                          // this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>

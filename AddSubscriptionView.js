@@ -10,11 +10,10 @@ import { LinearGradient } from "expo-linear-gradient";
  */
 export default class AddSubscriptionView extends React.Component {
   render() {
-    const { amount } = this.props.amount;
-    const{requestId} =  this.props.requestId;
+    const { amount } = this.props;
+    const {reqID} = this.props;
     return (
       <View style={styles.container}>
-
      <LinearGradient
           colors={[
             "rgba(217,174,148,0.36)",
@@ -48,12 +47,12 @@ export default class AddSubscriptionView extends React.Component {
             </Text>
        
           </View>
-          <View style={styles.textWrapper}>
+          {/* <View style={styles.textWrapper}>
             <Text style={[styles.textInputTitle, {marginBottom:30}]}>
            
              المبلغ المستحق | {amount} ريال سعودي
             </Text>
-          </View>
+          </View> */}
      
           <View style={styles.cardFormWrapper}>
             <PaymentFormView {...this.props}/>
