@@ -286,7 +286,6 @@ else{
           installemntPrice: this.state.priceState,
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
-
           creditor: keyC,
           creditorName:Cname,
           creditorEmail:values.user,
