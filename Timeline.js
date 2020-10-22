@@ -308,8 +308,9 @@ class Timeline extends React.Component {
                       {" "}
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
+                    
                   </View>
-                 
+              
                 </View>
               </TouchableOpacity>
 
@@ -375,12 +376,13 @@ class Timeline extends React.Component {
                       )}
                     </Text>
                 
-                      <Text style={styles.textInputTitle}>{" "}
-                      {this.state.iType == "" ? null : <Text> فترات التقسيط |</Text>}
-                       {this.state.iType == "" ? null : (
-                      <Text style={styles.textData}> {this.state.Duration} فترات</Text>
-                       )}
-                      </Text>
+                    <Text style={styles.textInputTitle}>
+
+{this.state.iType == "" ? null : <Text> فترة التقسيط |</Text>}
+{this.state.iType == "" ? null : (
+<Text style={styles.textData}> {this.state.Duration} </Text>
+)}
+</Text>
                       <Text style={styles.textInputTitle}>{" "}
                       {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
                        {this.state.iType == ""? null : (

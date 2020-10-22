@@ -264,7 +264,7 @@ export default class ReqAsCreditor extends React.Component {
     Alert.alert(
       "تنبيه ",
       "هل تريد قبول الطلب ",
-      [{ text: "نعم", onPress: () => this.updatestateAccept(k,props) },
+      [{ text: "نعم", onPress: () => this.updateAccept(k,props) },
       {
         text: 'لا',
         onPress: () =>  this.setModalVisible(!this.state.modalVisible),
@@ -306,17 +306,17 @@ export default class ReqAsCreditor extends React.Component {
 
   updatestateReject(k,props){
     
-  //   this.setModalVisible(!this.state.modalVisible);
-  //  props.navigate("squares");
+ this.setModalVisible(!this.state.modalVisible);
+  props.navigate("squares");
   //   const { currentUser } = firebase.auth();
-  //   firebase
-  //   .database()
-  //   .ref('requests/' + k)
-  //   .update({
+  firebase
+  .database()
+  .ref('requests/' + k)
+ .update({
   //     creditor:currentUser.uid,
-  //     rqeuestStatus: "مرفوض",
-  //   })
-  //   .then(() => console.log('Data updated.'));
+    rqeuestStatus: "مرفوض",
+  })
+  .then(() => console.log('Data updated.'));
     
    
   }
