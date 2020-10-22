@@ -88,7 +88,19 @@ firebase
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       //if (child.val().uid != currentUser.uid) {
-      requestArray.push(child.val());
+        requestArray.push({
+          creditor:child.val().creditor,
+           expectedDate:child.val().expectedDate,
+           installemntPrice:child.val().installemntPrice,
+            installmentsType:child.val().installmentsType,
+            price:child.val().price,
+           reason:child.val().reason,
+            repaymentType:child.val().repaymentType,
+          rqeuestStatus:child.val().rqeuestStatus,
+            submittedDate:child.val().submittedDate,
+           userName:child.val().userName,
+           userid:child.val().userid,
+            key:child.key,});
       //  }
     });
   });
@@ -116,7 +128,19 @@ export default class ReqAsCreditor extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (true) {
-            requestArray.push(child.val());
+            requestArray.push({
+              creditor:child.val().creditor,
+               expectedDate:child.val().expectedDate,
+               installemntPrice:child.val().installemntPrice,
+                installmentsType:child.val().installmentsType,
+                price:child.val().price,
+               reason:child.val().reason,
+                repaymentType:child.val().repaymentType,
+              rqeuestStatus:child.val().rqeuestStatus,
+                submittedDate:child.val().submittedDate,
+               userName:child.val().userName,
+               userid:child.val().userid,
+                key:child.key,});
           }
         });
       });
@@ -201,7 +225,8 @@ export default class ReqAsCreditor extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
-      creditorID: item.creditor
+      creditorID: item.creditor,
+      Rkey: item.key,
     });
 
     //  this.openModalWithItem2(item)
@@ -235,7 +260,7 @@ export default class ReqAsCreditor extends React.Component {
     Alert.alert(
       "تنبيه ",
       "هل تريد قبول الطلب ",
-      [{ text: "نعم", onPress: () => this.updatestateAccept(k,props) },
+      [{ text: "نعم", onPress: () => this.updateAccept(k,props) },
       {
         text: 'لا',
         onPress: () =>  this.setModalVisible(!this.state.modalVisible),
@@ -244,23 +269,23 @@ export default class ReqAsCreditor extends React.Component {
       { cancelable: false }
     );
   }
-  updatestateAccept(k,props){
+  updateAccept(k,props){
     
-  //   this.setModalVisible(!this.state.modalVisible);
-  //  props.navigate("squares");
-  //   const { currentUser } = firebase.auth();
-  //   firebase
-  //   .database()
-  //   .ref('requests/' + k)
-  //   .update({
-  //     creditor:currentUser.uid,
-  //     rqeuestStatus: "قيد التنفيذ",
-  //   })
-  //   .then(() => console.log('Data updated.'));
+    this.setModalVisible(!this.state.modalVisible);
+   props.navigate("squares");
+   // const { currentUser } = firebase.auth();
+    firebase
+    .database()
+    .ref('requests/' + k)
+    .update({
+     // creditor:currentUser.uid,
+      rqeuestStatus: "قيد التنفيذ",
+    })
+    .then(() => console.log('Data updated.'));
     
-   
+   // props.navigate("Timeline");
   }
-  
+ 
   conformupdateReject(k,props){
     Alert.alert(
       "تنبيه ",
@@ -277,17 +302,17 @@ export default class ReqAsCreditor extends React.Component {
 
   updatestateReject(k,props){
     
-  //   this.setModalVisible(!this.state.modalVisible);
-  //  props.navigate("squares");
+ this.setModalVisible(!this.state.modalVisible);
+  props.navigate("squares");
   //   const { currentUser } = firebase.auth();
-  //   firebase
-  //   .database()
-  //   .ref('requests/' + k)
-  //   .update({
+  firebase
+  .database()
+  .ref('requests/' + k)
+ .update({
   //     creditor:currentUser.uid,
-  //     rqeuestStatus: "مرفوض",
-  //   })
-  //   .then(() => console.log('Data updated.'));
+    rqeuestStatus: "مرفوض",
+  })
+  .then(() => console.log('Data updated.'));
     
    
   }
