@@ -401,8 +401,8 @@ class Timeline extends React.Component {
                       
                       onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                        onPress={() => {
-                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                        // onPress={() => {
+                        //   this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>

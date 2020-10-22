@@ -75,7 +75,7 @@ export default class AddSubscription extends React.Component {
         creditor:currentUser.uid,
         rqeuestStatus: "قيد التنفيذ",
       })
-      .then(() => console.log('Data updated.'));
+      .then(() => alert("dataUpdated"));
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    
