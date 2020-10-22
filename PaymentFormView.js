@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
-// import { withNavigation } from "react-navigation";
 
 import { FontAwesome } from '@expo/vector-icons';
 /**
@@ -40,7 +39,7 @@ export default class PaymentFormView extends React.Component {
         <View style={styles.buttonWrapper}>
         <View style={styles.buttonContainer}>
         <TouchableOpacity
-        // onPress = {()=>navigation.goBack()}
+        onPress = {()=>this.props.navigation.goBack()}
           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
          >
             <Text style={styles.buttonText}> إلغاء </Text>
@@ -153,4 +152,3 @@ const styles = StyleSheet.create({
 
 
 });
-// export default withNavigation(PaymentFormView);
