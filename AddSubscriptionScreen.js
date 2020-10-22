@@ -1,9 +1,23 @@
 import React from 'react';
  import AddSubscriptionView from './AddSubscriptionView';
+ import * as firebase from "firebase";
 const STRIPE_ERROR = 'Payment service error. Try again later.';
 const SERVER_ERROR = 'Server error. Try again later.';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
+const firebaseConfig = {
+  apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
+  authDomain: "madeendb2.firebaseapp.com",
+  databaseURL: "https://madeendb2.firebaseio.com",
+  projectId: "madeendb2",
+  storageBucket: "madeendb2.appspot.com",
+  messagingSenderId: "814154412010",
+  appId: "1:814154412010:web:435cac99ae40206a1ecc93",
+  measurementId: "G-SXS9Z8NESC",
+};
 
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 const getCreditCardToken = (creditCardData) => {
   const card = {
     'card[number]': creditCardData.values.number.replace(/ /g, ''),
@@ -51,10 +65,20 @@ export default class AddSubscription extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput) => {
+  onSubmit = async (creditCardInput,requestId) => {
     const { navigation } = this.props;
+    const { currentUser } = firebase.auth();
+      firebase
+      .database()
+      .ref('requests/' + requestId)
+      .update({
+        creditor:currentUser.uid,
+        rqeuestStatus: "قيد التنفيذ",
+      })
+      .then(() => console.log('Data updated.'));
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
+   
     let creditCardToken;
     try {
       // Create a credit card token
@@ -78,19 +102,24 @@ export default class AddSubscription extends React.Component {
       this.setState({ submitted: false, error: SERVER_ERROR });
     } else {
       this.setState({ submitted: false, error: null });
-      navigation.navigate('Home')
+
+      navigation.navigate('squares')
     }
   };
   
   // render the subscription view component and pass the props to it
   render() {
     const { submitted, error } = this.state;
-    return (
+    const {amount} = this.props.route.params;
+    const {requestId} = this.props.route.params;
 
+    return (
         <AddSubscriptionView
           error={error}
           submitted={submitted}
-          onSubmit={this.onSubmit}
+          onSubmit={this.onSubmit()}
+          amount = {amount}
+          requestId = {requestId}
         />
     );
   }

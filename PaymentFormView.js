@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
-
+import * as firebase from "firebase";
 import { FontAwesome } from '@expo/vector-icons';
 /**
  * Renders the payment form and handles the credit card data
@@ -13,7 +13,10 @@ export default class PaymentFormView extends React.Component {
     this.state = { cardData: { valid: false } };
   }
   render() {
-    const { onSubmit, submitted, error } = this.props;
+    const { onSubmit, submitted, error, } = this.props;
+    const { amount } = this.props.amount;
+    const{requestId} =  this.props.requestIdx;
+
     return (
       <View>
         <View>
@@ -42,7 +45,7 @@ export default class PaymentFormView extends React.Component {
           <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
             
             disabled={!this.state.cardData.valid || submitted}
-            onPress={() => onSubmit(this.state.cardData)}
+            onPress={() => onSubmit(this.state.cardData,requestId)}
        
           >
               <Text Text style={styles.buttonText}>
