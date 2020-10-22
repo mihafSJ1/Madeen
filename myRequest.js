@@ -218,7 +218,8 @@ export default class MyRequest extends React.Component {
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
       CreditorID: item.creditor,
-      RemAmount: item.remAmount
+      RemAmount: item.remAmount,
+      cName: item.creditorName,
       
     });
 
@@ -347,7 +348,8 @@ export default class MyRequest extends React.Component {
                         {" "}
                         {/* {console.log(this.state.CreditorName)}
                         {this.state.CreditorName} */}
-                        {c.userName}
+                        {c.creditorName}
+
                       </Text>
                     </Text>
 
@@ -939,7 +941,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 130,
+    left: 50,
     top: -20,
     zIndex: 2,
     width: 160,
@@ -952,14 +954,60 @@ const styles = StyleSheet.create({
     margin: 20,
     marginBottom: 40,
     bottom: 20,
-    right: -7,
+    right: -1,
     textAlign: "center",
     justifyContent: "center",
     color: "#746356",
   },
+  PinkRectangleShapeView: {
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    left: 165,
+    top: -35,
+    backgroundColor: "#D9AE94",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -5,
+    top: -104,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
 
+  debts: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "left",
+    color: "#404040",
+    top: -37,
+    left: 50,
+    zIndex: 2,
+  },
+  subsidy: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "right",
+    color: "#404040",
+    top: -10,
+    right: 48,
+  },
   RateStarts: {
-    left: 140,
+    left: 110,
     bottom: 50,
   },
 
@@ -1206,7 +1254,7 @@ backgroundColor:'red',
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 127,
+    left: 100,
     top: -50,
     zIndex: 2,
     width: 160,
