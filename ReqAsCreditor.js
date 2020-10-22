@@ -334,7 +334,7 @@ export default class ReqAsCreditor extends React.Component {
                     size={25}
                     color="#9B9B7A"
                     solid
-                    style={{ marginTop: 30, marginRight: 15 }}
+                    style={{ marginTop: 25, marginRight: 15 }}
                   />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
@@ -392,13 +392,7 @@ export default class ReqAsCreditor extends React.Component {
                       المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
                     </Text>
 
-                    <Text style={styles.textLabel}>
-                      {" "}
-                      حالة الطلب |
-                      {/* <Text style={styles.textData}> {c.rqeuestStatus} </Text> */}
-                      {c.rqeuestStatus == "قيد الإنتظار" ? <Text style={styles.textData}> طلب </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>}
-
-                    </Text>
+                  
 
                     
 
@@ -1041,7 +1035,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#F1DCA7",
     
    
@@ -1054,7 +1048,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#D9AE94",
     
    
@@ -1067,7 +1061,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#BE6A6C",
     
    
@@ -1080,7 +1074,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#A8CB9E",
     
    
