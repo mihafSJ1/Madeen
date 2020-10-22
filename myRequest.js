@@ -104,13 +104,14 @@ firebase
     });
   });
 
-export default class Timeline extends React.Component {
+export default class MyRequest extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
 
   state = {
     modalVisible: false,
     modalVisible2: false,
+    CreditorName:"",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
@@ -151,7 +152,10 @@ export default class Timeline extends React.Component {
   setModalVisible2(visible) {
     this.setState({ modalVisible2: visible });
   }
-
+  
+  setCreditorName(Name) {
+    this.setState({ CreditorName: Name });
+  }
   // setPic(picNew) {
   //   this.setState({ pic: picNew });
   // }
@@ -205,10 +209,24 @@ export default class Timeline extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         this.setTimelinePic(snapshot.val().UserImage);
-        console.log("Areej Test");
+        //console.log("Areej Test");
         console.log(this.state.setTimelinePic);
       });
   }
+
+  Creditor(Cid) {
+    firebase.auth();
+
+    firebase
+      .database()
+      .ref("users/" + Cid)
+      .on("value", (snapshot) => {
+        this.setCreditorName(snapshot.val().fullName);
+        console.log("Areej Test");
+       // console.log(this.state.setTimelinePic);
+      });
+  }
+  
 
   openModalWithItem(item) {
     this.setState({
@@ -224,7 +242,13 @@ export default class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
+
       Rkey: item.key,
+
+      CreditorID: item.creditor,
+      RemAmount: item.remAmount
+      
+
     });
 
     //  this.openModalWithItem2(item)
@@ -340,7 +364,7 @@ export default class Timeline extends React.Component {
                     size={25}
                     color="#9B9B7A"
                     solid
-                    style={{ marginTop: 30, marginRight: 45 }}
+                    style={{ marginTop: 25, marginRight: 15 }}
                   />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
@@ -348,18 +372,58 @@ export default class Timeline extends React.Component {
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                 </View>
+                {c.rqeuestStatus== "قيد الإنتظار" ? (
+                  <View style={styles.waitingRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{c.rqeuestStatus== "قيد التنفيذ" ? (
+                  <View style={styles.ProssessRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+
+{c.rqeuestStatus== "مكتمل" ? (
+                  <View style={styles.CompleteRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{c.rqeuestStatus== "مرفوض" ? (
+                  <View style={styles.RejectRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+                
+                    
                 {console.log("here3")}
                 
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
+                {/* {  this.Creditor(c.creditor)} */}
                     <Text style={styles.textLabel}>
-                      الإسم |{" "}
+                      الدائن |{" "}
                       <Text
                         style={styles.textData}
                         onPress={() => this.viewProfileFunction(c)}
                       >
                         {" "}
-                        
+                        {/* {console.log(this.state.CreditorName)}
+                        {this.state.CreditorName} */}
                         {c.userName}
                       </Text>
                     </Text>
@@ -369,10 +433,7 @@ export default class Timeline extends React.Component {
                       المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
                     </Text>
 
-                    <Text style={styles.textLabel}>
-                      {" "}
-                      حالة الطلب |<Text style={styles.textData}> {c.rqeuestStatus} </Text>
-                    </Text>
+                   
 
                     
 
@@ -402,6 +463,7 @@ export default class Timeline extends React.Component {
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+
                   <TouchableOpacity
                  
               style={styles.EditR}
@@ -413,7 +475,7 @@ export default class Timeline extends React.Component {
               <Text style={styles.EditR2}>
                 <Ionicons name="md-create" size={30} color="#808065" solid />
               </Text>)}
-            </TouchableOpacity>
+
 
                     <TouchableOpacity
                       onPress={() => {
@@ -424,20 +486,59 @@ export default class Timeline extends React.Component {
                         style={styles.close}
                         name="close"
                         size={24}
-                        color="black"
+                        color="#746356"
                       />
                     </TouchableOpacity>
-                  
+
+=======
+                    
+                    {this.state.Rstatus== "قيد التنفيذ" ? (
+                  <View style={styles.ProRectangleShapeView}> 
+                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{this.state.Rstatus== "قيد الإنتظار" ? (
+                  <View style={styles.WRectangleShapeView}> 
+                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+
+{this.state.Rstatus== "مكتمل" ? (
+                  <View style={styles.CRectangleShapeView}> 
+                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{this.state.Rstatus== "مرفوض" ? (
+                  <View style={styles.RRectangleShapeView}> 
+                    <Text style={styles.status3}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
                     <Text style={styles.header}>تفاصيل الطلب </Text>
-                    <Text style={styles.textInputTitle}>
+                    {/* <Text style={styles.textInputTitle}>
                       {" "}
                       حالة الطلب |{" "}
                       <Text style={styles.textData}> {this.state.Rstatus} </Text>
-                    </Text>
-
+                    </Text> */}
+                  {/* {  this.Creditor(c.creditor)} */}
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      اسم الدائن |{" "}
+                     الدائن |{" "}
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
 
@@ -481,8 +582,24 @@ export default class Timeline extends React.Component {
                           {this.state.Reason}{" "}
                         </Text>
                         
+                        
                       )}
                     </Text>
+                    {this.state.Rstatus == "قيد التنفيذ" ? (
+                      <Text style={styles.textInputTitle}>
+                      {" "}
+                      المتبقي من الدين|
+                      <Text style={styles.textData}>
+                        {" "}
+                        {this.state.RemAmount}{" "}
+                        <Text>ريال سعودي </Text>
+                      </Text>{" "}
+                    
+                    </Text>
+                    ) : null }
+
+                    
+
                     <Text style={styles.textInputTitle}>
 
                        {this.state.iType == "" ? null : <Text> فترة التقسيط |</Text>}
@@ -504,6 +621,7 @@ export default class Timeline extends React.Component {
                         </Text>
 
                     <View style={styles.buttonContainer}>
+
                     {this.state.Rstatus!= "قيد الإنتظار" ? null:(
                       <TouchableOpacity
                         style={[styles.button, { backgroundColor: "#FA8072" }]}
@@ -511,6 +629,140 @@ export default class Timeline extends React.Component {
                       >
                         <Text style={styles.buttonText}> حذف </Text>
                       </TouchableOpacity>)}
+
+=======
+                    
+                    {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
+
+{/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
+{this.state.Rstatus== "قيد الإنتظار" ? (
+                         <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
+
+):(
+                      // <TouchableOpacity
+                      //   style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      // >
+                      //   <Text style={styles.buttonText}> رفض </Text>
+                      // </TouchableOpacity>
+                      null
+                      
+                     )}
+                    
+
+
+{this.state.Rstatus== "قيد التنفيذ" ? ( 
+<TouchableOpacity
+    style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
+  >
+    <Text style={styles.PaybuttonText}> دفع </Text>
+  </TouchableOpacity>):(null
+  
+ )}
+
+{this.state.Rstatus== "مكتمل" ? ( 
+                       <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
+  
+ ): null }
+ 
+ {this.state.Rstatus== "مرفوض" ? ( 
+                       <Text style={styles.textReject}> نعتذر، تم رفض طلبك </Text>
+  
+ ): null }
+      
+
+
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.modalVisible2}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.setModalVisible2(!this.state.modalVisible2);
+                      }}
+                    >
+                      <AntDesign
+                        style={styles.close}
+                        name="close"
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                    <Image
+                      style={styles.UserImage}
+                      source={{ uri: this.state.profilePic }}
+                    />
+                    {/* namef   = snapshot.val().fullName;
+      emailf   = snapshot.val().email;
+      pic */}
+
+                    {/* <Text style={styles.header}> الملف الشخصي </Text> */}
+                    {/* {console.log(c.userName)} */}
+                    {/* {console.log(this.state.UserID)} */}
+                    <Text style={styles.UserName}>{this.state.namef}</Text>
+                    {/* <Text style={styles.UserName}>{this.state.UserID}</Text>
+            <Text style={styles.UserName}>{this.state.UserID}</Text>
+            <Text style={styles.UserName}> {this.state.Name}</Text>
+            <Text style={styles.UserName}> hiiiiiiiiiii</Text> */}
+
+                    {/* {c.userName} */}
+                    <Text style={styles.RateStarts}>
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                    </Text>
+                    
+
+                    <Text style={styles.subsidy}> عدد التسليف </Text>
+                    <Text style={styles.debts}> عدد الاستلاف </Text>
+                    <View style={styles.PinkRectangleShapeView}>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                    </View>
+                    <View style={styles.YellowRectangleShapeView}>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#fff" }]}
+                      ></TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#fff" }]}
+                      ></TouchableOpacity>
 
                     </View>
                   </View>
@@ -615,17 +867,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -120,
+    left: -180,
   },
 
   leftItems: {
     flexDirection: "row",
     justifyContent: "flex-start",
     // backgroundColor: "#000",
-    left: 30,
+    left: 10,
     top: 20,
     // width: "100%",
   },
+
+  
 
   textContainer: {
     marginRight: 10,
@@ -659,21 +913,68 @@ const styles = StyleSheet.create({
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 16,
+   
   },
 
   textData: {
     color: "#CBCA9E",
     fontFamily: "Bahij_TheSansArabic-Bold",
   },
+  textComplete: {
+    color: "#A8CB9E",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    alignItems: "center",
+    left:40,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.41,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
+  
+
+  textReject: {
+    color: "#BE6A6C",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    alignItems: "center",
+    left:70,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.41,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
+
+
+  textWait: {
+    color: "#D3CDC8",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    alignItems: "center",
+    left:40,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.41,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
+    width:650,
+    right:120,
   },
   modalView: {
     position: "absolute",
     bottom: 0,
+    width:425,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
     height: 650,
@@ -716,31 +1017,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     // textAlign: "center"
   },
-  button: {
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-    // fontSize:10,
-    alignItems: "center",
-    width: 170,
-    height: 30,
-    marginTop: 10,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-  },
+ 
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
     fontSize: 50,
     color:'#fff',
     fontWeight:"bold",
+  },
+  PaybuttonText: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "center",
+    fontSize: 50,
+    color:'#fff',
+    fontWeight:"bold",
+    
   },
   buttonContainer: {
     flexDirection: "row",
@@ -754,11 +1045,15 @@ const styles = StyleSheet.create({
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
-    margin: 20,
-    // top: 30,
+    // margin: 20,
+    top: -50,
+
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 30,
+    width:170,
+    left:90,
+    
   },
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -768,7 +1063,7 @@ const styles = StyleSheet.create({
     color: "#57694C",
     textAlign: "right",
 
-    marginRight: 35,
+    // marginRight: 1,
   },
   close: {
     marginLeft: 20,
@@ -858,6 +1153,131 @@ const styles = StyleSheet.create({
     
     
   },
+  ProssessRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#F1DCA7",
+    
+   
+
+  },
+
+  waitingRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#D3CDC8",
+    
+   
+
+  },
+
+  RejectRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#BE6A6C",
+    
+   
+
+  },
+
+  CompleteRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#A8CB9E",
+    
+   
+
+  },
+  status3:{
+    textAlign: "center",
+   
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+  status2:{
+    textAlign: "center",
+   
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+  ProRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#F1DCA7",
+  
+  },
+
+  WRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#D3CDC8",
+  
+  },
+
+  RRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#BE6A6C",
+  
+  },
+
+  CRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#A8CB9E",
+  
+  },
+
   test:{
 backgroundColor:'red',
   },
@@ -917,6 +1337,16 @@ backgroundColor:'red',
     fontSize: 15,
     color: "#404040",
   },
+  PaybuttonText: {
+    textAlign: "center",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    top: -4,
+    bottom: -18,
+    textAlign: "center",
+    fontSize: 18,
+    color:'#fff',
+    // fontWeight:"bold",
+  },
 
   UserImage: {
     alignItems: "center",
@@ -934,24 +1364,9 @@ backgroundColor:'red',
     borderWidth: 4,
   },
 
-  // button1:{
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginRight: 20,
-  //   marginLeft: 25,
-  //   fontSize: 5,
-  // borderRadius:15,
-  // },
+  
+
   button: {
-    alignItems: "center",
-    width: 170,
-    height: 30,
-    marginTop: 80,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    fontSize: 10,
     // alignItems: "center",
     // width: 170,
     // height: 30,
@@ -960,6 +1375,44 @@ backgroundColor:'red',
     // borderRadius: 15,
     // marginLeft: 10,
     // backgroundColor: "#fff",
+    // fontSize:10,
+    alignItems: "center",
+    width: 170,
+    height: 30,
+    marginTop: 10,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    backgroundColor: "#fff",
+    right:30,
+  },
+
+  Paybutton:{
+    // alignItems: "center",
+    // width: 170,
+    // height: 30,
+    // marginTop: 10,
+    // padding: 5,
+    // borderRadius: 15,
+    // marginLeft: 10,
+    // backgroundColor: "#fff",
+    // fontSize:10,
+    alignItems: "center",
+    width: 170,
+    height: 35,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    backgroundColor: "#fff",
+    right:-50,
+    top:-30,
+    shadowColor: "#000",
+    shadowOpacity: 0.21,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
   },
 
   //end
