@@ -60,7 +60,6 @@ class PayAsDebtor extends React.Component {
   }
   // Handles submitting the payment request
   onSubmit = async (creditCardInput, requestId, amount, remAmount) => {
-    alert(requestId)
    let reqStatus = "قيد التنفيذ"
    let remining = (amount-remAmount)
     if (remining == 0) {
