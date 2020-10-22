@@ -19,6 +19,9 @@ import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
 
+import TextInput from "react-native-textinput-multiline";
+
+
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
@@ -91,7 +94,7 @@ firebase
     });
   });
 
-export default class Timeline extends React.Component {
+export default class ReqAsCreditor extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
 
@@ -229,6 +232,67 @@ export default class Timeline extends React.Component {
     console.log("انتهى رتريف الصورة");
   }
 
+  conformupdateAccept(k,props){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد قبول الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestateAccept(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  updatestateAccept(k,props){
+    
+  //   this.setModalVisible(!this.state.modalVisible);
+  //  props.navigate("squares");
+  //   const { currentUser } = firebase.auth();
+  //   firebase
+  //   .database()
+  //   .ref('requests/' + k)
+  //   .update({
+  //     creditor:currentUser.uid,
+  //     rqeuestStatus: "قيد التنفيذ",
+  //   })
+  //   .then(() => console.log('Data updated.'));
+    
+   
+  }
+  
+  conformupdateReject(k,props){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد رفض الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestateReject(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+
+  updatestateReject(k,props){
+    
+  //   this.setModalVisible(!this.state.modalVisible);
+  //  props.navigate("squares");
+  //   const { currentUser } = firebase.auth();
+  //   firebase
+  //   .database()
+  //   .ref('requests/' + k)
+  //   .update({
+  //     creditor:currentUser.uid,
+  //     rqeuestStatus: "مرفوض",
+  //   })
+  //   .then(() => console.log('Data updated.'));
+    
+   
+  }
+
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
@@ -270,7 +334,7 @@ export default class Timeline extends React.Component {
                     size={25}
                     color="#9B9B7A"
                     solid
-                    style={{ marginTop: 30, marginRight: 45 }}
+                    style={{ marginTop: 30, marginRight: 15 }}
                   />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
@@ -279,11 +343,40 @@ export default class Timeline extends React.Component {
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                 </View>
                 {console.log("here3")}
+
+                {c.rqeuestStatus== "قيد الإنتظار" ? (
+                  <View style={styles.waitingRectangleShapeView}> 
+                    <Text style={styles.status2}> طلب </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{c.rqeuestStatus== "قيد التنفيذ" ? (
+                  <View style={styles.ProssessRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+
+{c.rqeuestStatus== "مكتمل" ? (
+                  <View style={styles.CompleteRectangleShapeView}> 
+                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
                 
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
                     <Text style={styles.textLabel}>
-                      الإسم |{" "}
+                      المدين |{" "}
                       <Text
                         style={styles.textData}
                         onPress={() => this.viewProfileFunction(c)}
@@ -347,17 +440,52 @@ export default class Timeline extends React.Component {
                         color="black"
                       />
                     </TouchableOpacity>
+
+
+                    {this.state.Rstatus== "قيد التنفيذ" ? (
+                  <View style={styles.ProRectangleShapeView}> 
+                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{this.state.Rstatus== "قيد الإنتظار" ? (
+                  <View style={styles.WRectangleShapeView}> 
+                    <Text style={styles.status2}> طلب </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+
+{this.state.Rstatus== "مكتمل" ? (
+                  <View style={styles.CRectangleShapeView}> 
+                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+{this.state.Rstatus== "مرفوض" ? (
+                  <View style={styles.RRectangleShapeView}> 
+                    <Text style={styles.status3}> {this.state.Rstatus} </Text>
+              </View>
+):(
+                      null
+                      
+                     )}
+
+                     
                     <Text style={styles.header}>تفاصيل الطلب </Text>
-                    <Text style={styles.textInputTitle}>
-                      {" "}
-                      حالة الطلب |{" "}
-                      {/* <Text style={styles.textData}> {this.state.Rstatus} </Text> */}
-                      {this.state.Rstatus == "قيد الإنتظار" ? <Text style={styles.textData}> طلب </Text> : <Text style={styles.textData}> {this.state.Rstatus} </Text>}
-                    </Text>
+                    
 
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      اسم الدائن |{" "}
+                      المدين |{" "}
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     
                     </Text>
@@ -395,8 +523,15 @@ export default class Timeline extends React.Component {
                     </Text>
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      {this.state.Reason == "" ? null : <Text> السبب |</Text>}
-                      {this.state.Reason == "" ? null : (
+                      <Text> السبب |</Text>
+                      {/* {this.state.Reason == "" ? null : <Text> السبب |</Text>} */}
+                      {this.state.Reason == "" ? (
+                        <Text style={styles.textData}>
+                        {" "}
+                        لا يوجد سبب
+                        {" "}
+                      </Text>
+                      ) : (
                         <Text style={styles.textData}>
                           {" "}
                           {this.state.Reason}{" "}
@@ -425,17 +560,65 @@ export default class Timeline extends React.Component {
                         </Text>
 
                     <View style={styles.buttonContainer}>
+                    {this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      >
-                        <Text style={styles.buttonText}> رفض </Text>
-                      </TouchableOpacity>
+                      style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      onPress={() => {
+                        this. conformupdateReject(this.state.Rkey,this.props.navigation)}}
+                      
+                    >
+                
+                      <Text style={styles.buttonText}> رفض </Text>
+                    </TouchableOpacity>
+                    ):
+                    (null)}
+
+{this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                      >
-                        <Text style={styles.buttonText}> قبول </Text>
-                      </TouchableOpacity>
+                      style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                      onPress={() => {
+                        this. conformupdateAccept(this.state.Rkey,this.props.navigation)}}
+                    >
+                      <Text style={styles.buttonText}> قبول </Text>
+                    </TouchableOpacity>
+                    ):
+                    (null)}
+
+{this.state.Rstatus== "قيد التنفيذ" ? ( 
+                       <Text style={styles.textprosses} multiline={true}> "
+                      
+                     مثل المؤمنين في توادهم وتراحمهم وتعاطفهم
+                     {'\n'}
+                    {"   "}
+                     كمثل الجسد
+                       إذا اشتكى منه عضو
+                       {"       "}
+                       {'\n'}
+                        تداعى له سائر الجسد بالسهر والحمى" </Text>
+
+                       
+  
+ ): null }
+                      
+                      {this.state.Rstatus== "مكتمل" ? ( 
+                       <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
+  
+ ): null }
                     </View>
+
+{/* <View style={styles.buttonContainer}>
+                     
+                     <TouchableOpacity
+                     
+                     onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                       onPress={() => {
+                         this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                     >
+                       <Text style={styles.buttonText}> قبول </Text>
+                     </TouchableOpacity>
+                   </View> */}
+  
                   </View>
                 </View>
               </Modal>
@@ -629,20 +812,21 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -120,
+    left: -180,
   },
 
   leftItems: {
     flexDirection: "row",
     justifyContent: "flex-start",
     // backgroundColor: "#000",
-    left: 30,
+    left: 10,
     top: 20,
     // width: "100%",
   },
 
   textContainer: {
     marginRight: 10,
+    
   },
 
   textLabel: {
@@ -650,6 +834,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 16,
+    
   },
 
   textData: {
@@ -661,7 +846,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
+    width:650,
+    right:120,
   },
+ 
   modalView: {
     position: "absolute",
     bottom: 0,
@@ -687,6 +875,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     // textAlign: "center"
   },
+ 
+
+
   button: {
     // alignItems: "center",
     // width: 170,
@@ -705,7 +896,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10,
     backgroundColor: "#fff",
+    top: -30,
+    left:-10,
   },
+
+  
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
@@ -719,16 +914,22 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 25,
     fontSize: 10,
+
+ 
+    
   },
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
     color: "#404040",
     fontSize: 30,
-    margin: 20,
-    // top: 30,
+    // margin: 20,
+    top: -50,
+
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 30,
+    width:170,
+    left:90,
   },
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -737,11 +938,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: "#57694C",
     textAlign: "right",
-
+// left:30,
     marginRight: 35,
+    top:-30,
+    right:-25,
+
+
   },
   close: {
-    marginLeft: 20,
+    marginLeft: 5,
+    top:-10,
+    color:'#746356',
   },
 
   // style for view profile
@@ -828,6 +1035,132 @@ const styles = StyleSheet.create({
     
     
   },
+  ProssessRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 100,
+    backgroundColor: "#F1DCA7",
+    
+   
+
+  },
+
+  waitingRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 100,
+    backgroundColor: "#D9AE94",
+    
+   
+
+  },
+
+  RejectRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 100,
+    backgroundColor: "#BE6A6C",
+    
+   
+
+  },
+
+  CompleteRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 100,
+    backgroundColor: "#A8CB9E",
+    
+   
+
+  },
+  
+  
+  status3:{
+    textAlign: "center",
+   
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+  status2:{
+    textAlign: "center",
+   
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+  ProRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 28,
+    backgroundColor: "#D9AE94",
+  
+  },
+
+  WRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#D9AE94",
+  
+  },
+
+  RRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#BE6A6C",
+  
+  },
+
+  CRectangleShapeView:{
+    alignItems: "center",
+    width: 340,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#A8CB9E",
+  
+  },
   test:{
 backgroundColor:'red',
   },
@@ -903,7 +1236,38 @@ backgroundColor:'red',
     borderColor: "#CBCA9E",
     borderWidth: 4,
   },
-
+  textprosses: {
+    textAlign: 'center',
+    top:-70,
+    color: "#986979",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:15,
+    alignItems: "center",
+    left:0,
+    marginTop:40,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.21,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+   
+    
+  },
+  textComplete: {
+    color: "#A8CB9E",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    alignItems: "center",
+    left:40,
+    top:-20,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.41,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
   // button1:{
   //   flexDirection: "row",
   //   alignItems: "center",
@@ -912,25 +1276,7 @@ backgroundColor:'red',
   //   fontSize: 5,
   // borderRadius:15,
   // },
-  button: {
-    alignItems: "center",
-    width: 170,
-    height: 30,
-    marginTop: 80,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    fontSize: 10,
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-  },
+  
 
   //end
 });
