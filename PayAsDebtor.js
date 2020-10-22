@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet,TextInput,Text,ScrollView,Dimensions,TouchableOpacity } from 'react-native';
+import { View, StyleSheet,TextInput,Text,ScrollView,Dimensions,TouchableOpacity,Alert } from 'react-native';
 import { Formik } from "formik";
 import * as yup from "yup";
 import PaymentFormView from './PaymentFormView';
@@ -72,7 +72,7 @@ class PayAsDebtor extends React.Component {
         remAmount: remining,
         rqeuestStatus: reqStatus
       })
-      .then(() => console.log('Data updated.'));
+      .then(() => Alert.alert("","تم التسديد بنجاح"));
 
     const { navigation } = this.props;
     // Disable the Submit button after the request is sent

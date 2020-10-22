@@ -86,7 +86,19 @@ firebase
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       //if (child.val().uid != currentUser.uid) {
-      requestArray.push(child.val(), child.key);
+        requestArray.push({
+          creditor:child.val().creditor,
+           expectedDate:child.val().expectedDate,
+           installemntPrice:child.val().installemntPrice,
+            installmentsType:child.val().installmentsType,
+            price:child.val().price,
+           reason:child.val().reason,
+            repaymentType:child.val().repaymentType,
+          rqeuestStatus:child.val().rqeuestStatus,
+            submittedDate:child.val().submittedDate,
+           userName:child.val().userName,
+           userid:child.val().userid,
+            key:child.key,});
       //  }
     });
   });
@@ -261,7 +273,56 @@ export default class MyRequest extends React.Component {
     console.log(this.state.pic);
     console.log("انتهى رتريف الصورة");
   }
+  EditRequest(k,Rstatus){
+    if(Rstatus!= "قيد الإنتظار"){
+      Alert.alert(
+        "عذرا",
+        " لا يمكن تعديل هذا الطلب ",
+        [{ text: "موافق", },
+       ],
+        { cancelable: false }
+      );
+    }
+    else{
+    this.setModalVisible(!this.state.modalVisible);
+    this.props.navigation.navigate('EditRequest',{
+      itemId:k,
+      
+    });
 
+  }}
+  conformRemove(k,Rstatus){
+    if(Rstatus== "قيد الإنتظار"){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد حذف الطلب ",
+      [{ text: "نعم", onPress: () => this.Remove(k) },
+      {
+        text: 'لا',
+        // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  else{
+    Alert.alert(
+      "تنبيه ",
+      "لايمكنك حذف الطلب ",
+      [{ text: "موافق"},
+     ],
+      { cancelable: false }
+    );
+  }
+}
+  Remove(k){
+    firebase
+    .database()
+   .ref('requests/' + k).remove()
+   this.props.navigation.navigate("squares");
+
+   this.setModalVisible(!this.state.modalVisible);
+  }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
@@ -300,7 +361,7 @@ export default class MyRequest extends React.Component {
                     size={25}
                     color="#9B9B7A"
                     solid
-                    style={{ marginTop: 30, marginRight: 15 }}
+                    style={{ marginTop: 25, marginRight: 15 }}
                   />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
@@ -352,7 +413,7 @@ export default class MyRequest extends React.Component {
                   <View style={styles.textContainer}>
                 {/* {  this.Creditor(c.creditor)} */}
                     <Text style={styles.textLabel}>
-                      الإسم |{" "}
+                      الدائن |{" "}
                       <Text
                         style={styles.textData}
                         onPress={() => this.viewProfileFunction(c)}
@@ -369,10 +430,7 @@ export default class MyRequest extends React.Component {
                       المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
                     </Text>
 
-                    <Text style={styles.textLabel}>
-                      {" "}
-                      حالة الطلب |<Text style={styles.textData}> {c.rqeuestStatus} </Text>
-                    </Text>
+                   
 
                     
 
@@ -403,7 +461,18 @@ export default class MyRequest extends React.Component {
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     
-
+                  <TouchableOpacity
+                 
+                 style={styles.Editicon}
+                 onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
+   
+                 {this.state.Rstatus!= "قيد الإنتظار" ? null:(
+                
+               
+                 <Text style={styles.Editicon1}>
+                   <Ionicons name="md-create" size={30} color="#808065" solid />
+                 </Text>)}
+               </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible(!this.state.modalVisible);
@@ -462,7 +531,7 @@ export default class MyRequest extends React.Component {
                   {/* {  this.Creditor(c.creditor)} */}
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      اسم الدائن |{" "}
+                     الدائن |{" "}
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
 
@@ -551,7 +620,7 @@ export default class MyRequest extends React.Component {
 {/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
 {this.state.Rstatus== "قيد الإنتظار" ? (
                          <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
-
+                        
 ):(
                       // <TouchableOpacity
                       //   style={[styles.button, { backgroundColor: "#D4CEC9" }]}
@@ -562,6 +631,11 @@ export default class MyRequest extends React.Component {
                       
                      )}
                     
+                {this.state.Rstatus== "قيد الإنتظار" ? (    
+                    <TouchableOpacity
+                         style={[styles.button, { backgroundColor: "#FA8072" }]}
+                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}><Text style={styles.buttonText}> حذف </Text>
+                         </TouchableOpacity>):(null)}
 
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
@@ -793,7 +867,30 @@ const styles = StyleSheet.create({
     // width: "100%",
   },
 
-  
+  Editicon: {
+    left: 253,
+    bottom: -10,
+    zIndex: 2,
+
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    width: 90,
+    shadowOffset: {
+      // width: 100,
+      // height: 100,
+    },
+  },
+ Editicon1: {
+    left: 60,
+    bottom: 0,
+    zIndex: 2,
+    shadowColor: "#000000",
+    shadowOpacity: 0.71,
+    shadowOffset: {
+      width: 100,
+      height: 100,
+    },
+  },
 
   textContainer: {
     marginRight: 10,
@@ -969,12 +1066,58 @@ const styles = StyleSheet.create({
     margin: 20,
     marginBottom: 40,
     bottom: 20,
-    right: -7,
+    right: -1,
     textAlign: "center",
     justifyContent: "center",
     color: "#746356",
   },
+  PinkRectangleShapeView: {
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    left: 185,
+    top: -35,
+    backgroundColor: "#D9AE94",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -25,
+    top: -104,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
 
+  debts: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "left",
+    color: "#404040",
+    top: -37,
+    left: 70,
+    zIndex: 2,
+  },
+  subsidy: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "right",
+    color: "#404040",
+    top: -10,
+    right: 75,
+  },
   RateStarts: {
     left: 140,
     bottom: 50,
@@ -1029,7 +1172,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#F1DCA7",
     
    
@@ -1042,7 +1185,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#D3CDC8",
     
    
@@ -1055,7 +1198,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#BE6A6C",
     
    
@@ -1068,7 +1211,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 100,
+    top: 75,
     backgroundColor: "#A8CB9E",
     
    
@@ -1247,6 +1390,7 @@ backgroundColor:'red',
     // backgroundColor: "#fff",
     // fontSize:10,
     alignItems: "center",
+  
     width: 170,
     height: 30,
     marginTop: 10,

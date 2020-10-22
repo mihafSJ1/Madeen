@@ -1,4 +1,3 @@
-
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -238,22 +237,22 @@ class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  updatestate(k,props){
+  // updatestate(k,props){
     
-    this.setModalVisible(!this.state.modalVisible);
-    this.props.navigation.navigate("PayAsDebtor",{amount:this.state.rAmount, reqID: this.state.Rkey});
-    const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' + k)
-    .update({
-      creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
+  //   this.setModalVisible(!this.state.modalVisible);
+  //   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey});
+  //   const { currentUser } = firebase.auth();
+  //   firebase
+  //   .database()
+  //   .ref('requests/' + k)
+  //   .update({
+  //     creditor:currentUser.uid,
+  //     rqeuestStatus: "قيد التنفيذ",
+  //   })
+  //   .then(() => console.log('Data updated.'));
     
-   // props.navigate("Timeline");
-  }
+  //  // props.navigate("Timeline");
+  // }
 
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
@@ -309,8 +308,9 @@ class Timeline extends React.Component {
                       {" "}
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
+                    
                   </View>
-                 
+              
                 </View>
               </TouchableOpacity>
 
@@ -376,12 +376,13 @@ class Timeline extends React.Component {
                       )}
                     </Text>
                 
-                      <Text style={styles.textInputTitle}>{" "}
-                      {this.state.iType == "" ? null : <Text> فترات التقسيط |</Text>}
-                       {this.state.iType == "" ? null : (
-                      <Text style={styles.textData}> {this.state.Duration} فترات</Text>
-                       )}
-                      </Text>
+                    <Text style={styles.textInputTitle}>
+
+{this.state.iType == "" ? null : <Text> فترة التقسيط |</Text>}
+{this.state.iType == "" ? null : (
+<Text style={styles.textData}> {this.state.Duration} </Text>
+)}
+</Text>
                       <Text style={styles.textInputTitle}>{" "}
                       {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
                        {this.state.iType == ""? null : (
@@ -400,10 +401,10 @@ class Timeline extends React.Component {
                      
                       <TouchableOpacity
                       
-                      onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                        onPress={() => {
-                          this.conformupdate(this.state.Rkey,this.props.navigation)}}
+                        // onPress={() => {
+                        //   this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>

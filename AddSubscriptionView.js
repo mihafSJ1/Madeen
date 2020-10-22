@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
+import * as firebase from "firebase";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
@@ -44,13 +45,14 @@ export default class AddSubscriptionView extends React.Component {
             <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Bold", fontSize:30}]}>
           الدفع 
             </Text>
+       
           </View>
-          {/* <View style={styles.textWrapper}>
+          <View style={styles.textWrapper}>
             <Text style={[styles.textInputTitle, {marginBottom:30}]}>
            
              المبلغ المستحق | {amount} ريال سعودي
             </Text>
-          </View> */}
+          </View>
      
           <View style={styles.cardFormWrapper}>
             <PaymentFormView {...this.props}/>
