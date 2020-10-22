@@ -47,12 +47,12 @@ export default class AddSubscriptionView extends React.Component {
             </Text>
        
           </View>
-          {/* <View style={styles.textWrapper}>
+          <View style={styles.textWrapper}>
             <Text style={[styles.textInputTitle, {marginBottom:30}]}>
            
              المبلغ المستحق | {amount} ريال سعودي
             </Text>
-          </View> */}
+          </View>
      
           <View style={styles.cardFormWrapper}>
             <PaymentFormView {...this.props}/>
