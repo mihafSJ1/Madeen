@@ -18,6 +18,7 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
+import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -86,7 +87,19 @@ firebase
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       //if (child.val().uid != currentUser.uid) {
-      requestArray.push(child.val());
+        requestArray.push({
+          creditor:child.val().creditor,
+           expectedDate:child.val().expectedDate,
+           installemntPrice:child.val().installemntPrice,
+            installmentsType:child.val().installmentsType,
+            price:child.val().price,
+           reason:child.val().reason,
+            repaymentType:child.val().repaymentType,
+          rqeuestStatus:child.val().rqeuestStatus,
+            submittedDate:child.val().submittedDate,
+           userName:child.val().userName,
+           userid:child.val().userid,
+            key:child.key,});
       //  }
     });
   });
@@ -115,7 +128,19 @@ export default class MyRequest extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (true) {
-            requestArray.push(child.val());
+            requestArray.push({
+              creditor:child.val().creditor,
+               expectedDate:child.val().expectedDate,
+               installemntPrice:child.val().installemntPrice,
+                installmentsType:child.val().installmentsType,
+                price:child.val().price,
+               reason:child.val().reason,
+                repaymentType:child.val().repaymentType,
+              rqeuestStatus:child.val().rqeuestStatus,
+                submittedDate:child.val().submittedDate,
+               userName:child.val().userName,
+               userid:child.val().userid,
+                key:child.key,});
           }
         });
       });
@@ -217,9 +242,13 @@ export default class MyRequest extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
+
+      Rkey: item.key,
+
       CreditorID: item.creditor,
       RemAmount: item.remAmount
       
+
     });
 
     //  this.openModalWithItem2(item)
@@ -248,7 +277,55 @@ export default class MyRequest extends React.Component {
     console.log(this.state.pic);
     console.log("انتهى رتريف الصورة");
   }
+  EditRequest(k,Rstatus){
+    if(Rstatus!= "قيد الإنتظار"){
+      Alert.alert(
+        "عذرا",
+        " لا يمكن تعديل هذا الطلب ",
+        [{ text: "موافق", },
+       ],
+        { cancelable: false }
+      );
+    }
+    else{
+    this.setModalVisible(!this.state.modalVisible);
+    this.props.navigation.navigate('EditRequest',{
+      itemId:k,
+      
+    });
 
+  }}
+  conformRemove(k,Rstatus){
+    if(Rstatus== "قيد الإنتظار"){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد حذف الطلب ",
+      [{ text: "نعم", onPress: () => this.Remove(k) },
+      {
+        text: 'لا',
+        // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  else{
+    Alert.alert(
+      "تنبيه ",
+      "لايمكنك حذف الطلب ",
+      [{ text: "موافق"},
+     ],
+      { cancelable: false }
+    );
+  }
+}
+  Remove(k){
+    firebase
+    .database()
+   .ref('requests/' + k).remove()
+   this.props.navigation.navigate("squares");
+
+  }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
@@ -386,7 +463,19 @@ export default class MyRequest extends React.Component {
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    
+
+                  <TouchableOpacity
+                 
+              style={styles.EditR}
+              onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
+
+              {this.state.Rstatus!= "قيد الإنتظار" ? null:(
+             
+            
+              <Text style={styles.EditR2}>
+                <Ionicons name="md-create" size={30} color="#808065" solid />
+              </Text>)}
+
 
                     <TouchableOpacity
                       onPress={() => {
@@ -400,6 +489,8 @@ export default class MyRequest extends React.Component {
                         color="#746356"
                       />
                     </TouchableOpacity>
+
+=======
                     
                     {this.state.Rstatus== "قيد التنفيذ" ? (
                   <View style={styles.ProRectangleShapeView}> 
@@ -437,6 +528,7 @@ export default class MyRequest extends React.Component {
                       null
                       
                      )}
+
                     <Text style={styles.header}>تفاصيل الطلب </Text>
                     {/* <Text style={styles.textInputTitle}>
                       {" "}
@@ -510,8 +602,8 @@ export default class MyRequest extends React.Component {
 
                     <Text style={styles.textInputTitle}>
 
-                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-                       {this.state.Duration == "" ? null : (
+                       {this.state.iType == "" ? null : <Text> فترة التقسيط |</Text>}
+                       {this.state.iType == "" ? null : (
                     <Text style={styles.textData}> {this.state.Duration} </Text>
                        )}
                       </Text><Text style={styles.textInputTitle}>{" "}
@@ -529,6 +621,16 @@ export default class MyRequest extends React.Component {
                         </Text>
 
                     <View style={styles.buttonContainer}>
+
+                    {this.state.Rstatus!= "قيد الإنتظار" ? null:(
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#FA8072" }]}
+                        onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}
+                      >
+                        <Text style={styles.buttonText}> حذف </Text>
+                      </TouchableOpacity>)}
+
+=======
                     
                     {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
 
@@ -661,6 +763,7 @@ export default class MyRequest extends React.Component {
                       <TouchableOpacity
                         style={[styles.button, { backgroundColor: "#fff" }]}
                       ></TouchableOpacity>
+
                     </View>
                   </View>
                 </View>
@@ -781,7 +884,30 @@ const styles = StyleSheet.create({
   textContainer: {
     marginRight: 10,
   },
+ EditR: {
+    left: 253,
+    bottom: -40,
+    zIndex: 2,
 
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    width: 90,
+    shadowOffset: {
+      // width: 100,
+      // height: 100,
+    },
+  },
+ EditR2: {
+    left: 60,
+    bottom: 0,
+    zIndex: 2,
+    shadowColor: "#000000",
+    shadowOpacity: 0.71,
+    shadowOffset: {
+      width: 100,
+      height: 100,
+    },
+  },
   textLabel: {
     color: "#404040",
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -851,7 +977,28 @@ const styles = StyleSheet.create({
     width:425,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
-    height: 550,
+    height: 650,
+    // margin: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+   paddingBottom: 100,
+  },
+  modalView: {
+    position: "absolute",
+    bottom: 0,
+    borderTopRightRadius: 70,
+    borderTopLeftRadius: 70,
+    width:"100%",
+    height: 700,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -866,7 +1013,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     paddingBottom: 100,
   },
-
   modalText: {
     marginBottom: 15,
     // textAlign: "center"
@@ -890,8 +1036,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 20,
-    marginLeft: 25,
+   // marginRight: 20,
+    marginLeft: 79,
+
     fontSize: 10,
   },
   header: {

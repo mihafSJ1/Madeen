@@ -21,7 +21,7 @@ import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
 import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
-
+import EditRequest from"./EditRequest";
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
@@ -297,6 +297,17 @@ export default function App({ navigation }) {
               <Stack.Screen
               name="PaymentFormView"
               component={PaymentFormView}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+             <Stack.Screen
+              name="EditRequest"
+              component={EditRequest}
               options={{
                 headerShown: true,
                 navigation: { navigation },
