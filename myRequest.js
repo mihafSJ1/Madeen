@@ -86,7 +86,19 @@ firebase
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       //if (child.val().uid != currentUser.uid) {
-      requestArray.push(child.val());
+        requestArray.push({
+          creditor:child.val().creditor,
+           expectedDate:child.val().expectedDate,
+           installemntPrice:child.val().installemntPrice,
+            installmentsType:child.val().installmentsType,
+            price:child.val().price,
+           reason:child.val().reason,
+            repaymentType:child.val().repaymentType,
+          rqeuestStatus:child.val().rqeuestStatus,
+            submittedDate:child.val().submittedDate,
+           userName:child.val().userName,
+           userid:child.val().userid,
+            key:child.key,});
       //  }
     });
   });
@@ -115,7 +127,19 @@ export default class MyRequest extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (true) {
-            requestArray.push(child.val());
+            requestArray.push({
+              creditor:child.val().creditor,
+               expectedDate:child.val().expectedDate,
+               installemntPrice:child.val().installemntPrice,
+                installmentsType:child.val().installmentsType,
+                price:child.val().price,
+               reason:child.val().reason,
+                repaymentType:child.val().repaymentType,
+              rqeuestStatus:child.val().rqeuestStatus,
+                submittedDate:child.val().submittedDate,
+               userName:child.val().userName,
+               userid:child.val().userid,
+                key:child.key,});
           }
         });
       });
@@ -217,6 +241,7 @@ export default class MyRequest extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
+      Rkey: item.key,
       CreditorID: item.creditor,
       RemAmount: item.remAmount,
       cName: item.creditorName,
@@ -249,7 +274,56 @@ export default class MyRequest extends React.Component {
     console.log(this.state.pic);
     console.log("انتهى رتريف الصورة");
   }
+  EditRequest(k,Rstatus){
+    if(Rstatus!= "قيد الإنتظار"){
+      Alert.alert(
+        "عذرا",
+        " لا يمكن تعديل هذا الطلب ",
+        [{ text: "موافق", },
+       ],
+        { cancelable: false }
+      );
+    }
+    else{
+    this.setModalVisible(!this.state.modalVisible);
+    this.props.navigation.navigate('EditRequest',{
+      itemId:k,
+      
+    });
 
+  }}
+  conformRemove(k,Rstatus){
+    if(Rstatus== "قيد الإنتظار"){
+    Alert.alert(
+      "تنبيه ",
+      "هل تريد حذف الطلب ",
+      [{ text: "نعم", onPress: () => this.Remove(k) },
+      {
+        text: 'لا',
+        // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
+      { cancelable: false }
+    );
+  }
+  else{
+    Alert.alert(
+      "تنبيه ",
+      "لايمكنك حذف الطلب ",
+      [{ text: "موافق"},
+     ],
+      { cancelable: false }
+    );
+  }
+}
+  Remove(k){
+    firebase
+    .database()
+   .ref('requests/' + k).remove()
+   this.props.navigation.navigate("squares");
+
+   this.setModalVisible(!this.state.modalVisible);
+  }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
@@ -389,7 +463,18 @@ export default class MyRequest extends React.Component {
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     
-
+                  <TouchableOpacity
+                 
+                 style={styles.Editicon}
+                 onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
+   
+                 {this.state.Rstatus!= "قيد الإنتظار" ? null:(
+                
+               
+                 <Text style={styles.Editicon1}>
+                   <Ionicons name="md-create" size={30} color="#808065" solid />
+                 </Text>)}
+               </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible(!this.state.modalVisible);
@@ -537,7 +622,7 @@ export default class MyRequest extends React.Component {
 {/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
 {this.state.Rstatus== "قيد الإنتظار" ? (
                          <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
-
+                        
 ):(
                       // <TouchableOpacity
                       //   style={[styles.button, { backgroundColor: "#D4CEC9" }]}
@@ -548,6 +633,11 @@ export default class MyRequest extends React.Component {
                       
                      )}
                     
+                {this.state.Rstatus== "قيد الإنتظار" ? (    
+                    <TouchableOpacity
+                         style={[styles.button, { backgroundColor: "#FA8072" }]}
+                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}><Text style={styles.buttonText}> حذف </Text>
+                         </TouchableOpacity>):(null)}
 
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
@@ -778,7 +868,30 @@ const styles = StyleSheet.create({
     // width: "100%",
   },
 
-  
+  Editicon: {
+    left: 253,
+    bottom: -10,
+    zIndex: 2,
+
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    width: 90,
+    shadowOffset: {
+      // width: 100,
+      // height: 100,
+    },
+  },
+ Editicon1: {
+    left: 60,
+    bottom: 0,
+    zIndex: 2,
+    shadowColor: "#000000",
+    shadowOpacity: 0.71,
+    shadowOffset: {
+      width: 100,
+      height: 100,
+    },
+  },
 
   textContainer: {
     marginRight: 10,
@@ -1278,6 +1391,7 @@ backgroundColor:'red',
     // backgroundColor: "#fff",
     // fontSize:10,
     alignItems: "center",
+  
     width: 170,
     height: 30,
     marginTop: 10,
