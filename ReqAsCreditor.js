@@ -19,7 +19,6 @@ import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
 
-import TextInput from "react-native-textinput-multiline";
 
 
 import { Ionicons } from "@expo/vector-icons";
