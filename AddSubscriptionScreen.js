@@ -86,12 +86,15 @@ export default class AddSubscription extends React.Component {
   render() {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
+    const {reqID} = this.props.route.params;
+    alert(reqID)
     return (
         <AddSubscriptionView
           error={error}
           submitted={submitted}
           onSubmit={this.onSubmit}
           amount = {amount}
+          reqId = {reqID}
         />
     );
   }

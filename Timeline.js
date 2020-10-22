@@ -241,7 +241,7 @@ class Timeline extends React.Component {
   updatestate(k,props){
     
     this.setModalVisible(!this.state.modalVisible);
-   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount});
+   this.props.navigation.navigate("PayAsDebtor",{amount:this.state.rAmount, reqID: this.state.Rkey});
     const { currentUser } = firebase.auth();
     firebase
     .database()
