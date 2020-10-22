@@ -4,6 +4,7 @@ import moment from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
+import { AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -85,12 +86,12 @@ const installmentsArray = [
     installmentsTypeArr: "يوميًا",
   },
 ];
-
+var rid;
 var year,
   days,
   week,
   month = 0;
-
+var rid;
 var dateDiffDays,
   dateDiffWeeks,
   dateDiffMonths,
@@ -107,6 +108,8 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 var userNameFromDB = "";
 
 class EditRequest extends React.Component {
+ 
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -252,8 +255,8 @@ class EditRequest extends React.Component {
 
     const requestID = firebase
       .database()
-      .ref("requests/")
-      .push(
+      .ref("requests/"+rid)
+      .update(
         {
           price: values.price,
           expectedDate: values.expectedDate,
@@ -274,8 +277,8 @@ class EditRequest extends React.Component {
           } else {
             Alert.alert(
               "تنبيه ",
-              "تم إرسال الطلب بنجاح   ",
-              [{ text: "موافق", onPress: () => props.navigate("squares") }],
+              "تم تعديل الطلب بنجاح   ",
+              [{ text: "موافق", onPress: () =>  props.navigate("squares")}],
               { cancelable: false }
             );
           }
@@ -316,6 +319,54 @@ class EditRequest extends React.Component {
 
   //-------------------------------------------- Rendering react component
   render() {
+    const { itemId} = this.props.route.params;
+    rid=itemId;
+           var creditorR;
+           var expectedDateR;
+           var installemntPriceR;
+           var installmentsTypeR;
+           var priceR;
+           var reasonR;
+           var repaymentTypeR;
+           var rqeuestStatusR;
+           var submittedDateR;
+           var userNameR;
+           var useridR;
+           var check;
+            var rquestobj;
+          
+           console.log("id"+itemId);
+    
+    firebase
+      .database()
+      .ref("requests/" + itemId )
+      .on("value", (snapshot) => {
+      
+       
+          creditorR=snapshot.val().creditor,
+          console.log(creditorR);
+          expectedDateR=snapshot.val().expectedDate,
+          console.log("done");
+          installemntPriceR=snapshot.val().installemntPrice,
+          
+           installmentsTypeR=snapshot.val().installmentsType,
+           priceR=snapshot.val().price,
+          reasonR=snapshot.val().reason,
+           repaymentTypeR=snapshot.val().repaymentType,
+         rqeuestStatusR=snapshot.val().rqeuestStatus,
+           submittedDateR=snapshot.val().submittedDate,
+          userNameR=snapshot.val().userName,
+          useridR=snapshot.val().userid
+          if(creditorR!="")
+          check= true;
+          else{
+            check= false;
+          }
+    
+   
+             
+      
+      });
     return (
       <View style={styles.container}>
         <View style={styles.background}>
@@ -324,23 +375,36 @@ class EditRequest extends React.Component {
 
         <View style={styles.registerBackground}>
           <KeyboardAwareScrollView>
+          {/* <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("myRequest");
+                }}
+              >
+                <AntDesign
+                  style={styles.close}
+                  name="close"
+                  size={24}
+                  color="#9B9B7A"
+                />
+              </TouchableOpacity> */}
+
             <Text style={styles.header}> تعديل الطلب  </Text>
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
-                installmentRepayment: "",
-                user: "",
-                usersSelect: false,
-                price: 0,
-                expectedDate: today,
-                repaymentType: "",
-                reason: "",
-                rqeuestStatus: "Waiting",
+                installmentRepayment: creditorR,
+                user:creditorR ,
+                usersSelect: check,
+                price: priceR,
+                expectedDate: expectedDateR,
+                repaymentType: repaymentTypeR,
+                reason: reasonR,
+                rqeuestStatus: rqeuestStatusR,
                 submittedDate: new Date(),
               }}
               onReset={(values, { resetForm }) => {}}
               onSubmit={(values, action) => {
-                action.resetForm();
+                //action.resetForm();
 
                 this.onSubmitPress(values, this.props.navigation);
               }}
@@ -401,7 +465,7 @@ class EditRequest extends React.Component {
                     searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
                       style={styles.DropDownPicker}
                       items={applicationUsers}
-                      placeholder="اختر دائن "
+                      placeholder= {creditorR}
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={formprops.values.user}
                       containerStyle={{
@@ -467,7 +531,7 @@ class EditRequest extends React.Component {
                       }
 
                     />
-                  ) : null}
+                  ) :null}
                   <Text style={[styles.textError, { top: -20 }]}>
                     {formprops.errors.user}
                   </Text>
@@ -480,7 +544,7 @@ class EditRequest extends React.Component {
                   <TextInput
                     style={styles.textInput}
                     // placeholderTextColor="#57694C"
-                    placeholder="المبلغ"
+                    placeholder={this.state.price}
                     value={formprops.values.price}
                     onChangeText={formprops.handleChange("price")}
                     keyboardType="numeric"
@@ -745,7 +809,7 @@ class EditRequest extends React.Component {
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      onPress={ ()=> formprops.handleReset()}
+                      onPress={ ()=>  this.props.navigation.navigate("myRequest")}
                                    
                     >
                       {/* <button type='reset'></button> */}
@@ -758,7 +822,7 @@ class EditRequest extends React.Component {
                         () => formprops.handleSubmit()
                       }
                     >
-                      <Text style={styles.buttonText}> إنشاء طلب </Text>
+                      <Text style={styles.buttonText}>  حفظ </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
