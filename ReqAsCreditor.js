@@ -80,28 +80,25 @@ firebase
 // });
 
 const currentUser = firebase.auth();
-//this.setState({ currentUser });
 firebase
-
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-            key:child.key,});
-      //  }
+            requestArray.push({
+             creditor:child.val().creditor,
+              expectedDate:child.val().expectedDate,
+              installemntPrice:child.val().installemntPrice,
+               installmentsType:child.val().installmentsType,
+               price:child.val().price,
+              reason:child.val().reason,
+               repaymentType:child.val().repaymentType,
+             rqeuestStatus:child.val().rqeuestStatus,
+               submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+               key:child.key,
+               remAmount: child.val().remAmount});
     });
   });
 
@@ -119,32 +116,38 @@ export default class ReqAsCreditor extends React.Component {
   };
 
   componentDidMount() {
-    requestArray=[]
+  
+    requestArray=[];
+   
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
-      .database()
-      .ref("requests/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          if (true) {
-            requestArray.push({
-              creditor:child.val().creditor,
-               expectedDate:child.val().expectedDate,
-               installemntPrice:child.val().installemntPrice,
-                installmentsType:child.val().installmentsType,
-                price:child.val().price,
-               reason:child.val().reason,
-                repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
-               userName:child.val().userName,
-               userid:child.val().userid,
-                key:child.key,});
-          }
-        });
+    .database()
+    .ref("requests/")
+    .on("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        if (true) {
+          requestArray.push({         
+            creditor:child.val().creditor,
+            expectedDate:child.val().expectedDate,
+            installemntDuration: child.val().installemntDuration,
+            installemntPrice:child.val().installemntPrice,
+             installmentsType:child.val().installmentsType,
+             price:child.val().price,
+            reason:child.val().reason,
+             repaymentType:child.val().repaymentType,
+           rqeuestStatus:child.val().rqeuestStatus,
+             submittedDate:child.val().submittedDate,
+            userName:child.val().userName,
+            userid:child.val().userid,
+             key:child.key,
+             remAmount: child.val().remAmount });
+          
+        }
       });
+    });
     }
+
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -227,6 +230,7 @@ export default class ReqAsCreditor extends React.Component {
       Rstatus: item.rqeuestStatus,
       creditorID: item.creditor,
       Rkey: item.key,
+      rAmount: item.remAmount
     });
 
     //  this.openModalWithItem2(item)
@@ -269,23 +273,23 @@ export default class ReqAsCreditor extends React.Component {
       { cancelable: false }
     );
   }
-  updateAccept(k,props){
+  // updatestateAccept(k,props){
     
-    this.setModalVisible(!this.state.modalVisible);
-   props.navigate("squares");
-   // const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' + k)
-    .update({
-     // creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
+  // //   this.setModalVisible(!this.state.modalVisible);
+  // //  props.navigate("squares");
+  // //   const { currentUser } = firebase.auth();
+  // //   firebase
+  // //   .database()
+  // //   .ref('requests/' + k)
+  // //   .update({
+  // //     creditor:currentUser.uid,
+  // //     rqeuestStatus: "قيد التنفيذ",
+  // //   })
+  // //   .then(() => console.log('Data updated.'));
     
-   // props.navigate("Timeline");
-  }
- 
+   
+  // }
+  
   conformupdateReject(k,props){
     Alert.alert(
       "تنبيه ",
@@ -448,7 +452,8 @@ export default class ReqAsCreditor extends React.Component {
                   <View style={styles.modalView}>
                     <TouchableOpacity
                       onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible);
+                        
+                   this.setModalVisible(!this.state.modalVisible),a
                       }}
                     >
                       <AntDesign
@@ -594,8 +599,7 @@ export default class ReqAsCreditor extends React.Component {
 {this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                      onPress={() => {
-                        this. conformupdateAccept(this.state.Rkey,this.props.navigation)}}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                     >
                       <Text style={styles.buttonText}> قبول </Text>
                     </TouchableOpacity>
