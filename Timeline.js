@@ -241,7 +241,7 @@ class Timeline extends React.Component {
   updatestate(k,props){
     
     this.setModalVisible(!this.state.modalVisible);
-   this.props.navigation.navigate("PayAsDebtor",{amount:this.state.rAmount, reqID: this.state.Rkey});
+    this.props.navigation.navigate("PayAsDebtor",{amount:this.state.rAmount, reqID: this.state.Rkey});
     const { currentUser } = firebase.auth();
     firebase
     .database()
@@ -403,7 +403,7 @@ class Timeline extends React.Component {
                       onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                         onPress={() => {
-                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                          this.conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>

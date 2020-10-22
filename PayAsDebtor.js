@@ -5,6 +5,7 @@ import * as yup from "yup";
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import * as firebase from "firebase";
 
 //  import AddSubscriptionView from './AddSubscriptionView';
 const STRIPE_ERROR = 'Payment service error. Try again later.';
@@ -58,8 +59,22 @@ export default class PayAsDebtor extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput, requestId, amount) => {
-      alert(requestId)
+  onSubmit = async (creditCardInput, requestId, amount, remAmount) => {
+    alert(requestId)
+   let reqStatus = "قيد التنفيذ"
+   let remining = (amount-remAmount)
+    if (remining == 0) {
+    reqStatus = "مكتمل"
+    }
+    firebase
+      .database()
+      .ref("requests/" + requestId)
+      .update({
+        remAmount: remining,
+        rqeuestStatus: reqStatus
+      })
+      .then(() => console.log('Data updated.'));
+
     const { navigation } = this.props;
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
@@ -103,7 +118,6 @@ export default class PayAsDebtor extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
-
     return (
 <View style={styles.container}>
 <LinearGradient
@@ -138,7 +152,7 @@ export default class PayAsDebtor extends React.Component {
      </View>
      <View style={styles.textWrapper}>
             <Text style={styles.title}>
-            <Text style={{fontFamily: "Bahij_TheSansArabic-Light",    color: "#404040",}}>المبلغ المستحق | </Text> 
+            <Text style={{fontFamily: "Bahij_TheSansArabic-Light",  color: "#404040",}}>المبلغ المستحق | </Text> 
             {amount} ريال سعودي
             </Text>
           </View>
@@ -149,7 +163,7 @@ export default class PayAsDebtor extends React.Component {
         <Formik
             validationSchema={this.payAsDebtorSchema}
             initialValues={{
-            price: 0,
+             price: 0,
             }}
             onReset={(values, { resetForm }) => {}}
             onSubmit={(values, action) => {
@@ -179,7 +193,8 @@ export default class PayAsDebtor extends React.Component {
                    submitted={submitted}
                    onSubmit={this.onSubmit}
                    amount = {amount}
-                   reqID= {reqID}/>
+                   reqID= {reqID}
+                   remAmount = {formprops.values.price}/>
                 </View>
               ) :  <Text style={[styles.textError, {top:-10}]}>
               المبلغ المدخل لا بد أن يكون أقل من أو يساوي المبلغ المستحق 

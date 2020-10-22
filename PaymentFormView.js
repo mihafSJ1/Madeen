@@ -14,7 +14,7 @@ export default class PaymentFormView extends React.Component {
     this.state = { cardData: { valid: false } };
   }
   render() {
-    const { onSubmit, submitted, error, amount, reqID } = this.props;
+    const { onSubmit, submitted, error, amount, reqID, remAmount } = this.props;
     return (
       <View style = {styles.background}>
         <View>
@@ -40,7 +40,7 @@ export default class PaymentFormView extends React.Component {
         <View style={styles.buttonWrapper}>
         <View style={styles.buttonContainer}>
         <TouchableOpacity
-        // onPress = {()=>this.props.navigation.navigate("Timline")}
+        // onPress = {()=>navigation.goBack()}
           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
          >
             <Text style={styles.buttonText}> إلغاء </Text>
@@ -49,7 +49,7 @@ export default class PaymentFormView extends React.Component {
           <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
             
             disabled={!this.state.cardData.valid || submitted}
-            onPress={() => onSubmit(this.state.cardData, reqID, amount)}
+            onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount)}
        
           >
               <Text Text style={styles.buttonText}>
