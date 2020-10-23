@@ -278,14 +278,15 @@ bringid(k){
 });
 }
   onSubmitPress(values, props) {
- if(creditorR==values.user){
+ if(creditorEmailR==values.user && priceR==values.price && expectedDateR==values.expectedDate &&repaymentTypeR==values.repaymentType && installemntDurationR==this.state.durationState && reasonR==values.reason)
+ {
    
-    if(priceR==values.price)
-    if(expectedDateR==values.expectedDate)
-    if(repaymentTypeR==values.repaymentType)
+  
+    // if(expectedDateR==values.expectedDate)
+    // if(repaymentTypeR==values.repaymentType)
     
-    if(installemntDurationR==this.state.durationState)
- if(reasonR==values.reason)
+    // if(installemntDurationR==this.state.durationState)
+    // if(reasonR==values.reason)
      {
       Alert.alert(
         "تنبيه ",
