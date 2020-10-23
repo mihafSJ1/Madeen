@@ -640,7 +640,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
 <TouchableOpacity
-onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.state.RemAmount, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.state.RemAmount, reqID: this.state.Rkey,type:this.state.Type}),this.setModalVisible(!this.state.modalVisible)}}
     style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
   >
     <Text style={styles.PaybuttonText}> دفع </Text>

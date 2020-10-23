@@ -46,7 +46,7 @@ export default class PaymentFormView extends React.Component {
         </TouchableOpacity>
 
           <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-            
+         
             disabled={!this.state.cardData.valid || submitted}
             onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount)}
        

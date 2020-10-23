@@ -117,6 +117,7 @@ class PayAsDebtor extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
+    const {type} = this.props.route.params;
     return (
 <View style={styles.container}>
 <LinearGradient
@@ -156,9 +157,7 @@ class PayAsDebtor extends React.Component {
             </Text>
           </View>
      <View style={styles.formStyle}>
-        <Text style={styles.textInputTitle}>
-            المبلغ المراد سداده <Text style={styles.textError}> *</Text>
-        </Text>
+      
         <Formik
             validationSchema={this.payAsDebtorSchema}
             initialValues={{
@@ -172,6 +171,12 @@ class PayAsDebtor extends React.Component {
         >      
          {(formprops, setFieldValue) => (
              <View style = {styles.formContainer}>
+            {type != "السداد دفعة واحدة" ?(
+
+              <View>
+              <Text style={styles.textInputTitle}>
+            المبلغ المراد سداده <Text style={styles.textError}> *</Text>
+             </Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="المبلغ"
@@ -179,13 +184,11 @@ class PayAsDebtor extends React.Component {
                 onChangeText={formprops.handleChange("price")}
                 keyboardType="numeric"
                 onBlur={formprops.handleBlur("price")}
-
+        
             />
             <Text style={styles.textError}>
             {formprops.touched.price && formprops.errors.price}
           </Text>
-
-          
           {formprops.values.price != 0 && formprops.values.price <= parseInt(amount) ? ( 
                 <View style={styles.cardFormWrapper}>
                 <PaymentFormView   
@@ -200,9 +203,21 @@ class PayAsDebtor extends React.Component {
               ) :  <Text style={[styles.textError, {top:-10}]}>
               المبلغ المدخل لا بد أن يكون أقل من أو يساوي المبلغ المستحق 
           </Text>}
+          </View>
+          )
+             :   <PaymentFormView   
+                 error={error}
+submitted={submitted}
+onSubmit={this.onSubmit}
+amount = {amount}
+reqID= {reqID}
+remAmount = {formprops.values.price}
+               navigation = {this.props.navigation}/>
+         }
+         
           <TouchableOpacity
         onPress = {()=>   this.props.navigation.navigate("myRequest")}
-          style={[styles.button, { backgroundColor: "#D4CEC9", left:120, top:250 }]}
+          style={[styles.button, { backgroundColor: "#D4CEC9", left:120, top:200 }]}
          >
             <Text style={styles.buttonText}> إلغاء </Text>
         </TouchableOpacity> 
@@ -253,7 +268,7 @@ top:0,
   },
   background: {
     flex: 1,
-    top: 100,
+    top: 120,
     height: 700,
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
@@ -271,7 +286,7 @@ top:0,
     margin: 10,
   },
   header: {
-    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontFamily: "Bahij_TheSansArabic-Light",
     fontSize:30,
     marginTop: 1,
     marginBottom: 5,

@@ -10,8 +10,8 @@ import { LinearGradient } from "expo-linear-gradient";
  */
 export default class AddSubscriptionView extends React.Component {
   render() {
-    const { amount } = this.props;
-    const {reqID} = this.props;
+    const { amount, reqID,error,onSubmit,submitted} = this.props;
+  
     return (
       <View style={styles.container}>
      <LinearGradient
@@ -42,16 +42,17 @@ export default class AddSubscriptionView extends React.Component {
           <View style={styles.textWrapper}>
           
 
-            <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Bold", fontSize:30}]}>
+            <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Light", fontSize:30,marginTop:20,}]}>
           الدفع 
             </Text>
        
           </View>
           <View style={styles.textWrapper}>
-            <Text style={[styles.textInputTitle, {marginBottom:30}]}>
-           
-             المبلغ المستحق | {amount} ريال سعودي
+            <Text style={styles.title}>
+          <Text style={{fontFamily: "Bahij_TheSansArabic-Light",  color: "#404040",}}>المبلغ المستحق | </Text> 
+            {amount} ريال سعودي
             </Text>
+          
           </View>
      
           <View style={styles.cardFormWrapper}>
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    top: 100,
+    top: 120,
     height: 700,
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
@@ -86,6 +87,15 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 18,
     textAlign: 'center'
+  },
+  title: {
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    marginTop: 1,
+    marginBottom: 5,
+    textAlign: "center",
+    color: "#CBCA9E",
+    marginRight: 2.5,
   },
   cardFormWrapper: {
     padding: 10,
