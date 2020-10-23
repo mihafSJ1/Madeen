@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
   alertText: {
     color: '#c22',
     fontSize: 16,
-    fontWeight: '400'
+    fontWeight: '400',
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
   alertWrapper: {
     backgroundColor: '#ecb7b7',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     top:10,
-    marginRight: 20,
+    marginRight: 90,
     fontSize: 30,
   },
     textInput: {
