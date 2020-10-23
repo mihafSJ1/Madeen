@@ -8,8 +8,8 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as firebase from "firebase";
 import { withNavigation } from "react-navigation";
 //  import AddSubscriptionView from './AddSubscriptionView';
-const STRIPE_ERROR = 'Payment service error. Try again later.';
-const SERVER_ERROR = 'Server error. Try again later.';
+const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى';
+const SERVER_ERROR = 'الخادم غير متوفر، حاول مرة أخرى';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
 
 const getCreditCardToken = (creditCardData) => {
@@ -205,14 +205,15 @@ class PayAsDebtor extends React.Component {
           </Text>}
           </View>
           )
-             :   <PaymentFormView   
-                 error={error}
-submitted={submitted}
-onSubmit={this.onSubmit}
-amount = {amount}
-reqID= {reqID}
-remAmount = {formprops.values.price}
-               navigation = {this.props.navigation}/>
+             :   <View style={styles.cardFormWrapper}>  
+             <PaymentFormView   
+                    error={error}
+                    submitted={submitted}
+                    onSubmit={this.onSubmit}
+                    amount = {amount}
+                    reqID= {reqID}
+                    remAmount = {formprops.values.price}
+                    navigation = {this.props.navigation}/></View>
          }
          
           <TouchableOpacity
@@ -284,10 +285,11 @@ top:0,
   cardFormWrapper: {
     padding: 10,
     margin: 10,
+
   },
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize:30,
+    fontSize:30, 
     marginTop: 1,
     marginBottom: 5,
     textAlign: "center",
@@ -335,6 +337,13 @@ top:0,
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    top:10,
+    marginRight: 90,
+    fontSize: 30,
   },
 });
 
