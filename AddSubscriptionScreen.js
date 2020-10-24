@@ -75,11 +75,23 @@ export default class AddSubscription extends React.Component {
   onSubmit = async (creditCardInput,reqID,amount) => {
     const { navigation } = this.props;
     const { currentUser } = firebase.auth();
+    var name;
+    var email;
+    firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+      name=snapshot.val().fullName,
+      email=snapshot.val().email
+      });
+
       firebase
       .database()
       .ref('requests/' + reqID)
       .update({
         creditor:currentUser.uid,
+        creditorEmail:email,
+        creditorName: name,
         rqeuestStatus: "قيد التنفيذ",
       })
       .then(() => Alert.alert(

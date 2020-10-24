@@ -20,7 +20,7 @@
         import FirebaseKeys from './FirebaseKeys';
 
 
-        
+
 
 
         import { Ionicons } from "@expo/vector-icons";
@@ -309,7 +309,7 @@
           updatestateReject(k,props){
             
         this.setModalVisible(!this.state.modalVisible);
-          props.navigate("ReqAsCreditor");
+        props.navigate("squares");
           //   const { currentUser } = firebase.auth();
           firebase
           .database()
@@ -467,7 +467,7 @@
 
                             {this.state.Rstatus== "قيد التنفيذ" ? (
                           <View style={styles.ProRectangleShapeView}> 
-                            <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                            <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
                       </View>
         ):(
                               null
@@ -476,7 +476,7 @@
 
         {this.state.Rstatus== "قيد الإنتظار" ? (
                           <View style={styles.WRectangleShapeView}> 
-                            <Text style={styles.status2}> طلب جديد  </Text>
+                            <Text style={styles.statusInside2}> طلب جديد  </Text>
                       </View>
         ):(
                               null
@@ -486,7 +486,7 @@
 
         {this.state.Rstatus== "مكتمل" ? (
                           <View style={styles.CRectangleShapeView}> 
-                            <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                            <Text style={styles.statusInside}> {this.state.Rstatus} </Text>
                       </View>
         ):(
                               null
@@ -792,15 +792,15 @@
                       
 
                       <Text style={styles.buttonTextNav}
-                  onPress={() => this.props.navigation.navigate("squares")}
+                  onPress={() => this.props.navigation.navigate("ReqAsCreditor")}
                       > دائن </Text>
                     
                 <View style={styles.GreenRectangleShapeView}>
                         
                       </View>
-                      
+                         <View style={styles.ViewList}>
                 <ScrollView>{this.list()}</ScrollView>
-
+                    </View>
                 {/*View request */}
               </View>
             );
@@ -821,6 +821,10 @@
             justifyContent: "center",
             alignItems: "center",
           },
+          ViewList:{
+            marginBottom:150,
+            
+              },
           card: {
               top:0,
             backgroundColor: "#fff",
@@ -1022,7 +1026,7 @@
             marginLeft: 0,
             marginBottom: 0,
             right: 0,
-            top: -140,
+            top: -130,
             backgroundColor: "#EAF4E1",
             borderColor: "#FFFFFF",
             borderWidth: 1,
@@ -1047,7 +1051,7 @@
             marginBottom: 0,
             right: 0,
             left:-88,
-            top: -51,
+            top: -41,
             backgroundColor: "#FFFFFF",
             borderColor: "#FFFFFF",
             borderWidth: 1,
@@ -1114,9 +1118,34 @@
             fontSize: 15,
             color: "#404040",
           },
+          statusInside:{
+            textAlign: "right",
+           left:160,
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 15,
+            color: "#404040",
+          },
+        
+          statusInside2:{
+            textAlign: "right",
+           left:150,
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 15,
+            color: "#404040",
+          },
+        
+          statusInsideReject:{
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 15,
+            color: "#FFFFFF",
+            left:160,
+          },
+
+
+
           ProRectangleShapeView:{
             alignItems: "center",
-            width: 340,
+            width: 388.5,
             height: 25,
             borderTopEndRadius:15,
             borderTopRightRadius:15,
@@ -1129,7 +1158,7 @@
 
           WRectangleShapeView:{
             alignItems: "center",
-            width: 340,
+            width: 388.5,
             height: 25,
             
             borderTopEndRadius:15,
@@ -1144,7 +1173,7 @@
 
           RRectangleShapeView:{
             alignItems: "center",
-            width: 340,
+            width: 388.5,
             height: 25,
             
             borderTopEndRadius:15,
@@ -1159,7 +1188,7 @@
 
           CRectangleShapeView:{
             alignItems: "center",
-            width: 340,
+            width: 388.5,
             height: 25,
             
             borderTopEndRadius:15,
@@ -1196,7 +1225,7 @@
           },
           buttonTextNav:{
             textAlign: "center",
-            top: -107,
+            top: -97,
             right: 90,
             fontFamily: "Bahij_TheSansArabic-Light",
             fontSize: 20,
@@ -1207,7 +1236,7 @@
           },
           buttonTextNav2:{
             textAlign: "center",
-            top: -23,
+            top: -13,
             left: 92,
             fontFamily: "Bahij_TheSansArabic-Light",
             fontSize: 20,
