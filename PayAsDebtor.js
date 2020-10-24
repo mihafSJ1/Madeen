@@ -81,7 +81,7 @@ class PayAsDebtor extends React.Component {
         remAmount: remining,
         rqeuestStatus: reqStatus
       })
-      .then(() => Alert.alert("","تم التسديد بنجاح"));
+      .then(() => Alert.alert("تنبيه","تم التسديد بنجاح"));
 
     const { navigation } = this.props;
     // Disable the Submit button after the request is sent

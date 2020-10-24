@@ -416,7 +416,7 @@ else{
 
                  }
                  searchableStyle={{
-                   fontSize:15,
+                  fontSize:15,
                  textAlign: "right",
                  fontFamily: "Bahij_TheSansArabic-Light"
                    }}

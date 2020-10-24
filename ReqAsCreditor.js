@@ -453,7 +453,7 @@ export default class ReqAsCreditor extends React.Component {
                     <TouchableOpacity
                       onPress={() => {
                         
-                   this.setModalVisible(!this.state.modalVisible),a
+                   this.setModalVisible(!this.state.modalVisible)
                       }}
                     >
                       <AntDesign

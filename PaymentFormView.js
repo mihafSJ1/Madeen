@@ -1,23 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity ,TextInput,Button} from 'react-native';
+
 import { CreditCardInput } from 'react-native-credit-card-input';
 
 import { FontAwesome } from '@expo/vector-icons';
-/**
- * Renders the payment form and handles the credit card data
- * using the CreditCardInput component.
- */
+
 export default class PaymentFormView extends React.Component {
   constructor(props) {
     super(props);
     this.state = { cardData: { valid: false } };
+
   }
+ 
   render() {
     const { onSubmit, submitted, error, amount, reqID, remAmount,type } = this.props;
     return (
       <View style = {styles.background}>
         <View>
-          <CreditCardInput requiresName onChange={(cardData) => this.setState({ cardData })} 
+          <CreditCardInput  onChange={(cardData) => this.setState({ cardData })} 
    
       labelStyle = {styles.textInputTitle}
       labels= {{ number: "رقم البطاقة ", expiry: "تاريخ الانتهاء", cvc: "CVC",name:"اسم حامل البطاقة " }}
@@ -32,11 +32,11 @@ export default class PaymentFormView extends React.Component {
       
       inputContainerStyle = {{ borderBottomWidth: 0, borderBottomColor: "black" ,
    }}
-     
-          />
+      />
 
         </View>
-        <View style={styles.buttonWrapper}>
+    
+    <View style={styles.buttonWrapper}>
         <View style={styles.buttonContainer}>
         <TouchableOpacity
         onPress = {()=>this.props.navigation.goBack()}
@@ -45,7 +45,8 @@ export default class PaymentFormView extends React.Component {
             <Text style={styles.buttonText}> إلغاء </Text>
         </TouchableOpacity>
 
-          <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+          <TouchableOpacity 
+            style={ (!this.state.cardData.valid || submitted)?[styles.button, { backgroundColor: "#F0EEED" }]:[styles.button, { backgroundColor: "#CBCA9E" }]}
          
             disabled={!this.state.cardData.valid || submitted}
             onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount,type)}
@@ -68,6 +69,18 @@ export default class PaymentFormView extends React.Component {
             </View>
           )}
         </View>
+          {error && (
+            <View style={styles.alertWrapper}>
+              <View style={styles.alertIconWrapper}>
+                <FontAwesome name="exclamation-circle" size={20} style={{ color: '#c22' }} />
+              </View>
+              <View style={styles.alertTextWrapper}>
+                <Text style={styles.alertText}>{error}</Text>
+              </View>
+            </View>
+          )}
+        {/* </View> */}
+          
       </View>
     );
   }

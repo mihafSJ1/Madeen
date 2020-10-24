@@ -23,12 +23,13 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-const getCreditCardToken = (creditCardData) => {
+const getCreditCardToken = (creditCardData,amount) => {
   const card = {
     'card[number]': creditCardData.values.number.replace(/ /g, ''),
     'card[exp_month]': creditCardData.values.expiry.split('/')[0],
     'card[exp_year]': creditCardData.values.expiry.split('/')[1],
-    'card[cvc]': creditCardData.values.cvc
+    'card[cvc]': creditCardData.values.cvc,
+    
   };
   return fetch('https://api.stripe.com/v1/tokens', {
     headers: {
