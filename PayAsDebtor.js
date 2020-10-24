@@ -117,7 +117,7 @@ class PayAsDebtor extends React.Component {
       this.setState({ submitted: false, error: SERVER_ERROR });
     } else {
       this.setState({ submitted: false, error: null });
-      navigation.navigate('myRequest')
+      // navigation.navigate('myRequest')
     }
   };
 
@@ -126,7 +126,7 @@ class PayAsDebtor extends React.Component {
       .number()
       .typeError("المبلغ لا بد أن يكون بأرقام إنجليزية")
       .required("المبلغ مطلوب")
-      .integer("المبلغ لا بد أن  يكون عدد صحيح")
+      // .integer("المبلغ لا بد أن  يكون عدد صحيح")
   });
   
   // render the subscription view component and pass the props to it
