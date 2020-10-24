@@ -29,6 +29,8 @@ const getCreditCardToken = (creditCardData,amount) => {
     'card[exp_month]': creditCardData.values.expiry.split('/')[0],
     'card[exp_year]': creditCardData.values.expiry.split('/')[1],
     'card[cvc]': creditCardData.values.cvc,
+    'card[metadata[amount]]':amount,
+    'card[metadata[currency]]':"SAR"
     
   };
   return fetch('https://api.stripe.com/v1/tokens', {
@@ -89,7 +91,7 @@ export default class AddSubscription extends React.Component {
     let creditCardToken;
     try {
       // Create a credit card token
-      creditCardToken = await getCreditCardToken(creditCardInput);
+      creditCardToken = await getCreditCardToken(creditCardInput,amount);
       if (creditCardToken.error) {
         // Reset the state if Stripe responds with an error
         // Set submitted to false to let the user subscribe again
