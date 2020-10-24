@@ -29,9 +29,8 @@ const getCreditCardToken = (creditCardData,amount) => {
     'card[exp_month]': creditCardData.values.expiry.split('/')[0],
     'card[exp_year]': creditCardData.values.expiry.split('/')[1],
     'card[cvc]': creditCardData.values.cvc,
-    'card[metadata[amount]]':amount,
-    'card[metadata[currency]]':"SAR"
-    
+    'card[metadata[amount]]': amount,
+    'card[metadata[currency]]': "SAR"
   };
   return fetch('https://api.stripe.com/v1/tokens', {
     headers: {
@@ -73,10 +72,9 @@ export default class AddSubscription extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput,reqID) => {
+  onSubmit = async (creditCardInput,reqID,amount) => {
     const { navigation } = this.props;
     const { currentUser } = firebase.auth();
-   alert(reqID)
       firebase
       .database()
       .ref('requests/' + reqID)
@@ -84,14 +82,19 @@ export default class AddSubscription extends React.Component {
         creditor:currentUser.uid,
         rqeuestStatus: "قيد التنفيذ",
       })
-      .then(() => alert("test"));
+      .then(() => Alert.alert(
+        "تنبيه ",
+        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح.",
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
+        { cancelable: false }
+      ));
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    
     let creditCardToken;
     try {
       // Create a credit card token
-      creditCardToken = await getCreditCardToken(creditCardInput,amount);
+      creditCardToken = await getCreditCardToken(creditCardInput, amount);
       if (creditCardToken.error) {
         // Reset the state if Stripe responds with an error
         // Set submitted to false to let the user subscribe again
@@ -121,16 +124,7 @@ export default class AddSubscription extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
-
     return (
-        // <AddSubscriptionView
-        //   error={error}
-        //   submitted={submitted}
-        //   onSubmit={this.onSubmit}
-        //   amount = {amount}
-        //   reqId = {reqID}
-        // />
- 
           <View style={styles.container}>
          <LinearGradient
               colors={[
