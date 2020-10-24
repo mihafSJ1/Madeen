@@ -606,7 +606,7 @@
         {this.state.Rstatus== "قيد الإنتظار" ? (
                               <TouchableOpacity
                               style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                              onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                              onPress = {()=>  { this.props.navigation.navigate("PayAsCreditor",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                             >
                               <Text style={styles.buttonText}> قبول </Text>
                             </TouchableOpacity>

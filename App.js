@@ -23,8 +23,8 @@ import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
 import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
-import AddSubscription from './AddSubscriptionScreen';
-import AddSubscriptionView from './AddSubscriptionView';
+import PayAsCreditor from './PayAsCreditor';
+
 import PaymentFormView from './PaymentFormView';
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
@@ -59,8 +59,8 @@ function squaresScreens() {
         options={{ headerShown: false }}
       />
            <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
@@ -295,17 +295,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-              <Stack.Screen
-              name="AddSubscriptionView"
-              component={AddSubscriptionView}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            />
+         
          
               <Stack.Screen
               name="PaymentFormView"

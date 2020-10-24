@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Dimensions,Alert } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
@@ -60,7 +60,7 @@ const subscribeUser = (creditCardToken) => {
   });
 };
 
-export default class AddSubscription extends React.Component {
+export default class PayAsCreditor extends React.Component {
   static navigationOptions = {
     title: 'Subscription page',
   };
@@ -84,10 +84,11 @@ export default class AddSubscription extends React.Component {
       })
       .then(() => Alert.alert(
         "تنبيه ",
-        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح.",
+        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح ",
         [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
         { cancelable: false }
       ));
+    
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    
