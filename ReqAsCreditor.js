@@ -80,28 +80,25 @@ firebase
 // });
 
 const currentUser = firebase.auth();
-//this.setState({ currentUser });
 firebase
-
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-            key:child.key,});
-      //  }
+            requestArray.push({
+             creditor:child.val().creditor,
+              expectedDate:child.val().expectedDate,
+              installemntPrice:child.val().installemntPrice,
+               installmentsType:child.val().installmentsType,
+               price:child.val().price,
+              reason:child.val().reason,
+               repaymentType:child.val().repaymentType,
+             rqeuestStatus:child.val().rqeuestStatus,
+               submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+               key:child.key,
+               remAmount: child.val().remAmount});
     });
   });
 
@@ -112,6 +109,7 @@ export default class ReqAsCreditor extends React.Component {
   state = {
     modalVisible: false,
     modalVisible2: false,
+    CreditorEmail:"",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
@@ -119,32 +117,38 @@ export default class ReqAsCreditor extends React.Component {
   };
 
   componentDidMount() {
-    requestArray=[]
+  
+    requestArray=[];
+   
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
-      .database()
-      .ref("requests/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          if (true) {
-            requestArray.push({
-              creditor:child.val().creditor,
-               expectedDate:child.val().expectedDate,
-               installemntPrice:child.val().installemntPrice,
-                installmentsType:child.val().installmentsType,
-                price:child.val().price,
-               reason:child.val().reason,
-                repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
-               userName:child.val().userName,
-               userid:child.val().userid,
-                key:child.key,});
-          }
-        });
+    .database()
+    .ref("requests/")
+    .on("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        if (true) {
+          requestArray.push({         
+            creditor:child.val().creditor,
+            expectedDate:child.val().expectedDate,
+            installemntDuration: child.val().installemntDuration,
+            installemntPrice:child.val().installemntPrice,
+             installmentsType:child.val().installmentsType,
+             price:child.val().price,
+            reason:child.val().reason,
+             repaymentType:child.val().repaymentType,
+           rqeuestStatus:child.val().rqeuestStatus,
+             submittedDate:child.val().submittedDate,
+            userName:child.val().userName,
+            userid:child.val().userid,
+             key:child.key,
+             remAmount: child.val().remAmount });
+          
+        }
       });
+    });
     }
+
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -163,6 +167,9 @@ export default class ReqAsCreditor extends React.Component {
   setTimelinePic(picNew) {
     this.setState({ pic: picNew });
   }
+  setCreditorEmail(Email) {
+    this.setState({ CreditorEmail: Email });
+  }
   viewProfileFunction(item) {
     firebase.auth();
     // console.log(item.userName);
@@ -174,7 +181,8 @@ export default class ReqAsCreditor extends React.Component {
       .on("value", (snapshot) => {
         console.log("جوا البيس");
 
-        this.setprofilePic(snapshot.val().UserImage);
+        this.setprofilePic(snapshot.val().UserImage)
+        this.setCreditorEmail(snapshot.val().email);
 
         console.log(this.state.profilePic);
       });
@@ -189,12 +197,12 @@ export default class ReqAsCreditor extends React.Component {
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
+      
+      
     });
     console.log("يارب١");
-    //  console.log(item.userid);
     console.log("يارب٢");
-    //  console.log(this.state.namef);
-    //   this.findImage(this.state.UserIDImage);
+    
   }
   //Areej Test
 
@@ -213,7 +221,6 @@ export default class ReqAsCreditor extends React.Component {
 
   openModalWithItem(item) {
     this.setState({
-
       submmitedDate: item.submmitedDate,
       modalVisible: true,
       Name: item.userName,
@@ -228,6 +235,8 @@ export default class ReqAsCreditor extends React.Component {
       Rstatus: item.rqeuestStatus,
       creditorID: item.creditor,
       Rkey: item.key,
+      rAmount: item.remAmount,
+      cEmail: item.creditorEmail
     });
 
     //  this.openModalWithItem2(item)
@@ -270,23 +279,23 @@ export default class ReqAsCreditor extends React.Component {
       { cancelable: false }
     );
   }
-  updateAccept(k,props){
+  // updatestateAccept(k,props){
     
-    this.setModalVisible(!this.state.modalVisible);
-   props.navigate("squares");
-   // const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' + k)
-    .update({
-     // creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
+  // //   this.setModalVisible(!this.state.modalVisible);
+  // //  props.navigate("squares");
+  // //   const { currentUser } = firebase.auth();
+  // //   firebase
+  // //   .database()
+  // //   .ref('requests/' + k)
+  // //   .update({
+  // //     creditor:currentUser.uid,
+  // //     rqeuestStatus: "قيد التنفيذ",
+  // //   })
+  // //   .then(() => console.log('Data updated.'));
     
-   // props.navigate("Timeline");
-  }
- 
+   
+  // }
+  
   conformupdateReject(k,props){
     Alert.alert(
       "تنبيه ",
@@ -326,7 +335,7 @@ export default class ReqAsCreditor extends React.Component {
         // {console.log(c.creditorID)}
       if (c.creditor == currentUser) {
         
-        if (true) {
+        if (c.rqeuestStatus!="مرفوض") {
           return (
             <View>
                 {/* {console.log(c.creditorID)} */}
@@ -371,7 +380,7 @@ export default class ReqAsCreditor extends React.Component {
 
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
-                    <Text style={styles.status2}> طلب </Text>
+                    <Text style={styles.status2}> طلب جديد  </Text>
               </View>
 ):(
                       null
@@ -396,7 +405,6 @@ export default class ReqAsCreditor extends React.Component {
                       null
                       
                      )}
-                      
 
                 
                 <View style={styles.rightItems}>
@@ -450,7 +458,8 @@ export default class ReqAsCreditor extends React.Component {
                   <View style={styles.modalView}>
                     <TouchableOpacity
                       onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible);
+                        
+                   this.setModalVisible(!this.state.modalVisible)
                       }}
                     >
                       <AntDesign
@@ -473,7 +482,7 @@ export default class ReqAsCreditor extends React.Component {
 
 {this.state.Rstatus== "قيد الإنتظار" ? (
                   <View style={styles.WRectangleShapeView}> 
-                    <Text style={styles.status2}> طلب </Text>
+                    <Text style={styles.status2}> طلب جديد  </Text>
               </View>
 ):(
                       null
@@ -526,7 +535,7 @@ export default class ReqAsCreditor extends React.Component {
                       {" "}
                       المبلغ|
                       <Text style={styles.textData}>
-                        {" "}
+                      
                         {this.state.Price}{" "}
                         <Text>ريال سعودي </Text>
                       </Text>{" "}
@@ -539,10 +548,10 @@ export default class ReqAsCreditor extends React.Component {
                       <Text style={styles.textData}>
                         {" "}
                         {this.state.EDate}{" "}
-                      </Text>{" "}
+                      </Text>
                     </Text>
                     <Text style={styles.textInputTitle}>
-                      {" "}
+                      
                       <Text> السبب |</Text>
                       {/* {this.state.Reason == "" ? null : <Text> السبب |</Text>} */}
                       {this.state.Reason == "" ? (
@@ -578,6 +587,13 @@ export default class ReqAsCreditor extends React.Component {
                        <Text style={styles.textData}> {this.state.Tprice} </Text>
                         )}
                         </Text>
+                       
+
+
+
+
+
+
 
                     <View style={styles.buttonContainer}>
                     {this.state.Rstatus== "قيد الإنتظار" ? (
@@ -596,8 +612,7 @@ export default class ReqAsCreditor extends React.Component {
 {this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                      onPress={() => {
-                        this. conformupdateAccept(this.state.Rkey,this.props.navigation)}}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                     >
                       <Text style={styles.buttonText}> قبول </Text>
                     </TouchableOpacity>
@@ -605,16 +620,26 @@ export default class ReqAsCreditor extends React.Component {
                     (null)}
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
-                       <Text style={styles.textprosses} multiline={true}> "
-                      
+                       <Text style={styles.textprosses} > 
+                       {/* "
+                    
                      مثل المؤمنين في توادهم وتراحمهم وتعاطفهم
                      {'\n'}
-                    {"   "}
+                
                      كمثل الجسد
                        إذا اشتكى منه عضو
-                       {"       "}
+                       
                        {'\n'}
-                        تداعى له سائر الجسد بالسهر والحمى" </Text>
+                        تداعى له سائر الجسد بالسهر والحمى" 
+                         */}
+                         "
+                         مثل المؤمنين في توادهم وتراحمهم وتعاطفهم
+                         {'\n'}
+                         كمثل الجسد إذا اشتكى منه عضو
+                         {'\n'}
+                         تداعى له سائر الجسد بالسهر والحمّى
+                         "
+                        </Text>
 
                        
   
@@ -625,7 +650,6 @@ export default class ReqAsCreditor extends React.Component {
   
  ): null }
                     </View>
-                   
 
 {/* <View style={styles.buttonContainer}>
                      
@@ -667,20 +691,9 @@ export default class ReqAsCreditor extends React.Component {
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
-                    {/* namef   = snapshot.val().fullName;
-      emailf   = snapshot.val().email;
-      pic */}
-
-                    {/* <Text style={styles.header}> الملف الشخصي </Text> */}
-                    {/* {console.log(c.userName)} */}
-                    {/* {console.log(this.state.UserID)} */}
+                   
                     <Text style={styles.UserName}>{this.state.namef}</Text>
-                    {/* <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}> {this.state.Name}</Text>
-            <Text style={styles.UserName}> hiiiiiiiiiii</Text> */}
-
-                    {/* {c.userName} */}
+                    <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -861,6 +874,7 @@ const styles = StyleSheet.create({
   textData: {
     color: "#CBCA9E",
     fontFamily: "Bahij_TheSansArabic-Bold",
+    
   },
   centeredView: {
     flex: 1,
@@ -874,9 +888,10 @@ const styles = StyleSheet.create({
   modalView: {
     position: "absolute",
     bottom: 0,
+    width:418,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
-    height: 550,
+    height: 600,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -900,15 +915,6 @@ const styles = StyleSheet.create({
 
 
   button: {
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-    // fontSize:10,
     alignItems: "center",
     width: 170,
     height: 30,
@@ -917,8 +923,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10,
     backgroundColor: "#fff",
-    top: -30,
-    left:-10,
+    top: 25,
+    left:-30,
   },
 
   
@@ -945,12 +951,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     // margin: 20,
     top: -50,
+    
 
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 30,
     width:170,
-    left:90,
+    left:95,
   },
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -961,14 +968,15 @@ const styles = StyleSheet.create({
     textAlign: "right",
 // left:30,
     marginRight: 35,
-    top:-30,
-    right:-25,
+    top:-20,
+    right:-17,
+    width:330,
 
 
   },
   close: {
-    marginLeft: 5,
-    top:-10,
+    marginLeft: 0,
+    top:-5,
     color:'#746356',
   },
 
@@ -1001,64 +1009,14 @@ const styles = StyleSheet.create({
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-    bottom: 20,
-    right: -7,
+    bottom: -5,
+    right: -1,
     textAlign: "center",
     justifyContent: "center",
     color: "#746356",
   },
 
-  PinkRectangleShapeView: {
-    width: 120,
-    height: 70,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 33,
-    marginBottom: 0,
-    left: 185,
-    top: -35,
-    backgroundColor: "#D9AE94",
-    borderColor: "#D3CECA",
-    borderWidth: 2,
-  },
-  YellowRectangleShapeView: {
-    alignItems: "center",
-    width: 120,
-    height: 70,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 33,
-    marginBottom: 0,
-    right: -25,
-    top: -104,
-    backgroundColor: "#F1DCA7",
-    borderColor: "#D3CECA",
-    borderWidth: 2,
-  },
-
-  debts: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 18,
-    textAlign: "left",
-    color: "#404040",
-    top: -37,
-    left: 70,
-    zIndex: 2,
-  },
-  subsidy: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 18,
-    textAlign: "right",
-    color: "#404040",
-    top: -10,
-    right: 75,
-  },
-  RateStarts: {
-    left: 140,
-    bottom: 50,
-  },
+  
 
   GreenRectangleShapeView: {
     alignItems: "center",
@@ -1112,8 +1070,6 @@ const styles = StyleSheet.create({
     top: 75,
     backgroundColor: "#F1DCA7",
     
-   
-
   },
 
   waitingRectangleShapeView:{
@@ -1125,8 +1081,6 @@ const styles = StyleSheet.create({
     top: 75,
     backgroundColor: "#D9AE94",
     
-   
-
   },
 
   RejectRectangleShapeView:{
@@ -1137,9 +1091,7 @@ const styles = StyleSheet.create({
     left:-70,
     top: 75,
     backgroundColor: "#BE6A6C",
-    
    
-
   },
 
   CompleteRectangleShapeView:{
@@ -1151,8 +1103,6 @@ const styles = StyleSheet.create({
     top: 75,
     backgroundColor: "#A8CB9E",
     
-   
-
   },
   
   
@@ -1174,14 +1124,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 340,
     height: 25,
-    
     borderTopEndRadius:15,
     borderTopRightRadius:15,
     borderBottomRightRadius:15,
-    
     left:-30,
     top: 28,
-    backgroundColor: "#D9AE94",
+    backgroundColor: "#F1DCA7",
   
   },
 
@@ -1194,8 +1142,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius:15,
     borderBottomRightRadius:15,
     
-    left:-30,
-    top: 45,
+    left:-33,
+    top: 40,
     backgroundColor: "#D9AE94",
   
   },
@@ -1262,9 +1210,6 @@ backgroundColor:'red',
     zIndex:2,
     paddingLeft: 50,
     paddingRight: 50,
-    // paddingBottom: 2,
-    // paddingTop: 0,
-    // backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
@@ -1276,9 +1221,6 @@ backgroundColor:'red',
     zIndex:7,
     paddingLeft: 50,
     paddingRight: 50,
-    // paddingBottom: 2,
-    // paddingTop: 0,
-    // backgroundColor:'red',
    
   },
   buttonText: {
@@ -1294,8 +1236,8 @@ backgroundColor:'red',
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 127,
-    top: -50,
+    left: 100,
+    top: 0,
     zIndex: 2,
     width: 160,
     height: 160,
@@ -1306,13 +1248,14 @@ backgroundColor:'red',
   },
   textprosses: {
     textAlign: 'center',
-    top:-70,
+    top:-50,
     color: "#986979",
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize:15,
     alignItems: "center",
-    left:0,
+    left:-15,
     marginTop:40,
+  width:330,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.21,
     shadowOffset: {
@@ -1327,8 +1270,8 @@ backgroundColor:'red',
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize:20,
     alignItems: "center",
-    left:40,
-    top:-20,
+    left:30,
+    top:40,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -1336,15 +1279,71 @@ backgroundColor:'red',
       height: 0,
     }
   },
-  // button1:{
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginRight: 20,
-  //   marginLeft: 25,
-  //   fontSize: 5,
-  // borderRadius:15,
-  // },
-  
+ 
 
-  //end
+  PinkRectangleShapeView: {
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    left: 165,
+    top: -35,
+    backgroundColor: "#D9AE94",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+  YellowRectangleShapeView: {
+    alignItems: "center",
+    width: 120,
+    height: 70,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 33,
+    marginBottom: 0,
+    right: -5,
+    top: -105,
+    backgroundColor: "#F1DCA7",
+    borderColor: "#D3CECA",
+    borderWidth: 2,
+  },
+
+  debts: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "left",
+    color: "#404040",
+    top: -40,
+    left: 50,
+    zIndex: 2,
+  },
+  subsidy: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 18,
+    textAlign: "right",
+    color: "#404040",
+    top: -12,
+    right: 42,
+  },
+  RateStarts: {
+    
+    left: 100,
+    bottom: 70,
+  },
+  Email: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+    marginBottom: 0,
+    margin: 20,
+    marginBottom: 40,
+    bottom: 40,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+
 });
