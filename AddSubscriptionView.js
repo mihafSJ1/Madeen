@@ -42,7 +42,7 @@ export default class AddSubscriptionView extends React.Component {
           <View style={styles.textWrapper}>
           
 
-            <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Bold", fontSize:30}]}>
+            <Text style={[styles.textInputTitle, {fontFamily: "Bahij_TheSansArabic-Light", fontSize:30}]}>
           الدفع 
             </Text>
        

@@ -3,6 +3,7 @@ import React from 'react';
  import * as firebase from "firebase";
 const STRIPE_ERROR = 'Payment service error. Try again later.';
 const SERVER_ERROR = 'Server error. Try again later.';
+
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -18,12 +19,13 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-const getCreditCardToken = (creditCardData) => {
+const getCreditCardToken = (creditCardData,amount) => {
   const card = {
     'card[number]': creditCardData.values.number.replace(/ /g, ''),
     'card[exp_month]': creditCardData.values.expiry.split('/')[0],
     'card[exp_year]': creditCardData.values.expiry.split('/')[1],
-    'card[cvc]': creditCardData.values.cvc
+    'card[cvc]': creditCardData.values.cvc,
+    
   };
   return fetch('https://api.stripe.com/v1/tokens', {
     headers: {
