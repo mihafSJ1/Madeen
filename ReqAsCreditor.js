@@ -309,7 +309,7 @@
           updatestateReject(k,props){
             
         this.setModalVisible(!this.state.modalVisible);
-          props.navigate("ReqAsCreditor");
+        props.navigate("squares");
           //   const { currentUser } = firebase.auth();
           firebase
           .database()
