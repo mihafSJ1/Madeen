@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Dimensions,Alert } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
@@ -96,7 +96,7 @@ export default class AddSubscription extends React.Component {
       })
       .then(() => Alert.alert(
         "تنبيه ",
-        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح.",
+        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
         [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
         { cancelable: false }
       ));
@@ -127,7 +127,7 @@ export default class AddSubscription extends React.Component {
     } else {
       this.setState({ submitted: false, error: null });
 
-      navigation.navigate('squares')
+      // navigation.navigate('squares')
     }
   };
   
