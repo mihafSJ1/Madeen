@@ -1,4 +1,3 @@
-
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -12,7 +11,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { withNavigation } from "react-navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -20,7 +18,7 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
-//import { withNavigation } from "react-navigation";
+import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -52,6 +50,7 @@ var submittedDate;
 var userName;
 var userid;
 var key;
+var remAmount;
 var requestArray = [];
 var usersArray = [];
 firebase
@@ -82,12 +81,13 @@ firebase
                submittedDate:child.val().submittedDate,
               userName:child.val().userName,
               userid:child.val().userid,
-               key:child.key,});
+               key:child.key,
+               remAmount: child.val().remAmount});
     });
   });
 
 var count =0;
-export default class Timeline extends React.Component {
+class Timeline extends React.Component {
 
   constructor(props) {
     super(props);
@@ -138,7 +138,8 @@ export default class Timeline extends React.Component {
                 submittedDate:child.val().submittedDate,
                userName:child.val().userName,
                userid:child.val().userid,
-                key:child.key,});
+                key:child.key,
+                remAmount: child.val().remAmount});
           }
         });
       });
@@ -205,6 +206,7 @@ export default class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rkey: item.key,
+      rAmount: item.remAmount
     });
   }
 
@@ -235,23 +237,24 @@ export default class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  updatestate(k,props){
+  // // updatestate(k,props){
+
+  //   this.setModalVisible(!this.state.modalVisible);
+  //  props.navigate("squares");
+  //   const { currentUser } = firebase.auth();
+  //   firebase
+  //   .database()
+  //   .ref('requests/' + k)
+  //   .update({
+  //     creditor:currentUser.email,
+  //     rqeuestStatus: "قيد التنفيذ",
+  //   })
+  //   .then(() => console.log('Data updated.'));
+
     
-    this.setModalVisible(!this.state.modalVisible);
-   props.navigate("squares");
-    const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' + k)
-    .update({
-      creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
-    
-   // props.navigate("Timeline");
-  }
- 
+  // //  // props.navigate("Timeline");
+  // // }
+
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
@@ -399,10 +402,10 @@ export default class Timeline extends React.Component {
                      
                       <TouchableOpacity
                       
-                      onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                        onPress={() => {
-                          this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                        // onPress={() => {
+                        //   this. conformupdate(this.state.Rkey,this.props.navigation)}}
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
@@ -822,4 +825,4 @@ const styles = StyleSheet.create({
 
   //end
 });
-//export default withNavigation(Timeline);
+export default withNavigation(Timeline);

@@ -21,6 +21,7 @@ import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
 import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
+import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
@@ -57,6 +58,28 @@ function squaresScreens() {
         component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
+           <Stack.Screen
+              name="AddSubscription"
+              component={AddSubscription}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="PayAsDebtor"
+              component={PayAsDebtor}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
     </Stack.Navigator>
   );
 }
@@ -283,17 +306,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-              <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            />
+         
               <Stack.Screen
               name="PaymentFormView"
               component={PaymentFormView}
@@ -305,6 +318,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
+           
              <Stack.Screen
               name="EditRequest"
               component={EditRequest}

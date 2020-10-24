@@ -1,23 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity ,TextInput,Button} from 'react-native';
+
 import { CreditCardInput } from 'react-native-credit-card-input';
 
 import { FontAwesome } from '@expo/vector-icons';
-/**
- * Renders the payment form and handles the credit card data
- * using the CreditCardInput component.
- */
+
 export default class PaymentFormView extends React.Component {
   constructor(props) {
     super(props);
     this.state = { cardData: { valid: false } };
+
   }
+ 
   render() {
-    const { onSubmit, submitted, error } = this.props;
+    const { onSubmit, submitted, error, amount, reqID, remAmount,type } = this.props;
     return (
-      <View>
+      <View style = {styles.background}>
         <View>
-          <CreditCardInput requiresName onChange={(cardData) => this.setState({ cardData })} 
+          <CreditCardInput  onChange={(cardData) => this.setState({ cardData })} 
    
       labelStyle = {styles.textInputTitle}
       labels= {{ number: "رقم البطاقة ", expiry: "تاريخ الانتهاء", cvc: "CVC",name:"اسم حامل البطاقة " }}
@@ -31,18 +31,25 @@ export default class PaymentFormView extends React.Component {
      
       
       inputContainerStyle = {{ borderBottomWidth: 0, borderBottomColor: "black" ,
-      flexDirection:"rtl",
    }}
-     
-          />
+      />
 
         </View>
-        <View style={styles.buttonWrapper}>
+    
+    <View style={styles.buttonWrapper}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity  style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-            
+        <TouchableOpacity
+        onPress = {()=>this.props.navigation.goBack()}
+          style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+         >
+            <Text style={styles.buttonText}> إلغاء </Text>
+        </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={ (!this.state.cardData.valid || submitted)?[styles.button, { backgroundColor: "#F0EEED" }]:[styles.button, { backgroundColor: "#CBCA9E" }]}
+         
             disabled={!this.state.cardData.valid || submitted}
-            onPress={() => onSubmit(this.state.cardData)}
+            onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount,type)}
        
           >
               <Text Text style={styles.buttonText}>
@@ -62,6 +69,18 @@ export default class PaymentFormView extends React.Component {
             </View>
           )}
         </View>
+          {error && (
+            <View style={styles.alertWrapper}>
+              <View style={styles.alertIconWrapper}>
+                <FontAwesome name="exclamation-circle" size={20} style={{ color: '#c22' }} />
+              </View>
+              <View style={styles.alertTextWrapper}>
+                <Text style={styles.alertText}>{error}</Text>
+              </View>
+            </View>
+          )}
+        {/* </View> */}
+          
       </View>
     );
   }
@@ -69,7 +88,7 @@ export default class PaymentFormView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonWrapper: {
     padding: 10,
@@ -89,7 +108,8 @@ const styles = StyleSheet.create({
   alertText: {
     color: '#c22',
     fontSize: 16,
-    fontWeight: '400'
+    fontWeight: '400',
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
   alertWrapper: {
     backgroundColor: '#ecb7b7',
@@ -108,7 +128,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 5,
     borderRadius: 15,
-    marginLeft: 60,
+    marginLeft: 10,
     bottom: 30,
     backgroundColor: "#fff",
   },
@@ -119,36 +139,30 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 25,
+    top:10,
+    marginRight: 90,
     fontSize: 30,
   },
     textInput: {
-    //   paddingLeft:30,
-  
-// marginHorizontal:10,
-//    marginLeft:30,
-//    marginRight:30,
     borderColor: "#DBDBDB",
-
     backgroundColor: "#fff",
- 
     borderRadius: 6,
     borderWidth: 1,
-    height:35,
-    
+    height:35,  
     textAlign: "right",
-  paddingRight: 10,
+    paddingRight: 10,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 12,
   },
   textInputTitle: {
- 
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 13,
     marginTop: 1,
     marginBottom: 5,
     textAlign: "right",
     color: "#404040",
- marginRight: 2.5,
+     marginRight: 2.5,
   },
+
+
 });
