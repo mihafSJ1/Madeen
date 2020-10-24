@@ -90,8 +90,8 @@ export default class PayAsCreditor extends React.Component {
       .ref('requests/' + reqID)
       .update({
         creditor:currentUser.uid,
-        creditorEmail:name,
-        creditorName: email,
+        creditorEmail:email,
+        creditorName: name,
         rqeuestStatus: "قيد التنفيذ",
       })
       .then(() => Alert.alert(
