@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Dimensions ,Alert} from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
@@ -82,7 +82,13 @@ export default class AddSubscription extends React.Component {
         creditor:currentUser.uid,
         rqeuestStatus: "قيد التنفيذ",
       })
-      .then(() => alert("dataUpdated"));
+      .then(() =>Alert.alert(
+        "تنبيه ",
+       " ","من سار بين الناس جابرًا للخواطر، أدركه الله في جوف المخاطر .تم الدفع بنجاح   ",
+        [{ text: "موافق", onPress: () => props.navigate("squares") }],
+        { cancelable: false }
+      ));
+    
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    
