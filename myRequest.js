@@ -55,27 +55,7 @@ firebase
       usersArray.push(Data);
     });
   });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
 
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
 
 const currentUser = firebase.auth();
 //this.setState({ currentUser });
@@ -164,9 +144,7 @@ export default class MyRequest extends React.Component {
   setCreditorEmail(Email) {
     this.setState({ CreditorEmail: Email });
   }
-  // setPic(picNew) {
-  //   this.setState({ pic: picNew });
-  // }
+
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
@@ -180,8 +158,7 @@ export default class MyRequest extends React.Component {
   }
   viewProfileFunction(item) {
     firebase.auth();
-    // console.log(item.userName);
-    console.log("شوفي فوق ");
+  
 
     firebase
       .database()
@@ -197,9 +174,7 @@ export default class MyRequest extends React.Component {
 
     console.log("بتنحل");
 
-    console.log("here");
 
-    console.log("here");
 
     this.setState({
       modalVisible2: true,
@@ -207,12 +182,11 @@ export default class MyRequest extends React.Component {
       UserIDImage: item.userid,
     });
     console.log("يارب١");
-    //  console.log(item.userid);
+
     console.log("يارب٢");
-    //  console.log(this.state.namef);
-    //   this.findImage(this.state.UserIDImage);
+  
   }
-  //Areej Test
+
 
   viewTimelineImageFunction(item) {
     firebase.auth();
@@ -227,18 +201,7 @@ export default class MyRequest extends React.Component {
       });
   }
 
-  // Creditor(Cid) {
-  //   firebase.auth();
 
-  //   firebase
-  //     .database()
-  //     .ref("users/" + Cid)
-  //     .on("value", (snapshot) => {
-  //       this.setCreditorName(snapshot.val().fullName);
-  //       console.log("Areej Test");
-  //      // console.log(this.state.setTimelinePic);
-  //     });
-  // }
   
 
   openModalWithItem(item) {
@@ -264,7 +227,7 @@ export default class MyRequest extends React.Component {
       });
     //  this.openModalWithItem2(item)
   }
-  //رجعيها اذا ما ضبط الحال
+ 
 
   openModalWithItem2(item) {
     console.log(item.userid);
@@ -346,24 +309,20 @@ export default class MyRequest extends React.Component {
           return (
             <View>
                 
-                {/* {console.log("هلا بالتعبانة")} */}
-                {/* {console.log(c)} */}
+        
               
-              {/* {this.openModalWithItem2(c)} */}
+           
               <TouchableOpacity
                 // margin={10}
                 style={styles.card}
                 
                 onPress={() => {
                   console.log("نداااء");
-                  // console.log(c.UserID);
+          
                   this.openModalWithItem(c);
-                  // this.openModalWithItem2(c);
-                  // this.viewProfileFunction(c);
+               
                   console.log("رغد الحلوه");
-                  //   console.log(c);
-                  //   console.log(c.userid);
-                  //  console.log(this.state.UserID);
+              
                   // this.viewProfileFunction(this.state.UserID);
                 }}
               >

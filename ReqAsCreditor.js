@@ -157,9 +157,7 @@
             this.setState({ modalVisible2: visible });
           }
 
-          // setPic(picNew) {
-          //   this.setState({ pic: picNew });
-          // }
+       
           setprofilePic(picNew) {
             this.setState({ profilePic: picNew });
           }
@@ -252,11 +250,7 @@
               .ref("users/" + item.userid)
               .on("value", (snapshot) => {
                 console.log(" الثانيه  جوا البيس");
-                // console.log(item.userid);
-                //  console.log(snapshot.val().UserImage);
-
-                // this.setName(snapshot.val().fullName),
-                // this.setEmail(snapshot.val().email),
+           
                 console.log("inside retrive");
                 this.setTimelinePic(snapshot.val().UserImage);
                 // emailf=snapshot.val().email;
@@ -331,8 +325,7 @@
             const currentUser = firebase.auth().currentUser.uid;
 
             return requestArray.map((c) => {
-                // {console.log("hiiiiiiii")}
-                // {console.log(c.creditorID)}
+              
               if (c.creditor == currentUser) {
                 
                 if (c.rqeuestStatus!="مرفوض") {
@@ -349,10 +342,9 @@
                         
                         onPress={() => {
                           console.log("نداااء");
-                          // console.log(c.UserID);
+                        
                           this.openModalWithItem(c);
-                          // this.openModalWithItem2(c);
-                          // this.viewProfileFunction(c);
+                       
                           console.log("رغد الحلوه");
                           //   console.log(c);
                           //   console.log(c.userid);
