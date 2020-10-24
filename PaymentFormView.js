@@ -2,10 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity ,TextInput,Button} from 'react-native';
 
 import { CreditCardInput } from 'react-native-credit-card-input';
-// import { withNavigation } from "react-navigation";
-import valid from "card-validator";
-import { Formik } from "formik";
-import * as yup from "yup";
+
 import { FontAwesome } from '@expo/vector-icons';
 
 export default class PaymentFormView extends React.Component {
@@ -16,7 +13,7 @@ export default class PaymentFormView extends React.Component {
   }
  
   render() {
-    const { onSubmit, submitted, error, amount, reqID } = this.props;
+    const { onSubmit, submitted, error, amount, reqID, remAmount } = this.props;
     return (
       <View style = {styles.background}>
         <View>
@@ -112,7 +109,8 @@ const styles = StyleSheet.create({
   alertText: {
     color: '#c22',
     fontSize: 16,
-    fontWeight: '400'
+    fontWeight: '400',
+    fontFamily: "Bahij_TheSansArabic-Light",
   },
   alertWrapper: {
     backgroundColor: '#ecb7b7',
@@ -143,7 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     top:10,
-    marginRight: 20,
+    marginRight: 90,
     fontSize: 30,
   },
     textInput: {
@@ -169,4 +167,3 @@ const styles = StyleSheet.create({
 
 
 });
-// export default withNavigation(PaymentFormView);

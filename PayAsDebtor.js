@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, StyleSheet,TextInput,Text,ScrollView,Dimensions } from 'react-native';
+import { View, StyleSheet,TextInput,Text,ScrollView,Dimensions,TouchableOpacity,Alert } from 'react-native';
 import { Formik } from "formik";
 import * as yup from "yup";
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
+import * as firebase from "firebase";
+import { withNavigation } from "react-navigation";
 //  import AddSubscriptionView from './AddSubscriptionView';
-const STRIPE_ERROR = 'Payment service error. Try again later.';
-const SERVER_ERROR = 'Server error. Try again later.';
+const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى';
+const SERVER_ERROR = 'الخادم غير متوفر، حاول مرة أخرى';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
 
 const getCreditCardToken = (creditCardData) => {
@@ -46,7 +47,7 @@ const subscribeUser = (creditCardToken) => {
   });
 };
 
-export default class PayAsDebtor extends React.Component {
+class PayAsDebtor extends React.Component {
   static navigationOptions = {
     title: 'Subscription page',
   };
@@ -58,8 +59,21 @@ export default class PayAsDebtor extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput, requestId, amount) => {
-      alert(requestId)
+  onSubmit = async (creditCardInput, requestId, amount, remAmount) => {
+   let reqStatus = "قيد التنفيذ"
+   let remining = (amount-remAmount)
+    if (remining == 0) {
+    reqStatus = "مكتمل"
+    }
+    firebase
+      .database()
+      .ref("requests/" + requestId)
+      .update({
+        remAmount: remining,
+        rqeuestStatus: reqStatus
+      })
+      .then(() => Alert.alert("","تم التسديد بنجاح"));
+
     const { navigation } = this.props;
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
@@ -86,7 +100,7 @@ export default class PayAsDebtor extends React.Component {
       this.setState({ submitted: false, error: SERVER_ERROR });
     } else {
       this.setState({ submitted: false, error: null });
-      navigation.navigate('squares')
+      navigation.navigate('myRequest')
     }
   };
 
@@ -103,7 +117,7 @@ export default class PayAsDebtor extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
-
+    const {type} = this.props.route.params;
     return (
 <View style={styles.container}>
 <LinearGradient
@@ -138,18 +152,16 @@ export default class PayAsDebtor extends React.Component {
      </View>
      <View style={styles.textWrapper}>
             <Text style={styles.title}>
-            <Text style={{fontFamily: "Bahij_TheSansArabic-Light",    color: "#404040",}}>المبلغ المستحق | </Text> 
+            <Text style={{fontFamily: "Bahij_TheSansArabic-Light",  color: "#404040",}}>المبلغ المستحق | </Text> 
             {amount} ريال سعودي
             </Text>
           </View>
      <View style={styles.formStyle}>
-        <Text style={styles.textInputTitle}>
-            المبلغ المراد سداده <Text style={styles.textError}> *</Text>
-        </Text>
+      
         <Formik
             validationSchema={this.payAsDebtorSchema}
             initialValues={{
-            price: 0,
+             price: 0,
             }}
             onReset={(values, { resetForm }) => {}}
             onSubmit={(values, action) => {
@@ -159,6 +171,12 @@ export default class PayAsDebtor extends React.Component {
         >      
          {(formprops, setFieldValue) => (
              <View style = {styles.formContainer}>
+            {type != "السداد دفعة واحدة" ?(
+
+              <View>
+              <Text style={styles.textInputTitle}>
+            المبلغ المراد سداده <Text style={styles.textError}> *</Text>
+             </Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="المبلغ"
@@ -166,12 +184,11 @@ export default class PayAsDebtor extends React.Component {
                 onChangeText={formprops.handleChange("price")}
                 keyboardType="numeric"
                 onBlur={formprops.handleBlur("price")}
-
+        
             />
             <Text style={styles.textError}>
             {formprops.touched.price && formprops.errors.price}
           </Text>
-          
           {formprops.values.price != 0 && formprops.values.price <= parseInt(amount) ? ( 
                 <View style={styles.cardFormWrapper}>
                 <PaymentFormView   
@@ -179,11 +196,32 @@ export default class PayAsDebtor extends React.Component {
                    submitted={submitted}
                    onSubmit={this.onSubmit}
                    amount = {amount}
-                   reqID= {reqID}/>
+                   reqID= {reqID}
+                   remAmount = {formprops.values.price}
+                   navigation = {this.props.navigation}/>
                 </View>
               ) :  <Text style={[styles.textError, {top:-10}]}>
               المبلغ المدخل لا بد أن يكون أقل من أو يساوي المبلغ المستحق 
-          </Text>} 
+          </Text>}
+          </View>
+          )
+             :   <View style={styles.cardFormWrapper}>  
+             <PaymentFormView   
+                    error={error}
+                    submitted={submitted}
+                    onSubmit={this.onSubmit}
+                    amount = {amount}
+                    reqID= {reqID}
+                    remAmount = {formprops.values.price}
+                    navigation = {this.props.navigation}/></View>
+         }
+         
+          <TouchableOpacity
+        onPress = {()=>   this.props.navigation.navigate("myRequest")}
+          style={[styles.button, { backgroundColor: "#D4CEC9", left:120, top:200 }]}
+         >
+            <Text style={styles.buttonText}> إلغاء </Text>
+        </TouchableOpacity> 
           </View>
         
          )}
@@ -231,7 +269,7 @@ top:0,
   },
   background: {
     flex: 1,
-    top: 100,
+    top: 120,
     height: 700,
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
@@ -247,10 +285,11 @@ top:0,
   cardFormWrapper: {
     padding: 10,
     margin: 10,
+
   },
   header: {
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize:30,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize:30, 
     marginTop: 1,
     marginBottom: 5,
     textAlign: "center",
@@ -284,4 +323,28 @@ top:0,
     bottom: 10,
   },
 
+  button: {
+    alignItems: "center",
+    width: 170,
+    height: 30,
+    marginTop: 50,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    bottom: 30,
+    backgroundColor: "#fff",
+  },
+  buttonText: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    top:10,
+    marginRight: 90,
+    fontSize: 30,
+  },
 });
+
+export default withNavigation(PayAsDebtor);

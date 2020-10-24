@@ -1601,15 +1601,15 @@
     query-string "^6.13.1"
     react-is "^16.13.0"
 
-"@react-navigation/core@^5.12.3":
-  version "5.12.3"
-  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.12.3.tgz#0484fcca290569a0dc10b70b99f00edd3f1fd93c"
-  integrity sha512-aEOTAw4FRRNsNu6F9ibLk3SVSs4Res8BI832NEZN6qUto5ZgtuYnQHWeWV2cZ43Nc9KvUyQC/vXvO2RScwgFwA==
+"@react-navigation/core@^5.12.5":
+  version "5.12.5"
+  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.12.5.tgz#434a34893368de1c9daca9508fdd7be94d1ec642"
+  integrity sha512-+QdQDtC75K1sBfACwCUNFlrCOYf36GYGr9YURHugm3LDEHUwAj7HPJA8FFLw1Rmp5N/P5q9Uct2B/XxJhYzKqA==
   dependencies:
-    "@react-navigation/routers" "^5.4.11"
+    "@react-navigation/routers" "^5.4.12"
     escape-string-regexp "^4.0.0"
     nanoid "^3.1.12"
-    query-string "^6.13.1"
+    query-string "^6.13.5"
     react-is "^16.13.0"
     use-subscription "^1.4.0"
 
@@ -1621,18 +1621,18 @@
     hoist-non-react-statics "^3.3.2"
     react-native-safe-area-view "^0.14.9"
 
-"@react-navigation/native@^5.7.3":
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-5.7.3.tgz#3cda5ee7b0fe0d980db6d788419f0af50a64deac"
-  integrity sha512-bXb1g/cLpGF2DW1Vxk90Ch5vbaZTk5b/4Fn5xjQlueQODgc9ca+GPEssKZ84hCrNmS+Xg+iK1m/ArawLF5gMlw==
+"@react-navigation/native@^5.7.6":
+  version "5.7.6"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-5.7.6.tgz#47546c512488d0e9c343219af635e1a44881761d"
+  integrity sha512-u+o9Ifs4//Ah6UczXiaAV+hiWPL0NyTbErj5WayeQUd6K5IIbA1UwumRVWs2Xp8q/4Q9h6FpPHUcKOyiTxhaqA==
   dependencies:
-    "@react-navigation/core" "^5.12.3"
+    "@react-navigation/core" "^5.12.5"
     nanoid "^3.1.12"
 
-"@react-navigation/routers@^5.4.11":
-  version "5.4.11"
-  resolved "https://registry.yarnpkg.com/@react-navigation/routers/-/routers-5.4.11.tgz#75dbec1809e282c3749068845099c5bee2c792f0"
-  integrity sha512-J/CsHdIjYBRe81UUiLOoz9NSrQ91uP23Oe21QPCALInRHx+rfwo2oPl6Fn8xAa7n8Dtt2oQUGyF+g5d05cB74w==
+"@react-navigation/routers@^5.4.12":
+  version "5.4.12"
+  resolved "https://registry.yarnpkg.com/@react-navigation/routers/-/routers-5.4.12.tgz#5c3690650c94be3a54b617a1c07510d2f604c03f"
+  integrity sha512-IwMmxeb5e6LboljhakmhtrHBXLYFrFDr2c1GjAG538e4MjT4QGi/ZYckAxCh/NqKI0knnzqKppPl2NsOMv/NoQ==
   dependencies:
     nanoid "^3.1.12"
 
@@ -2285,6 +2285,14 @@ capture-exit@^2.0.0:
   dependencies:
     rsvp "^4.8.4"
 
+card-validator@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/card-validator/-/card-validator-3.0.1.tgz#dcc2fabd6a1cd21f361b2536423a72de99a0894f"
+  integrity sha1-3ML6vWoc0h82GyU2Qjpy3pmgiU8=
+  dependencies:
+    credit-card-type "^5.0.0"
+    lodash "3.10.1"
+
 chalk@^2.0.0, chalk@^2.0.1, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
@@ -2573,6 +2581,11 @@ create-react-class@^15.6.2, create-react-class@^15.6.3:
     fbjs "^0.8.9"
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
+
+credit-card-type@^5.0.0:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-5.0.4.tgz#2dd9df280411ce2bb91ed95ac31e814605717aed"
+  integrity sha1-LdnfKAQRziu5Htlawx6BRgVxeu0=
 
 cross-spawn@^5.1.0:
   version "5.1.0"
@@ -4338,6 +4351,16 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
 
+lodash.compact@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.compact/-/lodash.compact-3.0.1.tgz#540ce3837745975807471e16b4a2ba21e7256ca5"
+  integrity sha1-VAzjg3dFl1gHRx4WtKK6IeclbKU=
+
+lodash.every@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.every/-/lodash.every-4.6.0.tgz#eb89984bebc4364279bb3aefbbd1ca19bfa6c6a7"
+  integrity sha1-64mYS+vENkJ5uzrvu9HKGb+mxqc=
+
 lodash.frompairs@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.frompairs/-/lodash.frompairs-4.0.1.tgz#bc4e5207fa2757c136e573614e9664506b2b1bd2"
@@ -4382,6 +4405,16 @@ lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
+
+lodash.values@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/lodash.values/-/lodash.values-4.3.0.tgz#a3a6c2b0ebecc5c2cba1c17e6e620fe81b53d347"
+  integrity sha1-o6bCsOvsxcLLocF+bmIP6BtT00c=
+
+lodash@3.10.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
+  integrity sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=
 
 lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.6.0:
   version "4.17.20"
@@ -5390,6 +5423,15 @@ query-string@^6.13.1:
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
 
+query-string@^6.13.5:
+  version "6.13.6"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.6.tgz#e5ac7c74f2a5da43fbca0b883b4f0bafba439966"
+  integrity sha512-/WWZ7d9na6s2wMEGdVCVgKWE9Rt7nYyNIf7k8xmHXcesPMlEzicWo3lbYwHyA4wBktI2KrXxxZeACLbE84hvSQ==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
 querystringify@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
@@ -5477,6 +5519,19 @@ react-native-check-box@^2.1.7:
   dependencies:
     prop-types "^15.5.7"
 
+react-native-credit-card-input@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-credit-card-input/-/react-native-credit-card-input-0.4.1.tgz#e62dd1a9beeab6787e5373ba23b93831cbf5f3de"
+  integrity sha1-5i3Rqb7qtnh+U3O6I7k4Mcv1894=
+  dependencies:
+    card-validator "^3.0.0"
+    lodash.compact "^3.0.1"
+    lodash.every "^4.6.0"
+    lodash.pick "^4.4.0"
+    lodash.values "^4.3.0"
+    prop-types "^15.6.0"
+    react-native-flip-card "^3.4.1"
+
 react-native-curved-bottom-tabbar@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/react-native-curved-bottom-tabbar/-/react-native-curved-bottom-tabbar-0.0.3.tgz#2c07c16237858355832f0e0e7892055668c845cc"
@@ -5517,6 +5572,13 @@ react-native-elements@^2.3.2:
     react-native-ratings "^7.2.0"
     react-native-status-bar-height "^2.5.0"
 
+react-native-flip-card@^3.4.1:
+  version "3.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-flip-card/-/react-native-flip-card-3.5.6.tgz#de26f0285aa6f8ee10bb4b696c60c6fb43bb580f"
+  integrity sha512-lqsjl4vF5DyHD7mjBJpyBoaLKVxalzoKfCosE63QF+TaCF9MKdJrxmGFQj/i64GDiMJqeS/5sNDcICUXtgFsVA==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-gesture-handler@~1.6.0:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
@@ -5549,6 +5611,11 @@ react-native-keyboard-aware-scroll-view-fix@^0.7.5:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+react-native-keyboard-spacer@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.4.1.tgz#46f18a320432098a25ea9fa89f5143dd254d332d"
+  integrity sha1-RvGKMgQyCYol6p+on1FD3SVNMy0=
 
 react-native-material-buttons@^0.5.0:
   version "0.5.0"
@@ -5604,6 +5671,11 @@ react-native-paper@^4.2.0:
     "@callstack/react-theme-provider" "^3.0.5"
     color "^3.1.2"
     react-native-safe-area-view "^0.14.9"
+
+react-native-paypal@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-paypal/-/react-native-paypal-2.2.0.tgz#7571ec8ff5fd4c8bbb477b600ad01fc45316beae"
+  integrity sha512-PM2oQl3e77Bmre9tWE3L2KVCVhC3AReU0MD1q8Xh/GEpZBRnM4Xjf0ZfDsiSfUYvRCTiUhydLVht5kxHcqm2Pw==
 
 react-native-picker-select@^8.0.0:
   version "8.0.0"
@@ -5671,6 +5743,13 @@ react-native-svg@^12.1.0:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-textinput-multiline@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-textinput-multiline/-/react-native-textinput-multiline-1.0.4.tgz#4493aa5028cee47ddec086c3883b1fa8ff0c3ac6"
+  integrity sha512-EpuEZDY4x/MGBzQbsOiJP7bmdHwFe4F9N/XHidXHCevHqAg+4fM2B2tPJoVTy6UnUePI9IGOQQFGPL3Cgj7aeQ==
+  dependencies:
+    invariant "^2.2.4"
 
 react-native-unimodules@^0.10.1:
   version "0.10.1"
@@ -5838,6 +5917,13 @@ readable-stream@^2.0.1, readable-stream@^2.2.2, readable-stream@~2.3.6:
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
+
+reassemble@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/reassemble/-/reassemble-0.5.6.tgz#0162c769ff3d5a25a15c6296b0c4653c0014d8e0"
+  integrity sha1-AWLHaf89WiWhXGKWsMRlPAAU2OA=
+  dependencies:
+    fbjs "^0.8.9"
 
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"

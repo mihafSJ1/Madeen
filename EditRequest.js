@@ -5,6 +5,7 @@ import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
 import { AntDesign } from "@expo/vector-icons";
+//import { compose, withHandlers, shallowEqual } from "recompose";
 import {
   StyleSheet,
   Text,
@@ -85,6 +86,7 @@ const installmentsArray = [
     durationValueArr: "",
     installmentsTypeArr: "يوميًا",
   },
+  
 ];
 var rid;
 var year,
@@ -104,9 +106,28 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 const maximumDate =  new Date(today);
 maximumDate.setDate(maximumDate.getDate() + 1825);
 // to get the maximum date for datePicker 
-
+var keyC ;
+var Cname;
 var userNameFromDB = "";
-
+var creditorR;
+           var expectedDateR;
+           var installemntPriceR;
+           var installmentsTypeR;
+           var priceR;
+           var reasonR;
+           var repaymentTypeR;
+           var rqeuestStatusR;
+           var submittedDateR;
+           var userNameR;
+           var useridR;
+           var check;
+            var num;
+            var index1;
+            var installemntPriceR;
+           var installemntDurationR;
+           var creditorEmailR;
+           var creditorNameR;
+          
 class EditRequest extends React.Component {
  
   
@@ -200,7 +221,7 @@ class EditRequest extends React.Component {
           " يوم";
         installmentsArray[3].priceValueArr = dailyPrice;
         installmentsArray[3].durationValueArr = dateDiffDays;
-        installmentsArray[3].installmentsTypeArr = "أسبوعيًا";
+        installmentsArray[3].installmentsTypeArr = "يوميًا";
       }
     }
     for (var i = 0, j = 0; i < installmentsArray.length; i++) {
@@ -240,12 +261,49 @@ class EditRequest extends React.Component {
   }
 //read req to view info
 //update not push
+bringid(k){
+  console.log("bring");
+  firebase
+  .database()
+  .ref("users/")
+  .on("value", (snapshot) => {
+    snapshot.forEach((child) => {
+      if (child.val().email == k) {
+        console.log("return")
+        keyC= child.key;
+        Cname=child.val().fullName;
+  
+}
+});
+});
+}
   onSubmitPress(values, props) {
+ if(creditorR==values.user){
+   
+    if(priceR==values.price)
+    if(expectedDateR==values.expectedDate)
+    if(repaymentTypeR==values.repaymentType)
+    
+    if(installemntDurationR==this.state.durationState)
+ if(reasonR==values.reason)
+     {
+      Alert.alert(
+        "تنبيه ",
+        "لا يوجد تعديلات جديدة",
+        [{ text: "موافق", onPress: () =>  props.navigate("myRequest")}],
+        { cancelable: false }
+      );
+    }}
+else{
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
+      keyC = "";
+      Cname="";
     }
-
+    else{
+      this.bringid(values.user);
+    }
     firebase
       .database()
       .ref("users/" + currentUser.uid)
@@ -269,7 +327,9 @@ class EditRequest extends React.Component {
           installemntPrice: this.state.priceState,
           installemntDuration: this.state.durationState,
           installmentsType: this.state.installmentsState,
-          creditor: values.user,
+          creditor: keyC,
+          creditorName:Cname,
+          creditorEmail:values.user,
         },
         function (error) {
           if (error) {
@@ -284,7 +344,8 @@ class EditRequest extends React.Component {
           }
         }
       );
-  }
+      }
+}
 
   requestSchema = yup.object({
     price: yup
@@ -321,19 +382,7 @@ class EditRequest extends React.Component {
   render() {
     const { itemId} = this.props.route.params;
     rid=itemId;
-           var creditorR;
-           var expectedDateR;
-           var installemntPriceR;
-           var installmentsTypeR;
-           var priceR;
-           var reasonR;
-           var repaymentTypeR;
-           var rqeuestStatusR;
-           var submittedDateR;
-           var userNameR;
-           var useridR;
-           var check;
-            var rquestobj;
+           
           
            console.log("id"+itemId);
     
@@ -344,28 +393,68 @@ class EditRequest extends React.Component {
       
        
           creditorR=snapshot.val().creditor,
+          creditorEmailR=snapshot.val(). creditorEmail,
+          creditorNameR=snapshot.val(). creditorName,
           console.log(creditorR);
           expectedDateR=snapshot.val().expectedDate,
           console.log("done");
-          installemntPriceR=snapshot.val().installemntPrice,
-          
+         
+          installemntDurationR=snapshot.val().installemntDuration;
            installmentsTypeR=snapshot.val().installmentsType,
+           console.log("installmentsTypeR"+installmentsTypeR);
+           installemntPriceR=snapshot.val().installemntPrice,
+           console.log("installemntPriceR"+installemntPriceR);
            priceR=snapshot.val().price,
           reasonR=snapshot.val().reason,
            repaymentTypeR=snapshot.val().repaymentType,
-         rqeuestStatusR=snapshot.val().rqeuestStatus,
+           rqeuestStatusR=snapshot.val().rqeuestStatus,
            submittedDateR=snapshot.val().submittedDate,
-          userNameR=snapshot.val().userName,
+           userNameR=snapshot.val().userName,
           useridR=snapshot.val().userid
+
           if(creditorR!="")
           check= true;
           else{
             check= false;
           }
-    
-   
-             
-      
+        if(repaymentTypeR=="السداد دفعة واحدة")
+         num=1;
+         else{ 
+           num=2;
+         }
+         if(creditorR!="")
+          check= true;
+          else{
+            check= false;
+          }
+        if(repaymentTypeR=="السداد دفعة واحدة")
+         num=1;
+         else{ 
+           num=2;
+         }
+          
+          this.repayementInstallments(priceR,expectedDateR);
+          console.log("lenght"+installmentsDropDownArray.length);
+         for(var i = 0, j = 0; i < installmentsDropDownArray.length; i++){
+           if(installmentsDropDownArray[i]==installmentsTypeR){
+           index1=i;
+         break;}
+         index1=0;
+
+         }
+        //    if( installmentsTypeR==installmentsDropDownArray[0].installmentsTypeArr) {
+        //     console.log("helllooooo");
+        //     index1=0;
+        //    }  
+        // if( installmentsTypeR==installmentsDropDownArray[1].installmentsTypeArr) {
+        //     index1=1;
+        //   }   if( installmentsTypeR==installmentsDropDownArray[2].installmentsTypeArr) {
+        //     index1=2;
+        //   }  if( installmentsTypeR==installmentsDropDownArray[3].installmentsTypeArr) {
+        //     index1=3;
+        //   }    
+       
+        //   console.log("hhhhhh"+index1);
       });
     return (
       <View style={styles.container}>
@@ -392,8 +481,9 @@ class EditRequest extends React.Component {
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
-                installmentRepayment: creditorR,
-                user:creditorR ,
+                installmentRepayment:"",
+                user: creditorEmailR ,
+
                 usersSelect: check,
                 price: priceR,
                 expectedDate: expectedDateR,
@@ -404,10 +494,9 @@ class EditRequest extends React.Component {
               }}
               onReset={(values, { resetForm }) => {}}
               onSubmit={(values, action) => {
-                //action.resetForm();
-
-                this.onSubmitPress(values, this.props.navigation);
-              }}
+                this.onSubmitPress(values, this.props.navigation);}
+                
+              }
             >
               {(formprops, setFieldValue) => (
                 <View style={styles.requestContainer}>
@@ -465,7 +554,7 @@ class EditRequest extends React.Component {
                     searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
                       style={styles.DropDownPicker}
                       items={applicationUsers}
-                      placeholder= {creditorR}
+                      placeholder= {creditorEmailR}
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={formprops.values.user}
                       containerStyle={{
@@ -625,7 +714,7 @@ class EditRequest extends React.Component {
                   </Text>
                   <View style={styles.radio}>
                     <RadioButtonRN
-                      initial={1}
+                      initial={num}
                       data={data}
                       box={false}
                       circleSize={10}
@@ -684,7 +773,8 @@ class EditRequest extends React.Component {
                         لطفًا التاريخ  لا يكون  ضمن الآربع وعشرون ساعة القادمة   
                         </Text>
                       )}
-                      placeholder="إختر الفترة"
+                     
+                      placeholder={num==1? "اختر الفترة":installmentsDropDownArray[index1].label}
                       placeholderStyle={{ color: "#CBCBCC" }}
                       value={formprops.values.user}
                       containerStyle={{

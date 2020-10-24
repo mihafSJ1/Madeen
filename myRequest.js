@@ -127,19 +127,22 @@ export default class MyRequest extends React.Component {
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
           if (true) {
-            requestArray.push({
+            requestArray.push({         
               creditor:child.val().creditor,
-               expectedDate:child.val().expectedDate,
-               installemntPrice:child.val().installemntPrice,
-                installmentsType:child.val().installmentsType,
-                price:child.val().price,
-               reason:child.val().reason,
-                repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
-               userName:child.val().userName,
-               userid:child.val().userid,
-                key:child.key,});
+              expectedDate:child.val().expectedDate,
+              installemntDuration: child.val().installemntDuration,
+              installemntPrice:child.val().installemntPrice,
+               installmentsType:child.val().installmentsType,
+               price:child.val().price,
+              reason:child.val().reason,
+               repaymentType:child.val().repaymentType,
+             rqeuestStatus:child.val().rqeuestStatus,
+               submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+               key:child.key,
+               remAmount: child.val().remAmount });
+            
           }
         });
       });
@@ -241,15 +244,12 @@ export default class MyRequest extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
-      Rkey: item.key,
       CreditorID: item.creditor,
-      RemAmount: item.remAmount
-      
-    });
-
+      RemAmount: item.remAmount,
+      Rkey: item.key,
+      });
     //  this.openModalWithItem2(item)
   }
-
   //رجعيها اذا ما ضبط الحال
 
   openModalWithItem2(item) {
@@ -332,8 +332,8 @@ export default class MyRequest extends React.Component {
           return (
             <View>
                 
-                {console.log("هلا بالتعبانة")}
-                {console.log(c)}
+                {/* {console.log("هلا بالتعبانة")} */}
+                {/* {console.log(c)} */}
               
               {/* {this.openModalWithItem2(c)} */}
               <TouchableOpacity
@@ -353,8 +353,8 @@ export default class MyRequest extends React.Component {
                   // this.viewProfileFunction(this.state.UserID);
                 }}
               >
-                 {console.log("here2")}
-                 {console.log(c.userName)}
+                 {/* {console.log("here2")}
+                 {console.log(c.userName)} */}
                 <View style={styles.leftItems}>
                   <Ionicons
                     name="ios-arrow-back"
@@ -407,7 +407,7 @@ export default class MyRequest extends React.Component {
                      )}
                 
                     
-                {console.log("here3")}
+                {/* {console.log("here3")} */}
                 
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
@@ -452,7 +452,7 @@ export default class MyRequest extends React.Component {
                   {/* </TouchableOpacity> */}
                 </View>
               </TouchableOpacity>
-              {console.log("here4")}
+              {/* {console.log("here4")} */}
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -640,6 +640,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
 <TouchableOpacity
+onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.state.RemAmount, reqID: this.state.Rkey,type:this.state.Type}),this.setModalVisible(!this.state.modalVisible)}}
     style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
   >
     <Text style={styles.PaybuttonText}> دفع </Text>
@@ -763,7 +764,7 @@ export default class MyRequest extends React.Component {
   };
 
   render() {
-    console.log;
+
     return (
       <View style={styles.container}>
           

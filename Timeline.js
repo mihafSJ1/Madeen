@@ -237,22 +237,23 @@ class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  // updatestate(k,props){
-    
+  // // updatestate(k,props){
+
   //   this.setModalVisible(!this.state.modalVisible);
-  //   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey});
+  //  props.navigate("squares");
   //   const { currentUser } = firebase.auth();
   //   firebase
   //   .database()
   //   .ref('requests/' + k)
   //   .update({
-  //     creditor:currentUser.uid,
+  //     creditor:currentUser.email,
   //     rqeuestStatus: "قيد التنفيذ",
   //   })
   //   .then(() => console.log('Data updated.'));
+
     
-  //  // props.navigate("Timeline");
-  // }
+  // //  // props.navigate("Timeline");
+  // // }
 
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
