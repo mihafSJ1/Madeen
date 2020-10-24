@@ -372,7 +372,7 @@ export default class MyRequest extends React.Component {
 
 {c.rqeuestStatus== "مرفوض" ? (
                   <View style={styles.RejectRectangleShapeView}> 
-                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+                    <Text style={styles.status3}> {c.rqeuestStatus} </Text>
               </View>
 ):(
                       null
@@ -481,7 +481,7 @@ export default class MyRequest extends React.Component {
                     
                     {this.state.Rstatus== "قيد التنفيذ" ? (
                   <View style={styles.ProRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -490,7 +490,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "قيد الإنتظار" ? (
                   <View style={styles.WRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -500,7 +500,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "مكتمل" ? (
                   <View style={styles.CRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -509,7 +509,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "مرفوض" ? (
                   <View style={styles.RRectangleShapeView}> 
-                    <Text style={styles.status3}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInsideReject}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -963,9 +963,9 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
         <View style={styles.GreenRectangleShapeView}>
                 
               </View>
-              
+              <View style={styles.ViewList}>
         <ScrollView>{this.list()}</ScrollView>
-
+        </View>
         {/*View request */}
       </View>
     );
@@ -991,6 +991,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  ViewList:{
+marginBottom:150,
+
   },
   card: {
       top:0,
@@ -1315,7 +1320,7 @@ waitContent:{
     marginLeft: 0,
     marginBottom: 0,
     right: 0,
-    top: -140,
+    top: -130,
     backgroundColor: "#EAF4E1",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1340,7 +1345,7 @@ waitContent:{
     marginBottom: 0,
     right: 0,
     left:88,
-    top: -51,
+    top: -41,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1413,9 +1418,33 @@ waitContent:{
     fontSize: 15,
     color: "#404040",
   },
+
+  statusInside:{
+    textAlign: "right",
+   left:160,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInside2:{
+    textAlign: "right",
+   left:150,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInsideReject:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+    left:160,
+  },
+
   ProRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1430,7 +1459,7 @@ waitContent:{
 
   WRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1445,7 +1474,7 @@ waitContent:{
 
   RRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1460,7 +1489,7 @@ waitContent:{
 
   CRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1488,7 +1517,7 @@ backgroundColor:'red',
     marginBottom: 0,
     right: 0,
     left:-90,
-    top: -78,
+    top: -68,
     backgroundColor: "#EAF4E1",
     borderColor: "#EAF4E1",
     borderWidth: 1,
@@ -1498,7 +1527,7 @@ backgroundColor:'red',
   },
   buttonTextNav:{
     textAlign: "center",
-    top: -107,
+    top: -97,
     right: 90,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
@@ -1512,7 +1541,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -23,
+    top: -13,
     left: 92,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
