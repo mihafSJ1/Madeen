@@ -1,0 +1,27 @@
+{
+  "name": "madeen",
+  "version": "1.0.0",
+  "main": "AddSubscriptionScreen.js",
+  "dependencies": {
+    "card-validator": "^8.1.0",
+    "expo": "^39.0.3",
+    "react-credit-card-input": "^1.1.5",
+    "react-native-credit-card-display": "^0.2.1",
+    "styled-components": "^5.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mihafSJ1/Madeen.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mihafSJ1/Madeen/issues"
+  },
+  "homepage": "https://github.com/mihafSJ1/Madeen#readme",
+  "description": ""
+}
