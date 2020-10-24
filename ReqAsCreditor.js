@@ -313,7 +313,7 @@ export default class ReqAsCreditor extends React.Component {
   updatestateReject(k,props){
     
  this.setModalVisible(!this.state.modalVisible);
-  props.navigate("squares");
+  props.navigate("ReqAsCreditor");
   //   const { currentUser } = firebase.auth();
   firebase
   .database()
@@ -1236,7 +1236,7 @@ backgroundColor:'red',
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 100,
+    left: 95,
     top: 0,
     zIndex: 2,
     width: 160,
