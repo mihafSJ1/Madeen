@@ -846,15 +846,29 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         size={24}
                         color="#746356"
                       />
+            
+                      
                     </TouchableOpacity>
-                    <Image
+                    {this.state.CreditorName=""? ( 
+                      <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
+      
+ ): null }
                     
-                    <Text style={styles.UserName}>{this.state.CreditorName}</Text>
-                    <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+                    {this.state.CreditorName=""? ( 
+                                         <Text style={styles.UserName}>{this.state.CreditorName}</Text>
 
+      
+ ): null }
+          {this.state.CreditorName=""? ( 
+                          <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+
+ ): null }
+                    {this.state.CreditorName=""? ( 
+      
+     
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -887,25 +901,46 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                    
+                     ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.subsidy}> عدد التسليف </Text>
 
-                    <Text style={styles.subsidy}> عدد التسليف </Text>
-                    <Text style={styles.debts}> عدد الاستلاف </Text>
-                    <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
-                    </View>
-                    <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.debts}> عدد الاستلاف </Text>
 
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.PinkRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+      </View>
+
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.YellowRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+      </View>
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+       <View style={styles.buttonContainer}>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+     </View>
+      ): null }
+                 {this.state.CreditorName=""? ( 
+null
+      ): 
+      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
+    }    
+             
+
+                   
                   </View>
                 </View>
               </Modal>
@@ -1261,6 +1296,18 @@ waitContent:{
     justifyContent: "center",
     color: "#746356",
   },
+  noUser: {
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize: 28,
+    margin: 20,
+    marginBottom: 40,
+    bottom: -125,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+  
   PinkRectangleShapeView: {
     width: 120,
     height: 70,
