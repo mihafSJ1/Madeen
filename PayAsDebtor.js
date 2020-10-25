@@ -66,10 +66,10 @@ class PayAsDebtor extends React.Component {
    let reqStatus = "قيد التنفيذ"
    let remining = 0
    if (type=="السداد دفعة واحدة"){
-    remining = (amount-amount)
+    remining = (amount-amount).toFixed(2)
    }
    if (type=="السداد بالتقسيط"){
-  remining = (amount-remAmount)
+    remining = (amount-remAmount).toFixed(2)
    }
     if (remining == 0) {
     reqStatus = "مكتمل"
