@@ -319,7 +319,7 @@
             rqeuestStatus: "مرفوض",
           })
           .then(() => console.log('Data updated.'));
-          props.navigate("ReqAsCreditorP")
+          props.navigate("squares")
           
           }
 
