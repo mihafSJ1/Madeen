@@ -372,6 +372,28 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
+              <Stack.Screen
+              name="AddSubscription"
+              component={AddSubscription}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="PayAsDebtor"
+              component={PayAsDebtor}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
           </>
         )}
       </Stack.Navigator>

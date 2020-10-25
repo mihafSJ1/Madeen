@@ -97,7 +97,7 @@ export default class AddSubscription extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
-        [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
         { cancelable: false }
       ));
     // Disable the Submit button after the request is sent
