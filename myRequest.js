@@ -87,8 +87,9 @@ firebase
 export default class MyRequest extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
-
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     modalVisible: false,
     modalVisible2: false,
     CreditorName:"",
@@ -98,7 +99,7 @@ export default class MyRequest extends React.Component {
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
-
+  }
   componentDidMount() {
     requestArray=[]
     const { currentUser } = firebase.auth();
@@ -268,12 +269,12 @@ export default class MyRequest extends React.Component {
     });
 
   }}
-  conformRemove(k,Rstatus){
+  conformRemove(k,Rstatus,props){
     if(Rstatus== "قيد الإنتظار"){
     Alert.alert(
       "تنبيه ",
       "هل تريد حذف الطلب ",
-      [{ text: "نعم", onPress: () => this.Remove(k) },
+      [{ text: "نعم", onPress: () => this.Remove(k,props) },
       {
         text: 'لا',
         // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
@@ -292,13 +293,15 @@ export default class MyRequest extends React.Component {
     );
   }
 }
-  Remove(k){
+
+  Remove(k,props){
+    this.setModalVisible(!this.state.modalVisible);
     firebase
     .database()
    .ref('requests/' + k).remove()
-   this.props.navigation.navigate("squares");
-
-   this.setModalVisible(!this.state.modalVisible);
+  
+ 
+   props.navigate("myRequestP")
   }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
@@ -794,7 +797,7 @@ export default class MyRequest extends React.Component {
                 {this.state.Rstatus== "قيد الإنتظار" ? (    
                     <TouchableOpacity
                          style={[styles.dbutton, { backgroundColor: "#BE4F4F" }]}
-                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}><Text style={styles.buttonTextDelete}> حذف </Text>
+                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus,this.props.navigation)}><Text style={styles.buttonTextDelete}> حذف </Text>
                          </TouchableOpacity>):(null)}
 
 
