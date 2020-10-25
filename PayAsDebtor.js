@@ -84,7 +84,7 @@ class PayAsDebtor extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "تم التسديد بنجاح   ",
-        [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
+        [{ text: "موافق", onPress: () => this.props.navigation.goBack() }],
         { cancelable: false }
       ));
 
@@ -126,7 +126,6 @@ class PayAsDebtor extends React.Component {
       .number()
       .typeError("المبلغ لا بد أن يكون بأرقام إنجليزية")
       .required("المبلغ مطلوب")
-      // .integer("المبلغ لا بد أن  يكون عدد صحيح")
   });
   
   // render the subscription view component and pass the props to it
@@ -206,7 +205,7 @@ class PayAsDebtor extends React.Component {
             <Text style={styles.textError}>
             {formprops.touched.price && formprops.errors.price}
           </Text>
-          {formprops.values.price != 0 && formprops.values.price <= parseInt(amount) ? ( 
+          {formprops.values.price != 0 && formprops.values.price <= parseFloat(amount) ? ( 
                 <View style={styles.cardFormWrapper}>
                 <PaymentFormView   
                    error={error}
