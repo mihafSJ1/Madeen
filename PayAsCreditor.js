@@ -96,8 +96,16 @@ export default class PayAsCreditor extends React.Component {
       })
       .then(() => Alert.alert(
         "تنبيه ",
+<<<<<<< HEAD:PayAsCreditor.js
         "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح ",
         [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
+||||||| merged common ancestors:AddSubscriptionScreen.js
+        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع  بنجاح.",
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("squares") }],
+=======
+        "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
+>>>>>>> aadc8e5e091123f54f053c341d53a9a415291323:AddSubscriptionScreen.js
         { cancelable: false }
       ));
     
@@ -128,7 +136,7 @@ export default class PayAsCreditor extends React.Component {
     } else {
       this.setState({ submitted: false, error: null });
 
-      navigation.navigate('squares')
+      // navigation.navigate('squares')
     }
   };
   

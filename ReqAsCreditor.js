@@ -309,7 +309,7 @@
           updatestateReject(k,props){
             
         this.setModalVisible(!this.state.modalVisible);
-        props.navigate("squares");
+       // props.navigate("squares");
           //   const { currentUser } = firebase.auth();
           firebase
           .database()
@@ -319,7 +319,7 @@
             rqeuestStatus: "مرفوض",
           })
           .then(() => console.log('Data updated.'));
-            
+          props.navigate("squares")
           
           }
 
@@ -779,7 +779,7 @@
                 {/* -------------------------------------- CARD 1*/}
           
 
-                <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
+                <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequestP")}> مدين </Text>
                 <View style={styles.WhiteRectangleShapeView}> 
                       </View>
             
@@ -792,7 +792,7 @@
                       
 
                       <Text style={styles.buttonTextNav}
-                  onPress={() => this.props.navigation.navigate("ReqAsCreditor")}
+                  onPress={() => this.props.navigation.navigate("ReqAsCreditorP")}
                       > دائن </Text>
                     
                 <View style={styles.GreenRectangleShapeView}>

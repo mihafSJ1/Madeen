@@ -87,8 +87,9 @@ firebase
 export default class MyRequest extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
-
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     modalVisible: false,
     modalVisible2: false,
     CreditorName:"",
@@ -98,7 +99,7 @@ export default class MyRequest extends React.Component {
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
-
+  }
   componentDidMount() {
     requestArray=[]
     const { currentUser } = firebase.auth();
@@ -268,12 +269,12 @@ export default class MyRequest extends React.Component {
     });
 
   }}
-  conformRemove(k,Rstatus){
+  conformRemove(k,Rstatus,props){
     if(Rstatus== "قيد الإنتظار"){
     Alert.alert(
       "تنبيه ",
       "هل تريد حذف الطلب ",
-      [{ text: "نعم", onPress: () => this.Remove(k) },
+      [{ text: "نعم", onPress: () => this.Remove(k,props) },
       {
         text: 'لا',
         // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
@@ -292,13 +293,15 @@ export default class MyRequest extends React.Component {
     );
   }
 }
-  Remove(k){
+
+  Remove(k,props){
+    this.setModalVisible(!this.state.modalVisible);
     firebase
     .database()
    .ref('requests/' + k).remove()
-   this.props.navigation.navigate("squares");
-
-   this.setModalVisible(!this.state.modalVisible);
+  
+ 
+   props.navigate("squares")
   }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
@@ -794,7 +797,7 @@ export default class MyRequest extends React.Component {
                 {this.state.Rstatus== "قيد الإنتظار" ? (    
                     <TouchableOpacity
                          style={[styles.dbutton, { backgroundColor: "#BE4F4F" }]}
-                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}><Text style={styles.buttonTextDelete}> حذف </Text>
+                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus,this.props.navigation)}><Text style={styles.buttonTextDelete}> حذف </Text>
                          </TouchableOpacity>):(null)}
 
 
@@ -843,15 +846,29 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         size={24}
                         color="#746356"
                       />
+            
+                      
                     </TouchableOpacity>
-                    <Image
+                    {this.state.CreditorName=""? ( 
+                      <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
+      
+ ): null }
                     
-                    <Text style={styles.UserName}>{this.state.CreditorName}</Text>
-                    <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+                    {this.state.CreditorName=""? ( 
+                                         <Text style={styles.UserName}>{this.state.CreditorName}</Text>
 
+      
+ ): null }
+          {this.state.CreditorName=""? ( 
+                          <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+
+ ): null }
+                    {this.state.CreditorName=""? ( 
+      
+     
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -884,25 +901,46 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                    
+                     ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.subsidy}> عدد التسليف </Text>
 
-                    <Text style={styles.subsidy}> عدد التسليف </Text>
-                    <Text style={styles.debts}> عدد الاستلاف </Text>
-                    <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
-                    </View>
-                    <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.debts}> عدد الاستلاف </Text>
 
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.PinkRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+      </View>
+
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.YellowRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+      </View>
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+       <View style={styles.buttonContainer}>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+     </View>
+      ): null }
+                 {this.state.CreditorName=""? ( 
+null
+      ): 
+      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
+    }    
+             
+
+                   
                   </View>
                 </View>
               </Modal>
@@ -1258,6 +1296,18 @@ waitContent:{
     justifyContent: "center",
     color: "#746356",
   },
+  noUser: {
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize: 28,
+    margin: 20,
+    marginBottom: 40,
+    bottom: -125,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+  
   PinkRectangleShapeView: {
     width: 120,
     height: 70,
