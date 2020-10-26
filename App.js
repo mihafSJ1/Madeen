@@ -93,6 +93,17 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+              <Stack.Screen
+              name="EditRequest"
+              component={EditRequest}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
     </Stack.Navigator>
   );
 }
@@ -351,7 +362,7 @@ export default function App({ navigation }) {
               }}
             />
            
-             <Stack.Screen
+             {/* <Stack.Screen
               name="EditRequest"
               component={EditRequest}
               options={{
@@ -361,10 +372,10 @@ export default function App({ navigation }) {
                 // headerMode:screen,
                 headerTransparent: true,
               }}
-            />
+            /> */}
               <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
