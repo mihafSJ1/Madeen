@@ -81,7 +81,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.greenText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("Calculator")}
           >
             {" "}
             الحاسبة

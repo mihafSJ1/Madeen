@@ -26,6 +26,8 @@ import EditRequest from"./EditRequest";
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
+import  Calculator from './Calculator';
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -82,6 +84,25 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+
+<Stack.Screen
+              name="Calculator"
+              component={Calculator}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+
+
+
+
+
               <Stack.Screen
               name="PayAsDebtor"
               component={PayAsDebtor}
