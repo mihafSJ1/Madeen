@@ -41,9 +41,7 @@ if (!firebase.apps.length) {
 }
 
 export default function login({ navigation }) {
-  useEffect(() => {
-    registerForPushNotificationsAsync();
-  }, []);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [errorMessage, setErrorMsg] = useState("");
@@ -94,7 +92,7 @@ export default function login({ navigation }) {
             break;
         }
       });
-
+      registerForPushNotificationsAsync();
     console.log("handleLogin");
   };
 

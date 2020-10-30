@@ -254,7 +254,13 @@ class Request extends React.Component {
   }
 
   
-  sendPushNotification = () => {
+  sendPushNotification = (Key) => {
+    let Token;
+    firebase
+    .database()
+    .ref("users/"+Key).on("value", (snapshot) => {
+      Token = snapshot.val().push_Notification_token;
+    });
     let response = fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -262,7 +268,7 @@ class Request extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        to: '',
+        to: Token,
         sound: 'default',
         title: 'Demo',
         body: 'Demo notificaiton'
@@ -338,6 +344,8 @@ else{
           }
         }
       );
+      if(keyC!=""){
+      sendPushNotification(keyC);}
   }
 
   requestSchema = yup.object({
