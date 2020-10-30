@@ -301,7 +301,7 @@ export default class MyRequest extends React.Component {
    .ref('requests/' + k).remove()
   
  
-   props.navigate("myRequestP")
+   props.navigate("squares")
   }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
