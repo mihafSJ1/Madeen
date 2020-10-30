@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { Component, useState } from "react";
+import React, { Component, useState,useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,7 @@ import Home from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import FirebaseKeys from './FirebaseKeys';
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
 
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
@@ -40,6 +41,9 @@ if (!firebase.apps.length) {
 }
 
 export default function login({ navigation }) {
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [errorMessage, setErrorMsg] = useState("");
