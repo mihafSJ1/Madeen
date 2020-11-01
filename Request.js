@@ -29,7 +29,9 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
-
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -246,7 +248,6 @@ class Request extends React.Component {
           applicationUsers.push({
             fullName: child.val().fullName,
             label: child.val().email,
-            push
           });
         }
       });
@@ -254,13 +255,15 @@ class Request extends React.Component {
   }
 
   
-  sendPushNotification = (Key) => {
+   sendPushNotification =(Key,userNameFromDB)=>{
+    console.log("sendPushNotification");
     let Token;
     firebase
     .database()
     .ref("users/"+Key).on("value", (snapshot) => {
       Token = snapshot.val().push_Notification_token;
     });
+   console.log("ToKEN"+Token);
     let response = fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -270,11 +273,44 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'Demo',
-        body: 'Demo notificaiton'
+        title: 'مدين | طلب جديد!',
+        body: 'بحاجة لمساعدتك'+userNameFromDB,
       })
     });
   }
+  
+//   scheduleLocalNotification=(trigger,exDate,instalmentT,repaymentT)=>{
+//     const content;
+   
+// if(repaymentT=="السداد بالتقسيط"){
+//      localNotification = {
+//       title: 'done',
+//       body: 'done!'
+//   };
+//   if(instalmentT=="سنويًا")
+//   instalmentT="year";
+//   if(instalmentT=="شهريًا")
+//   instalmentT="month";
+//   if(instalmentT=="أسبوعيًا")
+//   instalmentT="week";
+//   if(instalmentT=="يوميًا")
+//   instalmentT="day";
+//   trigger = {
+//     time: trigger,
+//     repeat:instalmentT,
+// }
+
+// }  
+// else{
+//   content = {
+//     title: 'done',
+//     body: 'done!',
+// },
+// trigger
+// }
+//     Notifications.scheduleNotificationAsync(localNotification,trigger);
+   
+//   }
 bringid(k){
   console.log("bring");
   firebase
@@ -291,6 +327,7 @@ bringid(k){
 });
 }
   onSubmitPress(values, props) {
+    const trigger = new Date(this.state.submittedDateState);
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
@@ -338,14 +375,19 @@ else{
             Alert.alert(
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
-              [{ text: "موافق", onPress: () => props.navigate("squares") }],
+              [{ text: "موافق", onPress: () =>{props.navigate("squares") } }],
               { cancelable: false }
             );
           }
+          
         }
+
       );
-      if(keyC!=""){
-      sendPushNotification(keyC);}
+     
+      if(  keyC != ""){
+        console.log("kyC");
+      this.sendPushNotification(keyC,userNameFromDB);}
+     // scheduleLocalNotification(trigger,values.expectedDate,this.state.installmentsState,values.repaymentType)
   }
 
   requestSchema = yup.object({
@@ -815,7 +857,7 @@ else{
                                    
                     >
                       {/* <button type='reset'></button> */}
-                      <Text style={styles.buttonText}> إلغاء </Text>
+                      <Text style={styles.buttonText} > إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}

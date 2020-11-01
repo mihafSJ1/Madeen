@@ -277,6 +277,29 @@ bringid(k){
 });
 });
 }
+sendPushNotification =(Key,userNameFromDB)=>{
+  console.log("sendPushNotification");
+  let Token;
+  firebase
+  .database()
+  .ref("users/"+Key).on("value", (snapshot) => {
+    Token = snapshot.val().push_Notification_token;
+  });
+ console.log("ToKEN"+Token);
+  let response = fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      to: Token,
+      sound: 'default',
+      title: 'مدين | طلب جديد!',
+      body: 'بحاجة لمساعدتك'+userNameFromDB,
+    })
+  });
+}
   onSubmitPress(values, props) {
     if(creditorEmailR==values.user && priceR==values.price && expectedDateR==values.expectedDate &&repaymentTypeR==values.repaymentType && installemntDurationR==this.state.durationState && reasonR==values.reason)
      {
@@ -337,6 +360,12 @@ else{
           }
         }
       );
+      }
+      if(creditorEmailR==values.user){
+        console.log("creditorEmailR");
+        if(  keyC != ""){
+          console.log("kyC");
+        this.sendPushNotification(keyC,userNameFromDB);}
       }
 }
 
