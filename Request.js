@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
+import * as Notifications from 'expo-notifications';
 import moment from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
@@ -246,7 +247,6 @@ class Request extends React.Component {
           applicationUsers.push({
             fullName: child.val().fullName,
             label: child.val().email,
-            push
           });
         }
       });
@@ -254,7 +254,7 @@ class Request extends React.Component {
   }
 
   
-  sendPushNotification = (Key) => {
+  sendPushNotification = (Key, userName) => {
     let Token;
     firebase
     .database()
@@ -270,11 +270,12 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'Demo',
-        body: 'Demo notificaiton'
+        title: 'مدين | طلب جديد!',
+        body: userName + ' بحاجة إلى مساعدتك '
       })
     });
   }
+  
 bringid(k){
   console.log("bring");
   firebase
@@ -326,10 +327,7 @@ else{
           creditor: keyC,
           creditorName:Cname,
           creditorEmail:values.user,
-         
-         
           remAmount: values.price
-
         },
         function (error) {
           if (error) {
@@ -344,8 +342,9 @@ else{
           }
         }
       );
+      alert(keyC)
       if(keyC!=""){
-      sendPushNotification(keyC);}
+      this.sendPushNotification(keyC, userNameFromDB);}
   }
 
   requestSchema = yup.object({
