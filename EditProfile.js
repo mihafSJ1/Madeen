@@ -41,7 +41,8 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
+var requestArrayU=[];
+var requestArrayC=[];
 let input = "";
 const fullNameRegexAR = /[\u0600-\u06FF]/;
 const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
@@ -57,11 +58,53 @@ export default class EditProfile extends React.Component {
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
-
+  updatename(name){
+    requestArrayU=[];
+    requestArrayC=[];
+      const { currentUser } = firebase.auth();
+      
+      firebase
+        .database()
+        .ref("requests/" )
+        .on("value", (snapshot) => {
+  
+          snapshot.forEach((child) => {
+          
+           if(child.val().userid==currentUser.uid){
+            requestArrayU.push({
+              key:child.key
+            })
+           }
+           if(child.val().creditor==currentUser.uid){
+            requestArrayC.push({
+              key:child.key
+            })}
+           
+          
+        });
+      });
+      for(var i=0 ; i<requestArrayU.length ;i++){
+        firebase
+       .database()
+     .ref("requests/" + requestArrayU[i].key)
+     .update({
+     userName:name
+        
+      })}
+      for(let i=0 ; i<requestArrayC.length;i++){
+        firebase
+       .database()
+      .ref("requests/" +requestArrayC[i].key)
+       
+      .update({
+        creditorName:name,
+        
+      })}
+    }
   setName(name) {
     this.setState({ namef: name });
+    this.updatename(name);
   }
-
   setEmail(email) {
     this.setState({ emailf: email });
   }

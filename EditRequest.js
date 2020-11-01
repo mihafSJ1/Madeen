@@ -278,22 +278,15 @@ bringid(k){
 });
 }
   onSubmitPress(values, props) {
- if(creditorR==values.user){
-   
-    if(priceR==values.price)
-    if(expectedDateR==values.expectedDate)
-    if(repaymentTypeR==values.repaymentType)
-    
-    if(installemntDurationR==this.state.durationState)
- if(reasonR==values.reason)
+    if(creditorEmailR==values.user && priceR==values.price && expectedDateR==values.expectedDate &&repaymentTypeR==values.repaymentType && installemntDurationR==this.state.durationState && reasonR==values.reason)
      {
       Alert.alert(
         "تنبيه ",
         "لا يوجد تعديلات جديدة",
-        [{ text: "موافق", onPress: () =>  props.navigate("myRequest")}],
+        [{ text: "موافق", onPress: () =>    props.navigate("myRequest")}],
         { cancelable: false }
       );
-    }}
+    }
 else{
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
@@ -338,7 +331,7 @@ else{
             Alert.alert(
               "تنبيه ",
               "تم تعديل الطلب بنجاح   ",
-              [{ text: "موافق", onPress: () =>  props.navigate("squares")}],
+              [{ text: "موافق", onPress: () =>  props.navigate("myRequest")}],
               { cancelable: false }
             );
           }

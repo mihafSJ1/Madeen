@@ -34,6 +34,7 @@ const Tab = createBottomTabNavigator();
 function squaresScreens() {
   return (
     <Stack.Navigator>
+     
       <Stack.Screen
         name="squares"
         component={squares}
@@ -52,7 +53,19 @@ function squaresScreens() {
         component={myRequest}
         options={{ headerShown: false }}
       />
+      {/* حل موقت  */}
+  <Stack.Screen
+        name="myRequestP"
+        component={myRequest}
+        options={{ headerShown: false }}
+      />
 
+<Stack.Screen
+        name="ReqAsCreditorP"
+        component={ReqAsCreditor}
+        options={{ headerShown: false }}
+      />
+       {/* حل موقت  */}
 <Stack.Screen
         name="ReqAsCreditor"
         component={ReqAsCreditor}
@@ -245,7 +258,36 @@ export default function App({ navigation }) {
               component={Home}
               options={{ headerShown: false }}
             />
-           
+            <Stack.Screen
+        name="Timeline"
+        component={Timeline}
+        options={{ headerShown: false }}
+      />
+       {/* حل موقت  */}
+     
+      <Stack.Screen
+        name="myRequestP"
+        component={myRequest}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="ReqAsCreditorP"
+        component={ReqAsCreditor}
+        options={{ headerShown: false }}
+      />
+       {/* حل موقت  */}
+       <Stack.Screen
+        name="myRequest"
+        component={myRequest}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="ReqAsCreditor"
+        component={ReqAsCreditor}
+        options={{ headerShown: false }}
+      />
             <Stack.Screen
               name="login"
               component={login}
@@ -325,6 +367,28 @@ export default function App({ navigation }) {
               options={{
                 headerShown: true,
                 navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="AddSubscription"
+              component={AddSubscription}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+              name="PayAsDebtor"
+              component={PayAsDebtor}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
                 header: (props) => <TopBar {...props} />,
                 // headerMode:screen,
                 headerTransparent: true,

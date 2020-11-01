@@ -55,27 +55,7 @@ firebase
       usersArray.push(Data);
     });
   });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
 
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
 
 const currentUser = firebase.auth();
 //this.setState({ currentUser });
@@ -98,6 +78,7 @@ firebase
             submittedDate:child.val().submittedDate,
            userName:child.val().userName,
            userid:child.val().userid,
+           cName:child.val().creditorName,
             key:child.key,});
       //  }
     });
@@ -106,17 +87,19 @@ firebase
 export default class MyRequest extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
-
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     modalVisible: false,
     modalVisible2: false,
     CreditorName:"",
+    CreditorEmail:"",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
-
+  }
   componentDidMount() {
     requestArray=[]
     const { currentUser } = firebase.auth();
@@ -139,6 +122,7 @@ export default class MyRequest extends React.Component {
              rqeuestStatus:child.val().rqeuestStatus,
                submittedDate:child.val().submittedDate,
               userName:child.val().userName,
+              creditorName:child.val().creditorName,
               userid:child.val().userid,
                key:child.key,
                remAmount: child.val().remAmount });
@@ -158,37 +142,40 @@ export default class MyRequest extends React.Component {
   setCreditorName(Name) {
     this.setState({ CreditorName: Name });
   }
-  // setPic(picNew) {
-  //   this.setState({ pic: picNew });
-  // }
+  setCreditorEmail(Email) {
+    this.setState({ CreditorEmail: Email });
+  }
+
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
+
+  
+
+
 
   setTimelinePic(picNew) {
     this.setState({ pic: picNew });
   }
   viewProfileFunction(item) {
     firebase.auth();
-    // console.log(item.userName);
-    console.log("شوفي فوق ");
+  
 
     firebase
       .database()
-      .ref("users/" + item.userid)
+      .ref("users/" + item.creditor)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
 
         this.setprofilePic(snapshot.val().UserImage);
-
+        this.setCreditorName(snapshot.val().fullName);
+        this.setCreditorEmail(snapshot.val().email);
         console.log(this.state.profilePic);
       });
 
     console.log("بتنحل");
 
-    console.log("here");
 
-    console.log("here");
 
     this.setState({
       modalVisible2: true,
@@ -196,12 +183,11 @@ export default class MyRequest extends React.Component {
       UserIDImage: item.userid,
     });
     console.log("يارب١");
-    //  console.log(item.userid);
+
     console.log("يارب٢");
-    //  console.log(this.state.namef);
-    //   this.findImage(this.state.UserIDImage);
+  
   }
-  //Areej Test
+
 
   viewTimelineImageFunction(item) {
     firebase.auth();
@@ -216,18 +202,7 @@ export default class MyRequest extends React.Component {
       });
   }
 
-  Creditor(Cid) {
-    firebase.auth();
 
-    firebase
-      .database()
-      .ref("users/" + Cid)
-      .on("value", (snapshot) => {
-        this.setCreditorName(snapshot.val().fullName);
-        console.log("Areej Test");
-       // console.log(this.state.setTimelinePic);
-      });
-  }
   
 
   openModalWithItem(item) {
@@ -245,12 +220,15 @@ export default class MyRequest extends React.Component {
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
       CreditorID: item.creditor,
+      CreName:item.creditorName,
+      CreEmail:item.creditorEmail,
       RemAmount: item.remAmount,
       Rkey: item.key,
+     repType:item.repaymentType,
       });
     //  this.openModalWithItem2(item)
   }
-  //رجعيها اذا ما ضبط الحال
+ 
 
   openModalWithItem2(item) {
     console.log(item.userid);
@@ -291,12 +269,12 @@ export default class MyRequest extends React.Component {
     });
 
   }}
-  conformRemove(k,Rstatus){
+  conformRemove(k,Rstatus,props){
     if(Rstatus== "قيد الإنتظار"){
     Alert.alert(
       "تنبيه ",
       "هل تريد حذف الطلب ",
-      [{ text: "نعم", onPress: () => this.Remove(k) },
+      [{ text: "نعم", onPress: () => this.Remove(k,props) },
       {
         text: 'لا',
         // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
@@ -315,13 +293,15 @@ export default class MyRequest extends React.Component {
     );
   }
 }
-  Remove(k){
+
+  Remove(k,props){
+    this.setModalVisible(!this.state.modalVisible);
     firebase
     .database()
    .ref('requests/' + k).remove()
-   this.props.navigation.navigate("squares");
-
-   this.setModalVisible(!this.state.modalVisible);
+  
+ 
+   props.navigate("squares")
   }
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
@@ -332,24 +312,20 @@ export default class MyRequest extends React.Component {
           return (
             <View>
                 
-                {/* {console.log("هلا بالتعبانة")} */}
-                {/* {console.log(c)} */}
+        
               
-              {/* {this.openModalWithItem2(c)} */}
+           
               <TouchableOpacity
                 // margin={10}
                 style={styles.card}
                 
                 onPress={() => {
                   console.log("نداااء");
-                  // console.log(c.UserID);
+          
                   this.openModalWithItem(c);
-                  // this.openModalWithItem2(c);
-                  // this.viewProfileFunction(c);
+               
                   console.log("رغد الحلوه");
-                  //   console.log(c);
-                  //   console.log(c.userid);
-                  //  console.log(this.state.UserID);
+              
                   // this.viewProfileFunction(this.state.UserID);
                 }}
               >
@@ -399,7 +375,7 @@ export default class MyRequest extends React.Component {
 
 {c.rqeuestStatus== "مرفوض" ? (
                   <View style={styles.RejectRectangleShapeView}> 
-                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+                    <Text style={styles.status3}> {c.rqeuestStatus} </Text>
               </View>
 ):(
                       null
@@ -419,9 +395,15 @@ export default class MyRequest extends React.Component {
                         onPress={() => this.viewProfileFunction(c)}
                       >
                         {" "}
-                        {/* {console.log(this.state.CreditorName)}
-                        {this.state.CreditorName} */}
-                        {c.userName}
+                        
+             {c.creditorName == "" ? <Text style={styles.textData}>لايوجد دائن محدد </Text>: (
+                     <Text style={styles.textData}> {c.creditorName} </Text>
+                        
+                        
+                      )}
+
+
+                       
                       </Text>
                     </Text>
 
@@ -462,7 +444,7 @@ export default class MyRequest extends React.Component {
                   <View style={styles.modalView}>
                     
                   <TouchableOpacity
-                 
+               
                  style={styles.Editicon}
                  onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
    
@@ -473,22 +455,36 @@ export default class MyRequest extends React.Component {
                    <Ionicons name="md-create" size={30} color="#808065" solid />
                  </Text>)}
                </TouchableOpacity>
-                    <TouchableOpacity
+                    <TouchableOpacity style={styles.Editicon3}
                       onPress={() => {
                         this.setModalVisible(!this.state.modalVisible);
                       }}
                     >
-                      <AntDesign
-                        style={styles.close}
-                        name="close"
-                        size={24}
-                        color="#746356"
-                      />
+                {this.state.Rstatus== "قيد الإنتظار" ? (
+                  
+                  <AntDesign 
+                  style={styles.waitclose}
+                  name="close"
+                  size={24}
+                  color="#746356"
+                />
+             ):(
+                   
+                 <AntDesign style={styles.close}  name="close" size={24}
+                           color="#746356"
+                               />    )}
+
+
+
+
+
+                      
+                   
                     </TouchableOpacity>
                     
                     {this.state.Rstatus== "قيد التنفيذ" ? (
                   <View style={styles.ProRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -497,7 +493,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "قيد الإنتظار" ? (
                   <View style={styles.WRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -507,7 +503,7 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "مكتمل" ? (
                   <View style={styles.CRectangleShapeView}> 
-                    <Text style={styles.status2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
@@ -516,23 +512,48 @@ export default class MyRequest extends React.Component {
 
 {this.state.Rstatus== "مرفوض" ? (
                   <View style={styles.RRectangleShapeView}> 
-                    <Text style={styles.status3}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInsideReject}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
                       
                      )}
-                    <Text style={styles.header}>تفاصيل الطلب </Text>
+
+
+                     {/* header */}
+{this.state.Rstatus== "قيد الإنتظار" ? (
+           <Text style={styles.waitheader}>تفاصيل الطلب </Text>    
+):(
+  <Text style={styles.header}>تفاصيل الطلب </Text>
+                      
+                     )}
+
+
+
+
+
+
+
+         
                     {/* <Text style={styles.textInputTitle}>
                       {" "}
                       حالة الطلب |{" "}
                       <Text style={styles.textData}> {this.state.Rstatus} </Text>
                     </Text> */}
                   {/* {  this.Creditor(c.creditor)} */}
+
+                  {this.state.Rstatus== "قيد الإنتظار" ? (
+                    <View style={styles.waitContent}>  
+
                     <Text style={styles.textInputTitle}>
                       {" "}
                      الدائن |{" "}
-                      <Text style={styles.textData}> {this.state.Name} </Text>
+                     {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
+                     <Text style={styles.textData}> {this.state.CreName} </Text>
+                        
+                        
+                      )}
+                     
                     </Text>
 
                     {/* <Text style={styles.textInputTitle}>
@@ -568,8 +589,8 @@ export default class MyRequest extends React.Component {
                     </Text>
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      {this.state.Reason == "" ? null : <Text> السبب |</Text>}
-                      {this.state.Reason == "" ? null : (
+                      {this.state.Reason == "" ? <Text> السبب |</Text>: <Text> السبب |</Text>}
+                      {this.state.Reason == "" ? <Text style={styles.textData}> لايوجد سبب </Text>: (
                         <Text style={styles.textData}>
                           {" "}
                           {this.state.Reason}{" "}
@@ -578,18 +599,28 @@ export default class MyRequest extends React.Component {
                         
                       )}
                     </Text>
-                    {this.state.Rstatus == "قيد التنفيذ" ? (
-                      <Text style={styles.textInputTitle}>
-                      {" "}
-                      المتبقي من الدين|
-                      <Text style={styles.textData}>
-                        {" "}
-                        {this.state.RemAmount}{" "}
-                        <Text>ريال سعودي </Text>
-                      </Text>{" "}
-                    
-                    </Text>
-                    ) : null }
+
+                   {/* كان هنا فيه كود المتبقي من الدين */}
+
+
+
+
+                   
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+
 
                     
 
@@ -613,6 +644,138 @@ export default class MyRequest extends React.Component {
                         )}
                         </Text>
 
+
+                        </View>
+                      //  /end content wait  
+):(
+  <View style={styles.Content}>  
+
+  <Text style={styles.textInputTitle}>
+    {" "}
+   الدائن |{" "}
+
+
+
+   {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
+                     <Text style={styles.textData}> {this.state.CreName} </Text>
+                        
+                        
+                      )}
+  </Text>
+
+  {/* <Text style={styles.textInputTitle}>
+    {" "}
+تاريخ الطلب |{" "}
+    <Text style={styles.textData}>
+      {" "}
+      {this.state.submmitedDate}{" "}
+    </Text>{" "}
+  </Text> */}
+  <Text style={styles.textInputTitle}>
+    نوع التسديد |{" "}
+    <Text style={styles.textData}> {this.state.Type} </Text>
+  </Text>
+  <Text style={styles.textInputTitle}>
+    {" "}
+    المبلغ|
+    <Text style={styles.textData}>
+      {" "}
+      {this.state.Price}{" "}
+      <Text>ريال سعودي </Text>
+    </Text>{" "}
+  
+  </Text>
+
+  <Text style={styles.textInputTitle}>
+    {" "}
+    التاريخ المتوقع لإكمال التسديد|{" "}
+    <Text style={styles.textData}>
+      {" "}
+      {this.state.EDate}{" "}
+    </Text>{" "}
+  </Text>
+  {/* <Text style={styles.textInputTitle}>
+    {" "}
+    {this.state.Reason == "" ? null : <Text> السبب |</Text>}
+    {this.state.Reason == "" ? null : (
+      <Text style={styles.textData}>
+        {" "}
+        {this.state.Reason}{" "}
+      </Text>
+      
+      
+    )}
+  </Text>
+
+  // */}
+  <Text style={styles.textInputTitle}>
+                    
+                      <Text> السبب |</Text>
+                      {this.state.Reason == "" ? (
+                        <Text style={styles.textData}>
+                        
+                        لا يوجد سبب
+                       
+                      </Text>
+                      ) : (
+                        <Text style={styles.textData}>
+                        
+                          {this.state.Reason}
+                        </Text>
+                        
+                      )}
+                    </Text>
+
+
+
+  <Text style={styles.textInputTitle}>
+
+     {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
+     {this.state.Duration == "" ? null : (
+  <Text style={styles.textData}> {this.state.Duration} </Text>
+     )}
+    </Text><Text style={styles.textInputTitle}>{" "}
+    {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
+     {this.state.iType == "" ? null : (
+    <Text style={styles.textData}> {this.state.iType} </Text>
+     )}
+    </Text>
+      <Text style={styles.textInputTitle}>
+      {" "}
+     {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
+      {this.state.Tprice == "" ? null : (
+     <Text style={styles.textData}> {this.state.Tprice} </Text>
+      )}
+      </Text>
+
+      {this.state.Rstatus == "قيد التنفيذ" && this.state.repType == "السداد بالتقسيط" ? (
+                      <Text style={styles.textInputTitle}>
+                      {" "}
+                      المتبقي من الدين|
+                      <Text style={styles.textData}>
+                        {" "}
+
+                        {this.state.RemAmount}{" "}
+                        <Text>ريال سعودي </Text>
+                      </Text>{" "}
+                    {console.log("دخلت ولا لا ")}
+                    </Text>
+                  
+                    
+                    ) : null }
+
+
+      </View>
+      // end content 
+                      
+                     )}
+
+
+
+
+
+               
+
                     <View style={styles.buttonContainer}>
                     
                     {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
@@ -633,8 +796,8 @@ export default class MyRequest extends React.Component {
                     
                 {this.state.Rstatus== "قيد الإنتظار" ? (    
                     <TouchableOpacity
-                         style={[styles.button, { backgroundColor: "#FA8072" }]}
-                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus)}><Text style={styles.buttonText}> حذف </Text>
+                         style={[styles.dbutton, { backgroundColor: "#BE4F4F" }]}
+                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus,this.props.navigation)}><Text style={styles.buttonTextDelete}> حذف </Text>
                          </TouchableOpacity>):(null)}
 
 
@@ -678,30 +841,34 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       }}
                     >
                       <AntDesign
-                        style={styles.close}
+                        style={styles.closeProfile}
                         name="close"
                         size={24}
-                        color="black"
+                        color="#746356"
                       />
+            
+                      
                     </TouchableOpacity>
-                    <Image
+                    {this.state.CreditorName=""? ( 
+                      <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
-                    {/* namef   = snapshot.val().fullName;
-      emailf   = snapshot.val().email;
-      pic */}
+      
+ ): null }
+                    
+                    {this.state.CreditorName=""? ( 
+                                         <Text style={styles.UserName}>{this.state.CreditorName}</Text>
 
-                    {/* <Text style={styles.header}> الملف الشخصي </Text> */}
-                    {/* {console.log(c.userName)} */}
-                    {/* {console.log(this.state.UserID)} */}
-                    <Text style={styles.UserName}>{this.state.namef}</Text>
-                    {/* <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}>{this.state.UserID}</Text>
-            <Text style={styles.UserName}> {this.state.Name}</Text>
-            <Text style={styles.UserName}> hiiiiiiiiiii</Text> */}
+      
+ ): null }
+          {this.state.CreditorName=""? ( 
+                          <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
-                    {/* {c.userName} */}
+ ): null }
+                    {this.state.CreditorName=""? ( 
+      
+     
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -734,25 +901,46 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                    
+                     ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.subsidy}> عدد التسليف </Text>
 
-                    <Text style={styles.subsidy}> عدد التسليف </Text>
-                    <Text style={styles.debts}> عدد الاستلاف </Text>
-                    <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
-                    </View>
-                    <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+                          <Text style={styles.debts}> عدد الاستلاف </Text>
 
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#fff" }]}
-                      ></TouchableOpacity>
-                    </View>
+      ): null }
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.PinkRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+      </View>
+
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+        <View style={styles.YellowRectangleShapeView}>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+      </View>
+      ): null }
+                  
+                    {this.state.CreditorName=""? ( 
+       <View style={styles.buttonContainer}>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+       <TouchableOpacity
+         style={[styles.button, { backgroundColor: "#fff" }]}
+       ></TouchableOpacity>
+     </View>
+      ): null }
+                 {this.state.CreditorName=""? ( 
+null
+      ): 
+      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
+    }    
+             
+
+                   
                   </View>
                 </View>
               </Modal>
@@ -813,15 +1001,21 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
         <View style={styles.GreenRectangleShapeView}>
                 
               </View>
-              
+              <View style={styles.ViewList}>
         <ScrollView>{this.list()}</ScrollView>
-
+        </View>
         {/*View request */}
       </View>
     );
   }
 }
 
+
+
+
+
+
+////////////////////////////////
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -835,6 +1029,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  ViewList:{
+marginBottom:150,
+
   },
   card: {
       top:0,
@@ -867,30 +1066,7 @@ const styles = StyleSheet.create({
     // width: "100%",
   },
 
-  Editicon: {
-    left: 253,
-    bottom: -10,
-    zIndex: 2,
-
-    shadowColor: "#000000",
-    shadowOpacity: 0.3,
-    width: 90,
-    shadowOffset: {
-      // width: 100,
-      // height: 100,
-    },
-  },
- Editicon1: {
-    left: 60,
-    bottom: 0,
-    zIndex: 2,
-    shadowColor: "#000000",
-    shadowOpacity: 0.71,
-    shadowOffset: {
-      width: 100,
-      height: 100,
-    },
-  },
+  
 
   textContainer: {
     marginRight: 10,
@@ -914,6 +1090,7 @@ const styles = StyleSheet.create({
     fontSize:20,
     alignItems: "center",
     left:40,
+    top:50,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -929,6 +1106,7 @@ const styles = StyleSheet.create({
     fontSize:20,
     alignItems: "center",
     left:70,
+    top:50,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -942,8 +1120,9 @@ const styles = StyleSheet.create({
     color: "#D3CDC8",
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize:20,
+    top:-20,
     alignItems: "center",
-    left:40,
+    left:35,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -965,7 +1144,7 @@ const styles = StyleSheet.create({
     width:425,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
-    height: 550,
+    height: 600,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -1022,6 +1201,39 @@ const styles = StyleSheet.create({
     left:90,
     
   },
+
+
+  Content:{
+  // backgroundColor:'red',
+},
+
+waitContent:{
+  top:-45,
+  // backgroundColor:'pink',
+},
+
+
+
+
+  waitheader:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    color: "#404040",
+    fontSize: 30,
+    // margin: 20,
+    top: -80,
+
+    textAlign: "center",
+    justifyContent: "center",
+    marginBottom: 30,
+    width:170,
+    left:90,
+    // backgroundColor:'red',
+  },
+
+
+
+
+
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 18,
@@ -1034,6 +1246,30 @@ const styles = StyleSheet.create({
   },
   close: {
     marginLeft: 20,
+    top:20,
+    zIndex:13,
+    width:40,
+  },
+
+  closeProfile: {
+    marginLeft: 10,
+    top:-4,
+    zIndex:13,
+    width:40,
+  },
+
+  waitclose: {
+    marginLeft: 10,
+    top:-1,
+  // backgroundColor:'black',
+    width:20,
+  },
+
+
+  Editicon3:{
+    top:-40,
+    width:30,
+    // backgroundColor:'pink',
   },
 
   // style for view profile
@@ -1048,29 +1284,30 @@ const styles = StyleSheet.create({
     borderColor: "red",
   },
 
-  UserImage: {
-    alignItems: "center",
-    marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    left: 130,
-    top: -20,
-    zIndex: 2,
-    width: 160,
-    height: 160,
-    resizeMode: "stretch",
-  },
+ 
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
     margin: 20,
     marginBottom: 40,
-    bottom: 20,
+    bottom: -5,
     right: -1,
     textAlign: "center",
     justifyContent: "center",
     color: "#746356",
   },
+  noUser: {
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize: 28,
+    margin: 20,
+    marginBottom: 40,
+    bottom: -125,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+  
   PinkRectangleShapeView: {
     width: 120,
     height: 70,
@@ -1079,7 +1316,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left: 185,
+    left: 165,
     top: -35,
     backgroundColor: "#D9AE94",
     borderColor: "#D3CECA",
@@ -1094,8 +1331,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    right: -25,
-    top: -104,
+    right: -5,
+    top: -105,
     backgroundColor: "#F1DCA7",
     borderColor: "#D3CECA",
     borderWidth: 2,
@@ -1106,8 +1343,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "left",
     color: "#404040",
-    top: -37,
-    left: 70,
+    top: -40,
+    left: 50,
     zIndex: 2,
   },
   subsidy: {
@@ -1115,12 +1352,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "right",
     color: "#404040",
-    top: -10,
-    right: 75,
+    top: -12,
+    right: 48,
   },
   RateStarts: {
-    left: 140,
-    bottom: 50,
+    left: 108,
+    bottom: 70,
   },
 
   GreenRectangleShapeView: {
@@ -1133,7 +1370,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginBottom: 0,
     right: 0,
-    top: -140,
+    top: -130,
     backgroundColor: "#EAF4E1",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1158,7 +1395,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     right: 0,
     left:88,
-    top: -51,
+    top: -41,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1231,9 +1468,33 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#404040",
   },
+
+  statusInside:{
+    textAlign: "right",
+   left:160,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInside2:{
+    textAlign: "right",
+   left:150,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInsideReject:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+    left:160,
+  },
+
   ProRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1248,7 +1509,7 @@ const styles = StyleSheet.create({
 
   WRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1256,14 +1517,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius:15,
     
     left:-30,
-    top: 45,
+    top: 15,
     backgroundColor: "#D3CDC8",
   
   },
 
   RRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1278,7 +1539,7 @@ const styles = StyleSheet.create({
 
   CRectangleShapeView:{
     alignItems: "center",
-    width: 340,
+    width: 388.5,
     height: 25,
     
     borderTopEndRadius:15,
@@ -1306,7 +1567,7 @@ backgroundColor:'red',
     marginBottom: 0,
     right: 0,
     left:-90,
-    top: -78,
+    top: -68,
     backgroundColor: "#EAF4E1",
     borderColor: "#EAF4E1",
     borderWidth: 1,
@@ -1316,7 +1577,7 @@ backgroundColor:'red',
   },
   buttonTextNav:{
     textAlign: "center",
-    top: -107,
+    top: -97,
     right: 90,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
@@ -1330,7 +1591,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -23,
+    top: -13,
     left: 92,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 20,
@@ -1350,6 +1611,19 @@ backgroundColor:'red',
     fontSize: 15,
     color: "#404040",
   },
+  buttonTextDelete:{
+    textAlign: "center",
+    top: -1,
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize: 15,
+    color: "#ffffff",
+  },
+
+
+
+
+
+
   PaybuttonText: {
     textAlign: "center",
     fontFamily: "Bahij_TheSansArabic-Bold",
@@ -1366,8 +1640,8 @@ backgroundColor:'red',
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 127,
-    top: -50,
+    left: 100,
+    top: 0,
     zIndex: 2,
     width: 160,
     height: 160,
@@ -1390,7 +1664,6 @@ backgroundColor:'red',
     // backgroundColor: "#fff",
     // fontSize:10,
     alignItems: "center",
-  
     width: 170,
     height: 30,
     marginTop: 10,
@@ -1420,7 +1693,7 @@ backgroundColor:'red',
     marginLeft: 10,
     backgroundColor: "#fff",
     right:-50,
-    top:-30,
+    top:30,
     shadowColor: "#000",
     shadowOpacity: 0.21,
     shadowOffset: {
@@ -1429,5 +1702,66 @@ backgroundColor:'red',
     },
   },
 
+
+
+
+  dbutton:{
+    alignItems: "center",
+    width: 170,
+    height: 35,
+
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    backgroundColor: "#fff",
+    right:190,
+    top:25,
+    shadowColor: "#000",
+    shadowOpacity: 0.21,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+
+    
+  },
+
+  Editicon:{
+// backgroundColor:'red',
+width:40,
+left:300,
+top:-10,
+  },
+
+
+  Editicon1: {
+    left: 10,
+    bottom: 0,
+    zIndex: 2,
+    width:40,
+    // backgroundColor:'black',
+    shadowColor: "#000000",
+    shadowOpacity: 0.31,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+  },
+
+  textContainer: {
+    marginRight: 10,
+  },
+  Email: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+    marginBottom: 0,
+    margin: 20,
+    marginBottom: 40,
+    bottom: 40,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
   //end
 });

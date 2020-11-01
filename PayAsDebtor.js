@@ -12,13 +12,16 @@ const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى
 const SERVER_ERROR = 'الخادم غير متوفر، حاول مرة أخرى';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
 
-const getCreditCardToken = (creditCardData) => {
+const getCreditCardToken = (creditCardData,amount) => {
   const card = {
     'card[number]': creditCardData.values.number.replace(/ /g, ''),
     'card[exp_month]': creditCardData.values.expiry.split('/')[0],
     'card[exp_year]': creditCardData.values.expiry.split('/')[1],
-    'card[cvc]': creditCardData.values.cvc
+    'card[cvc]': creditCardData.values.cvc,
+    'card[metadata[amount]]': amount,
+    'card[metadata[currency]]': "SAR"
   };
+
   return fetch('https://api.stripe.com/v1/tokens', {
     headers: {
       // Use the correct MIME type for your server
@@ -59,9 +62,15 @@ class PayAsDebtor extends React.Component {
     }
   }
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput, requestId, amount, remAmount) => {
+  onSubmit = async (creditCardInput, requestId, amount, remAmount,type) => {
    let reqStatus = "قيد التنفيذ"
-   let remining = (amount-remAmount)
+   let remining = 0
+   if (type=="السداد دفعة واحدة"){
+    remining = (amount-amount)
+   }
+   if (type=="السداد بالتقسيط"){
+  remining = (amount-remAmount)
+   }
     if (remining == 0) {
     reqStatus = "مكتمل"
     }
@@ -72,7 +81,12 @@ class PayAsDebtor extends React.Component {
         remAmount: remining,
         rqeuestStatus: reqStatus
       })
-      .then(() => Alert.alert("","تم التسديد بنجاح"));
+      .then(() => Alert.alert(
+        "تنبيه ",
+        "تم التسديد بنجاح   ",
+        [{ text: "موافق", onPress: () =>this.props.navigation.navigate("myRequestP")}],
+        { cancelable: false }
+      ));
 
     const { navigation } = this.props;
     // Disable the Submit button after the request is sent
@@ -80,11 +94,14 @@ class PayAsDebtor extends React.Component {
     let creditCardToken;
     try {
       // Create a credit card token
-      creditCardToken = await getCreditCardToken(creditCardInput);
+      creditCardToken = await getCreditCardToken(creditCardInput,amount);
+      this.setState({cToken: creditCardToken.id})
       if (creditCardToken.error) {
+        alert("creditCardToken.error")
         // Reset the state if Stripe responds with an error
         // Set submitted to false to let the user subscribe again
         this.setState({ submitted: false, error: STRIPE_ERROR });
+
         return;
       }
     } catch (e) {
@@ -100,7 +117,7 @@ class PayAsDebtor extends React.Component {
       this.setState({ submitted: false, error: SERVER_ERROR });
     } else {
       this.setState({ submitted: false, error: null });
-      navigation.navigate('myRequest')
+      // navigation.navigate('myRequest')
     }
   };
 
@@ -109,7 +126,6 @@ class PayAsDebtor extends React.Component {
       .number()
       .typeError("المبلغ لا بد أن يكون بأرقام إنجليزية")
       .required("المبلغ مطلوب")
-      .integer("المبلغ لا بد أن  يكون عدد صحيح")
   });
   
   // render the subscription view component and pass the props to it
@@ -189,7 +205,7 @@ class PayAsDebtor extends React.Component {
             <Text style={styles.textError}>
             {formprops.touched.price && formprops.errors.price}
           </Text>
-          {formprops.values.price != 0 && formprops.values.price <= parseInt(amount) ? ( 
+          {formprops.values.price != 0 && formprops.values.price <= parseFloat(amount) ? ( 
                 <View style={styles.cardFormWrapper}>
                 <PaymentFormView   
                    error={error}
@@ -198,6 +214,7 @@ class PayAsDebtor extends React.Component {
                    amount = {amount}
                    reqID= {reqID}
                    remAmount = {formprops.values.price}
+                   type = {type}
                    navigation = {this.props.navigation}/>
                 </View>
               ) :  <Text style={[styles.textError, {top:-10}]}>
