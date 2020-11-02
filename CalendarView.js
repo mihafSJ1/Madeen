@@ -99,7 +99,7 @@ firebase
 
     }
     else if (installmentRequests[i].installmentsType == "شهريًا"){
-       alert( moment( installmentRequests[i].submittedDate).add(j, 'month'))
+
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           
             installmentRequests[i].datesArray[j]=moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD");
@@ -171,13 +171,9 @@ firebase
     dayTextColor: '#2d4150',
     selectedColor: '#CBCA9E',
     selectedTextColor: 'white',
-  
-   
-
     disabledArrowColor: '#d9e1e8',
-
   textDayFontFamily: 'Bahij_TheSansArabic-Light',
-textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
+   textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
    textDayHeaderFontFamily: 'Bahij_TheSansArabic-Light',
     textDayFontWeight: '300',
     textMonthFontWeight: 'bold',
@@ -187,11 +183,7 @@ textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
     textDayHeaderFontSize: 16
        }}
          
-        //     agendaDayTextColor: 'purple',
-        //     agendaDayNumColor: 'black',
-        //     agendaTodayColor: 'red',
-        //     agendaKnobColor: 'blue'
-        //   }}
+     
       />
     );
   }
@@ -209,26 +201,35 @@ textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
     next2.setDate(next2.getDate() + 1);
     const dates = [tomorrow,next,next2];
 
-
-    for (let i =0 ;i<3 ;i++){
-        
-        const strTime = this.timeToString(dates[i])
-        
-          this.state.items[strTime] = [];
-       
-         
-            this.state.items[strTime].push({
-                
-              name: ' موعد التسديد ' + strTime ,
-              amount: "المبلغ :٢٠٠ ريال سعودي",
+for (var i = 0; i< onceRequests.length;i++){
+    this.state.items[onceRequests[i].expectedDate] = [];
+this.state.items[onceRequests[i].expectedDate].push({    
+              name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
+              amount: "المبلغ :"+onceRequests[i].price,
               height:20,
-              backgroundColor:'green',
-           
+              
              
            });
+        }
+    // for (let i =0 ;i<3 ;i++){
+        
+    //     const strTime = this.timeToString(dates[i])
+        
+    //       this.state.items[strTime] = [];
+       
+         
+    //         this.state.items[strTime].push({
+                
+    //           name: ' موعد التسديد ' + strTime ,
+    //           amount: "المبلغ :٢٠٠ ريال سعودي",
+    //           height:20,
+    //           backgroundColor:'green',
+           
+             
+    //        });
     
       
-    }
+    // }
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
       this.setState({
