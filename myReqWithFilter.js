@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState }  from "react";
+
 import {
   StyleSheet,
   Text,
@@ -10,8 +11,13 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Item,
+
 } from "react-native";
+
+
+
+import {Item,Container,Header,Icon,Input} from 'native-base';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -38,6 +44,8 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 var requestArray = [];
+
+var arrayFiltered=[];
 var myRequest = [];
 var usersArray = [];
 var namef = "name";
@@ -84,8 +92,8 @@ firebase
       //  }
     });
   });
-
-export default class MyRequest extends React.Component {
+  arrayFiltered=requestArray;
+export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
   constructor(props) {
@@ -99,10 +107,17 @@ export default class MyRequest extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+      searchTerm: '',
+
+    arrayFiltered:requestArray,
+    arrayFiltered2:requestArray,
   };
   }
+
+
   componentDidMount() {
     requestArray=[]
+    
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -131,6 +146,8 @@ export default class MyRequest extends React.Component {
           }
         });
       });
+      arrayFiltered=requestArray;
+     
     }
 
   setModalVisible(visible) {
@@ -307,7 +324,7 @@ export default class MyRequest extends React.Component {
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
-    return requestArray.map((c) => {
+    return requestArray.map((c,index) => {
       if (c.userid == currentUser) {
         if (true) {
           return (
@@ -952,6 +969,28 @@ null
     });
   };
 
+
+//To search a specific status 
+searchStatus(textTosearch)  {
+  var i="";
+    // alert(textTosearch);
+
+    this.setState({
+
+      requestArray:this.state.requestArray.
+      filter(i=>i.userName.toLowerCase().includes(textTosearch.toLowerCase())),
+ 
+
+    })
+    {console.log("فلتر فلتر ");}
+    {console.log(i);}
+   return i;
+  
+
+  }
+
+
+  
   render() {
 
     return (
@@ -981,10 +1020,24 @@ null
         ></LinearGradient>
 
         {/* -------------------------------------- CARD 1*/}
+
+       {/* SEARCH */}
+                 <View style={styles.searchb} >
+   <Header  >
+     <Item style >  
+        <Icon name="search" />
+       <SearchInput 
+       style={styles.searchInput}
+       onChange={ (text) => { this.searchStatus(text) }} 
+       
+       placeholder="ابحث عن حالة محدده"/>
+
+     </Item>
+   </Header>
    
   
-
-
+{/* <View style={styles.twoButton}>
+    
         <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
         <View style={styles.WhiteRectangleShapeView}> 
               </View>
@@ -1004,11 +1057,17 @@ null
         <View style={styles.GreenRectangleShapeView}>
                 
               </View>
+              </View> */}
+          
+
+
               <View style={styles.ViewList}>
         <ScrollView>{this.list()}</ScrollView>
         </View>
         {/*View request */}
       </View>
+      </View>
+
     );
   }
 }
@@ -1036,10 +1095,11 @@ const styles = StyleSheet.create({
 
   ViewList:{
 marginBottom:150,
-
+backgroundColor:'blue',
+top:80,
   },
   card: {
-      top:0,
+      top:10,
     backgroundColor: "#fff",
     marginBottom: 10,
     width: 400,
@@ -1766,5 +1826,38 @@ top:-10,
     justifyContent: "center",
     color: "#746356",
   },
+
+
+
+
+  searchb:{
+    top:10,
+    flex: 1,
+    // backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    backgroundColor:'pink',
+    width:390,
+   
+  
+  },
+
+
+  searchInput:{
+    padding: 10,
+    borderColor: '#CCC',
+    borderWidth: 1,
+    width:300,
+    height:30,
+    borderRadius:20,
+    fontSize:15,
+    fontFamily: "Bahij_TheSansArabic-Light",
+  },
+
+  twoButton:{
+top:30,
+  },
+
+
+
   //end
 });

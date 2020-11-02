@@ -66,7 +66,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.silverText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("myReqWithFilter")}
           >
             {" "}
             التقويم
