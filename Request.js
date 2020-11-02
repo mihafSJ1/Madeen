@@ -270,8 +270,8 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مدين | طلب جديد!',
-        body: userName + ' بحاجة إلى مساعدتك '
+        title: 'مَدِين | طلب جديد!',
+        body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
   }
