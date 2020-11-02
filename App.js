@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Register from "./Register";
 import login from "./login";
+import CalendarView from './CalendarView';
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import { AntDesign, MaterialIcons, Feather } from "@expo/vector-icons";
@@ -71,6 +72,7 @@ function squaresScreens() {
         component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
+
            <Stack.Screen
               name="PayAsCreditor"
               component={PayAsCreditor}
@@ -104,6 +106,11 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+              <Stack.Screen
+        name="CalendarView"
+        component={CalendarView}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
