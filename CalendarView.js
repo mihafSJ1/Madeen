@@ -31,6 +31,10 @@ import { date } from 'yup';
 var onceRequests = [];
 var installmentRequests = [];
  var  onceMarkedDates=[];
+var installmentRequestsMarkedDates = [];
+var dates = [];
+
+
  class CalendarView extends Component {
  
   constructor(props) {
@@ -79,7 +83,7 @@ firebase
             rqeuestStatus:child.val().rqeuestStatus,
             submittedDate:child.val().submittedDate,
             userid:child.val().userid,
-            // key:child.key,
+            key:child.key,
             remAmount: child.val().remAmount,
             datesArray:[1],
                 });
@@ -94,7 +98,10 @@ firebase
     if (installmentRequests[i].installmentsType == "سنويًا"){
         for(var j =0 ; j<installmentRequests[i].duration;j++){
 
-          installmentRequests[i].datesArray[j]=moment(installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD");
+          dates.push({
+            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD")
+              })
+         
              }
 
     }
@@ -102,30 +109,46 @@ firebase
 
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           
-            installmentRequests[i].datesArray[j]=moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD");
-           
-            console.log(installmentRequests[i].datesArray[j])
+          dates.push({
+         expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
+         installemntPrice: installmentRequests[i].installemntPrice
+           })
+         
      }
     }
    else if (installmentRequests[i].installmentsType == "أسبوعيًا"){
 
         for(var j =0 ; j<installmentRequests[i].duration;j++){
-        
-            installmentRequests[i].datesArray[j]=moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD");
+          dates.push({
+            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice
+              })
+            
      }
     }
     else if(installmentRequests[i].installmentsType == "يوميًا"){
         
         for(var j =0 ; j<installmentRequests[i].duration;j++){
-        
-            installmentRequests[i].datesArray[j]=moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD");
+          dates.push({
+            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice
+              })
+            
      }
+  
+   
     }
+    installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
+      acc[expectedDate] = {selected: true, selectedColor: '#D9AE94',selectedTextColor: 'white',marked:true}
+      return acc;
+    },{});
+  
   }
+ 
 
 
  onceMarkedDates = onceRequests.reduce((acc, {expectedDate}) => {
-   acc[expectedDate] = {selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white',marked:true}
+ acc[expectedDate] = {selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white',marked:true}
    return acc;
  },{});
 
@@ -147,7 +170,8 @@ firebase
      
     markedDates={
     
-        onceMarkedDates
+        onceMarkedDates,
+        installmentRequestsMarkedDates
         // '2020-11-05': { marked:true,  selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white', marked:true,},
       
       }
@@ -172,9 +196,9 @@ firebase
     selectedColor: '#CBCA9E',
     selectedTextColor: 'white',
     disabledArrowColor: '#d9e1e8',
-  textDayFontFamily: 'Bahij_TheSansArabic-Light',
-   textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
-   textDayHeaderFontFamily: 'Bahij_TheSansArabic-Light',
+    textDayFontFamily: 'Bahij_TheSansArabic-Light',
+    textMonthFontFamily: 'Bahij_TheSansArabic-Bold',
+    textDayHeaderFontFamily: 'Bahij_TheSansArabic-Light',
     textDayFontWeight: '300',
     textMonthFontWeight: 'bold',
     textDayHeaderFontWeight: '300',
@@ -192,20 +216,20 @@ firebase
  
      
     setTimeout(() => {
- const today = new Date()  
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const next =  new Date(tomorrow);
-    next.setDate(next.getDate() + 1);
-    const next2 =  new Date(next);
-    next2.setDate(next2.getDate() + 1);
-    const dates = [tomorrow,next,next2];
+for (var i =0 ;i<dates.length;i++){
+  this.state.items[dates[i].expectedDate] = [];
+  this.state.items[dates[i].expectedDate].push({    
+                name: ' موعد التسديد ' + dates[i].expectedDate ,
+                 amount: "المبلغ :"+dates[i].installemntPrice+"ريال سعودي" ,
+                height:20,
+              });
 
+            }
 for (var i = 0; i< onceRequests.length;i++){
     this.state.items[onceRequests[i].expectedDate] = [];
 this.state.items[onceRequests[i].expectedDate].push({    
               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
-              amount: "المبلغ :"+onceRequests[i].price,
+              amount: "المبلغ :"+onceRequests[i].price+"ريال سعودي ",
               height:20,
               
              
@@ -244,11 +268,11 @@ this.state.items[onceRequests[i].expectedDate].push({
     return (
       <TouchableOpacity
         // testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: item.height},{ba:item.textAlign}]} 
-        onPress={() => Alert.alert(item.name)}
+        style={[styles.item, {height: item.height}]} 
+        onPress={() => Alert.alert(item.name)}// need to navigate to payment screen 
       >
-        <Text>{item.name}</Text>
-        <Text>{item.amount}</Text>
+        <Text  style ={styles.textCard}>{item.name}</Text>
+        <Text  style ={styles.textCard}>{item.amount}</Text>
       </TouchableOpacity>
     );
   }
@@ -287,12 +311,19 @@ marginBottom:30,
     padding: 10,
     marginRight: 10,
     marginTop: 20,
+    
     fontFamily:'Bahij_TheSansArabic-Light',
   },
   emptyDate: {
     height: 15,
     flex:1,
     paddingTop: 30
+  },
+  textCard:{
+    fontFamily:'Bahij_TheSansArabic-Light',
+    textAlign:'right',
+    margin:2,
+    fontSize:15,
   }
 });
 export default withNavigation(CalendarView);
