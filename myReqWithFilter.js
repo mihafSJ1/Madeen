@@ -46,6 +46,7 @@ if (!firebase.apps.length) {
 var requestArray = [];
 
 var arrayFiltered=[];
+var arrayFiltered2=[];
 var myRequest = [];
 var usersArray = [];
 var namef = "name";
@@ -54,6 +55,10 @@ var emailf = "email";
 var UserIDImage = "2";
 var UserID = "3";
 let namefff = "999999";
+var Searching=false;
+var Found=false;
+var specificStatus="false";
+var SpecificStatusText="لا يوجد";
 
 firebase
   .database()
@@ -92,7 +97,9 @@ firebase
       //  }
     });
   });
+  //هنا الاسناد الصح 
   arrayFiltered=requestArray;
+  // arrayFiltered2=requestArray;
 export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
@@ -110,7 +117,7 @@ export default class MyReqWithFilter extends React.Component {
       searchTerm: '',
 
     arrayFiltered:requestArray,
-    arrayFiltered2:requestArray,
+   
   };
   }
 
@@ -147,6 +154,7 @@ export default class MyReqWithFilter extends React.Component {
         });
       });
       arrayFiltered=requestArray;
+    
      
     }
 
@@ -168,8 +176,24 @@ export default class MyReqWithFilter extends React.Component {
     this.setState({ profilePic: picNew });
   }
 
-  
+  setSearching(flag) {
+    this.setState({ Searching: flag });
+  }
+ 
+  setFound(flag) {
+    this.setState({ Found: flag });
+  }
 
+
+  setSpecificStatus(flag) {
+    this.setState({ specificStatus: flag });
+  }
+ 
+
+
+  setSpecificStatusText(text){
+    this.setState({ SpecificStatusText: text });
+  }
 
 
   setTimelinePic(picNew) {
@@ -321,16 +345,36 @@ export default class MyReqWithFilter extends React.Component {
  
    props.navigate("squares")
   }
-  list = () => {
+
+
+
+
+
+
+
+
+
+  list = (array,text) => {
+    // console.log("داخل الليست س");
     const currentUser = firebase.auth().currentUser.uid;
 
-    return requestArray.map((c,index) => {
+    return array.map((c,index) => {
+      console.log("داخل الليست ١١١١١");
       if (c.userid == currentUser) {
-        if (true) {
+        console.log(specificStatus);
+        console.log(this.state.specificStatus);
+
+        if (specificStatus=="true"){
+          console.log("يارب رحمتك");
+        }
+        // console.log("داخل بدون ستيتوس");
+        if (specificStatus=="false") {
+          console.log("داخل الليست ٢٢٢٢");
           return (
+         
             <View>
                 
-        
+                {console.log("داخل الفيووووو")}
               
            
               <TouchableOpacity
@@ -965,28 +1009,72 @@ null
             </View>
           );
         }
+        if(true){
+          <View></View>
+          // console.log("داخل مع ستيتوس");
+          console.log("nyv");
+          alert("raghad");
+          return(
+            <View>
+          <Text>raghad</Text>
+          </View>
+          );
+        }
       }
     });
   };
 
 
 //To search a specific status 
-searchStatus(textTosearch)  {
-  var i="";
+searchStatus = (textTosearch)  =>{
+
+  if(textTosearch==""){
+    this.setSearching(false);
+    return;
+  }
+  var arrayFiltered2=[];
+
+  for(var i =0 ,j = 0;i<requestArray.length;i++){
+    console.log(textTosearch)
+    if(textTosearch!=""){
+    if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+      this.setFound(true);
+      this.setSearching(true);
+      this.setSpecificStatus("true");
+      specificStatus="true";
+      console.log("طباعه الحاله ");
+      console.log(this.state.specificStatus);
+      console.log(specificStatus);
+      this.setSpecificStatusText(textTosearch);
+    // alert(requestArray[i].creditorName)
+    arrayFiltered2[j++]=requestArray[i]
+    console.log(" دخلت الاف  ")
+    
+    }
+    }
+    }
+  // console.log(textTosearch)
     // alert(textTosearch);
+    // this.setState({
 
-    this.setState({
+    //   arrayFiltered2:this.state.arrayFiltered.
+    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
 
-      requestArray:this.state.requestArray.
-      filter(i=>i.userName.toLowerCase().includes(textTosearch.toLowerCase())),
+
+    // })
+  console.log(" دخلت السيرتش ")
  
+//   console.log(arrayFiltered)
+// this.list(arrayFiltered2)
+// console.log(" اراي ٢ ")
+console.log(arrayFiltered2)
+console.log(" اخر السيرتش ")
+// console.log(textTosearch)
 
-    })
-    {console.log("فلتر فلتر ");}
-    {console.log(i);}
-   return i;
-  
 
+
+  // console.log( arrayFiltered2)
+// {this.listToSearch()} 
   }
 
 
@@ -1028,8 +1116,9 @@ searchStatus(textTosearch)  {
         <Icon name="search" />
        <SearchInput 
        style={styles.searchInput}
-       onChange={ (text) => { this.searchStatus(text) }} 
-       
+       onChangeText={ (text) => { this.searchStatus(text) }
+      } 
+      
        placeholder="ابحث عن حالة محدده"/>
 
      </Item>
@@ -1062,7 +1151,28 @@ searchStatus(textTosearch)  {
 
 
               <View style={styles.ViewList}>
-        <ScrollView>{this.list()}</ScrollView>
+
+                {/* اذا هو ما بحث الديفولت فولس وبطلع طبيعي  */}
+                {this.state.Searching ? (
+                  this.state.Found?(
+                 <ScrollView>{this.list(arrayFiltered2,SpecificStatusText)}</ScrollView>
+                  ):<Text> لايوجد</Text>
+                  ) :    <ScrollView>{this.list(requestArray,null)}</ScrollView>  }
+
+
+
+{/* this.setSpecificStatus(true)&&  */}
+
+
+
+
+        
+
+
+
+                {/* {this.searchStatus("مكتمل")} */}
+              {/* {this.listToSearch()}  */}
+        {/* <ScrollView>{this.list()}</ScrollView> */}
         </View>
         {/*View request */}
       </View>
