@@ -237,22 +237,22 @@ class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  updatestate(k,props){
+  // updatestate(k,props){
     
-    this.setModalVisible(!this.state.modalVisible);
-    this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey});
-    const { currentUser } = firebase.auth();
-    firebase
-    .database()
-    .ref('requests/' + k)
-    .update({
-      creditor:currentUser.uid,
-      rqeuestStatus: "قيد التنفيذ",
-    })
-    .then(() => console.log('Data updated.'));
+  //   this.setModalVisible(!this.state.modalVisible);
+  //   this.props.navigation.navigate("PayAsCreditor",{amount:this.state.rAmount, reqID: this.state.Rkey});
+  //   const { currentUser } = firebase.auth();
+  //   firebase
+  //   .database()
+  //   .ref('requests/' + k)
+  //   .update({
+  //     creditor:currentUser.uid,
+  //     rqeuestStatus: "قيد التنفيذ",
+  //   })
+  //   .then(() => console.log('Data updated.'));
     
-   // props.navigate("Timeline");
-  }
+  //  // props.navigate("Timeline");
+  // }
 
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
@@ -401,7 +401,7 @@ class Timeline extends React.Component {
                      
                       <TouchableOpacity
                       
-                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress = {()=>  { this.props.navigation.navigate("PayAsCreditor",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                         style={[styles.button, { backgroundColor: "#CBCA9E" }]}
                         // onPress={() => {
                         //   this. conformupdate(this.state.Rkey,this.props.navigation)}}
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
     width:"100%",
-    height: 620,
+    height: 520,
     // margin: 20,
     backgroundColor: "#fff",
     borderRadius: 20,
@@ -802,25 +802,25 @@ const styles = StyleSheet.create({
   //   fontSize: 5,
   // borderRadius:15,
   // },
-  button: {
-    alignItems: "center",
-    width: 170,
-    height: 30,
-    marginTop: 80,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    fontSize: 10,
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-  },
+  // button: {
+  //   alignItems: "center",
+  //   width: 170,
+  //   height: 30,
+  //   marginTop: 80,
+  //   padding: 5,
+  //   borderRadius: 15,
+  //   marginLeft: 10,
+  //   backgroundColor: "#fff",
+  //   fontSize: 10,
+  //   // alignItems: "center",
+  //   // width: 170,
+  //   // height: 30,
+  //   // marginTop: 10,
+  //   // padding: 5,
+  //   // borderRadius: 15,
+  //   // marginLeft: 10,
+  //   // backgroundColor: "#fff",
+  // },
 
   //end
 });

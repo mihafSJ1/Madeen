@@ -551,6 +551,7 @@ else{
                     keyboardType="numeric"
                     onBlur={formprops.handleBlur("price")}
                   />
+                  <Text style={[styles.textInputTitle, { top: -45,right:300, }]}>رس</Text>
                   <Text style={styles.textError}>
                     {formprops.touched.price && formprops.errors.price}
                   </Text>

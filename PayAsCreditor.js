@@ -60,7 +60,7 @@ const subscribeUser = (creditCardToken) => {
   });
 };
 
-export default class AddSubscription extends React.Component {
+export default class PayAsCreditor extends React.Component {
   static navigationOptions = {
     title: 'Subscription page',
   };
@@ -100,6 +100,7 @@ export default class AddSubscription extends React.Component {
         [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
         { cancelable: false }
       ));
+    
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    

@@ -66,7 +66,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.silverText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("CalendarView")}
           >
             {" "}
             التقويم
@@ -81,7 +81,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.greenText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("CalendarView")}
           >
             {" "}
             الحاسبة

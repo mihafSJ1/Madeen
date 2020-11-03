@@ -606,7 +606,7 @@
         {this.state.Rstatus== "قيد الإنتظار" ? (
                               <TouchableOpacity
                               style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                              onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                              onPress = {()=>  { this.props.navigation.navigate("PayAsCreditor",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                             >
                               <Text style={styles.buttonText}> قبول </Text>
                             </TouchableOpacity>
@@ -1046,12 +1046,12 @@
             height: 27,
             marginTop: 0,
             padding: 5,
-            borderRadius: 15,
+            borderRadius: 13,
             marginLeft: 0,
             marginBottom: 0,
             right: 0,
             left:-88,
-            top: -41,
+            top: -47,
             backgroundColor: "#FFFFFF",
             borderColor: "#FFFFFF",
             borderWidth: 1,
@@ -1236,7 +1236,7 @@
           },
           buttonTextNav2:{
             textAlign: "center",
-            top: -13,
+            top: -20,
             left: 92,
             fontFamily: "Bahij_TheSansArabic-Light",
             fontSize: 20,
