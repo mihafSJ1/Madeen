@@ -5,6 +5,7 @@ import { LocaleConfig as RNCalendarsLocaleConfig } from 'react-native-calendars'
 import * as Font from "expo-font";
 import { useFonts } from "expo-font";
 import * as firebase from "firebase";
+import {LocaleConfig} from 'react-native-calendars';
 import moment from "moment";
 const firebaseConfig = {
     apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -25,7 +26,14 @@ const firebaseConfig = {
 import { withNavigation } from "react-navigation";
 import { date } from 'yup';
 
-
+LocaleConfig.locales['ar'] = {
+  monthNames: [' يناير','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+  monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+  dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+  dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+  today: 'Aujourd\'hui'
+};
+LocaleConfig.defaultLocale = 'ar';
 
 
 var onceRequests = [];
@@ -61,7 +69,7 @@ firebase
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-        if(child.val().rqeuestStatus == "قيد التنفيذ"||child.val().rqeuestStatus =="قيد الإنتظار"){
+        if(child.val().rqeuestStatus == "قيد التنفيذ"){
         if (child.val().userid ==currentUser.uid ){
         if (child.val().repaymentType == "السداد دفعة واحدة"){
          onceRequests.push({
@@ -85,7 +93,7 @@ firebase
             userid:child.val().userid,
             key:child.key,
             remAmount: child.val().remAmount,
-            datesArray:[1],
+            datesArray:[],
                 });
           }
         }} 
@@ -99,7 +107,10 @@ firebase
         for(var j =0 ; j<installmentRequests[i].duration;j++){
 
           dates.push({
-            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD")
+            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price,
+            
               })
          
              }
@@ -111,7 +122,8 @@ firebase
           
           dates.push({
          expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
-         installemntPrice: installmentRequests[i].installemntPrice
+         installemntPrice: installmentRequests[i].installemntPrice,
+         price :  installmentRequests[i].price
            })
          
      }
@@ -121,7 +133,8 @@ firebase
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           dates.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price
               })
             
      }
@@ -131,7 +144,9 @@ firebase
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           dates.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price
+
               })
             
      }
@@ -219,8 +234,9 @@ firebase
 for (var i =0 ;i<dates.length;i++){
   this.state.items[dates[i].expectedDate] = [];
   this.state.items[dates[i].expectedDate].push({    
-                name: ' موعد التسديد ' + dates[i].expectedDate ,
+                  name: ' موعد التسديد ' + dates[i].expectedDate ,
                  amount: "المبلغ :"+dates[i].installemntPrice+"ريال سعودي" ,
+                 totalPrice : "المبلغ :"+dates[i].price+"ريال سعودي" ,
                 height:20,
               });
 
@@ -230,7 +246,8 @@ for (var i = 0; i< onceRequests.length;i++){
 this.state.items[onceRequests[i].expectedDate].push({    
               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
               amount: "المبلغ :"+onceRequests[i].price+"ريال سعودي ",
-              height:20,
+              totalPrice : "المبلغ :"+onceRequests[i].price+"ريال سعودي" ,
+              height:30,
               
              
            });
@@ -273,6 +290,8 @@ this.state.items[onceRequests[i].expectedDate].push({
       >
         <Text  style ={styles.textCard}>{item.name}</Text>
         <Text  style ={styles.textCard}>{item.amount}</Text>
+        <Text  style ={styles.textCard}>{item.totalPrice}</Text>
+
       </TouchableOpacity>
     );
   }
