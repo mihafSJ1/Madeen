@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -19,7 +19,6 @@ import "firebase/database";
 import "firebase/firestore";
 import Logo from "./Logo";
 import Home from "./Home";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -40,6 +39,7 @@ if (!firebase.apps.length) {
 }
 
 export default function Register({ navigation }) {
+
   // register backend
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

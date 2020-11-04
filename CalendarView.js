@@ -7,6 +7,8 @@ import { useFonts } from "expo-font";
 import * as firebase from "firebase";
 import {LocaleConfig} from 'react-native-calendars';
 import moment from "moment";
+import esLocale from 'moment/locale/es';
+
 const firebaseConfig = {
     apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
     authDomain: "madeendb2.firebaseapp.com",
@@ -27,10 +29,10 @@ import { withNavigation } from "react-navigation";
 import { date } from 'yup';
 
 LocaleConfig.locales['ar'] = {
-  monthNames: [' يناير','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+  monthNames: ['يناير','فبراير','مارس','ابريل','مايو','يونيو','يوليو','اغسطس','سبتمبر','اكتوبر','نوفمبر','ديسمبر'],
   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
   dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+  dayNamesShort: ['جمعة','خميس','أربعاء','ثلاثاء','اثنين','أحد.','سبت'],
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'ar';
@@ -154,7 +156,7 @@ firebase
    
     }
     installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
-      acc[expectedDate] = {selected: true, selectedColor: '#D9AE94',selectedTextColor: 'white',marked:true}
+      acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
       return acc;
     },{});
   
@@ -163,7 +165,7 @@ firebase
 
 
  onceMarkedDates = onceRequests.reduce((acc, {expectedDate}) => {
- acc[expectedDate] = {selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white',marked:true}
+ acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
    return acc;
  },{});
 
@@ -187,7 +189,7 @@ firebase
     
         onceMarkedDates,
         installmentRequestsMarkedDates
-        // '2020-11-05': { marked:true,  selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white', marked:true,},
+         //'2020-11-05': { marked:true,  selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white', marked:true,},
       
       }
 
@@ -207,7 +209,7 @@ firebase
        theme={{
       
     todayTextColor: '#57694C',
-    dayTextColor: '#2d4150',
+    dayTextColor: '#2d4150', // لون أرقام أيام التاريخ ا
     selectedColor: '#CBCA9E',
     selectedTextColor: 'white',
     disabledArrowColor: '#d9e1e8',
@@ -217,9 +219,18 @@ firebase
     textDayFontWeight: '300',
     textMonthFontWeight: 'bold',
     textDayHeaderFontWeight: '300',
-    textDayFontSize: 16,
+    textDayFontSize: 16.5,
     textMonthFontSize: 16,
-    textDayHeaderFontSize: 16
+    textDayHeaderFontSize: 11,
+    calendarBackground:"#FFFDF8",
+
+    textSectionTitleColor: '#9B9B7A',
+    textSectionTitleDisabledColor: '#B5B489',
+    selectedDayBackgroundColor: '#F4CE86',
+    textDayFontWeight: 'bold',
+    
+    selectedDotColor: '#A4161A',
+    monthTextColor: '#746356',
        }}
          
      
@@ -237,7 +248,7 @@ for (var i =0 ;i<dates.length;i++){
                   name: ' موعد التسديد ' + dates[i].expectedDate ,
                  amount: "المبلغ :"+dates[i].installemntPrice+"ريال سعودي" ,
                  totalPrice : "المبلغ :"+dates[i].price+"ريال سعودي" ,
-                height:20,
+                height:100,
               });
 
             }
@@ -247,7 +258,7 @@ this.state.items[onceRequests[i].expectedDate].push({
               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
               amount: "المبلغ :"+onceRequests[i].price+"ريال سعودي ",
               totalPrice : "المبلغ :"+onceRequests[i].price+"ريال سعودي" ,
-              height:30,
+              height:100,
               
              
            });
@@ -288,7 +299,14 @@ this.state.items[onceRequests[i].expectedDate].push({
         style={[styles.item, {height: item.height}]} 
         onPress={() => Alert.alert(item.name)}// need to navigate to payment screen 
       >
-        <Text  style ={styles.textCard}>{item.name}</Text>
+         {/* {item.names== "" ? (
+  <Text  style ={styles.textCard}>ككرتزتزا</Text>
+  ):(
+                      
+  <Text  style ={styles.textCard}>{item.name}</Text>
+              
+                     )} */}
+  <Text  style ={styles.textCard}>{item.name}</Text>
         <Text  style ={styles.textCard}>{item.amount}</Text>
         <Text  style ={styles.textCard}>{item.totalPrice}</Text>
 
@@ -298,10 +316,9 @@ this.state.items[onceRequests[i].expectedDate].push({
 
   renderEmptyDate() {
     return (
-      <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
-      </View>
-    );
+      <View style={{flex: 1}}>
+      <Text style={styles.titleStyle}>oops! There's no data here!</Text>
+    </View>);
   }
 
   rowHasChanged(r1, r2) {
@@ -317,7 +334,7 @@ this.state.items[onceRequests[i].expectedDate].push({
 const styles = StyleSheet.create({
     container:{
 marginTop:50,
-marginBottom:30,
+marginBottom:0,
 
     },
 
@@ -330,19 +347,26 @@ marginBottom:30,
     padding: 10,
     marginRight: 10,
     marginTop: 20,
-    
+    borderColor:'#D9AE94',
+    borderWidth:0.5,
+    //backgroundColor:'red',
     fontFamily:'Bahij_TheSansArabic-Light',
   },
   emptyDate: {
     height: 15,
     flex:1,
-    paddingTop: 30
+    paddingTop: 30,
+    
+  //  backgroundColor:'red',
   },
   textCard:{
     fontFamily:'Bahij_TheSansArabic-Light',
     textAlign:'right',
     margin:2,
     fontSize:15,
+    color:'#746356',
+  
+  //  backgroundColor:'red',
   }
 });
 export default withNavigation(CalendarView);

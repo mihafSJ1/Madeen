@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View, ScrollView,Dimensions,Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Dimensions ,Alert} from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";

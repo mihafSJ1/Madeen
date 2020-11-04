@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
+import * as Notifications from 'expo-notifications';
 import moment from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
@@ -19,7 +20,6 @@ import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
 import { withNavigation } from "react-navigation";
-
 import * as firebase from "firebase";
 import "firebase/auth";
 import "firebase/database";
@@ -29,6 +29,8 @@ import FirebaseKeys from "./FirebaseKeys";
 import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
+
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -216,6 +218,7 @@ class Request extends React.Component {
 
   //-------------------------------------------- Form Submission
   componentDidMount() {
+    registerForPushNotificationsAsync();
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -231,12 +234,48 @@ class Request extends React.Component {
           }
         });
       });
-
     this.setState({
       userValue: applicationUsers,
     });
+
+    firebase
+    .database()
+    .ref("users/")
+    .on("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        if (child.val().email != currentUser.email) {
+          applicationUsers.push({
+            fullName: child.val().fullName,
+            label: child.val().email,
+          });
+        }
+      });
+    });
   }
 
+  
+  sendPushNotification = (Key, userName) => {
+    let Token;
+    firebase
+    .database()
+    .ref("users/"+Key).on("value", (snapshot) => {
+      Token = snapshot.val().push_Notification_token;
+    });
+    let response = fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        to: Token,
+        sound: 'default',
+        title: 'مدين | طلب جديد!',
+        body: userName + ' بحاجة إلى مساعدتك '
+      })
+    });
+  }
+  
 bringid(k){
   console.log("bring");
   firebase
@@ -248,7 +287,6 @@ bringid(k){
         console.log("return")
         keyC= child.key;
         Cname=child.val().fullName;
-  
 }
 });
 });
@@ -289,10 +327,7 @@ else{
           creditor: keyC,
           creditorName:Cname,
           creditorEmail:values.user,
-         
-         
           remAmount: values.price
-
         },
         function (error) {
           if (error) {
@@ -307,6 +342,9 @@ else{
           }
         }
       );
+      alert(keyC)
+      if(keyC!=""){
+      this.sendPushNotification(keyC, userNameFromDB);}
   }
 
   requestSchema = yup.object({
