@@ -271,10 +271,11 @@ firebase
     monthTextColor: '#746356',
 
     //agena
-    agendaDayTextColor: 'yellow',
-    agendaDayNumColor: 'green',
-    agendaTodayColor: 'red',
-    agendaKnobColor: 'blue'
+    agendaDayTextColor: '#746356',
+    agendaDayNumColor: '#BE6A6C',
+    agendaTodayColor: '#F0BB56',
+   
+    agendaKnobColor: '#EBEBD3'
 
    
        }}
@@ -317,8 +318,8 @@ for (var i =0 ;i<dates.length;i++){
                  totalPrice : " المبلغ الكلي :"+dates[i].price+"ريال سعودي" ,
                 height:100,
                 backgroundColor: "white",
-                borderColor:'#D9AE94',
-                borderBottomColor:"#D9AE94",
+                borderColor:'#BE6A6C',
+                borderBottomColor:"#BE6A6C",
                 borderRadius: 10,
               });
 
