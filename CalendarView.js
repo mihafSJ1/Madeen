@@ -187,8 +187,8 @@ firebase
      
     markedDates={
     
-        onceMarkedDates,
-        installmentRequestsMarkedDates
+        onceMarkedDates
+        //installmentRequestsMarkedDates
          //'2020-11-05': { marked:true,  selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white', marked:true,},
       
       }
@@ -242,6 +242,20 @@ firebase
  
      
     setTimeout(() => {
+      for (var i = -15; i < 85; i++) {
+        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        const strTime = this.timeToString(time);
+        if (!this.state.items[strTime]) {
+          this.state.items[strTime] = [];
+
+            this.state.items[strTime].push({
+              name:  strTime ,
+              height: 10
+            });
+       
+          }
+        }
+      
 for (var i =0 ;i<dates.length;i++){
   this.state.items[dates[i].expectedDate] = [];
   this.state.items[dates[i].expectedDate].push({    
@@ -325,10 +339,10 @@ this.state.items[onceRequests[i].expectedDate].push({
     return r1.name !== r2.name;
   }
 
-  timeToString(date) {
+  timeToString(time) {
   
-    return date.toISOString().split('T')[0];
-  }
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];  }
 }
 
 const styles = StyleSheet.create({
