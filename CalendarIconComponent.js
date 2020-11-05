@@ -74,7 +74,7 @@ export default function CalendarIconComponent() {
           r={1.182}
           transform="translate(59.063 62.215)"
         />
-     // فيه هنا ثنين خليتهم اول شي
+   
         <Circle
           data-name="Ellipse 16"
           cx={1.182}
@@ -92,7 +92,6 @@ export default function CalendarIconComponent() {
           transform="translate(63.791 66.944)"
         />
 
-        //هنا بدلت بين اللي فوق وتخت الكومنت 
         <Circle
           data-name="Ellipse 17"
           cx={1.182}
