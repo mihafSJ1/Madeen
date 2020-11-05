@@ -33,7 +33,7 @@ LocaleConfig.locales['ar'] = {
   monthNames: ['يناير','فبراير','مارس','ابريل','مايو','يونيو','يوليو','اغسطس','سبتمبر','اكتوبر','نوفمبر','ديسمبر'],
   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
   dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  dayNamesShort: ['أحد','أثنين','ثلاثاء','أربعاء','خميس','جمعة.','سبت'],
+  dayNamesShort: ['احد','اثنين','ثلاثاء','اربعاء','خميس','جمعة','سبت'],
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'ar';
@@ -215,7 +215,6 @@ firebase
   render() {
   
   
-
     return (
 
       <Agenda style = {styles.container}
@@ -231,6 +230,7 @@ firebase
       }
 
  
+      
 
  
      
@@ -269,6 +269,14 @@ firebase
     
     selectedDotColor: '#A4161A',
     monthTextColor: '#746356',
+
+    //agena
+    agendaDayTextColor: 'yellow',
+    agendaDayNumColor: 'green',
+    agendaTodayColor: 'red',
+    agendaKnobColor: 'blue'
+
+   
        }}
          
      
@@ -392,6 +400,7 @@ const styles = StyleSheet.create({
     container:{
 marginTop:50,
 marginBottom:0,
+
 
     },
 
