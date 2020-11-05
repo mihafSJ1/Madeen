@@ -31,6 +31,13 @@ import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -119,10 +126,13 @@ class Request extends React.Component {
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
+      notification: {},
+      keyC: "",
+      keyD: "",
       // repaymentType : [],
     };
   }
-
+ 
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
@@ -219,6 +229,8 @@ class Request extends React.Component {
   //-------------------------------------------- Form Submission
   componentDidMount() {
     registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -253,8 +265,34 @@ class Request extends React.Component {
     });
   }
 
+  _handleNotification = notification => {
+    this.setState({ notification: notification });
+    firebase
+    .database()
+    .ref("notifications/")
+    .push(
+      {
+       title: this.state.notification.request.content.title,
+       body: this.state.notification.request.content.body,
+       creditor: this.state.keyC,
+       debtor:this.state.keyD,
+       opened: false,
+      });
+  }
+
+  _handleNotificationResponse = response => {
+    console.log(response);
+    // props.navigate("NotImplementedScreen")
+    firebase
+    .database()
+    .ref("requests/" + requestId)
+    .update({
+      remAmount: remining,
+      rqeuestStatus: reqStatus
+    })
+  };
   
-  sendPushNotification = (Key, userName) => {
+  sendPushNotification = (Key) => {
     let Token;
     firebase
     .database()
@@ -270,13 +308,29 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مدين | طلب جديد!',
-        body: userName + ' بحاجة إلى مساعدتك '
+        title: 'مَدِين | طلب جديد!',
+        body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
   }
   
-bringid(k){
+  pushNotificationToFirebase(keyC,keyD){
+    alert(keyC)
+    alert(this.state.notification.request.content.body)
+
+    firebase
+    .database()
+    .ref("notifications/")
+    .push(
+      {
+       title: this.state.notification.request.content.title,
+       body: this.state.notification.request.content.body,
+       creditor: keyC,
+       debtor:keyD
+      });
+  }
+  
+  bringid(k){
   console.log("bring");
   firebase
   .database()
@@ -284,10 +338,10 @@ bringid(k){
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       if (child.val().email == k) {
-        console.log("return")
         keyC= child.key;
         Cname=child.val().fullName;
 }
+this.setState({keyC: keyC})
 });
 });
 }
@@ -307,7 +361,7 @@ else{
       .on("value", (snapshot) => {
         userNameFromDB = snapshot.val().fullName;
       });
-
+this.setState({keyD:currentUser.uid})
     const requestID = firebase
       .database()
       .ref("requests/")
@@ -342,9 +396,11 @@ else{
           }
         }
       );
-      alert(keyC)
       if(keyC!=""){
-      this.sendPushNotification(keyC, userNameFromDB);}
+        this.sendPushNotification(keyC);
+      // this.pushNotificationToFirebase(keyC,currentUser.uid);
+
+      }
   }
 
   requestSchema = yup.object({
@@ -551,7 +607,6 @@ else{
                     keyboardType="numeric"
                     onBlur={formprops.handleBlur("price")}
                   />
-                  <Text style={[styles.textInputTitle, { top: -45,right:300, }]}>رس</Text>
                   <Text style={styles.textError}>
                     {formprops.touched.price && formprops.errors.price}
                   </Text>
