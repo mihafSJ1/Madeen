@@ -27,7 +27,7 @@ import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
 import  Calculator from './Calculator';
-import  myReqWithFilter from './myReqWithFilter';
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -98,17 +98,7 @@ function squaresScreens() {
             />
 
 
-<Stack.Screen
-              name="myReqWithFilter"
-              component={myReqWithFilter}
-              options={{
-                headerShown: true,
-                // navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            />
+
 
 
 
