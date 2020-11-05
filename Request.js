@@ -31,6 +31,7 @@ import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
 
+
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -119,6 +120,7 @@ class Request extends React.Component {
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
+      notification: {},
       // repaymentType : [],
     };
   }
@@ -219,6 +221,10 @@ class Request extends React.Component {
   //-------------------------------------------- Form Submission
   componentDidMount() {
     registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    // alert()
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
+  
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -251,10 +257,26 @@ class Request extends React.Component {
         }
       });
     });
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
   }
 
+  _handleNotification = notification => {
+    this.setState({ notification: notification });
+  }
+
+
+  _handleNotificationResponse = response => {
+    console.log(response);
+  };
   
-  sendPushNotification = (Key, userName) => {
+  sendPushNotification = (Key) => {
     let Token;
     firebase
     .database()
@@ -275,8 +297,22 @@ class Request extends React.Component {
       })
     });
   }
-  
-bringid(k){
+
+  pushNotificationToFirebase(keyC,keyD){
+    alert(this.state.notification)
+    firebase
+    .database()
+    .ref("notifications/")
+    .push(
+      {
+       title: this.state.notification,
+      //  body: this.state.notification.request.content.body,
+       creditor: keyC,
+       debtor:keyD
+      });
+  }
+
+  bringid(k){
   console.log("bring");
   firebase
   .database()
@@ -342,9 +378,10 @@ else{
           }
         }
       );
-      alert(keyC)
-      if(keyC!=""){
-      this.sendPushNotification(keyC, userNameFromDB);}
+       if(keyC!=""){
+      this.sendPushNotification(keyC);
+      this.pushNotificationToFirebase(keyC,currentUser.uid);
+    }
   }
 
   requestSchema = yup.object({
