@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Item,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
@@ -981,6 +982,8 @@ null
 
         {/* -------------------------------------- CARD 1*/}
    
+  
+
 
         <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
         <View style={styles.WhiteRectangleShapeView}> 
