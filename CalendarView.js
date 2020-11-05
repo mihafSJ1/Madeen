@@ -27,6 +27,7 @@ const firebaseConfig = {
 
 import { withNavigation } from "react-navigation";
 import { date } from 'yup';
+import { isThisWeek } from 'date-fns';
 
 LocaleConfig.locales['ar'] = {
   monthNames: ['يناير','فبراير','مارس','ابريل','مايو','يونيو','يوليو','اغسطس','سبتمبر','اكتوبر','نوفمبر','ديسمبر'],
@@ -43,7 +44,7 @@ var installmentRequests = [];
  var  onceMarkedDates=[];
 var installmentRequestsMarkedDates = [];
 var dates = [];
-
+var array = [];
 
  class CalendarView extends Component {
  
@@ -53,6 +54,7 @@ var dates = [];
     this.state = {
       items: {} ,
       dates:[],
+      events:[],
       debtorRequests :[],
       currentUser : null,
      markedDates:null
@@ -95,82 +97,117 @@ firebase
             userid:child.val().userid,
             key:child.key,
             remAmount: child.val().remAmount,
-            datesArray:[],
+          
                 });
           }
         }} 
  });
       
   });
+  for (var i =0 ;i< onceRequests.length;i++){
+    array.push({
+      expectedDate :onceRequests[i].expectedDate
+    })
+  }
 
 
   for (var i =0 ;i< installmentRequests.length;i++){
     if (installmentRequests[i].installmentsType == "سنويًا"){
         for(var j =0 ; j<installmentRequests[i].duration;j++){
-
-          dates.push({
+         
+          array.push({
+           
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice,
-            price :  installmentRequests[i].price,
+         
             
               })
+              dates.push({
+                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
+                installemntPrice: installmentRequests[i].installemntPrice,
+                price :  installmentRequests[i].price
+                  })
          
              }
 
     }
-    else if (installmentRequests[i].installmentsType == "شهريًا"){
+ if (installmentRequests[i].installmentsType == "شهريًا"){
 
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           
-          dates.push({
+          array.push({
          expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
-         installemntPrice: installmentRequests[i].installemntPrice,
-         price :  installmentRequests[i].price
+      
            })
+           dates.push({
+            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price
+              })
          
      }
     }
-   else if (installmentRequests[i].installmentsType == "أسبوعيًا"){
+  if (installmentRequests[i].installmentsType == "أسبوعيًا"){
 
         for(var j =0 ; j<installmentRequests[i].duration;j++){
-          dates.push({
+          array.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice,
-            price :  installmentRequests[i].price
+       
               })
             
+              dates.push({
+                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
+                installemntPrice: installmentRequests[i].installemntPrice,
+                price :  installmentRequests[i].price
+                  })
      }
     }
-    else if(installmentRequests[i].installmentsType == "يوميًا"){
+    if(installmentRequests[i].installmentsType == "يوميًا"){
         
         for(var j =0 ; j<installmentRequests[i].duration;j++){
-          dates.push({
+          array.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice,
-            price :  installmentRequests[i].price
+        
 
               })
+              dates.push({
+                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
+                installemntPrice: installmentRequests[i].installemntPrice,
+                price :  installmentRequests[i].price
+    
+                  })
+
             
      }
   
    
     }
-    installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
+   
+    
+    // installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
+    //   acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
+
+    //   return acc;
+    // },{});
+    onceMarkedDates = array.reduce((acc, {expectedDate}) => {
       acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
-      return acc;
-    },{});
+        return acc;
+      },{});
+      // console.log("hello")
+      // console.log("once")
+      // console.log(array)
+      // console.log("hello")
+      // console.log(onceMarkedDates)
   
   }
- 
 
 
- onceMarkedDates = onceRequests.reduce((acc, {expectedDate}) => {
- acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
-   return acc;
- },{});
 
 
-}
+
+
+  }
+
+
 
 
 
@@ -179,15 +216,15 @@ firebase
   
   
     return (
-   
+
       <Agenda style = {styles.container}
      
       
      
     markedDates={
-    
-        onceMarkedDates
-        //installmentRequestsMarkedDates
+  
+        
+      onceMarkedDates
          //'2020-11-05': { marked:true,  selected: true, selectedColor: '#CBCA9E',selectedTextColor: 'white', marked:true,},
       
       }
@@ -205,8 +242,9 @@ firebase
         renderEmptyDate={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
 
-        
+     
        theme={{
+        
       
     todayTextColor: '#57694C',
     dayTextColor: '#2d4150', // لون أرقام أيام التاريخ ا
@@ -257,52 +295,55 @@ firebase
           this.state.items[strTime] = [];
 
             this.state.items[strTime].push({
-              name:  strTime ,
-              height: 10
+              // name:   ,
+              // height: 10
+              backgroundColor:" #F2F4F5",
+              borderColor:'#F2F4F5',
+              borderBottomColor:"#C9D1E0",
+              borderRadius: 0,
+              
+
             });
        
           }
         }
       
 for (var i =0 ;i<dates.length;i++){
+  
   this.state.items[dates[i].expectedDate] = [];
   this.state.items[dates[i].expectedDate].push({    
                   name: ' موعد التسديد ' + dates[i].expectedDate ,
-                 amount: "المبلغ :"+dates[i].installemntPrice+"ريال سعودي" ,
-                 totalPrice : "المبلغ :"+dates[i].price+"ريال سعودي" ,
+                 amount: "  مبلغ التسديد  :"+dates[i].installemntPrice+"ريال سعودي" ,
+                 totalPrice : " المبلغ الكلي :"+dates[i].price+"ريال سعودي" ,
                 height:100,
+                backgroundColor: "white",
+                borderColor:'#D9AE94',
+                borderBottomColor:"#D9AE94",
+                borderRadius: 10,
               });
 
             }
 for (var i = 0; i< onceRequests.length;i++){
+  if (!this.state.items[onceRequests[i].expectedDate]) {
     this.state.items[onceRequests[i].expectedDate] = [];
 this.state.items[onceRequests[i].expectedDate].push({    
               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
-              amount: "المبلغ :"+onceRequests[i].price+"ريال سعودي ",
-              totalPrice : "المبلغ :"+onceRequests[i].price+"ريال سعودي" ,
+              totalPrice : " المبلغ الكلي :"+onceRequests[i].price+"ريال سعودي" ,
               height:100,
+              backgroundColor: "white",
+              borderColor:'#D9AE94',
+              borderBottomColor:"#D9AE94",
+              borderRadius: 10,
+           
               
              
            });
-        }
-    // for (let i =0 ;i<3 ;i++){
-        
-    //     const strTime = this.timeToString(dates[i])
-        
-    //       this.state.items[strTime] = [];
-       
-         
-    //         this.state.items[strTime].push({
-                
-    //           name: ' موعد التسديد ' + strTime ,
-    //           amount: "المبلغ :٢٠٠ ريال سعودي",
-    //           height:20,
-    //           backgroundColor:'green',
-           
-             
-    //        });
-    
-      
+          }
+      }
+//  console.log(onceRequests)
+//  console.log("ins")
+//  console.log(dates)
+ 
     // }
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
@@ -318,7 +359,7 @@ this.state.items[onceRequests[i].expectedDate].push({
     return (
       <TouchableOpacity
         // testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: item.height}]} 
+        style={[styles.item, {height: item.height}, {backgroundColor: item.backgroundColor},{borderColor: item.borderColor},{borderBottomColor: item.borderBottomColor},,{borderRadius: item.borderRadius}]} 
         onPress={() => Alert.alert(item.name)}// need to navigate to payment screen 
       >
          {/* {item.names== "" ? (
@@ -329,7 +370,9 @@ this.state.items[onceRequests[i].expectedDate].push({
               
                      )} */}
   <Text  style ={styles.textCard}>{item.name}</Text>
-        <Text  style ={styles.textCard}>{item.amount}</Text>
+  {item.amount ==  null ?null
+  :  <Text  style ={styles.textCard}>{item.amount}</Text>}
+ 
         <Text  style ={styles.textCard}>{item.totalPrice}</Text>
 
       </TouchableOpacity>
@@ -364,13 +407,14 @@ marginBottom:0,
   item: {
     // textAlign:'Right',
     textAlign:'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     flex: 1,
-    borderRadius: 10,
+  
     padding: 10,
     marginRight: 10,
     marginTop: 20,
-    borderColor:'#D9AE94',
+    // borderColor:'#D9AE94',
+marginHorizontal:5,
     borderWidth:0.5,
     //backgroundColor:'red',
     fontFamily:'Bahij_TheSansArabic-Light',
