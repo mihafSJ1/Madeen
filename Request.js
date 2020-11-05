@@ -29,9 +29,11 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
+import {schedulePushNotification} from './schedulePushNotification';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
+import { fromUnixTime } from "date-fns";
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -327,7 +329,7 @@ bringid(k){
 });
 }
   onSubmitPress(values, props) {
-    const trigger = new Date(this.state.submittedDateState);
+    const trigger = new Date(this.state.expectedDate);
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
@@ -387,7 +389,8 @@ else{
       if(  keyC != ""){
         console.log("kyC");
       this.sendPushNotification(keyC,userNameFromDB);}
-     // scheduleLocalNotification(trigger,values.expectedDate,this.state.installmentsState,values.repaymentType)
+     // schedulePushNotification(userNameFromDB,trigger,this.state.installmentsState,values.repaymentType);
+     // scheduleLocalNotification(userNametrigger,values.expectedDate,this.state.installmentsState,values.repaymentType)
   }
 
   requestSchema = yup.object({

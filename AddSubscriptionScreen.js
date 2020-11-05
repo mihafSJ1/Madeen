@@ -4,8 +4,9 @@ import { StyleSheet, Text, View, ScrollView,Dimensions,Alert } from 'react-nativ
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
-
+import {schedulePushNotification} from './schedulePushNotification';
  import * as firebase from "firebase";
+ import {registerForPushNotificationsAsync} from './PushNotificationToken';
 const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى';
 const SERVER_ERROR = 'الخادم غير متوفر، حاول مرة أخرى';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
@@ -61,6 +62,7 @@ const subscribeUser = (creditCardToken) => {
 };
 
 export default class AddSubscription extends React.Component {
+
   static navigationOptions = {
     title: 'Subscription page',
   };
@@ -71,8 +73,59 @@ export default class AddSubscription extends React.Component {
       error: null
     }
   }
+  componentDidMount(){
+ registerForPushNotificationsAsync();
+  }
+  sendPushNotification =(Key)=>{
+    console.log("sendPushNotification");
+    let Token;
+    let userid;
+    let  expectedDate;
+    let   submittedDate;
+    let repaymentType;
+    let     userName ;
+    let installemntPrice;
+    let  installmentsType;
+    firebase
+    .database()
+    .ref("requests/"+Key).on("value", (snapshot) => {
+      userid = snapshot.val().userid;
+     
+          expectedDate=snapshot.val().expectedDate,
+          submittedDate=snapshot.val().submittedDate,
+          repaymentType =snapshot.val().repaymentType,
+           // userid = currentUser.uid,
+          userName =snapshot.val().userName,
+         
+          installemntPrice=snapshot.val().installemntPrice,
+          //installemntDuration=this.state.durationState,
+          installmentsType=snapshot.val().installmentsType
+
+    });
+    firebase
+    .database()
+    .ref("users/"+userid).on("value", (snapshot) => {
+      Token = snapshot.val().push_Notification_token;
+    });
+   console.log("ToKEN"+Token);
+    let response = fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        to: Token,
+        sound: 'default',
+        title: 'تم قبول طلبك',
+      })
+    });
+        
+    schedulePushNotification(userName,submittedDate,installmentsType,repaymentType);
+  }
   // Handles submitting the payment request
   onSubmit = async (creditCardInput,reqID,amount) => {
+    this.sendPushNotification(reqID);
     const { navigation } = this.props;
     const { currentUser } = firebase.auth();
     var name;

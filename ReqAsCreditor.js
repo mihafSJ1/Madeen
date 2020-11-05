@@ -18,11 +18,7 @@
         import "firebase/database";
         import "firebase/firestore";
         import FirebaseKeys from './FirebaseKeys';
-
-
-
-
-
+        import {registerForPushNotificationsAsync} from './PushNotificationToken';
         import { Ionicons } from "@expo/vector-icons";
         import { FlatList } from "react-native-gesture-handler";
         import { render } from "react-dom";
@@ -119,7 +115,7 @@
           };
 
           componentDidMount() {
-          
+            registerForPushNotificationsAsync();
             requestArray=[];
           
             const { currentUser } = firebase.auth();
@@ -305,9 +301,36 @@
               { cancelable: false }
             );
           }
-
+          sendPushNotificationRejact =(Key)=>{
+            console.log("sendPushNotification");
+            let Token;
+            let userid;
+            firebase
+            .database()
+            .ref("requests/"+Key).on("value", (snapshot) => {
+              userid = snapshot.val().userid;
+            });
+            firebase
+            .database()
+            .ref("users/"+userid).on("value", (snapshot) => {
+              Token = snapshot.val().push_Notification_token;
+            });
+           console.log("ToKEN"+Token);
+            let response = fetch('https://exp.host/--/api/v2/push/send', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                to: Token,
+                sound: 'default',
+                title: 'نعتذر، تم رفض طلب',
+              })
+            });
+          }
           updatestateReject(k,props){
-            
+            this.sendPushNotificationRejact (k);
         this.setModalVisible(!this.state.modalVisible);
        // props.navigate("squares");
           //   const { currentUser } = firebase.auth();
