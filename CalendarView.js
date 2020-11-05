@@ -242,8 +242,9 @@ firebase
         renderEmptyDate={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
 
-        
+     
        theme={{
+        
       
     todayTextColor: '#57694C',
     dayTextColor: '#2d4150', // لون أرقام أيام التاريخ ا
@@ -286,8 +287,14 @@ firebase
           this.state.items[strTime] = [];
 
             this.state.items[strTime].push({
-              name:  strTime ,
-              height: 10
+              // name:   ,
+              // height: 10
+              backgroundColor:" #F2F4F5",
+              borderColor:'#F2F4F5',
+              borderBottomColor:"#C9D1E0",
+              borderRadius: 0,
+              
+
             });
        
           }
@@ -301,6 +308,10 @@ for (var i =0 ;i<dates.length;i++){
                  amount: "  مبلغ التسديد  :"+dates[i].installemntPrice+"ريال سعودي" ,
                  totalPrice : " المبلغ الكلي :"+dates[i].price+"ريال سعودي" ,
                 height:100,
+                backgroundColor: "white",
+                borderColor:'#D9AE94',
+                borderBottomColor:"#D9AE94",
+                borderRadius: 10,
               });
 
             }
@@ -309,8 +320,13 @@ for (var i = 0; i< onceRequests.length;i++){
     this.state.items[onceRequests[i].expectedDate] = [];
 this.state.items[onceRequests[i].expectedDate].push({    
               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
-             totalPrice : " المبلغ الكلي :"+onceRequests[i].price+"ريال سعودي" ,
+              totalPrice : " المبلغ الكلي :"+onceRequests[i].price+"ريال سعودي" ,
               height:100,
+              backgroundColor: "white",
+              borderColor:'#D9AE94',
+              borderBottomColor:"#D9AE94",
+              borderRadius: 10,
+           
               
              
            });
@@ -335,7 +351,7 @@ this.state.items[onceRequests[i].expectedDate].push({
     return (
       <TouchableOpacity
         // testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: item.height}]} 
+        style={[styles.item, {height: item.height}, {backgroundColor: item.backgroundColor},{borderColor: item.borderColor},{borderBottomColor: item.borderBottomColor},,{borderRadius: item.borderRadius}]} 
         onPress={() => Alert.alert(item.name)}// need to navigate to payment screen 
       >
          {/* {item.names== "" ? (
@@ -382,13 +398,14 @@ marginBottom:0,
   item: {
     // textAlign:'Right',
     textAlign:'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     flex: 1,
-    borderRadius: 10,
+  
     padding: 10,
     marginRight: 10,
     marginTop: 20,
-    borderColor:'#D9AE94',
+    // borderColor:'#D9AE94',
+marginHorizontal:5,
     borderWidth:0.5,
     //backgroundColor:'red',
     fontFamily:'Bahij_TheSansArabic-Light',
