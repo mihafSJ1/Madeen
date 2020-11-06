@@ -28,6 +28,7 @@ import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
 import  Calculator from './Calculator';
 import  myReqWithFilter from './myReqWithFilter';
+import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
 
 
 // import * as firebase from "firebase";
@@ -103,6 +104,18 @@ function squaresScreens() {
 <Stack.Screen
               name="myReqWithFilter"
               component={myReqWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+<Stack.Screen
+              name="ReqAsCreditorWithFilter"
+              component={ReqAsCreditorWithFilter}
               options={{
                 headerShown: true,
                 // navigation: { navigation },

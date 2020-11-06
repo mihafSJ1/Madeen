@@ -1595,7 +1595,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
             
                       
                     </TouchableOpacity>
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                       <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
@@ -1603,16 +1603,16 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       
  ): null }
                     
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                                          <Text style={styles.UserName}>{this.state.CreditorName}</Text>
 
       
  ): null }
-          {this.state.CreditorName=""? ( 
+          {this.state.CreditorName!=""? ( 
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -1648,28 +1648,28 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       />
                     </Text>
                      ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
       ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                           <Text style={styles.debts}> عدد الاستلاف </Text>
 
       ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
         <View style={styles.PinkRectangleShapeView}>
         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
       </View>
 
       ): null }
                   
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
         <View style={styles.YellowRectangleShapeView}>
         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
       </View>
       ): null }
                   
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
        <View style={styles.buttonContainer}>
        <TouchableOpacity
          style={[styles.button, { backgroundColor: "#fff" }]}
@@ -1678,12 +1678,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
          style={[styles.button, { backgroundColor: "#fff" }]}
        ></TouchableOpacity>
      </View>
-      ): null }
-                 {this.state.CreditorName=""? ( 
-null
-      ): 
-      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
-    }    
+      ): <Text style={styles.noUser}>لا يوجد دائن محدد</Text> }
+   
              
 
                    
@@ -1701,7 +1697,7 @@ null
 
 //To search a specific status 
 searchStatus = (textTosearch)  =>{
-  arrayFiltered2=[];
+   arrayFiltered2=[];
   firebase.auth();
   console.log("////////////////////////////////");
   this.setSpecificStatusText(textTosearch);
@@ -1716,6 +1712,10 @@ searchStatus = (textTosearch)  =>{
     this.setSearching(true);
  
   }
+
+  if(textTosearch=="قيد الانتظار"){
+    textTosearch="قيد الإنتظار";
+}
 
    var check=false;
   for(var i =0 ,j = 0;i<requestArray.length;i++){
@@ -1841,7 +1841,7 @@ console.log(check)
   
 <View style={styles.twoButton}>
     
-        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
+        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myReqWithFilter")}> مدين </Text>
         <View style={styles.WhiteRectangleShapeView}> 
               </View>
      
@@ -1854,7 +1854,7 @@ console.log(check)
               
 
               <Text style={styles.buttonTextNav}
-          onPress={() => this.props.navigation.navigate("ReqAsCreditor")}
+          onPress={() => this.props.navigation.navigate("ReqAsCreditorWithFilter")}
               > دائن </Text>
             
         <View style={styles.GreenRectangleShapeView}>
@@ -1935,7 +1935,7 @@ const styles = StyleSheet.create({
   },
 
   ViewList:{
-marginBottom:150,
+marginBottom:220,
 // backgroundColor:'blue',
 top:-32,
   },
@@ -2483,20 +2483,24 @@ backgroundColor:'red',
     textAlign: "center",
     top: -95,
     right: 90,
+    left:25,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 22,
     color: "#404040",
     zIndex:2,
-    paddingLeft: 50,
-    paddingRight: 50,
+    width:50,
+    paddingLeft: 45,
+    paddingRight:90,
     // paddingBottom: 2,
     // paddingTop: 0,
     // backgroundColor:'red',
+    
   },
   buttonTextNav2:{
     textAlign: "center",
     top: 0,
-    left: 77,
+    left: 180,
+    right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 22,
     color: "#404040",
@@ -2505,7 +2509,11 @@ backgroundColor:'red',
     paddingRight: 50,
     // paddingBottom: 2,
     // paddingTop: 0,
-    // backgroundColor:'red',
+    // backgroundColor:'pink',
+    width:100,
+    paddingRight: 90,
+    paddingLeft: 60,
+    paddingTop:-40,
    
   },
   buttonText: {
