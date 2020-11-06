@@ -51,7 +51,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.blueText}
-            onPress={() => navigation.navigate("myRequest")}
+            onPress={() => navigation.navigate("myReqWithFilter")}
           >
             {" "}
             طلباتي
@@ -66,7 +66,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.silverText}
-            onPress={() => navigation.navigate("myReqWithFilter")}
+            onPress={() => navigation.navigate("NotImplementedScreens")}
           >
             {" "}
             التقويم
