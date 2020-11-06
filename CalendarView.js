@@ -340,7 +340,7 @@ if(!array[i].flag){
                 amount: array[i].installemntPrice,
                 creditor: "الدائن | "+array[i].creditor,
                 totalPrice : " المبلغ الكلي | "+array[i].price+" ريال سعودي" ,
-                height:130,
+                // height:130,
                 borderColor:'#BE6A6C',
                 borderBottomColor:"#BE6A6C",
                 borderRadius: 10,
@@ -409,6 +409,9 @@ if(!array[i].flag){
   
   }
   renderItem(item) {
+    {item.amount == null ?item.height= 100
+ 
+  :item.height= 120
   {item.name == null ?item.backgroundColor= "#F2F4F5"
  
   :item.backgroundColor= "white"
@@ -423,16 +426,16 @@ if(!array[i].flag){
      
 <Text  style ={styles.textCard}>{item.name}</Text>
 <Text  style ={styles.textCard}>{item.creditor}</Text>
-{item.amount ==  null ?null
+<Text  style ={styles.textCard}>{item.totalPrice}</Text>
+{item.amount ==  null ?null 
 :  <Text  style ={styles.textCard}>  مبلغ التقسيط | {item.amount} ريال سعودي </Text>}
 
-      <Text  style ={styles.textCard}>{item.totalPrice}</Text>
     
 
     </View>
   );
 }
-    
+}  
   
   }
 
@@ -466,7 +469,7 @@ marginBottom:0,
     textAlign:'center',
     // backgroundColor: 'white',
     flex: 1,
-  
+  fontSize:18,
     padding: 10,
     marginRight: 10,
     marginTop: 20,
@@ -487,7 +490,7 @@ marginHorizontal:5,
     fontFamily:'Bahij_TheSansArabic-Light',
     textAlign:'right',
     margin:2,
-    fontSize:15,
+    fontSize:18,
     color:'#746356',
   
 
