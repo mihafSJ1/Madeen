@@ -51,7 +51,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.blueText}
-            onPress={() => navigation.navigate("myRequest")}
+            onPress={() => navigation.navigate("myReqWithFilter")}
           >
             {" "}
             طلباتي
@@ -81,7 +81,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.greenText}
-          
+            onPress={() => navigation.navigate("Calculator")}
           >
             {" "}
             الحاسبة

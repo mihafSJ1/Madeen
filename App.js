@@ -27,6 +27,11 @@ import EditRequest from"./EditRequest";
 import PayAsCreditor from './PayAsCreditor';
 
 import PaymentFormView from './PaymentFormView';
+import  Calculator from './Calculator';
+import  myReqWithFilter from './myReqWithFilter';
+import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
+
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -84,6 +89,48 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+
+<Stack.Screen
+              name="Calculator"
+              component={Calculator}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+<Stack.Screen
+              name="myReqWithFilter"
+              component={myReqWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+<Stack.Screen
+              name="ReqAsCreditorWithFilter"
+              component={ReqAsCreditorWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+
+
+
               <Stack.Screen
               name="PayAsDebtor"
               component={PayAsDebtor}
