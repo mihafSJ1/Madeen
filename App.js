@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
 import Register from "./Register";
 import login from "./login";
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import { AntDesign, MaterialIcons, Feather } from "@expo/vector-icons";
 import SvgComponent from "./Svgnav";
-import SvgComponent2 from "./TabbarSVG";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Timeline from "./Timeline";
 import squares from "./squares";
 import Request from "./Request";
 import TopBar from "./TopBar";
-import Alert from "./Alert";
 import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
@@ -26,8 +23,7 @@ import EditRequest from"./EditRequest";
 import AddSubscription from './AddSubscriptionScreen';
 import AddSubscriptionView from './AddSubscriptionView';
 import PaymentFormView from './PaymentFormView';
-// import * as firebase from "firebase";
-import { color } from "react-native-reanimated";
+import NotificationsCenter from './NotificationsCenter';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -177,7 +173,7 @@ function Homenav() {
 
       <Tab.Screen
         name="Notifications"
-        component={NotImplementedScreens}
+        component={NotificationsCenter}
         options={{
           tabBarLabel: "",
           unmountOnBlur: true,
@@ -216,33 +212,7 @@ export default function App({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  // if (loading) {
-  //   return (
-  //     <></>
-  //   )
-  // }
-
-  // useEffect(() => {
-  //   // const usersRef = firebase.firestore().collection('users');
-  //   // firebase.auth().onAuthStateChanged(user => {
-  //   //   if (user) {
-  //   //     usersRef
-  //   //       .doc(user.uid)
-  //   //       .get()
-  //   //       .then((document) => {
-  //   //         const userData = document.data()
-  //   //         setLoading(false)
-  //   //         setUser(userData)
-  //   //       })
-  //   //       .catch((error) => {
-  //   //         setLoading(false)
-  //   //       });
-  //   //   } else {
-  //   //     setLoading(false)
-  //   //   }
-  //   // });
-
-  // }, []);
+  
 
   return (
     <NavigationContainer>
@@ -400,4 +370,4 @@ export default function App({ navigation }) {
     </NavigationContainer>
   );
 }
-//
+

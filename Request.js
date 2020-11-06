@@ -31,7 +31,13 @@ import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
 
-
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -121,10 +127,12 @@ class Request extends React.Component {
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
       notification: {},
+      keyC: "",
+      keyD: "",
       // repaymentType : [],
     };
   }
-
+ 
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
@@ -222,9 +230,7 @@ class Request extends React.Component {
   componentDidMount() {
     registerForPushNotificationsAsync();
     Notifications.addNotificationReceivedListener(this._handleNotification);
-    // alert()
     Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
-  
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -257,26 +263,31 @@ class Request extends React.Component {
         }
       });
     });
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
   }
 
   _handleNotification = notification => {
     this.setState({ notification: notification });
   }
 
-
   _handleNotificationResponse = response => {
     console.log(response);
+     let notificationsId;
+    firebase
+    .database()
+    .ref("notifications/")
+    .on("value", (snapshot) => {
+        notificationsId = snapshot.val().key;
+        });
+// alert(notificationsId)
+    firebase
+    .database()
+    .ref("notifications/" + notificationsId )
+    .update({
+      opened: true,
+    })
   };
   
-  sendPushNotification = (Key) => {
+  sendPushNotification = (Key, debtorName) => {
     let Token;
     firebase
     .database()
@@ -292,26 +303,24 @@ Notifications.setNotificationHandler({
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مَدِين | طلب جديد!',
+        title: 'طلب جديد من قِبل '+  debtorName ,
         body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
-  }
-
-  pushNotificationToFirebase(keyC,keyD){
-    alert(this.state.notification)
     firebase
     .database()
     .ref("notifications/")
     .push(
       {
-       title: this.state.notification,
-      //  body: this.state.notification.request.content.body,
-       creditor: keyC,
-       debtor:keyD
+        title: 'طلب جديد من قِبل '+  debtorName ,
+        body:  ' والله في عون العبد ما كان العبد في عون أخيه ',
+       creditor: this.state.keyC,
+       debtor:this.state.keyD,
+       opened: false,
+       notificationType: "new request",
       });
   }
-
+  
   bringid(k){
   console.log("bring");
   firebase
@@ -320,10 +329,10 @@ Notifications.setNotificationHandler({
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       if (child.val().email == k) {
-        console.log("return")
         keyC= child.key;
         Cname=child.val().fullName;
 }
+this.setState({keyC: keyC})
 });
 });
 }
@@ -343,6 +352,8 @@ else{
       .on("value", (snapshot) => {
         userNameFromDB = snapshot.val().fullName;
       });
+
+    this.setState({keyD:currentUser.uid})
 
     const requestID = firebase
       .database()
@@ -378,10 +389,9 @@ else{
           }
         }
       );
-       if(keyC!=""){
-      this.sendPushNotification(keyC);
-      this.pushNotificationToFirebase(keyC,currentUser.uid);
-    }
+      if(keyC!=""){
+        this.sendPushNotification(keyC, userNameFromDB);
+      }
   }
 
   requestSchema = yup.object({
