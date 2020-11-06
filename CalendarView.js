@@ -490,8 +490,9 @@ marginHorizontal:5,
     fontFamily:'Bahij_TheSansArabic-Light',
     textAlign:'right',
     margin:2,
-    fontSize:18,
+    fontSize:15,
     color:'#746356',
+    bottom:5,
   
 
   }
