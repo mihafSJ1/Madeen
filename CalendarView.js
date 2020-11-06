@@ -65,6 +65,9 @@ var array = [];
  
 
   componentDidMount() {
+    onceRequests = [];
+    installmentRequests = [];
+    array = [];
 const { currentUser } = firebase.auth();
 this.setState({ currentUser });
 firebase
@@ -77,15 +80,18 @@ firebase
         if (child.val().repaymentType == "السداد دفعة واحدة"){
          onceRequests.push({
             expectedDate:child.val().expectedDate,
+            creditor:child.val().creditorName,
             price:child.val().price,
             rqeuestStatus:child.val().rqeuestStatus,
             submittedDate:child.val().submittedDate,
+            
             key:child.key,
             });
         
           }else{// installment type 
             installmentRequests.push({
             expectedDate:child.val().expectedDate,
+            creditor:child.val().creditorName,
             installemntPrice:child.val().installemntPrice,
             installmentsType:child.val().installmentsType,
             price:child.val().price,
@@ -107,6 +113,7 @@ firebase
     array.push({
       expectedDate :onceRequests[i].expectedDate,
       price: onceRequests[i].price,
+      creditor:onceRequests[i].creditor,
       installemntPrice: null,
       flag:false,
       key: onceRequests[i].key,
@@ -124,17 +131,18 @@ firebase
         expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
         price :  installmentRequests[i].price,
         installemntPrice:installmentRequests[i].installemntPrice,
+        creditor:installmentRequests[i].creditor,
         key: installmentRequests[i].key,
         flag: false,
             
               })
-              dates.push({
-                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
-                installemntPrice: installmentRequests[i].installemntPrice,
-                price :  installmentRequests[i].price
+              // dates.push({
+              //   expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
+              //   installemntPrice: installmentRequests[i].installemntPrice,
+              //   price :  installmentRequests[i].price
 
             
-                  })
+              //     })
          
              }
 
@@ -147,17 +155,18 @@ firebase
          expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
          installemntPrice: installmentRequests[i].installemntPrice,
          price :  installmentRequests[i].price,
+         creditor:installmentRequests[i].creditor,
          key: installmentRequests[i].key,
          flag: false,
       
            })
-           dates.push({
-            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
-            installemntPrice: installmentRequests[i].installemntPrice,
-            price :  installmentRequests[i].price,
-            key: installmentRequests[i].key,
-            flag: false,
-              })
+          //  dates.push({
+          //   expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
+          //   installemntPrice: installmentRequests[i].installemntPrice,
+          //   price :  installmentRequests[i].price,
+          //   key: installmentRequests[i].key,
+          //   flag: false,
+          //     })
          
      }
     }
@@ -168,17 +177,18 @@ firebase
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
             installemntPrice: installmentRequests[i].installemntPrice,
             price :  installmentRequests[i].price,
+            creditor:installmentRequests[i].creditor,
             key: installmentRequests[i].key,
             flag: false,
        
               })
             
-              dates.push({
-                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
-                installemntPrice: installmentRequests[i].installemntPrice,
-                key: installmentRequests[i].key,
-                price :  installmentRequests[i].price
-                  })
+              // dates.push({
+              //   expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
+              //   installemntPrice: installmentRequests[i].installemntPrice,
+              //   key: installmentRequests[i].key,
+              //   price :  installmentRequests[i].price
+              //     })
      }
     }
     if(installmentRequests[i].installmentsType == "يوميًا"){
@@ -188,17 +198,18 @@ firebase
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
             installemntPrice: installmentRequests[i].installemntPrice,
             price :  installmentRequests[i].price,
+            creditor:installmentRequests[i].creditor,
                    key: installmentRequests[i].key,
             flag: false,
         
 
               })
-              dates.push({
-                expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
-                installemntPrice: installmentRequests[i].installemntPrice,
-                price :  installmentRequests[i].price
+              // dates.push({
+              //   expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
+              //   installemntPrice: installmentRequests[i].installemntPrice,
+              //   price :  installmentRequests[i].price
     
-                  })
+              //     })
 
             
      }
@@ -325,11 +336,11 @@ if(!this.state.items[array[i].expectedDate]){
 if(!array[i].flag){
 
  this.state.items[array[i].expectedDate].push({    
-                name: ' موعد التسديد :' + array[i].expectedDate ,
+                name: ' موعد التسديد | ' + array[i].expectedDate ,
                 amount: array[i].installemntPrice,
-             
-                totalPrice : " المبلغ الكلي :"+array[i].price+"ريال سعودي" ,
-                height:100,
+                creditor: "الدائن | "+array[i].creditor,
+                totalPrice : " المبلغ الكلي | "+array[i].price+" ريال سعودي" ,
+                height:130,
                 borderColor:'#BE6A6C',
                 borderBottomColor:"#BE6A6C",
                 borderRadius: 10,
@@ -411,10 +422,12 @@ if(!array[i].flag){
     >
      
 <Text  style ={styles.textCard}>{item.name}</Text>
+<Text  style ={styles.textCard}>{item.creditor}</Text>
 {item.amount ==  null ?null
-:  <Text  style ={styles.textCard}> مبلغ التقسيط:{item.amount}ريال سعودي </Text>}
+:  <Text  style ={styles.textCard}>  مبلغ التقسيط | {item.amount} ريال سعودي </Text>}
 
       <Text  style ={styles.textCard}>{item.totalPrice}</Text>
+    
 
     </View>
   );
