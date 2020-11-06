@@ -42,7 +42,6 @@ LocaleConfig.defaultLocale = 'ar';
 var onceRequests = [];
 var installmentRequests = [];
  var  onceMarkedDates=[];
-var installmentRequestsMarkedDates = [];
 var dates = [];
 var array = [];
 
@@ -106,7 +105,12 @@ firebase
   });
   for (var i =0 ;i< onceRequests.length;i++){
     array.push({
-      expectedDate :onceRequests[i].expectedDate
+      expectedDate :onceRequests[i].expectedDate,
+      price: onceRequests[i].price,
+      installemntPrice: null,
+      flag:false,
+      key: onceRequests[i].key,
+      remAmount: onceRequests.remAmount,
     })
   }
 
@@ -117,14 +121,19 @@ firebase
          
           array.push({
            
-            expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
-         
+        expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
+        price :  installmentRequests[i].price,
+        installemntPrice:installmentRequests[i].installemntPrice,
+        key: installmentRequests[i].key,
+        flag: false,
             
               })
               dates.push({
                 expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'year').format("YYYY-MM-DD"),
                 installemntPrice: installmentRequests[i].installemntPrice,
                 price :  installmentRequests[i].price
+
+            
                   })
          
              }
@@ -136,12 +145,18 @@ firebase
           
           array.push({
          expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
+         installemntPrice: installmentRequests[i].installemntPrice,
+         price :  installmentRequests[i].price,
+         key: installmentRequests[i].key,
+         flag: false,
       
            })
            dates.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'month').format("YYYY-MM-DD"),
             installemntPrice: installmentRequests[i].installemntPrice,
-            price :  installmentRequests[i].price
+            price :  installmentRequests[i].price,
+            key: installmentRequests[i].key,
+            flag: false,
               })
          
      }
@@ -151,12 +166,17 @@ firebase
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           array.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price,
+            key: installmentRequests[i].key,
+            flag: false,
        
               })
             
               dates.push({
                 expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'week').format("YYYY-MM-DD"),
                 installemntPrice: installmentRequests[i].installemntPrice,
+                key: installmentRequests[i].key,
                 price :  installmentRequests[i].price
                   })
      }
@@ -166,6 +186,10 @@ firebase
         for(var j =0 ; j<installmentRequests[i].duration;j++){
           array.push({
             expectedDate:  moment( installmentRequests[i].submittedDate).add(j, 'day').format("YYYY-MM-DD"),
+            installemntPrice: installmentRequests[i].installemntPrice,
+            price :  installmentRequests[i].price,
+                   key: installmentRequests[i].key,
+            flag: false,
         
 
               })
@@ -181,7 +205,7 @@ firebase
   
    
     }
-   
+
     
     // installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
     //   acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
@@ -195,9 +219,10 @@ firebase
       // console.log("hello")
       // console.log("once")
       // console.log(array)
-      // console.log("hello")
+      // console.log("hellolll")
       // console.log(onceMarkedDates)
   
+    
   }
 
 
@@ -289,6 +314,55 @@ firebase
  
      
     setTimeout(() => {
+
+   
+   
+      
+for (let i =0 ;i<array.length;i++){
+if(!this.state.items[array[i].expectedDate]){
+  this.state.items[array[i].expectedDate] = [];
+}
+if(!array[i].flag){
+
+ this.state.items[array[i].expectedDate].push({    
+                name: ' موعد التسديد :' + array[i].expectedDate ,
+                amount: array[i].installemntPrice,
+             
+                totalPrice : " المبلغ الكلي :"+array[i].price+"ريال سعودي" ,
+                height:100,
+                borderColor:'#BE6A6C',
+                borderBottomColor:"#BE6A6C",
+                borderRadius: 10,
+                key : array[i].key,
+                remaining: array[i].remAmount
+                
+
+              });
+              array[i].flag = true;
+            }
+          
+}
+
+         
+          
+// for (var i = 0; i< onceRequests.length;i++){
+//   if( !this.state.items[onceRequests[i].expectedDate] ){
+//     this.state.items[onceRequests[i].expectedDate] = [];
+// this.state.items[onceRequests[i].expectedDate].push({    
+//               name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
+//               totalPrice : " المبلغ الكلي :"+onceRequests[i].price+"ريال سعودي" ,
+//               height:100,
+//               // backgroundColor: "white",
+//               borderColor:'#D9AE94',
+//               borderBottomColor:"#D9AE94",
+//               borderRadius: 10,
+           
+              
+             
+//            });
+//   }
+//           }
+      
       for (var i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = this.timeToString(time);
@@ -298,7 +372,7 @@ firebase
             this.state.items[strTime].push({
               // name:   ,
               // height: 10
-              backgroundColor:" #F2F4F5",
+              // backgroundColor:" #F2F4F5",
               borderColor:'#F2F4F5',
               borderBottomColor:"#C9D1E0",
               borderRadius: 0,
@@ -308,39 +382,6 @@ firebase
        
           }
         }
-      
-for (var i =0 ;i<dates.length;i++){
-  
-  this.state.items[dates[i].expectedDate] = [];
-  this.state.items[dates[i].expectedDate].push({    
-                  name: ' موعد التسديد ' + dates[i].expectedDate ,
-                 amount: "  مبلغ التسديد  :"+dates[i].installemntPrice+"ريال سعودي" ,
-                 totalPrice : " المبلغ الكلي :"+dates[i].price+"ريال سعودي" ,
-                height:100,
-                backgroundColor: "white",
-                borderColor:'#BE6A6C',
-                borderBottomColor:"#BE6A6C",
-                borderRadius: 10,
-              });
-
-            }
-for (var i = 0; i< onceRequests.length;i++){
-  if (!this.state.items[onceRequests[i].expectedDate]) {
-    this.state.items[onceRequests[i].expectedDate] = [];
-this.state.items[onceRequests[i].expectedDate].push({    
-              name: ' موعد التسديد ' + onceRequests[i].expectedDate ,
-              totalPrice : " المبلغ الكلي :"+onceRequests[i].price+"ريال سعودي" ,
-              height:100,
-              backgroundColor: "white",
-              borderColor:'#D9AE94',
-              borderBottomColor:"#D9AE94",
-              borderRadius: 10,
-           
-              
-             
-           });
-          }
-      }
 //  console.log(onceRequests)
 //  console.log("ins")
 //  console.log(dates)
@@ -357,27 +398,29 @@ this.state.items[onceRequests[i].expectedDate].push({
   
   }
   renderItem(item) {
-    return (
-      <TouchableOpacity
-        // testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: item.height}, {backgroundColor: item.backgroundColor},{borderColor: item.borderColor},{borderBottomColor: item.borderBottomColor},,{borderRadius: item.borderRadius}]} 
-        onPress={() => Alert.alert(item.name)}// need to navigate to payment screen 
-      >
-         {/* {item.names== "" ? (
-  <Text  style ={styles.textCard}>ككرتزتزا</Text>
-  ):(
-                      
-  <Text  style ={styles.textCard}>{item.name}</Text>
-              
-                     )} */}
-  <Text  style ={styles.textCard}>{item.name}</Text>
-  {item.amount ==  null ?null
-  :  <Text  style ={styles.textCard}>{item.amount}</Text>}
+  {item.name == null ?item.backgroundColor= "#F2F4F5"
  
-        <Text  style ={styles.textCard}>{item.totalPrice}</Text>
+  :item.backgroundColor= "white"
+  return (
+     
+    <View
+  
+      style={[styles.item, {height: item.height}, {backgroundColor: item.backgroundColor},{borderColor: item.borderColor},{borderBottomColor: item.borderBottomColor},,{borderRadius: item.borderRadius}]} 
+      onPress={()=> {item.name ==  null? "":
+        this.props.navigation.navigate("PayAsDebtor",{ reqID: item.key,amount:item.amount})}}
+    >
+     
+<Text  style ={styles.textCard}>{item.name}</Text>
+{item.amount ==  null ?null
+:  <Text  style ={styles.textCard}> مبلغ التقسيط:{item.amount}ريال سعودي </Text>}
 
-      </TouchableOpacity>
-    );
+      <Text  style ={styles.textCard}>{item.totalPrice}</Text>
+
+    </View>
+  );
+}
+    
+  
   }
 
   renderEmptyDate() {
@@ -434,7 +477,7 @@ marginHorizontal:5,
     fontSize:15,
     color:'#746356',
   
-  //  backgroundColor:'red',
+
   }
 });
 export default withNavigation(CalendarView);

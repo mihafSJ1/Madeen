@@ -283,12 +283,21 @@ class Request extends React.Component {
   _handleNotificationResponse = response => {
     console.log(response);
     // props.navigate("NotImplementedScreen")
+    let notificationsId;
     firebase
     .database()
-    .ref("requests/" + requestId)
+    .ref("notifications/")
+    .on("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        notificationsId = child.key;
+      })
+        });
+
+    firebase
+    .database()
+    .ref("notifications/" + notificationsId )
     .update({
-      remAmount: remining,
-      rqeuestStatus: reqStatus
+      opened: true,
     })
   };
   
@@ -312,22 +321,6 @@ class Request extends React.Component {
         body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
-  }
-  
-  pushNotificationToFirebase(keyC,keyD){
-    alert(keyC)
-    alert(this.state.notification.request.content.body)
-
-    firebase
-    .database()
-    .ref("notifications/")
-    .push(
-      {
-       title: this.state.notification.request.content.title,
-       body: this.state.notification.request.content.body,
-       creditor: keyC,
-       debtor:keyD
-      });
   }
   
   bringid(k){
@@ -361,7 +354,9 @@ else{
       .on("value", (snapshot) => {
         userNameFromDB = snapshot.val().fullName;
       });
-this.setState({keyD:currentUser.uid})
+
+    this.setState({keyD:currentUser.uid})
+
     const requestID = firebase
       .database()
       .ref("requests/")
@@ -398,8 +393,6 @@ this.setState({keyD:currentUser.uid})
       );
       if(keyC!=""){
         this.sendPushNotification(keyC);
-      // this.pushNotificationToFirebase(keyC,currentUser.uid);
-
       }
   }
 
