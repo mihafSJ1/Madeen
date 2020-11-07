@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
-import * as Notifications from 'expo-notifications';
-import moment, { now } from "moment";
+import moment from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
@@ -20,6 +19,7 @@ import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
 import { withNavigation } from "react-navigation";
+
 import * as firebase from "firebase";
 import "firebase/auth";
 import "firebase/database";
@@ -29,15 +29,6 @@ import FirebaseKeys from "./FirebaseKeys";
 import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
-import {registerForPushNotificationsAsync} from './PushNotificationToken';
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -60,9 +51,7 @@ let installmentsDropDownArray = [];
 const numericKeyboard = /[^0-9]/;
 
 const data = [
-  {
-    label: "السداد دفعة واحدة",
-  },
+
   {
     label: "السداد بالتقسيط",
   },
@@ -116,7 +105,6 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 
 var userNameFromDB = "";
 
-    
 class Request extends React.Component {
   constructor(props) {
     super(props);
@@ -127,14 +115,10 @@ class Request extends React.Component {
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
-      notification: {},
-      notificationId: "",
-      keyC: "",
-      keyD: "",
       // repaymentType : [],
     };
   }
- 
+
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
@@ -229,158 +213,102 @@ class Request extends React.Component {
   }
 
   //-------------------------------------------- Form Submission
-  componentDidMount() {
-    registerForPushNotificationsAsync();
-    Notifications.addNotificationReceivedListener(this._handleNotification);
-    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
-    const { currentUser } = firebase.auth();
-    this.setState({ currentUser });
-    firebase
-      .database()
-      .ref("users/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          if (child.val().email != currentUser.email) {
-            applicationUsers.push({
-              fullName: child.val().fullName,
-              label: child.val().email,
-            });
-          }
-        });
-      });
-    this.setState({
-      userValue: applicationUsers,
-    });
+//   componentDidMount() {
+//     const { currentUser } = firebase.auth();
+//     this.setState({ currentUser });
+//     firebase
+//       .database()
+//       .ref("users/")
+//       .on("value", (snapshot) => {
+//         snapshot.forEach((child) => {
+//           if (child.val().email != currentUser.email) {
+//             applicationUsers.push({
+//               fullName: child.val().fullName,
+//               label: child.val().email,
+//             });
+//           }
+//         });
+//       });
 
-    firebase
-    .database()
-    .ref("users/")
-    .on("value", (snapshot) => {
-      snapshot.forEach((child) => {
-        if (child.val().email != currentUser.email) {
-          applicationUsers.push({
-            fullName: child.val().fullName,
-            label: child.val().email,
-          });
-        }
-      });
-    });
+//     this.setState({
+//       userValue: applicationUsers,
+//     });
+//   }
+
+// bringid(k){
+//   console.log("bring");
+//   firebase
+//   .database()
+//   .ref("users/")
+//   .on("value", (snapshot) => {
+//     snapshot.forEach((child) => {
+//       if (child.val().email == k) {
+//         console.log("return")
+//         keyC= child.key;
+//         Cname=child.val().fullName;
   
-  }
+// }
+// });
+// });
+// }
 
-  _handleNotification = notification => {
-    this.setState({ notification: notification });
-  }
 
-  _handleNotificationResponse = response => {
-    console.log(response);
-  };
-  
-  sendPushNotification = (Key, debtorName) => {
-    let Token;
-    firebase
-    .database()
-    .ref("users/"+Key).on("value", (snapshot) => {
-      Token = snapshot.val().push_Notification_token;
-    });
-    let response = fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        to: Token,
-        sound: 'default',
-        title: 'طلب جديد من قِبل '+  debtorName ,
-        body: 'والله في عون العبد ما كان العبد في عون أخيه'
-      })
-    });
-    const notificationKey = firebase
-    .database()
-    .ref("notifications/")
-    .push(
-      {
-        title: 'طلب جديد من قِبل '+  debtorName ,
-        body:  ' والله في عون العبد ما كان العبد في عون أخيه ',
-        creditor: this.state.keyC,
-        debtor:this.state.keyD,
-        notificationType: "new request",
-      });
-  }
-  
-  bringid(k){
-  console.log("bring");
-  firebase
-  .database()
-  .ref("users/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-      if (child.val().email == k) {
-        keyC= child.key;
-        Cname=child.val().fullName;
-}
-this.setState({keyC: keyC})
-});
-});
-}
-  onSubmitPress(values, props) {
-    const { currentUser } = this.state;
-    if (values.usersSelect == false) {
-      values.user = "";
-      keyC = "";
-      Cname="";
-    }
-else{
-  this.bringid(values.user);
-}
-    firebase
-      .database()
-      .ref("users/" + currentUser.uid)
-      .on("value", (snapshot) => {
-        userNameFromDB = snapshot.val().fullName;
-      });
 
-    this.setState({keyD:currentUser.uid})
+//   onSubmitPress(values, props) {
+//     const { currentUser } = this.state;
+//     if (values.usersSelect == false) {
+//       values.user = "";
+//       keyC = "";
+//       Cname="";
+//     }
+// else{
+//   this.bringid(values.user);
+// }
+//     firebase
+//       .database()
+//       .ref("users/" + currentUser.uid)
+//       .on("value", (snapshot) => {
+//         userNameFromDB = snapshot.val().fullName;
+//       });
 
-    const requestID = firebase
-      .database()
-      .ref("requests/")
-      .push(
-        {
-          price: values.price,
-          expectedDate: values.expectedDate,
-          submittedDate: this.state.submittedDateState,
-          repaymentType: values.repaymentType,
-          reason: values.reason,
-          userid: currentUser.uid,
-          userName: userNameFromDB,
-          rqeuestStatus: "قيد الإنتظار",
-          installemntPrice: this.state.priceState,
-          installemntDuration: this.state.durationState,
-          installmentsType: this.state.installmentsState,
-          creditor: keyC,
-          creditorName:Cname,
-          creditorEmail:values.user,
-          remAmount: values.price
-        },
-        function (error) {
-          if (error) {
-            alert(error);
-          } else {
-            Alert.alert(
-              "تنبيه ",
-              "تم إرسال الطلب بنجاح   ",
-              [{ text: "موافق", onPress: () => props.navigate("squares") }],
-              { cancelable: false }
-            );
-          }
-        }
-      );
-      if(keyC!=""){
-        this.sendPushNotification(keyC, userNameFromDB);
-      }
-  }
+//     const requestID = firebase
+//       .database()
+//       .ref("requests/")
+//       .push(
+//         {
+//           price: values.price,
+//           expectedDate: values.expectedDate,
+//           submittedDate: this.state.submittedDateState,
+//           repaymentType: values.repaymentType,
+//           reason: values.reason,
+//           userid: currentUser.uid,
+//           userName: userNameFromDB,
+//           rqeuestStatus: "قيد الإنتظار",
+//           installemntPrice: this.state.priceState,
+//           installemntDuration: this.state.durationState,
+//           installmentsType: this.state.installmentsState,
+//           creditor: keyC,
+//           creditorName:Cname,
+//           creditorEmail:values.user,
+         
+         
+//           remAmount: values.price
+
+//         },
+//         function (error) {
+//           if (error) {
+//             alert(error);
+//           } else {
+//             Alert.alert(
+//               "تنبيه ",
+//               "تم إرسال الطلب بنجاح   ",
+//               [{ text: "موافق", onPress: () => props.navigate("squares") }],
+//               { cancelable: false }
+//             );
+//           }
+//         }
+//       );
+//   }
 
   requestSchema = yup.object({
     price: yup
@@ -402,17 +330,48 @@ else{
     // ),
     reason: yup.string().trim().min(3, "السبب لا بد أن  يكون ٣ خانات فأكثر"),
 
-    usersSelect: yup.bool(),
-    user: yup
-      .string()
-      .notRequired()
-      .when("usersSelect", {
-        is: (val) => val == true,
-        then: yup.string().required("اختيار الدائن مطلوب"),
-        otherwise: yup.string().notRequired(),
-      }),
+    // usersSelect: yup.bool(),
+    // user: yup
+    //   .string()
+    //   .notRequired()
+    //   .when("usersSelect", {
+    //     is: (val) => val == true,
+    //     then: yup.string().required("اختيار الدائن مطلوب"),
+    //     otherwise: yup.string().notRequired(),
+    //   }),
   });
 
+
+
+
+  list = (count) => {
+ 
+    return installmentsDropDownArray.map((c) => {
+       return(
+        <View style={styles.CardText} >
+            {/* <Text> raghad</Text> */}
+        {console.log('raghad here inside list')}
+        {console.log(c.installmentsDropDownArray)}
+        
+<Text style={[styles.CardText,{top:10+count*10}]} >{installmentsDropDownArray[count++].label}</Text>
+
+</View>
+
+
+
+
+
+       )
+    });
+
+
+// for (var i = 0; i < installmentsArray.length; i++) {
+//  {installmentsDropDownArray[i].label};
+// }
+
+
+
+  };
   //-------------------------------------------- Rendering react component
   render() {
    
@@ -424,7 +383,7 @@ else{
 
         <View style={styles.registerBackground}>
           <KeyboardAwareScrollView>
-            <Text style={styles.header}>إنشاء طلب </Text>
+            <Text style={styles.header}>الحاسبة</Text>
             <Formik
               validationSchema={this.requestSchema}
               initialValues={{
@@ -447,13 +406,13 @@ else{
             >
               {(formprops, setFieldValue) => (
                 <View style={styles.requestContainer}>
-                  <View style={styles.checkboxContainer}>
-                    <Text style={styles.checkboxLabel}>
+                  {/* <View style={styles.checkboxContainer}> */}
+                    {/* <Text style={styles.checkboxLabel}>
                       {" "}
                       الاستلاف من شخص محدد
-                    </Text>
+                    </Text> */}
 
-                    <CheckBox
+                    {/* <CheckBox
                       style={styles.checkbox}
                       checkedColor="#CBCA9E"
                       checkedIcon="check-box"
@@ -466,13 +425,13 @@ else{
                         )
                       }
                       checked={formprops.values.usersSelect}
-                    />
-                  </View>
+                    /> */}
+                  {/* </View> */}
 
-                  <Text style={styles.textNote}>
+                  {/* <Text style={styles.textNote}>
                     ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
-                  </Text>
-
+                  </Text> */}
+{/* 
                   {formprops.values.usersSelect ? (
                     <DropDownPicker
                     searchable={true}
@@ -492,7 +451,7 @@ else{
                  textAlign: "right",
                  fontFamily: "Bahij_TheSansArabic-Light"
                    }}
-                    // seachableStyle={{
+                 
                  
 
                    
@@ -567,7 +526,7 @@ else{
                       }
 
                     />
-                  ) : null}
+                  ) : null} */}
                   <Text style={[styles.textError, { top: -20 }]}>
                     {formprops.errors.user}
                   </Text>
@@ -586,6 +545,9 @@ else{
                     keyboardType="numeric"
                     onBlur={formprops.handleBlur("price")}
                   />
+
+
+                  
                   <Text style={styles.textError}>
                     {formprops.touched.price && formprops.errors.price}
                   </Text>
@@ -648,6 +610,9 @@ else{
                         fontSize: 17,
                       },
                     }}
+
+
+                    
                     onDateChange={(date) => {
                       formprops.setFieldValue("expectedDate", date);
 
@@ -655,12 +620,14 @@ else{
                     }}
                   />
                   {console.log(formprops.values.expectedDate)}
+
+                  
                   <Text style={[styles.textError, { top: -50 }]}>
                     {formprops.touched.expectedDate &&
                       formprops.errors.expectedDate}
                   </Text>
                   <View style={styles.radio}>
-                    <RadioButtonRN
+                    {/* <RadioButtonRN
                       initial={1}
                       data={data}
                       box={false}
@@ -691,10 +658,11 @@ else{
                       selectedBtn={(e) =>
                         formprops.setFieldValue("repaymentType", e.label)
                       }
-                    />
+                    /> */}
                     {console.log(formprops.values.installmentRepayment)}
                   </View>
-                  {formprops.values.repaymentType == data[1].label ? (
+                  {/* شرط البوتن الثاني حق  حولته لترو  */}
+                  {true? (
                     formprops.values.expectedDate == today   ||formprops.values.price <10 || formprops.values.expectedDate == tomorrow || (dateDiffDays == 0 && dateDiffMonths == 0 && dateDiffYears == 0 && dateDiffWeeks == 0) ||
                     (year == -1 && month == -1 && days == -1 && week == -1) ?
                 
@@ -711,87 +679,99 @@ else{
                  
                   
                    :
+                
+
+<View style={styles.card} >
+{/* {console.log(this.installmentsDropDownArray)} */}
+
+                  {this.list(0)} 
                   
-                    <DropDownPicker
-                      style={styles.DropDownPicker}
-                      items={installmentsDropDownArray}
-                      searchableError={() => (
-                        <Text style={[styles.textError, { marginRight: 4 }]}>
-                        لطفًا التاريخ  لا يكون  ضمن الآربع وعشرون ساعة القادمة   
-                        </Text>
-                      )}
-                      placeholder="إختر الفترة"
-                      placeholderStyle={{ color: "#CBCBCC" }}
-                      value={formprops.values.user}
-                      containerStyle={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#CBCA9E",
-                      }}
-                      style={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#57694C",
-                        borderWidth: 1,
-                        width: 100,
-                      }}
-                      arrowColor="#9b9b7a"
-                      arrowSize={18}
-                      containerStyle={{
-                        width: 352,
-                        height: 40,
-                        marginLeft: 35,
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 60,
-                        borderBottomRightRadius: 50,
-                        marginBottom: 35,
-                      }}
-                      itemStyle={{
-                        backgroundColor: "#fff",
-                        textAlign: "right",
-                        flexDirection: "row-reverse",
-                        justifyContent: "flex-start",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                        // to make the list to the right side
-                      }}
-                      selectedLabelStyle={{
-                        color: "#57694C",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      activeLabelStyle={{
-                        color: "#57694C",
-                      }}
-                      labelStyle={{
-                        backgroundColor: "#fff",
-                        fontSize: 16,
-                        textAlign: "right",
-                        color: "#000",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      style={{
-                        flexDirection: "row-reverse",
-                        // to support RTL
-                      }}
-                      onChangeItem={(item) =>
-                        this.setState({
-                          installmentsState: item.installmentsTypeArr,
-                          priceState: item.priceValueArr,
-                          durationState: item.durationValueArr,
-                        })
-                        // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
+                 
+
+
+                  </View>
+                
+                //   هنا الدروب داون حق التقسيط 
+                    // <DropDownPicker
+                    //   style={styles.DropDownPicker}
+                    //   items={installmentsDropDownArray}
+                    //   searchableError={() => (
+                    //     <Text style={[styles.textError, { marginRight: 4 }]}>
+                    //     لطفًا التاريخ  لا يكون  ضمن الآربع وعشرون ساعة القادمة   
+                    //     </Text>
+                    //   )}
+                    //   placeholder="إختر الفترة"
+                    //   placeholderStyle={{ color: "#CBCBCC" }}
+                    //   value={formprops.values.user}
+                    //   containerStyle={{
+                    //     borderTopLeftRadius: 50,
+                    //     borderTopRightRadius: 50,
+                    //     borderBottomLeftRadius: 40,
+                    //     borderBottomRightRadius: 50,
+                    //     borderColor: "#CBCA9E",
+                    //   }}
+                    //   style={{
+                    //     borderTopLeftRadius: 50,
+                    //     borderTopRightRadius: 50,
+                    //     borderBottomLeftRadius: 40,
+                    //     borderBottomRightRadius: 50,
+                    //     borderColor: "#57694C",
+                    //     borderWidth: 1,
+                    //     width: 100,
+                    //   }}
+                    //   arrowColor="#9b9b7a"
+                    //   arrowSize={18}
+                    //   containerStyle={{
+                    //     width: 352,
+                    //     height: 40,
+                    //     marginLeft: 35,
+                    //     borderTopLeftRadius: 50,
+                    //     borderTopRightRadius: 50,
+                    //     borderBottomLeftRadius: 60,
+                    //     borderBottomRightRadius: 50,
+                    //     marginBottom: 35,
+                    //   }}
+                    //   itemStyle={{
+                    //     backgroundColor: "#fff",
+                    //     textAlign: "right",
+                    //     flexDirection: "row-reverse",
+                    //     justifyContent: "flex-start",
+                    //     fontFamily: "Bahij_TheSansArabic-Light",
+                    //     // to make the list to the right side
+                    //   }}
+                    //   selectedLabelStyle={{
+                    //     color: "#57694C",
+                    //     fontFamily: "Bahij_TheSansArabic-Light",
+                    //   }}
+                    //   activeLabelStyle={{
+                    //     color: "#57694C",
+                    //   }}
+                    //   labelStyle={{
+                    //     backgroundColor: "#fff",
+                    //     fontSize: 16,
+                    //     textAlign: "right",
+                    //     color: "#000",
+                    //     fontFamily: "Bahij_TheSansArabic-Light",
+                    //   }}
+                    //   style={{
+                    //     flexDirection: "row-reverse",
+                    //     // to support RTL
+                    //   }}
+                    //   onChangeItem={(item) =>
+                    //     this.setState({
+                    //       installmentsState: item.installmentsTypeArr,
+                    //       priceState: item.priceValueArr,
+                    //       durationState: item.durationValueArr,
+                    //     })
+                    //     // (item2) => formprops.setFieldValue('installmentRepayment',item2.label)
                      
-                      }
-                    />
-                   
-                  ) : (year == 0 && month == 0 && days == 0 && week == 0) ||
-                    (year == -1 && month == -1 && days == -1 && week == -1) ? (
+                    //   }
+                    // />
+                   //شروط الدفع 
+                  ) : (false) ||
+                    (false) ? (
                     <Text style={styles.repaymentTextError}>
-                      لظهور المدة حدد التاريخ المتوقع لإكمال السداد{" "}
+                      {/* لظهور المدة حدد التاريخ المتوقع لإكمال السداد{" "} */}
                     </Text>
                   ) : (
                     <Text
@@ -800,35 +780,38 @@ else{
                         { color: "#9B9B7A", top: -75, right: 10 },
                       ]}
                     >
-                      السداد بعد
-                      {year != 0 ? (
+
+
+                        {/* اللي تحت السداد دفعه واحده يعلم متى بتسددين لونه اخضر  */}
+                      {/* السداد بعد */}
+                      {/* {year != 0 ? (
                         <Text> {ArabicNumbers(year)} سنه </Text>
-                      ) : null}
-                      {month != 0 ? (
+                      ) : null} */}
+                      {/* {month != 0 ? (
                         year != 0 ? (
                           <Text> و {ArabicNumbers(month)} شهر</Text>
                         ) : (
                           <Text> {ArabicNumbers(month)} شهر </Text>
                         )
-                      ) : null}
-                      {week != 0 ? (
+                      ) : null} */}
+                      {/* {week != 0 ? (
                         year != 0 || month != 0 ? (
                           <Text> و {ArabicNumbers(week)} إسبوع</Text>
                         ) : (
                           <Text> {ArabicNumbers(week)} إسبوع </Text>
                         )
-                      ) : null}
-                      {days != 0 ? (
+                      ) : null} */}
+                      {/* {days != 0 ? (
                         year != 0 || month != 0 || week != 0 ? (
                           <Text> و {ArabicNumbers(days)} يوم</Text>
                         ) : (
                           <Text> {ArabicNumbers(days)} يوم </Text>
                         )
-                      ) : null}
+                      ) : null} */}
                     </Text>
                   )}
 
-                  <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
+                  {/* <Text style={[styles.textInputTitle, { marginTop: -15 }]}>
                     السبب{" "}
                   </Text>
                   <TextInput
@@ -841,7 +824,7 @@ else{
                   />
                   <Text style={styles.textError}>
                     {formprops.touched.reason && formprops.errors.reason}
-                  </Text>
+                  </Text> */}
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                           style={[styles.button, { backgroundColor: "#D4CEC9" }]}
@@ -851,15 +834,18 @@ else{
                       {/* <button type='reset'></button> */}
                       <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+
+
+                    {/* <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                      onPress={
-                        // (() => formprops.setFieldValue("installmentsType", "ww"),
-                        () => formprops.handleSubmit()
-                      }
+                    //   onPress={
+                      
+                    //     () => formprops.handleSubmit()
+                    //   }
                     >
                       <Text style={styles.buttonText}> إنشاء طلب </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    
                   </View>
                 </View>
               )}
@@ -872,6 +858,8 @@ else{
 }
 
 const styles = StyleSheet.create({
+
+  
   container: {
     textAlign: "right",
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -942,8 +930,9 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 15,
     marginLeft: 10,
-    bottom: 30,
+    bottom: 20,
     backgroundColor: "#fff",
+    left:90,
   },
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -986,6 +975,10 @@ const styles = StyleSheet.create({
     marginRight: 30,
     fontFamily: "Bahij_TheSansArabic-Bold",
   },
+
+ 
+
+
   textError: {
     color: "#A4161A",
     fontSize: 13,
@@ -998,7 +991,7 @@ const styles = StyleSheet.create({
     color: "#A4161A",
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 13,
-    bottom: 75,
+    bottom: 20,
     textAlign: "right",
     marginBottom: -10,
     marginRight: 30,
@@ -1011,6 +1004,29 @@ const styles = StyleSheet.create({
     left: 56,
     paddingRight: 340,
   },
+  card: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    backgroundColor: "#F0DECC",
+    marginBottom: 10,
+    width: 350,
+    height:140,
+    left:36,
+    borderRadius: 6,
+    shadowColor: "#000",
+    shadowOpacity: 0.11,
+    shadowOffset: {
+      width: 0,
+      height: 0,}
+    },
+
+
+    CardText:{
+        fontFamily: "Bahij_TheSansArabic-Light", 
+        textAlign: "center",
+        top:4,
+        fontSize: 14,
+    }
+  
 });
 
 export default withNavigation(Request);

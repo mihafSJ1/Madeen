@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Register from "./Register";
 import login from "./login";
+import CalendarView from './CalendarView';
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import { AntDesign, MaterialIcons, Feather } from "@expo/vector-icons";
@@ -20,10 +21,17 @@ import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
 import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
-import AddSubscription from './AddSubscriptionScreen';
-import AddSubscriptionView from './AddSubscriptionView';
+import PayAsCreditor from './PayAsCreditor';
+
 import PaymentFormView from './PaymentFormView';
 import NotificationsCenter from './NotificationsCenter';
+import  Calculator from './Calculator';
+import  myReqWithFilter from './myReqWithFilter';
+import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
+
+
+// import * as firebase from "firebase";
+import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -67,9 +75,10 @@ function squaresScreens() {
         component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
+
            <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
@@ -78,6 +87,48 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+
+<Stack.Screen
+              name="Calculator"
+              component={Calculator}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+<Stack.Screen
+              name="myReqWithFilter"
+              component={myReqWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+<Stack.Screen
+              name="ReqAsCreditorWithFilter"
+              component={ReqAsCreditorWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+
+
+
               <Stack.Screen
               name="PayAsDebtor"
               component={PayAsDebtor}
@@ -89,6 +140,22 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+              <Stack.Screen
+              name="EditRequest"
+              component={EditRequest}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+        name="CalendarView"
+        component={CalendarView}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -307,17 +374,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-              <Stack.Screen
-              name="AddSubscriptionView"
-              component={AddSubscriptionView}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            />
+         
          
               <Stack.Screen
               name="PaymentFormView"
@@ -331,7 +388,7 @@ export default function App({ navigation }) {
               }}
             />
            
-             <Stack.Screen
+             {/* <Stack.Screen
               name="EditRequest"
               component={EditRequest}
               options={{
@@ -341,10 +398,10 @@ export default function App({ navigation }) {
                 // headerMode:screen,
                 headerTransparent: true,
               }}
-            />
+            /> */}
               <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },

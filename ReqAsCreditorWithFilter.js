@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Item,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
@@ -19,6 +18,10 @@ import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
+import SearchInput, { createFilter } from 'react-native-search-filter';
+import {Item,Container,Header,Icon,Input} from 'native-base';
+
+
 
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
@@ -46,6 +49,10 @@ var emailf = "email";
 var UserIDImage = "2";
 var UserID = "3";
 let namefff = "999999";
+var Searching=false;
+var Found=false;
+var specificStatus=false;
+let arrayFiltered22=[];
 
 firebase
   .database()
@@ -56,82 +63,102 @@ firebase
       usersArray.push(Data);
     });
   });
+// firebase
+// .database()
+// .ref("requests")
+// .once("value", function (snapshot) {
+//   snapshot.forEach(function (childSnapshot) {
+//     var Data = childSnapshot.val();
+//     // var expectedDate = childSnapshot.expectedDate;
+//     // var installemntDuration = childSnapshot.installemntDuration;
+//     // var installemntPrice = childSnapshot.installemntPrice;
+//     //  var installmentsType = childSnapshot.installmentsType;
+//     // var price = childSnapshot.price;
+//     // var reason=childSnapshot.reason;
+//     // var repaymentType=childSnapshot.repaymentType;
+//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
+//     //  var submittedDate=childSnapshot.submittedDate;
+//     // var userid = childSnapshot.userid;
 
+//         requestArray.push(Data);
+//         // console.log(Data);
+//   });
+// });
 
 const currentUser = firebase.auth();
-//this.setState({ currentUser });
 firebase
-
   .database()
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-           cName:child.val().creditorName,
-            key:child.key,});
-      //  }
+            requestArray.push({
+            creditor:child.val().creditor,
+              expectedDate:child.val().expectedDate,
+              installemntPrice:child.val().installemntPrice,
+              installmentsType:child.val().installmentsType,
+              price:child.val().price,
+              reason:child.val().reason,
+              repaymentType:child.val().repaymentType,
+            rqeuestStatus:child.val().rqeuestStatus,
+              submittedDate:child.val().submittedDate,
+              userName:child.val().userName,
+              userid:child.val().userid,
+              key:child.key,
+              remAmount: child.val().remAmount});
     });
   });
 
-export default class MyRequest extends React.Component {
+export default class ReqAsCreditor extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
-  constructor(props) {
-    super(props);
-  this.state = {
+
+  state = {
     modalVisible: false,
     modalVisible2: false,
-    CreditorName:"",
     CreditorEmail:"",
+    specificStatus:false,
+    SpecificStatusText:"",
+    Searching:false,
+     Found:false,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
-  }
+
   componentDidMount() {
-    requestArray=[]
+  
+    requestArray=[];
+  
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
-      .database()
-      .ref("requests/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          if (true) {
-            requestArray.push({         
-              creditor:child.val().creditor,
-              expectedDate:child.val().expectedDate,
-              installemntDuration: child.val().installemntDuration,
-              installemntPrice:child.val().installemntPrice,
-               installmentsType:child.val().installmentsType,
-               price:child.val().price,
-              reason:child.val().reason,
-               repaymentType:child.val().repaymentType,
-             rqeuestStatus:child.val().rqeuestStatus,
-               submittedDate:child.val().submittedDate,
-              userName:child.val().userName,
-              creditorName:child.val().creditorName,
-              userid:child.val().userid,
-               key:child.key,
-               remAmount: child.val().remAmount });
-            
-          }
-        });
+    .database()
+    .ref("requests/")
+    .on("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        if (true) {
+          requestArray.push({         
+            creditor:child.val().creditor,
+            expectedDate:child.val().expectedDate,
+            installemntDuration: child.val().installemntDuration,
+            installemntPrice:child.val().installemntPrice,
+            installmentsType:child.val().installmentsType,
+            price:child.val().price,
+            reason:child.val().reason,
+            repaymentType:child.val().repaymentType,
+          rqeuestStatus:child.val().rqeuestStatus,
+            submittedDate:child.val().submittedDate,
+            userName:child.val().userName,
+            userid:child.val().userid,
+            key:child.key,
+            remAmount: child.val().remAmount });
+          
+        }
       });
+    });
     }
+
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -139,56 +166,106 @@ export default class MyRequest extends React.Component {
   setModalVisible2(visible) {
     this.setState({ modalVisible2: visible });
   }
-  
-  setCreditorName(Name) {
-    this.setState({ CreditorName: Name });
-  }
-  setCreditorEmail(Email) {
-    this.setState({ CreditorEmail: Email });
-  }
+
 
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
 
-  
-
-
-
   setTimelinePic(picNew) {
     this.setState({ pic: picNew });
   }
+  setCreditorEmail(Email) {
+    this.setState({ CreditorEmail: Email });
+  }
+
+  setSearching(flag) {
+
+    this.setState({ Searching: flag}, function() {
+      // do something with new state
+
+      console.log("new code")
+      console.log(this.state.Searching)
+  });
+    console.log("تروحين تغيرين الفلاق سيرتش ولا لا ")
+    // this.setState({ Searching: flag });
+    console.log("غيرت السيرتش")
+    console.log(this.state.Searching)
+  }
+ 
+  setFound(flag) {
+
+    this.setState({ Found: flag}, function() {
+      // do something with new state
+
+      console.log("new code2")
+      console.log(this.state.Found)
+  });
+    // this.setState({ Found: flag });
+  }
+
+
+  setSpecificStatus(flag) {
+    // console.log("تروحين تغيرين الفلاق الحاله ولا لا ")
+    // this.setState({ specificStatus: flag});
+    this.setState({ specificStatus: flag}, function() {
+      // do something with new state
+
+      console.log("new code3")
+      console.log(this.state.specificStatus)
+  });
+  }
+ 
+
+
+  setSpecificStatusText(text){
+    // this.setState({ SpecificStatusText: text });
+    this.setState({ SpecificStatusText: text}, function() {
+      // do something with new state
+
+      console.log("new code4")
+      console.log(this.state.SpecificStatusText)
+  });
+
+  }
+
+
+
   viewProfileFunction(item) {
     firebase.auth();
-  
+    // console.log(item.userName);
+    console.log("شوفي فوق ");
 
     firebase
       .database()
-      .ref("users/" + item.creditor)
+      .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
 
-        this.setprofilePic(snapshot.val().UserImage);
-        this.setCreditorName(snapshot.val().fullName);
+        this.setprofilePic(snapshot.val().UserImage)
         this.setCreditorEmail(snapshot.val().email);
+
         console.log(this.state.profilePic);
       });
 
     console.log("بتنحل");
 
+    console.log("here");
 
+    console.log("here");
 
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
+      
+      
     });
     console.log("يارب١");
-
     console.log("يارب٢");
-  
+    
   }
-
+  //Areej Test
 
   viewTimelineImageFunction(item) {
     firebase.auth();
@@ -198,13 +275,10 @@ export default class MyRequest extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         this.setTimelinePic(snapshot.val().UserImage);
-        //console.log("Areej Test");
+        console.log("Areej Test");
         console.log(this.state.setTimelinePic);
       });
   }
-
-
-  
 
   openModalWithItem(item) {
     this.setState({
@@ -220,16 +294,16 @@ export default class MyRequest extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rstatus: item.rqeuestStatus,
-      CreditorID: item.creditor,
-      CreName:item.creditorName,
-      CreEmail:item.creditorEmail,
-      RemAmount: item.remAmount,
+      creditorID: item.creditor,
       Rkey: item.key,
-     repType:item.repaymentType,
-      });
+      rAmount: item.remAmount,
+      cEmail: item.creditorEmail
+    });
+
     //  this.openModalWithItem2(item)
   }
- 
+
+  //رجعيها اذا ما ضبط الحال
 
   openModalWithItem2(item) {
     console.log(item.userid);
@@ -239,11 +313,7 @@ export default class MyRequest extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log(" الثانيه  جوا البيس");
-        // console.log(item.userid);
-        //  console.log(snapshot.val().UserImage);
-
-        // this.setName(snapshot.val().fullName),
-        // this.setEmail(snapshot.val().email),
+   
         console.log("inside retrive");
         this.setTimelinePic(snapshot.val().UserImage);
         // emailf=snapshot.val().email;
@@ -252,86 +322,101 @@ export default class MyRequest extends React.Component {
     console.log(this.state.pic);
     console.log("انتهى رتريف الصورة");
   }
-  EditRequest(k,Rstatus){
-    if(Rstatus!= "قيد الإنتظار"){
-      Alert.alert(
-        "عذرا",
-        " لا يمكن تعديل هذا الطلب ",
-        [{ text: "موافق", },
-       ],
-        { cancelable: false }
-      );
-    }
-    else{
-    this.setModalVisible(!this.state.modalVisible);
-    this.props.navigation.navigate('EditRequest',{
-      itemId:k,
-      
-    });
 
-  }}
-  conformRemove(k,Rstatus,props){
-    if(Rstatus== "قيد الإنتظار"){
+  conformupdateAccept(k,props){
     Alert.alert(
       "تنبيه ",
-      "هل تريد حذف الطلب ",
-      [{ text: "نعم", onPress: () => this.Remove(k,props) },
+      "هل تريد قبول الطلب ",
+      [{ text: "نعم", onPress: () => this.updateAccept(k,props) },
       {
         text: 'لا',
-        // onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
         style: 'cancel'
       },],
       { cancelable: false }
     );
   }
-  else{
+  // updatestateAccept(k,props){
+    
+  // //   this.setModalVisible(!this.state.modalVisible);
+  // //  props.navigate("squares");
+  // //   const { currentUser } = firebase.auth();
+  // //   firebase
+  // //   .database()
+  // //   .ref('requests/' + k)
+  // //   .update({
+  // //     creditor:currentUser.uid,
+  // //     rqeuestStatus: "قيد التنفيذ",
+  // //   })
+  // //   .then(() => console.log('Data updated.'));
+    
+  
+  // }
+  
+  conformupdateReject(k,props){
     Alert.alert(
       "تنبيه ",
-      "لايمكنك حذف الطلب ",
-      [{ text: "موافق"},
-     ],
+      "هل تريد رفض الطلب ",
+      [{ text: "نعم", onPress: () => this.updatestateReject(k,props) },
+      {
+        text: 'لا',
+        onPress: () =>  this.setModalVisible(!this.state.modalVisible),
+        style: 'cancel'
+      },],
       { cancelable: false }
     );
   }
-}
 
-  Remove(k,props){
-    this.setModalVisible(!this.state.modalVisible);
-    firebase
-    .database()
-   .ref('requests/' + k).remove()
+  updatestateReject(k,props){
+    
+this.setModalVisible(!this.state.modalVisible);
+// props.navigate("squares");
+  //   const { currentUser } = firebase.auth();
+  firebase
+  .database()
+  .ref('requests/' + k)
+.update({
+  //     creditor:currentUser.uid,
+    rqeuestStatus: "مرفوض",
+  })
+  .then(() => console.log('Data updated.'));
+  props.navigate("squares")
   
- 
-   props.navigate("squares")
   }
-  list = () => {
+
+  list = (array,text) => {
     const currentUser = firebase.auth().currentUser.uid;
 
-    return requestArray.map((c) => {
-      if (c.userid == currentUser) {
-        if (true) {
+    return array.map((c) => {
+      
+      if (c.creditor == currentUser) {
+        
+        if (c.rqeuestStatus!="مرفوض") {
           return (
             <View>
-                
-        
+                {/* {console.log(c.creditorID)} */}
+                {console.log("هلا بالتعبانة")}
+                {/* {console.log(c)} */}
               
-           
+              {/* {this.openModalWithItem2(c)} */}
               <TouchableOpacity
                 // margin={10}
                 style={styles.card}
                 
                 onPress={() => {
                   console.log("نداااء");
-          
+                
                   this.openModalWithItem(c);
                
                   console.log("رغد الحلوه");
-              
+                  //   console.log(c);
+                  //   console.log(c.userid);
+                  //  console.log(this.state.UserID);
                   // this.viewProfileFunction(this.state.UserID);
                 }}
               >
-                 {/* {console.log("here2")}
-                 {console.log(c.userName)} */}
+                {console.log("here2")}
+                {console.log(c.userName)}
                 <View style={styles.leftItems}>
                   <Ionicons
                     name="ios-arrow-back"
@@ -346,14 +431,16 @@ export default class MyRequest extends React.Component {
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                 </View>
+                {console.log("here3")}
+
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
-                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+                    <Text style={styles.status2}> طلب جديد  </Text>
               </View>
 ):(
                       null
                       
-                     )}
+                    )}
 
 {c.rqeuestStatus== "قيد التنفيذ" ? (
                   <View style={styles.ProssessRectangleShapeView}> 
@@ -362,7 +449,7 @@ export default class MyRequest extends React.Component {
 ):(
                       null
                       
-                     )}
+                    )}
 
 
 {c.rqeuestStatus== "مكتمل" ? (
@@ -372,39 +459,20 @@ export default class MyRequest extends React.Component {
 ):(
                       null
                       
-                     )}
+                    )}
 
-{c.rqeuestStatus== "مرفوض" ? (
-                  <View style={styles.RejectRectangleShapeView}> 
-                    <Text style={styles.status3}> {c.rqeuestStatus} </Text>
-              </View>
-):(
-                      null
-                      
-                     )}
-                
-                    
-                {/* {console.log("here3")} */}
                 
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
-                {/* {  this.Creditor(c.creditor)} */}
                     <Text style={styles.textLabel}>
-                      الدائن |{" "}
+                      المدين |{" "}
                       <Text
                         style={styles.textData}
                         onPress={() => this.viewProfileFunction(c)}
                       >
                         {" "}
                         
-             {c.creditorName == "" ? <Text style={styles.textData}>لايوجد دائن محدد </Text>: (
-                     <Text style={styles.textData}> {c.creditorName} </Text>
-                        
-                        
-                      )}
-
-
-                       
+                        {c.userName}
                       </Text>
                     </Text>
 
@@ -413,7 +481,7 @@ export default class MyRequest extends React.Component {
                       المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
                     </Text>
 
-                   
+                  
 
                     
 
@@ -423,10 +491,10 @@ export default class MyRequest extends React.Component {
                     </Text>
                   </View>
                   {/* <TouchableOpacity style={styles.imageT} 
-           onPress={() => {
+          onPress={() => {
             // this.setModalVisible2(!this.state.modalVisible2);
-             this.viewProfileFunction(c);
-           }}>  */}
+            this.viewProfileFunction(c);
+          }}>  */}
                   {/* {console.log(this.state.pic)} */}
                   {/* <Image style={styles.imageT}
             // source={{uri: this.state.pic}}
@@ -435,7 +503,7 @@ export default class MyRequest extends React.Component {
                   {/* </TouchableOpacity> */}
                 </View>
               </TouchableOpacity>
-              {/* {console.log("here4")} */}
+              {console.log("here4")}
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -443,46 +511,21 @@ export default class MyRequest extends React.Component {
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    
-                  <TouchableOpacity
-               
-                 style={styles.Editicon}
-                 onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
-   
-                 {this.state.Rstatus!= "قيد الإنتظار" ? null:(
-                
-               
-                 <Text style={styles.Editicon1}>
-                   <Ionicons name="md-create" size={30} color="#808065" solid />
-                 </Text>)}
-               </TouchableOpacity>
-                    <TouchableOpacity style={styles.Editicon3}
+                    <TouchableOpacity
                       onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible);
+                        
+                  this.setModalVisible(!this.state.modalVisible)
                       }}
                     >
-                {this.state.Rstatus== "قيد الإنتظار" ? (
-                  
-                  <AntDesign 
-                  style={styles.waitclose}
-                  name="close"
-                  size={24}
-                  color="#746356"
-                />
-             ):(
-                   
-                 <AntDesign style={styles.close}  name="close" size={24}
-                           color="#746356"
-                               />    )}
-
-
-
-
-
-                      
-                   
+                      <AntDesign
+                        style={styles.close}
+                        name="close"
+                        size={24}
+                        color="black"
+                      />
                     </TouchableOpacity>
-                    
+
+
                     {this.state.Rstatus== "قيد التنفيذ" ? (
                   <View style={styles.ProRectangleShapeView}> 
                     <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
@@ -490,16 +533,16 @@ export default class MyRequest extends React.Component {
 ):(
                       null
                       
-                     )}
+                    )}
 
 {this.state.Rstatus== "قيد الإنتظار" ? (
                   <View style={styles.WRectangleShapeView}> 
-                    <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
+                    <Text style={styles.statusInside2}> طلب جديد  </Text>
               </View>
 ):(
                       null
                       
-                     )}
+                    )}
 
 
 {this.state.Rstatus== "مكتمل" ? (
@@ -509,52 +552,26 @@ export default class MyRequest extends React.Component {
 ):(
                       null
                       
-                     )}
+                    )}
 
 {this.state.Rstatus== "مرفوض" ? (
                   <View style={styles.RRectangleShapeView}> 
-                    <Text style={styles.statusInsideReject}> {this.state.Rstatus} </Text>
+                    <Text style={styles.status3}> {this.state.Rstatus} </Text>
               </View>
 ):(
                       null
                       
-                     )}
+                    )}
 
-
-                     {/* header */}
-{this.state.Rstatus== "قيد الإنتظار" ? (
-           <Text style={styles.waitheader}>تفاصيل الطلب </Text>    
-):(
-  <Text style={styles.header}>تفاصيل الطلب </Text>
-                      
-                     )}
-
-
-
-
-
-
-
-         
-                    {/* <Text style={styles.textInputTitle}>
-                      {" "}
-                      حالة الطلب |{" "}
-                      <Text style={styles.textData}> {this.state.Rstatus} </Text>
-                    </Text> */}
-                  {/* {  this.Creditor(c.creditor)} */}
-
-                  {this.state.Rstatus== "قيد الإنتظار" ? (
-                    <View style={styles.waitContent}>  
+                    
+                    <Text style={styles.header}>تفاصيل الطلب </Text>
+                    
 
                     <Text style={styles.textInputTitle}>
                       {" "}
-                     الدائن |{" "}
-                     {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
-                     <Text style={styles.textData}> {this.state.CreName} </Text>
-                        
-                        
-                      )}
-                     
+                      المدين |{" "}
+                      <Text style={styles.textData}> {this.state.Name} </Text>
+                    
                     </Text>
 
                     {/* <Text style={styles.textInputTitle}>
@@ -573,7 +590,7 @@ export default class MyRequest extends React.Component {
                       {" "}
                       المبلغ|
                       <Text style={styles.textData}>
-                        {" "}
+                      
                         {this.state.Price}{" "}
                         <Text>ريال سعودي </Text>
                       </Text>{" "}
@@ -586,245 +603,122 @@ export default class MyRequest extends React.Component {
                       <Text style={styles.textData}>
                         {" "}
                         {this.state.EDate}{" "}
-                      </Text>{" "}
+                      </Text>
                     </Text>
                     <Text style={styles.textInputTitle}>
-                      {" "}
-                      {this.state.Reason == "" ? <Text> السبب |</Text>: <Text> السبب |</Text>}
-                      {this.state.Reason == "" ? <Text style={styles.textData}> لايوجد سبب </Text>: (
+                      
+                      <Text> السبب |</Text>
+                      {/* {this.state.Reason == "" ? null : <Text> السبب |</Text>} */}
+                      {this.state.Reason == "" ? (
+                        <Text style={styles.textData}>
+                        {" "}
+                        لا يوجد سبب
+                        {" "}
+                      </Text>
+                      ) : (
                         <Text style={styles.textData}>
                           {" "}
                           {this.state.Reason}{" "}
                         </Text>
                         
-                        
                       )}
                     </Text>
-
-                   {/* كان هنا فيه كود المتبقي من الدين */}
-
-
-
-
-                   
-
-
-
-
-
-
-
-
-
-                   
-
-
-
-
-
-
-                    
-
                     <Text style={styles.textInputTitle}>
 
-                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-                       {this.state.Duration == "" ? null : (
+                      {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
+                      {this.state.Duration == "" ? null : (
                     <Text style={styles.textData}> {this.state.Duration} </Text>
-                       )}
+                      )}
                       </Text><Text style={styles.textInputTitle}>{" "}
                       {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
-                       {this.state.iType == "" ? null : (
+                      {this.state.iType == "" ? null : (
                       <Text style={styles.textData}> {this.state.iType} </Text>
-                       )}
+                      )}
                       </Text>
                         <Text style={styles.textInputTitle}>
                         {" "}
-                       {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
+                      {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
                         {this.state.Tprice == "" ? null : (
-                       <Text style={styles.textData}> {this.state.Tprice} </Text>
+                      <Text style={styles.textData}> {this.state.Tprice} </Text>
                         )}
                         </Text>
-
-
-                        </View>
-                      //  /end content wait  
-):(
-  <View style={styles.Content}>  
-
-  <Text style={styles.textInputTitle}>
-    {" "}
-   الدائن |{" "}
-
-
-
-   {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
-                     <Text style={styles.textData}> {this.state.CreName} </Text>
-                        
-                        
-                      )}
-  </Text>
-
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-تاريخ الطلب |{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.submmitedDate}{" "}
-    </Text>{" "}
-  </Text> */}
-  <Text style={styles.textInputTitle}>
-    نوع التسديد |{" "}
-    <Text style={styles.textData}> {this.state.Type} </Text>
-  </Text>
-  <Text style={styles.textInputTitle}>
-    {" "}
-    المبلغ|
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.Price}{" "}
-      <Text>ريال سعودي </Text>
-    </Text>{" "}
-  
-  </Text>
-
-  <Text style={styles.textInputTitle}>
-    {" "}
-    التاريخ المتوقع لإكمال التسديد|{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.EDate}{" "}
-    </Text>{" "}
-  </Text>
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-    {this.state.Reason == "" ? null : <Text> السبب |</Text>}
-    {this.state.Reason == "" ? null : (
-      <Text style={styles.textData}>
-        {" "}
-        {this.state.Reason}{" "}
-      </Text>
-      
-      
-    )}
-  </Text>
-
-  // */}
-  <Text style={styles.textInputTitle}>
-                    
-                      <Text> السبب |</Text>
-                      {this.state.Reason == "" ? (
-                        <Text style={styles.textData}>
-                        
-                        لا يوجد سبب
-                       
-                      </Text>
-                      ) : (
-                        <Text style={styles.textData}>
-                        
-                          {this.state.Reason}
-                        </Text>
-                        
-                      )}
-                    </Text>
-
-
-
-  <Text style={styles.textInputTitle}>
-
-     {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-     {this.state.Duration == "" ? null : (
-  <Text style={styles.textData}> {this.state.Duration} </Text>
-     )}
-    </Text><Text style={styles.textInputTitle}>{" "}
-    {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
-     {this.state.iType == "" ? null : (
-    <Text style={styles.textData}> {this.state.iType} </Text>
-     )}
-    </Text>
-      <Text style={styles.textInputTitle}>
-      {" "}
-     {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
-      {this.state.Tprice == "" ? null : (
-     <Text style={styles.textData}> {this.state.Tprice} </Text>
-      )}
-      </Text>
-
-      {this.state.Rstatus == "قيد التنفيذ" && this.state.repType == "السداد بالتقسيط" ? (
-                      <Text style={styles.textInputTitle}>
-                      {" "}
-                      المتبقي من الدين|
-                      <Text style={styles.textData}>
-                        {" "}
-
-                        {this.state.RemAmount}{" "}
-                        <Text>ريال سعودي </Text>
-                      </Text>{" "}
-                    {console.log("دخلت ولا لا ")}
-                    </Text>
-                  
-                    
-                    ) : null }
-
-
-      </View>
-      // end content 
                       
-                     )}
 
 
 
 
 
-               
+
 
                     <View style={styles.buttonContainer}>
-                    
-                    {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
-
-{/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
-{this.state.Rstatus== "قيد الإنتظار" ? (
-                         <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
-                        
-):(
-                      // <TouchableOpacity
-                      //   style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-                      // >
-                      //   <Text style={styles.buttonText}> رفض </Text>
-                      // </TouchableOpacity>
-                      null
+                    {this.state.Rstatus== "قيد الإنتظار" ? (
+                      <TouchableOpacity
+                      style={[styles.button, { backgroundColor: "#D4CEC9" }]}
+                      onPress={() => {
+                        this. conformupdateReject(this.state.Rkey,this.props.navigation)}}
                       
-                     )}
-                    
-                {this.state.Rstatus== "قيد الإنتظار" ? (    
-                    <TouchableOpacity
-                         style={[styles.dbutton, { backgroundColor: "#BE4F4F" }]}
-                         onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus,this.props.navigation)}><Text style={styles.buttonTextDelete}> حذف </Text>
-                         </TouchableOpacity>):(null)}
+                    >
+                
+                      <Text style={styles.buttonText}> رفض </Text>
+                    </TouchableOpacity>
+                    ):
+                    (null)}
 
+{this.state.Rstatus== "قيد الإنتظار" ? (
+                      <TouchableOpacity
+                      style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    >
+                      <Text style={styles.buttonText}> قبول </Text>
+                    </TouchableOpacity>
+                    ):
+                    (null)}
 
 {this.state.Rstatus== "قيد التنفيذ" ? ( 
-<TouchableOpacity
-onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.state.RemAmount, reqID: this.state.Rkey,type:this.state.Type}),this.setModalVisible(!this.state.modalVisible)}}
-    style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
-  >
-    <Text style={styles.PaybuttonText}> دفع </Text>
-  </TouchableOpacity>):(null
-  
- )}
+                      <Text style={styles.textprosses} > 
+                      {/* "
+                    
+                    مثل المؤمنين في توادهم وتراحمهم وتعاطفهم
+                    {'\n'}
+                
+                    كمثل الجسد
+                      إذا اشتكى منه عضو
+                      
+                      {'\n'}
+                        تداعى له سائر الجسد بالسهر والحمى" 
+                        */}
+                        "
+                        مثل المؤمنين في توادهم وتراحمهم وتعاطفهم
+                        {'\n'}
+                        كمثل الجسد إذا اشتكى منه عضو
+                        {'\n'}
+                        تداعى له سائر الجسد بالسهر والحمّى
+                        "
+                        </Text>
 
-{this.state.Rstatus== "مكتمل" ? ( 
-                       <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
+                      
   
- ): null }
- 
- {this.state.Rstatus== "مرفوض" ? ( 
-                       <Text style={styles.textReject}> نعتذر، تم رفض طلبك </Text>
+): null }
+                      
+                      {this.state.Rstatus== "مكتمل" ? ( 
+                      <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
   
- ): null }
-      
-
-
+): null }
                     </View>
+
+{/* <View style={styles.buttonContainer}>
+                    
+                    <TouchableOpacity
+                    
+                    onPress = {()=>  {this.props.navigation.navigate("AddSubscription"),this.setModalVisible(!this.state.modalVisible)}}
+                      style={[styles.button, { backgroundColor: "#CBCA9E" }]}
+                      onPress={() => {
+                        this. conformupdate(this.state.Rkey,this.props.navigation)}}
+                    >
+                      <Text style={styles.buttonText}> قبول </Text>
+                    </TouchableOpacity>
+                  </View> */}
+  
                   </View>
                 </View>
               </Modal>
@@ -842,34 +736,19 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       }}
                     >
                       <AntDesign
-                        style={styles.closeProfile}
+                        style={styles.close}
                         name="close"
                         size={24}
-                        color="#746356"
+                        color="black"
                       />
-            
-                      
                     </TouchableOpacity>
-                    {this.state.CreditorName=""? ( 
-                      <Image
+                    <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
                     />
-      
- ): null }
-                    
-                    {this.state.CreditorName=""? ( 
-                                         <Text style={styles.UserName}>{this.state.CreditorName}</Text>
-
-      
- ): null }
-          {this.state.CreditorName=""? ( 
-                          <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-
- ): null }
-                    {this.state.CreditorName=""? ( 
-      
-     
+                  
+                    <Text style={styles.UserName}>{this.state.namef}</Text>
+                    <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -902,46 +781,24 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                     ): null }
-                    {this.state.CreditorName=""? ( 
-                          <Text style={styles.subsidy}> عدد التسليف </Text>
 
-      ): null }
-                    {this.state.CreditorName=""? ( 
-                          <Text style={styles.debts}> عدد الاستلاف </Text>
+                    <Text style={styles.subsidy}> عدد التسليف </Text>
+                    <Text style={styles.debts}> عدد الاستلاف </Text>
+                    <View style={styles.PinkRectangleShapeView}>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                    </View>
+                    <View style={styles.YellowRectangleShapeView}>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                    </View>
 
-      ): null }
-                    {this.state.CreditorName=""? ( 
-        <View style={styles.PinkRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
-      </View>
-
-      ): null }
-                  
-                    {this.state.CreditorName=""? ( 
-        <View style={styles.YellowRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
-      </View>
-      ): null }
-                  
-                    {this.state.CreditorName=""? ( 
-       <View style={styles.buttonContainer}>
-       <TouchableOpacity
-         style={[styles.button, { backgroundColor: "#fff" }]}
-       ></TouchableOpacity>
-       <TouchableOpacity
-         style={[styles.button, { backgroundColor: "#fff" }]}
-       ></TouchableOpacity>
-     </View>
-      ): null }
-                 {this.state.CreditorName=""? ( 
-null
-      ): 
-      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
-    }    
-             
-
-                   
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#fff" }]}
+                      ></TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#fff" }]}
+                      ></TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </Modal>
@@ -952,8 +809,115 @@ null
     });
   };
 
-  render() {
 
+
+
+
+  //To search a specific status 
+searchStatus = (textTosearch)  =>{
+    arrayFiltered22=[];
+    firebase.auth();
+    console.log("////////////////////////////////");
+    this.setSpecificStatusText(textTosearch);
+    console.log(this.state.SpecificStatusText);
+    console.log("////////////////////////////////");
+    
+    if(textTosearch==""){
+      this.setSearching(false);
+      return;
+    }
+  
+    if(textTosearch!=""){
+      this.setSearching(true);
+   
+    }
+    if(textTosearch=="قيد الإنتظار"){
+        textTosearch="";
+    }
+
+    if(textTosearch=="طلب جديد"){
+        textTosearch="قيد الإنتظار";
+    }
+
+
+  
+     var check=false;
+    for(var i =0 ,j = 0;i<requestArray.length;i++){
+      console.log(textTosearch)
+      if(textTosearch!=""){
+      if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+       check=true;
+        this.setFound(true);
+        // this.setSearching(true);
+        this.setSpecificStatus(true);
+        this.setSpecificStatusText(textTosearch);
+        // specificStatus="true";
+        console.log("طباعه الحاله ");
+        console.log(this.state.specificStatus);
+        // console.log(specificStatus);
+        // this.setSpecificStatusText(textTosearch);
+        console.log(this.state.SpecificStatusText);
+      // alert(requestArray[i].creditorName)
+      arrayFiltered22[j++]=requestArray[i]
+      console.log(" دخلت الاف  ")
+  
+      // this.setState({
+      //   specificStatus: true,
+      //   SpecificStatusText:textTosearch ,
+       
+      // });
+      
+      }
+      }
+      }
+  
+    // requestArray.forEach(element =>{
+    //   if(textTosearch==element.rqeuestStatus){
+    //     arrayFiltered2.push(element);
+    //     this.setFound(true);
+    //     this.setSearching(true);
+    //     this.setSpecificStatus(true);
+    //     this.setSpecificStatusText(textTosearch);
+    //   }
+    // }
+  
+    // )
+  
+  
+  
+  
+  
+  
+  
+  
+    // console.log(textTosearch)
+      // alert(textTosearch);
+      // this.setState({
+  
+      //   arrayFiltered2:this.state.arrayFiltered.
+      //   filter(i=>i.rqeuestStatus.match(textTosearch)),
+  
+  
+      // })
+    console.log(" دخلت السيرتش ")
+   
+  //   console.log(arrayFiltered)
+  // this.list(arrayFiltered2)
+  // console.log(" اراي ٢ ")
+  console.log(arrayFiltered22)
+  console.log(" اخر السيرتش ")
+  console.log(check)
+  // console.log(textTosearch)
+  
+  
+  
+  
+    // console.log( arrayFiltered2)
+  // {this.listToSearch()} 
+    }
+
+  render() {
+    console.log;
     return (
       <View style={styles.container}>
           
@@ -981,44 +945,62 @@ null
         ></LinearGradient>
 
         {/* -------------------------------------- CARD 1*/}
-   
+
+        <View style={styles.searchb} >
+
+        <Icon name="" />
+       <SearchInput 
+       style={styles.searchInput}
+       onChangeText={ (text) => { this.searchStatus(text) }
+     
+      } 
+      
+       placeholder="ابحث عن حالة محدده"/>
+
+
+
   
-
-
-        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
+        <View style={styles.twoButton}>
+        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myReqWithFilter")}> مدين </Text>
         <View style={styles.WhiteRectangleShapeView}> 
               </View>
-     
+    
 
 
 
-           
+          
               <View style={styles.Green2RectangleShapeView}> 
               </View>
               
 
               <Text style={styles.buttonTextNav}
-          onPress={() => this.props.navigation.navigate("ReqAsCreditor")}
+          onPress={() => this.props.navigation.navigate("ReqAsCreditorWithFilter")}
               > دائن </Text>
             
         <View style={styles.GreenRectangleShapeView}>
                 
               </View>
-              <View style={styles.ViewList}>
-        <ScrollView>{this.list()}</ScrollView>
         </View>
+
+                 <View style={styles.ViewList}>
+                 {this.state.Searching && this.state.Found?(
+
+
+
+<ScrollView>{this.list(arrayFiltered22,this.state.SpecificStatusText)}</ScrollView>
+):this.state.Searching && !this.state.Found?(
+
+
+null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+
+            </View>
         {/*View request */}
+        </View>
       </View>
     );
   }
 }
 
-
-
-
-
-
-////////////////////////////////
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -1033,25 +1015,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   ViewList:{
-marginBottom:150,
-
-  },
-  card: {
-      top:0,
-    backgroundColor: "#fff",
-    marginBottom: 10,
-    width: 400,
-    shadowColor: "#000",
-    shadowOpacity: 0.11,
-    shadowOffset: {
-      width: 0,
-      height: 0,
+    marginBottom:220,
+    // backgroundColor:'blue',
+    top:-32,
+      },
+      card: {
+        top:1,
+      backgroundColor: "#fff",
+      marginBottom: 10,
+      width: 400,
+      shadowColor: "#000",
+      shadowOpacity: 0.11,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      flexDirection: "row",
+      // justifyContent: "flex-end",
     },
-    flexDirection: "row",
-    // justifyContent: "flex-end",
-  },
   rightItems: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -1069,10 +1051,9 @@ marginBottom:150,
     // width: "100%",
   },
 
-  
-
   textContainer: {
     marginRight: 10,
+    
   },
 
   textLabel: {
@@ -1080,58 +1061,13 @@ marginBottom:150,
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "right",
     fontSize: 16,
-   
+    
   },
 
   textData: {
     color: "#CBCA9E",
     fontFamily: "Bahij_TheSansArabic-Bold",
-  },
-  textComplete: {
-    color: "#A8CB9E",
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize:20,
-    alignItems: "center",
-    left:40,
-    top:50,
-    shadowColor: "#FFCB69",
-    shadowOpacity: 0.41,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    }
-  },
-  
-
-  textReject: {
-    color: "#BE6A6C",
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize:20,
-    alignItems: "center",
-    left:70,
-    top:50,
-    shadowColor: "#FFCB69",
-    shadowOpacity: 0.41,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    }
-  },
-
-
-  textWait: {
-    color: "#D3CDC8",
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize:20,
-    top:-20,
-    alignItems: "center",
-    left:60,
-    shadowColor: "#FFCB69",
-    shadowOpacity: 0.41,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    }
+    
   },
   centeredView: {
     flex: 1,
@@ -1141,10 +1077,11 @@ marginBottom:150,
     width:650,
     right:120,
   },
+
   modalView: {
     position: "absolute",
     bottom: 0,
-    width:425,
+    width:418,
     borderTopRightRadius: 70,
     borderTopLeftRadius: 70,
     height: 600,
@@ -1167,7 +1104,23 @@ marginBottom:150,
     marginBottom: 15,
     // textAlign: "center"
   },
- 
+
+
+
+  button: {
+    alignItems: "center",
+    width: 170,
+    height: 30,
+    marginTop: 10,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 10,
+    backgroundColor: "#fff",
+    top: 25,
+    left:-30,
+  },
+
+  
   buttonText: {
     fontFamily: "Bahij_TheSansArabic-Light",
     textAlign: "center",
@@ -1175,20 +1128,15 @@ marginBottom:150,
     color:'#fff',
     fontWeight:"bold",
   },
-  PaybuttonText: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-    textAlign: "center",
-    fontSize: 50,
-    color:'#fff',
-    fontWeight:"bold",
-    
-  },
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginRight: 20,
     marginLeft: 25,
     fontSize: 10,
+
+
+    
   },
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -1196,47 +1144,14 @@ marginBottom:150,
     fontSize: 30,
     // margin: 20,
     top: -50,
-
-    textAlign: "center",
-    justifyContent: "center",
-    marginBottom: 30,
-    width:170,
-    left:90,
     
-  },
-
-
-  Content:{
-  // backgroundColor:'red',
-},
-
-waitContent:{
-  top:-45,
-  // backgroundColor:'pink',
-},
-
-
-
-
-  waitheader:{
-    fontFamily: "Bahij_TheSansArabic-Light",
-    color: "#404040",
-    fontSize: 30,
-    // margin: 20,
-    top: -80,
 
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 30,
     width:170,
-    left:90,
-    // backgroundColor:'red',
+    left:95,
   },
-
-
-
-
-
   textInputTitle: {
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 18,
@@ -1244,35 +1159,18 @@ waitContent:{
     marginBottom: 5,
     color: "#57694C",
     textAlign: "right",
+// left:30,
+    marginRight: 35,
+    top:-20,
+    right:-17,
+    width:330,
 
-    // marginRight: 1,
+
   },
   close: {
-    marginLeft: 20,
-    top:20,
-    zIndex:13,
-    width:40,
-  },
-
-  closeProfile: {
-    marginLeft: 10,
-    top:-4,
-    zIndex:13,
-    width:40,
-  },
-
-  waitclose: {
-    marginLeft: 10,
-    top:-1,
-  // backgroundColor:'black',
-    width:20,
-  },
-
-
-  Editicon3:{
-    top:-40,
-    width:30,
-    // backgroundColor:'pink',
+    marginLeft: 0,
+    top:-5,
+    color:'#746356',
   },
 
   // style for view profile
@@ -1287,7 +1185,18 @@ waitContent:{
     borderColor: "red",
   },
 
- 
+  UserImage: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    left: 130,
+    top: -20,
+    zIndex: 2,
+    width: 160,
+    height: 160,
+    resizeMode: "stretch",
+  },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
@@ -1299,18 +1208,314 @@ waitContent:{
     justifyContent: "center",
     color: "#746356",
   },
-  noUser: {
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize: 28,
-    margin: 20,
-    marginBottom: 40,
-    bottom: -125,
-    right: -1,
-    textAlign: "center",
-    justifyContent: "center",
-    color: "#746356",
+
+  
+
+  GreenRectangleShapeView: {
+    alignItems: "center",
+    width: 360,
+    height: 40,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 0,
+    marginBottom: 0,
+    right: 0,
+    top: -130,
+    backgroundColor: "#EAF4E1",
+    borderColor: "#FFFFFF",
+    borderWidth: 1,
+    marginBottom:-122,
+    shadowColor: "#000",
+    shadowOpacity: 0.11,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    
+  },
+
+  WhiteRectangleShapeView: {
+    alignItems: "center",
+    width: 192,
+    height: 34,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 13,
+    marginLeft: 0,
+    marginBottom: 0,
+    right: 0,
+    left:2,
+    top: -32,
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FFFFFF",
+    borderWidth: 1,
+    zIndex:1,
+    
+    
+  },
+
+
+  
+  ProssessRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#F1DCA7",
+    
+  },
+
+  waitingRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#D9AE94",
+    
+  },
+
+  RejectRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#BE6A6C",
+  
+  },
+
+  CompleteRectangleShapeView:{
+    alignItems: "center",
+    width: 88,
+    height: 25,
+    borderRadius: 15,
+    left:-70,
+    top: 75,
+    backgroundColor: "#A8CB9E",
+    
   },
   
+  
+  status3:{
+    textAlign: "center",
+  
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+  status2:{
+    textAlign: "center",
+  
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+  statusInside:{
+    textAlign: "right",
+   left:160,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInside2:{
+    textAlign: "right",
+   left:150,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  statusInsideReject:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#FFFFFF",
+    left:160,
+  },
+
+
+
+  ProRectangleShapeView:{
+    alignItems: "center",
+    width: 388.5,
+    height: 25,
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    left:-30,
+    top: 28,
+    backgroundColor: "#F1DCA7",
+  
+  },
+
+  WRectangleShapeView:{
+    alignItems: "center",
+    width: 388.5,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-33,
+    top: 40,
+    backgroundColor: "#D9AE94",
+  
+  },
+
+  RRectangleShapeView:{
+    alignItems: "center",
+    width: 388.5,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#BE6A6C",
+  
+  },
+
+  CRectangleShapeView:{
+    alignItems: "center",
+    width: 388.5,
+    height: 25,
+    
+    borderTopEndRadius:15,
+    borderTopRightRadius:15,
+    borderBottomRightRadius:15,
+    
+    left:-30,
+    top: 45,
+    backgroundColor: "#A8CB9E",
+  
+  },
+  test:{
+backgroundColor:'red',
+  },
+
+  Green2RectangleShapeView: {
+    alignItems: "center",
+    width: 178,
+    height: 27,
+    marginTop: 0,
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 0,
+    marginBottom: 0,
+    right: 0,
+    left:150,
+    top: -68,
+    backgroundColor: "#EAF4E1",
+    borderColor: "#EAF4E1",
+    borderWidth: 1,
+    zIndex:0,
+    
+    
+  },
+  buttonTextNav:{
+    textAlign: "center",
+    top: -95,
+    right: 90,
+    left:25,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 22,
+    color: "#404040",
+    zIndex:2,
+    width:50,
+    paddingLeft: 45,
+    paddingRight:90,
+    // paddingBottom: 2,
+    // paddingTop: 0,
+    // backgroundColor:'black',
+    
+  },
+  buttonTextNav2:{
+    textAlign: "center",
+    top: 0,
+    left: 180,
+    right:100,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 22,
+    color: "#404040",
+    zIndex:7,
+    paddingLeft: 50,
+    paddingRight: 50,
+    // paddingBottom: 2,
+    // paddingTop: 0,
+    // backgroundColor:'blue',
+    width:100,
+    paddingRight: 90,
+    paddingLeft: 60,
+    paddingTop:-40,
+   
+  },
+  buttonText: {
+    textAlign: "center",
+    top: -1,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 15,
+    color: "#404040",
+  },
+
+  UserImage: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    left: 95,
+    top: 0,
+    zIndex: 2,
+    width: 160,
+    height: 160,
+    resizeMode: "stretch",
+    borderRadius: 100,
+    borderColor: "#CBCA9E",
+    borderWidth: 4,
+  },
+  textprosses: {
+    textAlign: 'center',
+    top:-50,
+    color: "#986979",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:15,
+    alignItems: "center",
+    left:-15,
+    marginTop:40,
+  width:330,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.21,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  
+    
+  },
+  textComplete: {
+    color: "#A8CB9E",
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    fontSize:20,
+    alignItems: "center",
+    left:30,
+    top:40,
+    shadowColor: "#FFCB69",
+    shadowOpacity: 0.41,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
+
+
   PinkRectangleShapeView: {
     width: 120,
     height: 70,
@@ -1356,403 +1561,12 @@ waitContent:{
     textAlign: "right",
     color: "#404040",
     top: -12,
-    right: 48,
+    right: 42,
   },
   RateStarts: {
-    left: 108,
-    bottom: 70,
-  },
-
-  GreenRectangleShapeView: {
-    alignItems: "center",
-    width: 360,
-    height: 34,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 0,
-    marginBottom: 0,
-    right: 0,
-    top: -130,
-    backgroundColor: "#EAF4E1",
-    borderColor: "#FFFFFF",
-    borderWidth: 1,
-    marginBottom:-122,
-    shadowColor: "#000",
-    shadowOpacity: 0.11,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
     
-  },
-
-  WhiteRectangleShapeView: {
-    alignItems: "center",
-    width: 178,
-    height: 27,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 13,
-    marginLeft: 0,
-    marginBottom: 0,
-    right: 0,
-    left:88,
-    top: -48,
-    backgroundColor: "#FFFFFF",
-    borderColor: "#FFFFFF",
-    borderWidth: 1,
-    zIndex:2,
-    
-    
-  },
-  ProssessRectangleShapeView:{
-    alignItems: "center",
-    width: 88,
-    height: 25,
-    borderRadius: 15,
-    left:-70,
-    top: 75,
-    backgroundColor: "#F1DCA7",
-    
-   
-
-  },
-
-  waitingRectangleShapeView:{
-    alignItems: "center",
-    width: 88,
-    height: 25,
-    borderRadius: 15,
-    left:-70,
-    top: 75,
-    backgroundColor: "#D3CDC8",
-    
-   
-
-  },
-
-  RejectRectangleShapeView:{
-    alignItems: "center",
-    width: 88,
-    height: 25,
-    borderRadius: 15,
-    left:-70,
-    top: 75,
-    backgroundColor: "#BE6A6C",
-    
-   
-
-  },
-
-  CompleteRectangleShapeView:{
-    alignItems: "center",
-    width: 88,
-    height: 25,
-    borderRadius: 15,
-    left:-70,
-    top: 75,
-    backgroundColor: "#A8CB9E",
-    
-   
-
-  },
-  status3:{
-    textAlign: "center",
-   
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#FFFFFF",
-  },
-  status2:{
-    textAlign: "center",
-   
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#404040",
-  },
-
-  statusInside:{
-    textAlign: "right",
-   left:160,
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#404040",
-  },
-
-  statusInside2:{
-    textAlign: "right",
-   left:150,
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#404040",
-  },
-
-  statusInsideReject:{
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#FFFFFF",
-    left:160,
-  },
-
-  ProRectangleShapeView:{
-    alignItems: "center",
-    width: 388.5,
-    height: 25,
-    
-    borderTopEndRadius:15,
-    borderTopRightRadius:15,
-    borderBottomRightRadius:15,
-    
-    left:-30,
-    top: 45,
-    backgroundColor: "#F1DCA7",
-  
-  },
-
-  WRectangleShapeView:{
-    alignItems: "center",
-    width: 388.5,
-    height: 25,
-    
-    borderTopEndRadius:15,
-    borderTopRightRadius:15,
-    borderBottomRightRadius:15,
-    
-    left:-30,
-    top: 15,
-    backgroundColor: "#D3CDC8",
-  
-  },
-
-  RRectangleShapeView:{
-    alignItems: "center",
-    width: 388.5,
-    height: 25,
-    
-    borderTopEndRadius:15,
-    borderTopRightRadius:15,
-    borderBottomRightRadius:15,
-    
-    left:-30,
-    top: 45,
-    backgroundColor: "#BE6A6C",
-  
-  },
-
-  CRectangleShapeView:{
-    alignItems: "center",
-    width: 388.5,
-    height: 25,
-    
-    borderTopEndRadius:15,
-    borderTopRightRadius:15,
-    borderBottomRightRadius:15,
-    
-    left:-30,
-    top: 45,
-    backgroundColor: "#A8CB9E",
-  
-  },
-
-  test:{
-backgroundColor:'red',
-  },
-
-  Green2RectangleShapeView: {
-    alignItems: "center",
-    width: 178,
-    height: 27,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 0,
-    marginBottom: 0,
-    right: 0,
-    left:-90,
-    top: -68,
-    backgroundColor: "#EAF4E1",
-    borderColor: "#EAF4E1",
-    borderWidth: 1,
-    zIndex:2,
-    
-    
-  },
-  buttonTextNav:{
-    textAlign: "center",
-    top: -97,
-    right: 90,
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
-    color: "#404040",
-    zIndex:2,
-    paddingLeft: 50,
-    paddingRight: 50,
-    // paddingBottom: 2,
-    // paddingTop: 0,
-    // backgroundColor:'red',
-  },
-  buttonTextNav2:{
-    textAlign: "center",
-    top: -20,
-    left: 92,
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
-    color: "#404040",
-    zIndex:7,
-    paddingLeft: 50,
-    paddingRight: 50,
-    // paddingBottom: 2,
-    // paddingTop: 0,
-    // backgroundColor:'red',
-   
-  },
-  buttonText: {
-    textAlign: "center",
-    top: -1,
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 15,
-    color: "#404040",
-  },
-  buttonTextDelete:{
-    textAlign: "center",
-    top: -1,
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    fontSize: 15,
-    color: "#ffffff",
-  },
-
-
-
-
-
-
-  PaybuttonText: {
-    textAlign: "center",
-    fontFamily: "Bahij_TheSansArabic-Bold",
-    top: -4,
-    bottom: -18,
-    textAlign: "center",
-    fontSize: 18,
-    color:'#fff',
-    // fontWeight:"bold",
-  },
-
-  UserImage: {
-    alignItems: "center",
-    marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
     left: 100,
-    top: 0,
-    zIndex: 2,
-    width: 160,
-    height: 160,
-    resizeMode: "stretch",
-    borderRadius: 100,
-    borderColor: "#CBCA9E",
-    borderWidth: 4,
-  },
-
-  
-
-  button: {
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-    // fontSize:10,
-    alignItems: "center",
-    width: 170,
-    height: 30,
-    marginTop: 10,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    right:30,
-  },
-
-  Paybutton:{
-    // alignItems: "center",
-    // width: 170,
-    // height: 30,
-    // marginTop: 10,
-    // padding: 5,
-    // borderRadius: 15,
-    // marginLeft: 10,
-    // backgroundColor: "#fff",
-    // fontSize:10,
-    alignItems: "center",
-    width: 170,
-    height: 35,
-    marginTop: 0,
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    right:-50,
-    top:30,
-    shadowColor: "#000",
-    shadowOpacity: 0.21,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-  },
-
-
-
-
-  dbutton:{
-    alignItems: "center",
-    width: 170,
-    height: 35,
-
-    padding: 5,
-    borderRadius: 15,
-    marginLeft: 10,
-    backgroundColor: "#fff",
-    right:140,
-    top:25,
-    shadowColor: "#000",
-    shadowOpacity: 0.21,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-
-    
-  },
-
-  Editicon:{
-// backgroundColor:'red',
-width:40,
-left:300,
-top:-10,
-  },
-
-
-  Editicon1: {
-    left: 10,
-    bottom: 0,
-    zIndex: 2,
-    width:40,
-    // backgroundColor:'black',
-    shadowColor: "#000000",
-    shadowOpacity: 0.31,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-  },
-
-  textContainer: {
-    marginRight: 10,
+    bottom: 70,
   },
   Email: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -1766,5 +1580,45 @@ top:-10,
     justifyContent: "center",
     color: "#746356",
   },
-  //end
+
+  twoButton:{
+    top:-80,
+    left:20,
+      },
+
+      searchb:{
+        top:10,
+        bottom:-30,
+        flex: 1,
+        // backgroundColor: '#fff',
+        justifyContent: 'flex-start',
+        // backgroundColor:'pink',
+        width:390,
+       
+      
+      },
+    
+    
+      searchInput:{
+        top:8,
+        padding: 10,
+        borderColor: '#ffffff',
+        borderWidth: 1,
+        width:390,
+        height:40,
+        borderRadius:10,
+        fontSize:15,
+        fontFamily: "Bahij_TheSansArabic-Light",
+        left:0,
+        textAlign:'right',
+        backgroundColor:'#ffffff',
+      
+      },
+    
+      searchHeader:{
+        backgroundColor: 'transparent',
+        opacity: 0.6
+        
+      },
+
 });

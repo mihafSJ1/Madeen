@@ -63,7 +63,7 @@ const subscribeUser = (creditCardToken) => {
   });
 };
 
-export default class AddSubscription extends React.Component {
+export default class PayAsCreditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -144,7 +144,6 @@ export default class AddSubscription extends React.Component {
           title: 'قبول الطلب',
           body: ' تم قبول طلبك من  قِبل '+ creditorName,
           debtor:userid,
-          opened: false,
          notificationType: "accept request",
          });
         // schedulePushNotification(userName,submittedDate,installmentsType,repaymentType);
@@ -165,7 +164,6 @@ export default class AddSubscription extends React.Component {
       name=snapshot.val().fullName,
       email=snapshot.val().email
       });
-alert(nKey)
       firebase
       .database()
      .ref('notifications/' + nKey).remove();
