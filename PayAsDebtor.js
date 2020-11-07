@@ -230,11 +230,12 @@ class PayAsDebtor extends React.Component {
                     amount = {amount}
                     reqID= {reqID}
                     remAmount = {formprops.values.price}
-                    navigation = {this.props.navigation}/></View>
+                    navigation = {this.props.navigation}
+                   /></View>
          }
          
           <TouchableOpacity
-        onPress = {()=>   this.props.navigation.navigate("myRequest")}
+        onPress = {()=>   this.props.navigation.goBack()}
           style={[styles.button, { backgroundColor: "#D4CEC9", left:120, top:200 }]}
          >
             <Text style={styles.buttonText}> إلغاء </Text>
