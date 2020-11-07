@@ -272,22 +272,6 @@ class EditRequest extends React.Component {
 
   _handleNotificationResponse = response => {
     console.log(response);
-     let notificationsId;
-    firebase
-    .database()
-    .ref("notifications/")
-    .on("value", (snapshot) => {
-      snapshot.forEach((child) => {
-        notificationsId = child.key;
-      })
-        });
-alert(notificationsId)
-    firebase
-    .database()
-    .ref("notifications/" + notificationsId )
-    .update({
-      opened: true,
-    })
   };
 //read req to view info
 //update not push

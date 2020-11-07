@@ -15,6 +15,7 @@ import "firebase/firestore";
 import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
+import { date } from "yup";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -32,6 +33,8 @@ if (!firebase.apps.length) {
 
 let notificationsArray = [];
 var usersArray = [];
+var requestArray = [];
+
 firebase
   .database()
   .ref("users")
@@ -54,11 +57,12 @@ firebase
               title:child.val().title,
                body:child.val().body,
                nType: child.val().notificationType,
-               opened:child.val().opened});
+               notficationKey: child.key});
     });
   });
 
 var count =0;
+
 class NotificationsCenter extends React.Component {
 
   constructor(props) {
@@ -83,25 +87,42 @@ class NotificationsCenter extends React.Component {
                 title:child.val().title,
                 body:child.val().body,
                 nType: child.val().notificationType,
-            opened:child.val().opened });
+          notficationKey: child.key});
         });
       });
+
+      firebase
+      .database()
+      .ref("requests/")
+      .on("value", (snapshot) => {
+        snapshot.forEach((child) => {
+          if (true) {
+            this.setState({
+              Rkey:child.key,
+              rAmount: child.val().remAmount })  
+            
+          }
+        });
+      });
+
     }
 
+   
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
+
     return notificationsArray.map((c) => {
      count++;
      if (  (c.creditor == currentUser && c.nType == "new request" 
         || c.debtor == currentUser && c.nType == "accept request" 
         || c.debtor == currentUser && c.nType == "reject request")
-        && !c.opened) {
+        ) {
           return (
             <View>
                 {c.nType== "new request" ?    <TouchableOpacity
                 style={styles.card}
                 onPress={() => {
-                    this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey});
+                   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey, nKey: c.notficationKey})    
                 }}
               >
                 <View style={styles.leftItems}>
@@ -180,6 +201,26 @@ class NotificationsCenter extends React.Component {
   };
 
   render() {
+
+    setTimeout(function() {
+        firebase
+        .database()
+        .ref("notifications/")
+        .on("value", (snapshot) => {
+          snapshot.forEach((child) => {
+            if  (child.val().debtor == currentUser && child.val().notificationType == "accept request" 
+                 || child.val().debtor == currentUser && child.val().notificationType== "reject request"){
+            firebase
+            .database()
+           .ref('notifications/'+ child.key).remove()  
+                 }
+        
+          });
+        });
+  
+  
+      }, 432000000)//after 5 days
+      
     return (
       <View style={styles.container}>
         <LinearGradient

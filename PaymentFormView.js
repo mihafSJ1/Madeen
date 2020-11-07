@@ -13,7 +13,7 @@ export default class PaymentFormView extends React.Component {
   }
  
   render() {
-    const { onSubmit, submitted, error, amount, reqID, remAmount,type } = this.props;
+    const { onSubmit, submitted, error, amount, reqID, remAmount,type,nKey } = this.props;
     return (
       <View style = {styles.background}>
         <View>
@@ -49,7 +49,7 @@ export default class PaymentFormView extends React.Component {
             style={ (!this.state.cardData.valid || submitted)?[styles.button, { backgroundColor: "#F0EEED" }]:[styles.button, { backgroundColor: "#CBCA9E" }]}
          
             disabled={!this.state.cardData.valid || submitted}
-            onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount,type)}
+            onPress={() => onSubmit(this.state.cardData, reqID, amount, remAmount,type, nKey)}
        
           >
               <Text Text style={styles.buttonText}>

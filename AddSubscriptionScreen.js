@@ -87,22 +87,6 @@ export default class AddSubscription extends React.Component {
   
     _handleNotificationResponse = response => {
       console.log(response);
-       let notificationsId;
-      firebase
-      .database()
-      .ref("notifications/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          notificationsId = child.key;
-        })
-          });
-  alert(notificationsId)
-      firebase
-      .database()
-      .ref("notifications/" + notificationsId )
-      .update({
-        opened: true,
-      })
     };
 
      sendPushNotification =(Key)=>{
@@ -167,7 +151,7 @@ export default class AddSubscription extends React.Component {
      }
  
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput,reqID,amount) => {
+  onSubmit = async (creditCardInput,reqID,amount,remAmount,type,nKey) => {
     const { navigation } = this.props;
     this.sendPushNotification(reqID);
 
@@ -181,6 +165,10 @@ export default class AddSubscription extends React.Component {
       name=snapshot.val().fullName,
       email=snapshot.val().email
       });
+alert(nKey)
+      firebase
+      .database()
+     .ref('notifications/' + nKey).remove();
 
       firebase
       .database()
@@ -233,6 +221,7 @@ export default class AddSubscription extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
+    const {nKey} = this.props.route.params
     return (
           <View style={styles.container}>
          <LinearGradient
@@ -283,7 +272,8 @@ export default class AddSubscription extends React.Component {
           onSubmit={this.onSubmit}
           amount = {amount}
           navigation = {this.props.navigation}
-           reqID = {reqID}/>
+           reqID = {reqID}
+           nKey= {nKey} />
              </View>
             </ScrollView>
             {/* Scrolls to the payment form */}

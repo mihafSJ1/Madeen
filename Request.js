@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Notifications from 'expo-notifications';
-import moment from "moment";
+import moment, { now } from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
@@ -116,6 +116,7 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 
 var userNameFromDB = "";
 
+    
 class Request extends React.Component {
   constructor(props) {
     super(props);
@@ -127,6 +128,7 @@ class Request extends React.Component {
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
       notification: {},
+      notificationId: "",
       keyC: "",
       keyD: "",
       // repaymentType : [],
@@ -263,6 +265,7 @@ class Request extends React.Component {
         }
       });
     });
+  
   }
 
   _handleNotification = notification => {
@@ -271,20 +274,6 @@ class Request extends React.Component {
 
   _handleNotificationResponse = response => {
     console.log(response);
-     let notificationsId;
-    firebase
-    .database()
-    .ref("notifications/")
-    .on("value", (snapshot) => {
-        notificationsId = snapshot.val().key;
-        });
-// alert(notificationsId)
-    firebase
-    .database()
-    .ref("notifications/" + notificationsId )
-    .update({
-      opened: true,
-    })
   };
   
   sendPushNotification = (Key, debtorName) => {
@@ -307,17 +296,16 @@ class Request extends React.Component {
         body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
-    firebase
+    const notificationKey = firebase
     .database()
     .ref("notifications/")
     .push(
       {
         title: 'طلب جديد من قِبل '+  debtorName ,
         body:  ' والله في عون العبد ما كان العبد في عون أخيه ',
-       creditor: this.state.keyC,
-       debtor:this.state.keyD,
-       opened: false,
-       notificationType: "new request",
+        creditor: this.state.keyC,
+        debtor:this.state.keyD,
+        notificationType: "new request",
       });
   }
   
