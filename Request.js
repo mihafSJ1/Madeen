@@ -257,7 +257,7 @@ class Request extends React.Component {
   }
 
   
-   sendPushNotification =(Key,userNameFromDB)=>{
+   sendPushNotification =(Key,userNameFromDB,eDate,installmentsType,repaymentType,submittedDate)=>{
     console.log("sendPushNotification");
     let Token;
     firebase
@@ -275,10 +275,13 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مدين | طلب جديد!',
-        body: 'بحاجة لمساعدتك'+userNameFromDB,
+        title: 'مَدِين | طلب جديد!',
+        body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
+   
+      
+    schedulePushNotification(userNameFromDB,eDate,installmentsType,repaymentType,submittedDate);
   }
   
 //   scheduleLocalNotification=(trigger,exDate,instalmentT,repaymentT)=>{
@@ -329,7 +332,7 @@ bringid(k){
 });
 }
   onSubmitPress(values, props) {
-    const trigger = new Date(this.state.expectedDate);
+    //const trigger = new Date(this.state.expectedDate);
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
@@ -387,8 +390,8 @@ else{
       );
      
       if(  keyC != ""){
-        console.log("kyC");
-      this.sendPushNotification(keyC,userNameFromDB);}
+        console.log("kyC");}
+      this.sendPushNotification(keyC,userNameFromDB,this.state.expectedDate,this.state.installmentsState,values.repaymentType,this.state.submittedDateState);
      // schedulePushNotification(userNameFromDB,trigger,this.state.installmentsState,values.repaymentType);
      // scheduleLocalNotification(userNametrigger,values.expectedDate,this.state.installmentsState,values.repaymentType)
   }

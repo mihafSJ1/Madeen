@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, ScrollView,Dimensions,Alert } from 'react-nativ
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
-import {schedulePushNotification} from './schedulePushNotification';
  import * as firebase from "firebase";
  import {registerForPushNotificationsAsync} from './PushNotificationToken';
 const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى';
@@ -120,8 +119,8 @@ export default class AddSubscription extends React.Component {
         title: 'تم قبول طلبك',
       })
     });
-        
-    schedulePushNotification(userName,submittedDate,installmentsType,repaymentType);
+
+    
   }
   // Handles submitting the payment request
   onSubmit = async (creditCardInput,reqID,amount) => {

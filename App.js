@@ -215,7 +215,7 @@ function Homenav() {
 export default function App({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-
+  
   // if (loading) {
   //   return (
   //     <></>
