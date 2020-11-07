@@ -122,7 +122,7 @@ class NotificationsCenter extends React.Component {
                 {c.nType== "new request" ?    <TouchableOpacity
                 style={styles.card}
                 onPress={() => {
-                   this.props.navigation.navigate("AddSubscription",{amount:this.state.rAmount, reqID: this.state.Rkey, nKey: c.notficationKey})    
+                   this.props.navigation.navigate("PayAsCreditor",{amount:this.state.rAmount, reqID: this.state.Rkey, nKey: c.notficationKey})    
                 }}
               >
                 <View style={styles.leftItems}>

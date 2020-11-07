@@ -321,7 +321,6 @@ sendPushNotification = (Key, debtorName) => {
       body: 'والله في عون العبد ما كان العبد في عون أخيه',
      creditor: this.state.keyC,
      debtor:this.state.keyD,
-     opened: false,
     notificationType: "new request",
     });
 }

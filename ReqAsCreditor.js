@@ -349,9 +349,7 @@
               {
                title: 'طلب مرفوض',
                body: creditorName+ ' نعتذر، تم رفض طلبك من قِبل',
-              //  creditor: this.state.keyC,
                debtor:userid,
-               opened: false,
               notificationType: "reject request",
               });
           }
