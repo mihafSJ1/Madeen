@@ -150,9 +150,8 @@ export default class PayAsCreditor extends React.Component {
      }
  
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput,reqID,amount,remAmount,type,nKey) => {
+  onSubmit = async (creditCardInput,reqID,amount,remAmount,type) => {
     const { navigation } = this.props;
-    this.sendPushNotification(reqID);
 
     const { currentUser } = firebase.auth();
     var name;
@@ -164,9 +163,7 @@ export default class PayAsCreditor extends React.Component {
       name=snapshot.val().fullName,
       email=snapshot.val().email
       });
-      firebase
-      .database()
-     .ref('notifications/' + nKey).remove();
+
 
       firebase
       .database()
@@ -212,6 +209,9 @@ export default class PayAsCreditor extends React.Component {
 
       // navigation.navigate('squares')
     }
+
+    this.sendPushNotification(reqID);
+
   };
   
   // render the subscription view component and pass the props to it
@@ -219,7 +219,6 @@ export default class PayAsCreditor extends React.Component {
     const { submitted, error } = this.state;
     const {amount} = this.props.route.params;
     const {reqID} = this.props.route.params;
-    const {nKey} = this.props.route.params
     return (
           <View style={styles.container}>
          <LinearGradient
@@ -271,7 +270,7 @@ export default class PayAsCreditor extends React.Component {
           amount = {amount}
           navigation = {this.props.navigation}
            reqID = {reqID}
-           nKey= {nKey} />
+        />
              </View>
             </ScrollView>
             {/* Scrolls to the payment form */}

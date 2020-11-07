@@ -47,19 +47,25 @@ firebase
 
 const currentUser = firebase.auth();
 firebase
-  .database()
-  .ref("notifications/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-        notificationsArray.push({
-             creditor:child.val().creditor,
-              debtor:child.val().debtor,
-              title:child.val().title,
-               body:child.val().body,
-               nType: child.val().notificationType,
-               notficationKey: child.key});
-    });
+.database()
+.ref("notifications/")
+.on("value", (snapshot) => {
+  snapshot.forEach((child) => {
+    // this.setState({reqID:  })
+    
+      notificationsArray.push({
+
+          creditor:child.val().creditor,
+          debtor:child.val().debtor,
+          title:child.val().title,
+          body:child.val().body,
+          nType: child.val().notificationType,
+          reqKey:child.val().reqID,
+          notficationKey: child.key,    
+  }
+);
   });
+});
 
 var count =0;
 
@@ -69,99 +75,49 @@ class NotificationsCenter extends React.Component {
     super(props);
     this.state = {
       currentUser: null,
+      reqID:""
     //   notificationsArray:[],
     };
   }
 
   componentDidMount() { 
     notificationsArray=[];
-   
+   let reqID;
     firebase
       .database()
       .ref("notifications/")
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
+          // this.setState({reqID:  })
             notificationsArray.push({
                 creditor:child.val().creditor,
                 debtor:child.val().debtor,
                 title:child.val().title,
                 body:child.val().body,
                 nType: child.val().notificationType,
-          notficationKey: child.key});
+                // reqKey:child.val().reqID,
+                notficationKey: child.key,    
+        }
+    );
         });
       });
 
-      firebase
-      .database()
-      .ref("requests/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          if (true) {
-            this.setState({
-              Rkey:child.key,
-              rAmount: child.val().remAmount })  
-            
-          }
-        });
-      });
 
     }
 
    
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
-
     return notificationsArray.map((c) => {
      count++;
      if (  (c.creditor == currentUser && c.nType == "new request" 
         || c.debtor == currentUser && c.nType == "accept request" 
-        || c.debtor == currentUser && c.nType == "reject request")
+        || c.debtor == currentUser && c.nType == "reject request"
+        || c.debtor == currentUser && c.nType == "repayment")
         ) {
           return (
             <View>
-                {c.nType== "new request" ?    <TouchableOpacity
-                style={styles.card}
-                onPress={() => {
-                   this.props.navigation.navigate("PayAsCreditor",{amount:this.state.rAmount, reqID: this.state.Rkey, nKey: c.notficationKey})    
-                }}
-              >
-                <View style={styles.leftItems}>
-                <Ionicons
-                    name="ios-arrow-back"
-                    size={25}
-                    color="#9B9B7A"
-                    solid
-                    style={{ marginTop: 30, left: -20 }}
-                  />
                
-                </View>
-                <View style={styles.rightItems}>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.textLabel}>
-                       الإشعار |{" "}
-                     
-                        {" "}
-                        {c.title}
-
-                    </Text>
-
-                    <Text style={styles.textLabel}>
-                      {" "}
-                      <Text style={styles.textData}> {c.body} </Text>
-                    </Text>
-
-                   
-                  </View>
-                  <Ionicons
-                    name="ios-notifications-outline"
-                    size={60}
-                    color="#A4161A"
-                    solid
-                    style={{ marginTop: -10 }}
-                  />
-                </View>
-            
-              </TouchableOpacity> : 
               <TouchableOpacity
                 style={styles.card}
               >
@@ -192,7 +148,7 @@ class NotificationsCenter extends React.Component {
                   />
                 </View>
             
-              </TouchableOpacity>}
+              </TouchableOpacity>
             </View>
           );
          }
@@ -208,8 +164,10 @@ class NotificationsCenter extends React.Component {
         .ref("notifications/")
         .on("value", (snapshot) => {
           snapshot.forEach((child) => {
-            if  (child.val().debtor == currentUser && child.val().notificationType == "accept request" 
-                 || child.val().debtor == currentUser && child.val().notificationType== "reject request"){
+            if  ( child.val().creditor == currentUser && child.val().notificationType  == "new request"  ||
+              child.val().debtor == currentUser && child.val().notificationType == "accept request" 
+                 || child.val().debtor == currentUser && child.val().notificationType== "reject request"
+                 || child.val().debtor == currentUser && child.val().notificationType== "repayment"){
             firebase
             .database()
            .ref('notifications/'+ child.key).remove()  

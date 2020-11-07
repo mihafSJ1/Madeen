@@ -30,6 +30,7 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
+import {schedulePushNotification} from './schedulePushNotification';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -276,7 +277,7 @@ class Request extends React.Component {
     console.log(response);
   };
   
-  sendPushNotification = (Key, debtorName) => {
+  sendPushNotification = (Key, debtorName, reqKey) => {
     let Token;
     firebase
     .database()
@@ -306,6 +307,7 @@ class Request extends React.Component {
         creditor: this.state.keyC,
         debtor:this.state.keyD,
         notificationType: "new request",
+        reqID: reqKey,
       });
   }
   
@@ -378,8 +380,9 @@ else{
         }
       );
       if(keyC!=""){
-        this.sendPushNotification(keyC, userNameFromDB);
+        this.sendPushNotification(keyC, userNameFromDB,requestID.key );
       }
+      schedulePushNotification(values.expectedDate,this.state.installmentsState,values.repaymentType,this.state.submittedDateState,currentUser.uid,requestID.key);
   }
 
   requestSchema = yup.object({
