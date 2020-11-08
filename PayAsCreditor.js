@@ -177,7 +177,7 @@ export default class PayAsCreditor extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
-        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorWithFilter") }],
         { cancelable: false }
       ));
     // Disable the Submit button after the request is sent

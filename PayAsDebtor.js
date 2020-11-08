@@ -84,7 +84,7 @@ class PayAsDebtor extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "تم التسديد بنجاح   ",
-        [{ text: "موافق", onPress: () =>this.props.navigation.navigate("myRequestP")}],
+        [{ text: "موافق", onPress: () =>this.props.navigation.navigate("myReqWithFilter")}],
         { cancelable: false }
       ));
 
