@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState }  from "react";
+
 import {
   StyleSheet,
   Text,
@@ -10,8 +11,13 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Item,
+
 } from "react-native";
+
+
+
+import {Item,Container,Header,Icon,Input} from 'native-base';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -38,6 +44,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 var requestArray = [];
+
+var arrayFiltered=[];
+
 var myRequest = [];
 var usersArray = [];
 var namef = "name";
@@ -46,6 +55,11 @@ var emailf = "email";
 var UserIDImage = "2";
 var UserID = "3";
 let namefff = "999999";
+var Searching=false;
+var Found=false;
+var specificStatus=false;
+// var SpecificStatusText="لا يوجد";
+let arrayFiltered2=[];
 
 firebase
   .database()
@@ -84,8 +98,10 @@ firebase
       //  }
     });
   });
-
-export default class MyRequest extends React.Component {
+  //هنا الاسناد الصح 
+  arrayFiltered=requestArray;
+  // arrayFiltered2=requestArray;
+export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
   constructor(props) {
@@ -93,16 +109,27 @@ export default class MyRequest extends React.Component {
   this.state = {
     modalVisible: false,
     modalVisible2: false,
+    specificStatus:false,
+    SpecificStatusText:"",
+    Searching:false,
+     Found:false,
     CreditorName:"",
     CreditorEmail:"",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+      searchTerm: '',
+
+    arrayFiltered:requestArray,
+   
   };
   }
+
+
   componentDidMount() {
     requestArray=[]
+    
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -131,6 +158,9 @@ export default class MyRequest extends React.Component {
           }
         });
       });
+      arrayFiltered=requestArray;
+    
+     
     }
 
   setModalVisible(visible) {
@@ -151,8 +181,55 @@ export default class MyRequest extends React.Component {
     this.setState({ profilePic: picNew });
   }
 
-  
+  setSearching(flag) {
 
+    this.setState({ Searching: flag}, function() {
+      // do something with new state
+
+      console.log("new code")
+      console.log(this.state.Searching)
+  });
+    console.log("تروحين تغيرين الفلاق سيرتش ولا لا ")
+    // this.setState({ Searching: flag });
+    console.log("غيرت السيرتش")
+    console.log(this.state.Searching)
+  }
+ 
+  setFound(flag) {
+
+    this.setState({ Found: flag}, function() {
+      // do something with new state
+
+      console.log("new code2")
+      console.log(this.state.Found)
+  });
+    // this.setState({ Found: flag });
+  }
+
+
+  setSpecificStatus(flag) {
+    // console.log("تروحين تغيرين الفلاق الحاله ولا لا ")
+    // this.setState({ specificStatus: flag});
+    this.setState({ specificStatus: flag}, function() {
+      // do something with new state
+
+      console.log("new code3")
+      console.log(this.state.specificStatus)
+  });
+  }
+ 
+
+
+  setSpecificStatusText(text){
+    // this.setState({ SpecificStatusText: text });
+    this.setState({ SpecificStatusText: text}, function() {
+      // do something with new state
+
+      console.log("new code4")
+      console.log(this.state.SpecificStatusText)
+  });
+
+  }
 
 
   setTimelinePic(picNew) {
@@ -304,16 +381,38 @@ export default class MyRequest extends React.Component {
  
    props.navigate("squares")
   }
-  list = () => {
-    const currentUser = firebase.auth().currentUser.uid;
 
-    return requestArray.map((c) => {
+
+
+
+
+
+
+
+
+  list = (array,text) => {
+    // console.log("داخل الليست س");
+    const currentUser = firebase.auth().currentUser.uid;
+    console.log("hi")
+console.log(this.state.SpecificStatusText)
+console.log(this.state.SpecificStatusText)
+console.log(this.state.specificStatus)
+console.log(text)
+    return array.map((c,index) => {
+      console.log("داخل الليست ١١١١١");
       if (c.userid == currentUser) {
+        console.log("اول شرط بالليست ") ;
+        // console.log(specificStatus);
+        console.log(this.state.specificStatus);
+
+
         if (true) {
+          console.log("داخل الليست ٢٢٢٢");
           return (
+         
             <View>
                 
-        
+                {console.log("داخل الفيووووو")}
               
            
               <TouchableOpacity
@@ -850,7 +949,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
             
                       
                     </TouchableOpacity>
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                       <Image
                       style={styles.UserImage}
                       source={{ uri: this.state.profilePic }}
@@ -858,16 +957,16 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       
  ): null }
                     
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                                          <Text style={styles.UserName}>{this.state.CreditorName}</Text>
 
       
  ): null }
-          {this.state.CreditorName=""? ( 
+          {this.state.CreditorName!=""? ( 
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -903,28 +1002,28 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       />
                     </Text>
                      ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
       ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
                           <Text style={styles.debts}> عدد الاستلاف </Text>
 
       ): null }
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
         <View style={styles.PinkRectangleShapeView}>
         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
       </View>
 
       ): null }
                   
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
         <View style={styles.YellowRectangleShapeView}>
         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
       </View>
       ): null }
                   
-                    {this.state.CreditorName=""? ( 
+                    {this.state.CreditorName!=""? ( 
        <View style={styles.buttonContainer}>
        <TouchableOpacity
          style={[styles.button, { backgroundColor: "#fff" }]}
@@ -933,12 +1032,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
          style={[styles.button, { backgroundColor: "#fff" }]}
        ></TouchableOpacity>
      </View>
-      ): null }
-                 {this.state.CreditorName=""? ( 
-null
-      ): 
-      <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
-    }    
+      ): <Text style={styles.noUser}>لا يوجد دائن محدد</Text> }
+   
              
 
                    
@@ -948,10 +1043,111 @@ null
             </View>
           );
         }
+      
       }
     });
   };
 
+
+//To search a specific status 
+searchStatus = (textTosearch)  =>{
+   arrayFiltered2=[];
+  firebase.auth();
+  console.log("////////////////////////////////");
+  this.setSpecificStatusText(textTosearch);
+  console.log(this.state.SpecificStatusText);
+  console.log("////////////////////////////////");
+  if(textTosearch==""){
+    this.setSearching(false);
+    return;
+  }
+
+  if(textTosearch!=""){
+    this.setSearching(true);
+ 
+  }
+
+  if(textTosearch=="قيد الانتظار"){
+    textTosearch="قيد الإنتظار";
+}
+
+   var check=false;
+  for(var i =0 ,j = 0;i<requestArray.length;i++){
+    console.log(textTosearch)
+    if(textTosearch!=""){
+    if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+     check=true;
+      this.setFound(true);
+      // this.setSearching(true);
+      this.setSpecificStatus(true);
+      this.setSpecificStatusText(textTosearch);
+      // specificStatus="true";
+      console.log("طباعه الحاله ");
+      console.log(this.state.specificStatus);
+      // console.log(specificStatus);
+      // this.setSpecificStatusText(textTosearch);
+      console.log(this.state.SpecificStatusText);
+    // alert(requestArray[i].creditorName)
+    arrayFiltered2[j++]=requestArray[i]
+    console.log(" دخلت الاف  ")
+
+    // this.setState({
+    //   specificStatus: true,
+    //   SpecificStatusText:textTosearch ,
+     
+    // });
+    
+    }
+    }
+    }
+
+  // requestArray.forEach(element =>{
+  //   if(textTosearch==element.rqeuestStatus){
+  //     arrayFiltered2.push(element);
+  //     this.setFound(true);
+  //     this.setSearching(true);
+  //     this.setSpecificStatus(true);
+  //     this.setSpecificStatusText(textTosearch);
+  //   }
+  // }
+
+  // )
+
+
+
+
+
+
+
+
+  // console.log(textTosearch)
+    // alert(textTosearch);
+    // this.setState({
+
+    //   arrayFiltered2:this.state.arrayFiltered.
+    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
+
+
+    // })
+  console.log(" دخلت السيرتش ")
+ 
+//   console.log(arrayFiltered)
+// this.list(arrayFiltered2)
+// console.log(" اراي ٢ ")
+console.log(arrayFiltered2)
+console.log(" اخر السيرتش ")
+console.log(check)
+// console.log(textTosearch)
+
+
+
+
+  // console.log( arrayFiltered2)
+// {this.listToSearch()} 
+  }
+
+
+  
   render() {
 
     return (
@@ -981,11 +1177,25 @@ null
         ></LinearGradient>
 
         {/* -------------------------------------- CARD 1*/}
+
+       {/* SEARCH */}
+                 <View style={styles.searchb} >
+
+        <Icon name="" />
+       <SearchInput 
+       style={styles.searchInput}
+       onChangeText={ (text) => { this.searchStatus(text) }
+     
+      } 
+      
+       placeholder="ابحث عن حالة محدده"/>
+
+   
    
   
-
-
-        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myRequest")}> مدين </Text>
+<View style={styles.twoButton}>
+    
+        <Text style={styles.buttonTextNav2}   onPress={() => this.props.navigation.navigate("myReqWithFilter")}> مدين </Text>
         <View style={styles.WhiteRectangleShapeView}> 
               </View>
      
@@ -998,17 +1208,61 @@ null
               
 
               <Text style={styles.buttonTextNav}
-          onPress={() => this.props.navigation.navigate("ReqAsCreditor")}
+          onPress={() => this.props.navigation.navigate("ReqAsCreditorWithFilter")}
               > دائن </Text>
             
         <View style={styles.GreenRectangleShapeView}>
                 
               </View>
+              </View>
+          
+
+
               <View style={styles.ViewList}>
-        <ScrollView>{this.list()}</ScrollView>
+
+                {/* اذا هو ما بحث الديفولت فولس وبطلع طبيعي  */}
+{/* 
+                {this.state.Found?(console.log(arrayFiltered2)&&console.log("5555555555555")&&
+                 <ScrollView>{this.list(arrayFiltered2,null)}</ScrollView>
+                  ):null} */}
+
+                  
+            {/* {this.state.Searching ? (null):<ScrollView>{this.list(requestArray,null)}</ScrollView> } */}
+
+                
+            
+
+
+
+{this.state.Searching && this.state.Found?(
+
+
+
+<ScrollView>{this.list(arrayFiltered2,this.state.SpecificStatusText)}</ScrollView>
+):this.state.Searching && !this.state.Found?(
+
+
+null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+
+
+
+{/* this.setSpecificStatus(true)&&  */}
+
+
+
+
+        
+
+
+
+                {/* {this.searchStatus("مكتمل")} */}
+              {/* {this.listToSearch()}  */}
+        {/* <ScrollView>{this.list()}</ScrollView> */}
         </View>
         {/*View request */}
       </View>
+      </View>
+
     );
   }
 }
@@ -1035,11 +1289,12 @@ const styles = StyleSheet.create({
   },
 
   ViewList:{
-marginBottom:150,
-
+marginBottom:220,
+// backgroundColor:'blue',
+top:-32,
   },
   card: {
-      top:0,
+      top:1,
     backgroundColor: "#fff",
     marginBottom: 10,
     width: 400,
@@ -1125,7 +1380,7 @@ marginBottom:150,
     fontSize:20,
     top:-20,
     alignItems: "center",
-    left:60,
+    left:35,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -1366,7 +1621,7 @@ waitContent:{
   GreenRectangleShapeView: {
     alignItems: "center",
     width: 360,
-    height: 34,
+    height: 40,
     marginTop: 0,
     padding: 5,
     borderRadius: 15,
@@ -1389,20 +1644,20 @@ waitContent:{
 
   WhiteRectangleShapeView: {
     alignItems: "center",
-    width: 178,
-    height: 27,
+    width: 192,
+    height: 34,
     marginTop: 0,
     padding: 5,
     borderRadius: 13,
     marginLeft: 0,
     marginBottom: 0,
     right: 0,
-    left:88,
-    top: -48,
+    left:164,
+    top: -32,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
-    zIndex:2,
+    zIndex:4,
     
     
   },
@@ -1569,7 +1824,7 @@ backgroundColor:'red',
     marginLeft: 0,
     marginBottom: 0,
     right: 0,
-    left:-90,
+    left:0,
     top: -68,
     backgroundColor: "#EAF4E1",
     borderColor: "#EAF4E1",
@@ -1580,31 +1835,39 @@ backgroundColor:'red',
   },
   buttonTextNav:{
     textAlign: "center",
-    top: -97,
+    top: -95,
     right: 90,
+    left:25,
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
+    fontSize: 22,
     color: "#404040",
     zIndex:2,
-    paddingLeft: 50,
-    paddingRight: 50,
+    width:50,
+    paddingLeft: 45,
+    paddingRight:90,
     // paddingBottom: 2,
     // paddingTop: 0,
     // backgroundColor:'red',
+    
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -20,
-    left: 92,
+    top: 0,
+    left: 180,
+    right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
+    fontSize: 22,
     color: "#404040",
     zIndex:7,
     paddingLeft: 50,
     paddingRight: 50,
     // paddingBottom: 2,
     // paddingTop: 0,
-    // backgroundColor:'red',
+    // backgroundColor:'pink',
+    width:100,
+    paddingRight: 90,
+    paddingLeft: 60,
+    paddingTop:-40,
    
   },
   buttonText: {
@@ -1717,7 +1980,7 @@ backgroundColor:'red',
     borderRadius: 15,
     marginLeft: 10,
     backgroundColor: "#fff",
-    right:140,
+    right:190,
     top:25,
     shadowColor: "#000",
     shadowOpacity: 0.21,
@@ -1766,5 +2029,50 @@ top:-10,
     justifyContent: "center",
     color: "#746356",
   },
+
+
+
+
+  searchb:{
+    top:10,
+    bottom:-30,
+    flex: 1,
+    // backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    // backgroundColor:'pink',
+    width:390,
+   
+  
+  },
+
+
+  searchInput:{
+    top:8,
+    padding: 10,
+    borderColor: '#ffffff',
+    borderWidth: 1,
+    width:390,
+    height:40,
+    borderRadius:10,
+    fontSize:15,
+    fontFamily: "Bahij_TheSansArabic-Light",
+    left:0,
+    textAlign:'right',
+    backgroundColor:'#ffffff',
+  
+  },
+
+  twoButton:{
+top:-80,
+left:20,
+  },
+
+  searchHeader:{
+    backgroundColor: 'transparent',
+    opacity: 0.6
+    
+  },
+
+
   //end
 });

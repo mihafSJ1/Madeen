@@ -22,6 +22,8 @@
         import { Ionicons } from "@expo/vector-icons";
         import { FlatList } from "react-native-gesture-handler";
         import { render } from "react-dom";
+        import * as Notifications from 'expo-notifications';
+
         const firebaseConfig = {
           apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
           authDomain: "madeendb2.firebaseapp.com",
@@ -32,6 +34,7 @@
           appId: "1:814154412010:web:435cac99ae40206a1ecc93",
           measurementId: "G-SXS9Z8NESC",
         };
+
 
         if (!firebase.apps.length) {
           firebase.initializeApp(firebaseConfig);
@@ -116,6 +119,8 @@
 
           componentDidMount() {
             registerForPushNotificationsAsync();
+            Notifications.addNotificationReceivedListener(this._handleNotification);
+            Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
             requestArray=[];
           
             const { currentUser } = firebase.auth();
@@ -147,7 +152,13 @@
             });
             }
 
-
+            _handleNotification = notification => {
+              this.setState({ notification: notification });
+            }
+          
+            _handleNotificationResponse = response => {
+              console.log(response);
+            };
           setModalVisible(visible) {
             this.setState({ modalVisible: visible });
           }
@@ -305,10 +316,12 @@
             console.log("sendPushNotification");
             let Token;
             let userid;
+            let creditorName;
             firebase
             .database()
             .ref("requests/"+Key).on("value", (snapshot) => {
               userid = snapshot.val().userid;
+              creditorName = snapshot.val().creditorName;
             });
             firebase
             .database()
@@ -325,12 +338,24 @@
               body: JSON.stringify({
                 to: Token,
                 sound: 'default',
-                title: 'نعتذر، تم رفض طلب',
+                title: 'طلب مرفوض',
+                body: creditorName+ ' نعتذر، تم رفض طلبك من قِبل',
               })
             });
+            firebase
+            .database()
+            .ref("notifications/")
+            .push(
+              {
+               title: 'طلب مرفوض',
+               body: creditorName+ ' نعتذر، تم رفض طلبك من قِبل',
+               debtor:userid,
+              notificationType: "reject request",
+              });
           }
           updatestateReject(k,props){
             this.sendPushNotificationRejact (k);
+
         this.setModalVisible(!this.state.modalVisible);
        // props.navigate("squares");
           //   const { currentUser } = firebase.auth();
@@ -629,7 +654,7 @@
         {this.state.Rstatus== "قيد الإنتظار" ? (
                               <TouchableOpacity
                               style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                              onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                              onPress = {()=>  { this.props.navigation.navigate("PayAsCreditor",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                             >
                               <Text style={styles.buttonText}> قبول </Text>
                             </TouchableOpacity>
@@ -1069,12 +1094,12 @@
             height: 27,
             marginTop: 0,
             padding: 5,
-            borderRadius: 15,
+            borderRadius: 13,
             marginLeft: 0,
             marginBottom: 0,
             right: 0,
             left:-88,
-            top: -41,
+            top: -47,
             backgroundColor: "#FFFFFF",
             borderColor: "#FFFFFF",
             borderWidth: 1,
@@ -1259,7 +1284,7 @@
           },
           buttonTextNav2:{
             textAlign: "center",
-            top: -13,
+            top: -20,
             left: 92,
             fontFamily: "Bahij_TheSansArabic-Light",
             fontSize: 20,

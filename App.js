@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
 import Register from "./Register";
 import login from "./login";
+import CalendarView from './CalendarView';
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
 import { AntDesign, MaterialIcons, Feather } from "@expo/vector-icons";
 import SvgComponent from "./Svgnav";
-import SvgComponent2 from "./TabbarSVG";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Timeline from "./Timeline";
 import squares from "./squares";
 import Request from "./Request";
 import TopBar from "./TopBar";
-import Alert from "./Alert";
 import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
@@ -23,9 +21,15 @@ import myRequest from "./myRequest";
 import ReqAsCreditor from "./ReqAsCreditor";
 import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
-import AddSubscription from './AddSubscriptionScreen';
-import AddSubscriptionView from './AddSubscriptionView';
+import PayAsCreditor from './PayAsCreditor';
+
 import PaymentFormView from './PaymentFormView';
+import NotificationsCenter from './NotificationsCenter';
+import  Calculator from './Calculator';
+import  myReqWithFilter from './myReqWithFilter';
+import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
+
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -71,9 +75,10 @@ function squaresScreens() {
         component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
+
            <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
@@ -82,6 +87,48 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+
+<Stack.Screen
+              name="Calculator"
+              component={Calculator}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+<Stack.Screen
+              name="myReqWithFilter"
+              component={myReqWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+<Stack.Screen
+              name="ReqAsCreditorWithFilter"
+              component={ReqAsCreditorWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+
+
+
+
+
               <Stack.Screen
               name="PayAsDebtor"
               component={PayAsDebtor}
@@ -93,6 +140,22 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+              <Stack.Screen
+              name="EditRequest"
+              component={EditRequest}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+              <Stack.Screen
+        name="CalendarView"
+        component={CalendarView}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -177,7 +240,7 @@ function Homenav() {
 
       <Tab.Screen
         name="Notifications"
-        component={NotImplementedScreens}
+        component={NotificationsCenter}
         options={{
           tabBarLabel: "",
           unmountOnBlur: true,
@@ -215,34 +278,8 @@ function Homenav() {
 export default function App({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+
   
-  // if (loading) {
-  //   return (
-  //     <></>
-  //   )
-  // }
-
-  // useEffect(() => {
-  //   // const usersRef = firebase.firestore().collection('users');
-  //   // firebase.auth().onAuthStateChanged(user => {
-  //   //   if (user) {
-  //   //     usersRef
-  //   //       .doc(user.uid)
-  //   //       .get()
-  //   //       .then((document) => {
-  //   //         const userData = document.data()
-  //   //         setLoading(false)
-  //   //         setUser(userData)
-  //   //       })
-  //   //       .catch((error) => {
-  //   //         setLoading(false)
-  //   //       });
-  //   //   } else {
-  //   //     setLoading(false)
-  //   //   }
-  //   // });
-
-  // }, []);
 
   return (
     <NavigationContainer>
@@ -337,17 +374,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-              <Stack.Screen
-              name="AddSubscriptionView"
-              component={AddSubscriptionView}
-              options={{
-                headerShown: true,
-                navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            />
+         
          
               <Stack.Screen
               name="PaymentFormView"
@@ -361,7 +388,7 @@ export default function App({ navigation }) {
               }}
             />
            
-             <Stack.Screen
+             {/* <Stack.Screen
               name="EditRequest"
               component={EditRequest}
               options={{
@@ -371,10 +398,10 @@ export default function App({ navigation }) {
                 // headerMode:screen,
                 headerTransparent: true,
               }}
-            />
+            /> */}
               <Stack.Screen
-              name="AddSubscription"
-              component={AddSubscription}
+              name="PayAsCreditor"
+              component={PayAsCreditor}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
@@ -400,4 +427,4 @@ export default function App({ navigation }) {
     </NavigationContainer>
   );
 }
-//
+

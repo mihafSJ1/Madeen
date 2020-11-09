@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
-import moment from "moment";
+import * as Notifications from 'expo-notifications';
+import moment, { now } from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
@@ -30,10 +31,14 @@ import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import {schedulePushNotification} from './schedulePushNotification';
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-import { fromUnixTime } from "date-fns";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 // import TopBar from "./TopBar";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
@@ -112,6 +117,7 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 
 var userNameFromDB = "";
 
+    
 class Request extends React.Component {
   constructor(props) {
     super(props);
@@ -122,10 +128,14 @@ class Request extends React.Component {
       durationState: 0,
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
+      notification: {},
+      notificationId: "",
+      keyC: "",
+      keyD: "",
       // repaymentType : [],
     };
   }
-
+ 
   //-------------------------------------------- Calculations
   repaymentOnce(eDate) {
     var time = new Date(eDate).getTime() - new Date().getTime();
@@ -222,6 +232,8 @@ class Request extends React.Component {
   //-------------------------------------------- Form Submission
   componentDidMount() {
     registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -254,18 +266,24 @@ class Request extends React.Component {
         }
       });
     });
+  
   }
 
+  _handleNotification = notification => {
+    this.setState({ notification: notification });
+  }
+
+  _handleNotificationResponse = response => {
+    console.log(response);
+  };
   
-   sendPushNotification =(Key,userNameFromDB,eDate,installmentsType,repaymentType,submittedDate)=>{
-    console.log("sendPushNotification");
+  sendPushNotification = (Key, debtorName, reqKey) => {
     let Token;
     firebase
     .database()
     .ref("users/"+Key).on("value", (snapshot) => {
       Token = snapshot.val().push_Notification_token;
     });
-   console.log("ToKEN"+Token);
     let response = fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -275,48 +293,25 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مَدِين | طلب جديد!',
+        title: 'طلب جديد من قِبل '+  debtorName ,
         body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
-   
-      
-    schedulePushNotification(userNameFromDB,eDate,installmentsType,repaymentType,submittedDate);
+    const notificationKey = firebase
+    .database()
+    .ref("notifications/")
+    .push(
+      {
+        title: 'طلب جديد من قِبل '+  debtorName ,
+        body:  ' والله في عون العبد ما كان العبد في عون أخيه ',
+        creditor: this.state.keyC,
+        debtor:this.state.keyD,
+        notificationType: "new request",
+        reqID: reqKey,
+      });
   }
   
-//   scheduleLocalNotification=(trigger,exDate,instalmentT,repaymentT)=>{
-//     const content;
-   
-// if(repaymentT=="السداد بالتقسيط"){
-//      localNotification = {
-//       title: 'done',
-//       body: 'done!'
-//   };
-//   if(instalmentT=="سنويًا")
-//   instalmentT="year";
-//   if(instalmentT=="شهريًا")
-//   instalmentT="month";
-//   if(instalmentT=="أسبوعيًا")
-//   instalmentT="week";
-//   if(instalmentT=="يوميًا")
-//   instalmentT="day";
-//   trigger = {
-//     time: trigger,
-//     repeat:instalmentT,
-// }
-
-// }  
-// else{
-//   content = {
-//     title: 'done',
-//     body: 'done!',
-// },
-// trigger
-// }
-//     Notifications.scheduleNotificationAsync(localNotification,trigger);
-   
-//   }
-bringid(k){
+  bringid(k){
   console.log("bring");
   firebase
   .database()
@@ -324,15 +319,14 @@ bringid(k){
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
       if (child.val().email == k) {
-        console.log("return")
         keyC= child.key;
         Cname=child.val().fullName;
 }
+this.setState({keyC: keyC})
 });
 });
 }
   onSubmitPress(values, props) {
-    //const trigger = new Date(this.state.expectedDate);
     const { currentUser } = this.state;
     if (values.usersSelect == false) {
       values.user = "";
@@ -348,6 +342,8 @@ else{
       .on("value", (snapshot) => {
         userNameFromDB = snapshot.val().fullName;
       });
+
+    this.setState({keyD:currentUser.uid})
 
     const requestID = firebase
       .database()
@@ -368,10 +364,7 @@ else{
           creditor: keyC,
           creditorName:Cname,
           creditorEmail:values.user,
-         
-         
           remAmount: values.price
-
         },
         function (error) {
           if (error) {
@@ -380,20 +373,16 @@ else{
             Alert.alert(
               "تنبيه ",
               "تم إرسال الطلب بنجاح   ",
-              [{ text: "موافق", onPress: () =>{props.navigate("squares") } }],
+              [{ text: "موافق", onPress: () => props.navigate("squares") }],
               { cancelable: false }
             );
           }
-          
         }
-
       );
-     
-      if(  keyC != ""){
-        console.log("kyC");}
-      this.sendPushNotification(keyC,userNameFromDB,this.state.expectedDate,this.state.installmentsState,values.repaymentType,this.state.submittedDateState);
-     // schedulePushNotification(userNameFromDB,trigger,this.state.installmentsState,values.repaymentType);
-     // scheduleLocalNotification(userNametrigger,values.expectedDate,this.state.installmentsState,values.repaymentType)
+      if(keyC!=""){
+        this.sendPushNotification(keyC, userNameFromDB,requestID.key );
+      }
+      schedulePushNotification(values.expectedDate,this.state.installmentsState,values.repaymentType,this.state.submittedDateState,currentUser.uid,requestID.key);
   }
 
   requestSchema = yup.object({
@@ -863,7 +852,7 @@ else{
                                    
                     >
                       {/* <button type='reset'></button> */}
-                      <Text style={styles.buttonText} > إلغاء </Text>
+                      <Text style={styles.buttonText}> إلغاء </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}

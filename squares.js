@@ -39,7 +39,7 @@ export default function squares({ navigation }) {
             onPress={() => navigation.navigate("Timeline")}
           >
             {" "}
-            الطلبات العامه
+            الطلبات العامة
           </Text>
         </ImageBackground>
       </TouchableOpacity>
@@ -51,7 +51,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.blueText}
-            onPress={() => navigation.navigate("myRequest")}
+            onPress={() => navigation.navigate("myReqWithFilter")}
           >
             {" "}
             طلباتي
@@ -66,7 +66,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.silverText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("CalendarView")}
           >
             {" "}
             التقويم
@@ -81,7 +81,7 @@ export default function squares({ navigation }) {
         >
           <Text
             style={styles.greenText}
-            onPress={() => navigation.navigate("NotImplementedScreens")}
+            onPress={() => navigation.navigate("Calculator")}
           >
             {" "}
             الحاسبة
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
   },
 
   silver: {
+
     alignItems: "center",
     marginLeft: 0,
     marginRight: 0,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     // fontSize: 25,
     // fontFamily: "Bahij_TheSansArabic-Light",
 
-    top: 50,
+    top: 40,
     fontSize: 25,
     fontFamily: "Bahij_TheSansArabic-Light",
     paddingLeft: 215,
