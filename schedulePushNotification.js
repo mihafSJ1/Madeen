@@ -30,8 +30,8 @@ export   async function schedulePushNotification(exDate,instalmentT,repaymentT,s
         repeats: true },
   });
 
-
-  setTimeout(() => {
+// update to set stInterval
+  setInterval(() => {
     const notificationKey = firebase
     .database()
     .ref("notifications/")
