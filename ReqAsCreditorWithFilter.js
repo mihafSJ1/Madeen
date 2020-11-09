@@ -20,9 +20,8 @@ import "firebase/firestore";
 import FirebaseKeys from './FirebaseKeys';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import {Item,Container,Header,Icon,Input} from 'native-base';
-
-
-
+import * as Notifications from 'expo-notifications';
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
@@ -127,7 +126,9 @@ export default class ReqAsCreditor extends React.Component {
   };
 
   componentDidMount() {
-  
+    registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
     requestArray=[];
   
     const { currentUser } = firebase.auth();
@@ -159,7 +160,55 @@ export default class ReqAsCreditor extends React.Component {
     });
     }
 
+    _handleNotification = notification => {
+      this.setState({ notification: notification });
+    }
+  
+    _handleNotificationResponse = response => {
+      console.log(response);
+    };
 
+    sendPushNotificationRejact =(Key)=>{
+      console.log("sendPushNotification");
+      let Token;
+      let userid;
+      let creditorName;
+      firebase
+      .database()
+      .ref("requests/"+Key).on("value", (snapshot) => {
+        userid = snapshot.val().userid;
+        creditorName = snapshot.val().creditorName;
+      });
+      firebase
+      .database()
+      .ref("users/"+userid).on("value", (snapshot) => {
+        Token = snapshot.val().push_Notification_token;
+      });
+     console.log("ToKEN"+Token);
+      let response = fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: Token,
+          sound: 'default',
+          title: 'طلب مرفوض',
+          body: creditorName+ ' نعتذر، تم رفض طلبك من قِبل',
+        })
+      });
+      firebase
+      .database()
+      .ref("notifications/")
+      .push(
+        {
+         title: 'طلب مرفوض',
+         body: creditorName+ ' نعتذر، تم رفض طلبك من قِبل',
+         debtor:userid,
+        notificationType: "reject request",
+        });
+    }
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
@@ -368,7 +417,7 @@ export default class ReqAsCreditor extends React.Component {
   }
 
   updatestateReject(k,props){
-    
+    this.sendPushNotificationRejact (k);
 this.setModalVisible(!this.state.modalVisible);
 // props.navigate("squares");
   //   const { currentUser } = firebase.auth();
@@ -667,7 +716,7 @@ this.setModalVisible(!this.state.modalVisible);
 {this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
                       style={[styles.button, { backgroundColor: "#CBCA9E" }]}
-                      onPress = {()=>  { this.props.navigation.navigate("AddSubscription",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress = {()=>  { this.props.navigation.navigate("PayAsCreditor",{amount:this.state.Price, reqID: this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
                     >
                       <Text style={styles.buttonText}> قبول </Text>
                     </TouchableOpacity>

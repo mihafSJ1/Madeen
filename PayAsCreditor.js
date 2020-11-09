@@ -1,11 +1,14 @@
 import React from 'react';
+import * as Notifications from 'expo-notifications';
 
 import { StyleSheet, Text, View, ScrollView,Dimensions ,Alert} from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PaymentFormView from './PaymentFormView';
 import { LinearGradient } from "expo-linear-gradient";
-
+// import {schedulePushNotification} from './schedulePushNotification';
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
  import * as firebase from "firebase";
+
 const STRIPE_ERROR = 'حدث خطأ عند الدفع، حاول مرة أخرى';
 const SERVER_ERROR = 'الخادم غير متوفر، حاول مرة أخرى';
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51HcqzjAReRyTcF617BS3RHvCHjouUNJNg6lzyY2az0IWFbAHurDOp6aiTKJS5abZ02PlH35EOOMyzNNpNSKh1iWq0046Usv5pE';
@@ -61,19 +64,95 @@ const subscribeUser = (creditCardToken) => {
 };
 
 export default class PayAsCreditor extends React.Component {
-  static navigationOptions = {
-    title: 'Subscription page',
-  };
   constructor(props) {
     super(props);
     this.state = {
       submitted: false,
-      error: null
+      error: null,
+      keyD: "",
     }
   }
+  static navigationOptions = {
+    title: 'Subscription page',
+  };
+  componentDidMount(){
+    registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
+     }
+
+     _handleNotification = notification => {
+      this.setState({ notification: notification });
+    }
+  
+    _handleNotificationResponse = response => {
+      console.log(response);
+    };
+
+     sendPushNotification =(Key)=>{
+       console.log("sendPushNotification");
+       let Token;
+       let userid;
+       let  expectedDate;
+       let   submittedDate;
+       let repaymentType;
+       let     userName ;
+       let installemntPrice;
+       let  installmentsType;
+       let creditorName;
+       firebase
+       .database()
+       .ref("requests/"+Key).on("value", (snapshot) => {
+         userid = snapshot.val().userid;
+  
+              expectedDate=snapshot.val().expectedDate,
+             submittedDate=snapshot.val().submittedDate,
+             repaymentType =snapshot.val().repaymentType,
+              // userid = currentUser.uid,
+             userName =snapshot.val().userName,
+             creditorName =snapshot.val().creditorName,
+              installemntPrice=snapshot.val().installemntPrice,
+             //installemntDuration=this.state.durationState,
+             installmentsType=snapshot.val().installmentsType
+  
+        });
+
+       firebase
+       .database()
+       .ref("users/"+userid).on("value", (snapshot) => {
+         Token = snapshot.val().push_Notification_token;
+       });
+      console.log("ToKEN"+Token);
+       let response = fetch('https://exp.host/--/api/v2/push/send', {
+         method: 'POST',
+         headers: {
+           Accept: 'application/json',
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({
+           to: Token,
+           sound: 'default',
+           title: 'مَدِين | قبول الطلب',
+           body: ' تم قبول طلبك من  قِبل '+ creditorName,
+          })
+       });
+       firebase
+       .database()
+       .ref("notifications/")
+       .push(
+         {
+          title: 'قبول الطلب',
+          body: ' تم قبول طلبك من  قِبل '+ creditorName,
+          debtor:userid,
+         notificationType: "accept request",
+         });
+        // schedulePushNotification(userName,submittedDate,installmentsType,repaymentType);
+     }
+ 
   // Handles submitting the payment request
-  onSubmit = async (creditCardInput,reqID,amount) => {
+  onSubmit = async (creditCardInput,reqID,amount,remAmount,type) => {
     const { navigation } = this.props;
+
     const { currentUser } = firebase.auth();
     var name;
     var email;
@@ -84,6 +163,7 @@ export default class PayAsCreditor extends React.Component {
       name=snapshot.val().fullName,
       email=snapshot.val().email
       });
+
 
       firebase
       .database()
@@ -97,10 +177,9 @@ export default class PayAsCreditor extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
-        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorWithFilter") }],
         { cancelable: false }
       ));
-    
     // Disable the Submit button after the request is sent
     this.setState({ submitted: true });
    
@@ -130,6 +209,9 @@ export default class PayAsCreditor extends React.Component {
 
       // navigation.navigate('squares')
     }
+
+    this.sendPushNotification(reqID);
+
   };
   
   // render the subscription view component and pass the props to it
@@ -187,7 +269,8 @@ export default class PayAsCreditor extends React.Component {
           onSubmit={this.onSubmit}
           amount = {amount}
           navigation = {this.props.navigation}
-           reqID = {reqID}/>
+           reqID = {reqID}
+        />
              </View>
             </ScrollView>
             {/* Scrolls to the payment form */}
