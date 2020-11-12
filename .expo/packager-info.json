@@ -1,15 +1,6 @@
 {
-  "devToolsPort": 19003,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-<<<<<<< HEAD
-  "packagerPid": 11191,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
-||||||| merged common ancestors
-  "packagerPid": 8031
-=======
-  "packagerPid": 2057
->>>>>>> 803f26f967eb45b4f9b9246be0837bb4743e93c9
+  "devToolsPort": 19007,
+  "expoServerPort": 19008,
+  "packagerPort": 19009,
+  "packagerPid": 55782
 }
