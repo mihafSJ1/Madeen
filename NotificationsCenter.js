@@ -31,7 +31,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-let notificationsArray = [];
+ var notificationsArray = [];
 var usersArray = [];
 var requestArray = [];
 
@@ -81,7 +81,8 @@ class NotificationsCenter extends React.Component {
   }
 
   componentDidMount() { 
-    notificationsArray=[];
+    notificationsArray.splice(0, notificationsArray.length)
+    // notificationsArray=[];
    let reqID;
     firebase
       .database()

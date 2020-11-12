@@ -65,11 +65,12 @@ var array = [];
  
 
   componentDidMount() {
+    const { currentUser } = firebase.auth();
+this.setState({ currentUser });
     onceRequests = [];
     installmentRequests = [];
     array = [];
-const { currentUser } = firebase.auth();
-this.setState({ currentUser });
+
 firebase
   .database()
   .ref("requests/")
@@ -106,7 +107,7 @@ firebase
                 });
           }
         }} 
- });//comment 1
+ });
       
   });
   for (var i =0 ;i< onceRequests.length;i++){
@@ -143,7 +144,7 @@ firebase
 
             
               //     })
-         //comment 1
+         
              }
 
     }
@@ -168,7 +169,7 @@ firebase
           //   flag: false,
           //     })
          
-     }//comment 1
+     }
     }
   if (installmentRequests[i].installmentsType == "أسبوعيًا"){
 
@@ -188,7 +189,7 @@ firebase
               //   installemntPrice: installmentRequests[i].installemntPrice,
               //   key: installmentRequests[i].key,
               //   price :  installmentRequests[i].price
-              //     })//comment 1
+              //     })
      }
     }
     if(installmentRequests[i].installmentsType == "يوميًا"){
@@ -214,7 +215,7 @@ firebase
             
      }
   
-   //comment 1
+   
     }
 
     
@@ -222,14 +223,16 @@ firebase
     //   acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
 
     //   return acc;
-    // },{});
+    // },{});      // console.log("hello")
+      console.log("once")
+     console.log(array)
     onceMarkedDates = array.reduce((acc, {expectedDate}) => {
       acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
         return acc;
       },{});
       // console.log("hello")
-      // console.log("once")
-      // console.log(array)
+      console.log("once")
+      console.log(array)
       // console.log("hellolll")
       // console.log(onceMarkedDates)
   
@@ -245,7 +248,7 @@ firebase
 
 
 
-//comment 1
+
 
 
   render() {
@@ -266,7 +269,7 @@ firebase
       }
 
  
-      //comment 1
+      
 
  
      
@@ -280,9 +283,8 @@ firebase
 
      
        theme={{
-       //comment 1 
-      //comment 1
-      //comment 1
+        
+      
     todayTextColor: '#57694C',
     dayTextColor: '#2d4150', // لون أرقام أيام التاريخ ا
     selectedColor: '#CBCA9E',
@@ -327,7 +329,7 @@ firebase
      
     setTimeout(() => {
 
-   //comment 1
+   
    
       
 for (let i =0 ;i<array.length;i++){
@@ -356,7 +358,7 @@ if(!array[i].flag){
 }
 
          
-       //comment 1   
+          
 // for (var i = 0; i< onceRequests.length;i++){
 //   if( !this.state.items[onceRequests[i].expectedDate] ){
 //     this.state.items[onceRequests[i].expectedDate] = [];
@@ -369,12 +371,12 @@ if(!array[i].flag){
 //               borderBottomColor:"#D9AE94",
 //               borderRadius: 10,
            
-           //comment 1   
+              
              
 //            });
 //   }
 //           }
-      //comment 1
+      
       for (var i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = this.timeToString(time);
@@ -397,7 +399,7 @@ if(!array[i].flag){
 //  console.log(onceRequests)
 //  console.log("ins")
 //  console.log(dates)
- //comment 1
+ 
     // }
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
@@ -407,7 +409,7 @@ if(!array[i].flag){
     
     }, 1000);
 
-  //comment 1
+  
   }
   renderItem(item) {
     {item.amount == null ?item.height= 100
@@ -437,7 +439,7 @@ if(!array[i].flag){
   );
 }
 }  
-  //comment 1
+  
   }
 
   renderEmptyDate() {
@@ -450,7 +452,7 @@ if(!array[i].flag){
   rowHasChanged(r1, r2) {
     return r1.name !== r2.name;
   }
-//comment 1
+
   timeToString(time) {
   
     const date = new Date(time);
@@ -461,7 +463,7 @@ const styles = StyleSheet.create({
     container:{
 marginTop:50,
 marginBottom:0,
-//comment 1
+
 
     },
 
@@ -479,13 +481,12 @@ marginHorizontal:5,
     borderWidth:0.5,
     //backgroundColor:'red',
     fontFamily:'Bahij_TheSansArabic-Light',
-    //comment 1
   },
   emptyDate: {
     height: 15,
     flex:1,
     paddingTop: 30,
-    //comment 1
+    
   //  backgroundColor:'red',
   },
   textCard:{
@@ -494,8 +495,7 @@ marginHorizontal:5,
     margin:2,
     fontSize:15,
     color:'#746356',
-    bottom:5,
-  //comment 1
+  
 
   }
 });
