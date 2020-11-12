@@ -1291,7 +1291,7 @@ const styles = StyleSheet.create({
   ViewList:{
 marginBottom:220,
 // backgroundColor:'blue',
-top:-32,
+top:-25,
   },
   card: {
       top:1,
@@ -1653,7 +1653,7 @@ waitContent:{
     marginBottom: 0,
     right: 0,
     left:164,
-    top: -32,
+    top: -38,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1667,7 +1667,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 75,
+    top: 46,
     backgroundColor: "#F1DCA7",
     
    
@@ -1680,7 +1680,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 75,
+    top: 46,
     backgroundColor: "#D3CDC8",
     
    
@@ -1693,7 +1693,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 75,
+    top: 46,
     backgroundColor: "#BE6A6C",
     
    
@@ -1706,7 +1706,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:-70,
-    top: 75,
+    top: 46,
     backgroundColor: "#A8CB9E",
     
    
@@ -1852,7 +1852,8 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: 0,
+    top: -8,
+    // bottom:5,
     left: 180,
     right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -2047,7 +2048,7 @@ top:-10,
 
 
   searchInput:{
-    top:8,
+  
     padding: 10,
     borderColor: '#ffffff',
     borderWidth: 1,
