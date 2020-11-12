@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Notifications from 'expo-notifications';
-import moment from "moment";
+import moment, { now } from "moment";
 import DatePicker from "react-native-datepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { ArabicNumbers } from "react-native-arabic-numbers";
@@ -30,6 +30,7 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
+import {schedulePushNotification} from './schedulePushNotification';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -116,6 +117,7 @@ maximumDate.setDate(maximumDate.getDate() + 1825);
 
 var userNameFromDB = "";
 
+    
 class Request extends React.Component {
   constructor(props) {
     super(props);
@@ -127,6 +129,7 @@ class Request extends React.Component {
       submittedDateState: moment().format("YYYY-MM-DD"),
       userValue: [],
       notification: {},
+      notificationId: "",
       keyC: "",
       keyD: "",
       // repaymentType : [],
@@ -263,45 +266,18 @@ class Request extends React.Component {
         }
       });
     });
+  
   }
 
   _handleNotification = notification => {
     this.setState({ notification: notification });
-    firebase
-    .database()
-    .ref("notifications/")
-    .push(
-      {
-       title: this.state.notification.request.content.title,
-       body: this.state.notification.request.content.body,
-       creditor: this.state.keyC,
-       debtor:this.state.keyD,
-       opened: false,
-      });
   }
 
   _handleNotificationResponse = response => {
     console.log(response);
-    // props.navigate("NotImplementedScreen")
-    let notificationsId;
-    firebase
-    .database()
-    .ref("notifications/")
-    .on("value", (snapshot) => {
-      snapshot.forEach((child) => {
-        notificationsId = child.key;
-      })
-        });
-
-    firebase
-    .database()
-    .ref("notifications/" + notificationsId )
-    .update({
-      opened: true,
-    })
   };
   
-  sendPushNotification = (Key) => {
+  sendPushNotification = (Key, debtorName, reqKey) => {
     let Token;
     firebase
     .database()
@@ -317,10 +293,22 @@ class Request extends React.Component {
       body: JSON.stringify({
         to: Token,
         sound: 'default',
-        title: 'مَدِين | طلب جديد!',
+        title: 'طلب جديد من قِبل '+  debtorName ,
         body: 'والله في عون العبد ما كان العبد في عون أخيه'
       })
     });
+    const notificationKey = firebase
+    .database()
+    .ref("notifications/")
+    .push(
+      {
+        title: 'طلب جديد من قِبل '+  debtorName ,
+        body:  ' والله في عون العبد ما كان العبد في عون أخيه ',
+        creditor: this.state.keyC,
+        debtor:this.state.keyD,
+        notificationType: "new request",
+        reqID: reqKey,
+      });
   }
   
   bringid(k){
@@ -392,8 +380,9 @@ else{
         }
       );
       if(keyC!=""){
-        this.sendPushNotification(keyC);
+        this.sendPushNotification(keyC, userNameFromDB,requestID.key );
       }
+      schedulePushNotification(values.expectedDate,this.state.installmentsState,values.repaymentType,this.state.submittedDateState,currentUser.uid,requestID.key);
   }
 
   requestSchema = yup.object({

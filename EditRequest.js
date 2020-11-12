@@ -21,6 +21,8 @@ import * as yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarIconComponent from "./CalendarIconComponent";
 import { withNavigation } from "react-navigation";
+import * as Notifications from 'expo-notifications';
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
 
 import * as firebase from "firebase";
 import "firebase/auth";
@@ -239,6 +241,9 @@ class EditRequest extends React.Component {
 
   //-------------------------------------------- Form Submission
   componentDidMount() {
+    registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -258,7 +263,16 @@ class EditRequest extends React.Component {
     this.setState({
       userValue: applicationUsers,
     });
+
+    
   }
+  _handleNotification = notification => {
+    this.setState({ notification: notification });
+  }
+
+  _handleNotificationResponse = response => {
+    console.log(response);
+  };
 //read req to view info
 //update not push
 bringid(k){
@@ -274,8 +288,41 @@ bringid(k){
         Cname=child.val().fullName;
   
 }
+this.setState({keyC: keyC})
 });
 });
+}
+sendPushNotification = (Key, debtorName) => {
+  let Token;
+  firebase
+  .database()
+  .ref("users/"+Key).on("value", (snapshot) => {
+    Token = snapshot.val().push_Notification_token;
+  });
+  let response = fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      to: Token,
+      sound: 'default',
+      title: 'طلب جديد من قِبل '+  debtorName ,
+      body: 'والله في عون العبد ما كان العبد في عون أخيه'
+    })
+  });
+  firebase
+  .database()
+  .ref("notifications/")
+  .push(
+    {
+      title: 'طلب جديد من قِبل '+  debtorName ,
+      body: 'والله في عون العبد ما كان العبد في عون أخيه',
+     creditor: this.state.keyC,
+     debtor:this.state.keyD,
+    notificationType: "new request",
+    });
 }
   onSubmitPress(values, props) {
     if(creditorEmailR==values.user && priceR==values.price && expectedDateR==values.expectedDate &&repaymentTypeR==values.repaymentType && installemntDurationR==this.state.durationState && reasonR==values.reason)
@@ -303,6 +350,7 @@ else{
       .on("value", (snapshot) => {
         userNameFromDB = snapshot.val().fullName;
       });
+      this.setState({keyD:currentUser.uid})
 
     const requestID = firebase
       .database()
@@ -337,6 +385,12 @@ else{
           }
         }
       );
+      }
+      if(creditorEmailR==values.user){
+        console.log("creditorEmailR");
+        if(  keyC != ""){
+          console.log("kyC");
+        this.sendPushNotification(keyC,userNameFromDB);}
       }
 }
 
