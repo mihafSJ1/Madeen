@@ -31,7 +31,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-let notificationsArray = [];
+var notificationsArray = [];
 var usersArray = [];
 var requestArray = [];
 
