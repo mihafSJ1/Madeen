@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableHighlight,
+
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
@@ -29,7 +30,11 @@ const firebaseConfig = {
   appId: "1:814154412010:web:435cac99ae40206a1ecc93",
   measurementId: "G-SXS9Z8NESC",
 };
+import  { useContext } from 'react';
+import { IconButton } from 'react-native-paper';
 
+import { Title } from 'react-native-paper';
+// import { AuthContext } from '../navigation/AuthProvider';
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -37,7 +42,30 @@ if (!firebase.apps.length) {
 export default function NotImplementedScreens({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 20 }}>Not Implemented Yet... </Text>
+
+<IconButton
+       style={styles.chatIcon}
+        icon='message-plus'
+        size={38}
+        color='#f1dca7'
+        onPress={() => navigation.navigate('addRoom')}
+      />
+      <Title>Home Screen</Title>
+      <Title>All chat rooms will be listed here</Title>
+      {/* <Title>{user.uid}</Title> */}
+      {/* <button
+        modeValue='contained'
+        title='Logout'
+        onPress={() => logout()}
+      /> */}
+
+      {/* <Button
+        modeValue='contained'
+        title='Add Room'
+        onPress={() => navigation.navigate('addRoom')}
+      /> */}
+
+
     </View>
   );
 }
@@ -47,5 +75,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+ 
   },
+
+
+  chatIcon:{
+    top:-180,
+    left:170,
+  }
+
+
 });
