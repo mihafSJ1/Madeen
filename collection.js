@@ -1393,7 +1393,7 @@ backgroundColor:'red',
   },
   subsidy: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 18,
+    
     textAlign: "right",
     color: "#404040",
     top: -12,
@@ -1406,10 +1406,10 @@ backgroundColor:'red',
   },
   Email: {
     fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
+    
     marginBottom: 0,
     margin: 20,
-    marginBottom: 40,
+   
     bottom: 40,
     right: -1,
     textAlign: "center",
