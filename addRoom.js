@@ -14,32 +14,38 @@ import {
   } from "react-native";
   import { useState } from "react";
   import { IconButton,Title} from 'react-native-paper';
-  import firestore from '@react-native-firebase/firestore';
+  //import firestore from '@react-native-firebase/firestore';
+  //import firebase from 'firebase';
+  //import firestoreNative from '@react-native-firebase/firestore';
+
+  //import '@firebase/firestore';
+  import * as firebase from 'firebase';
+import 'firebase/firestore';
 // import FormButton from '../components/FormButton';
 
 
 
 export default function addRoom({ navigation }) {
     const [roomName, setRoomName] = useState('');
+    const db = firebase.firestore();
 
-    // function handleButtonPress() {
+    function handleButtonPress() {
 
 
-    //     return "raghad";
-    //     // if (roomName.length > 0) {
-    //     //   firestore()
-    //     //     .collection('THREADS')
-    //     //     .add({
-    //     //       name: roomName,
+        if (roomName.length > 0) {
+          firebase.firestore()
+            .collection('THREADS')
+            .add({
+              name: roomName,
            
-    //     //     })
-    //     //     .then(() => {
+            })
+            .then(() => {
            
           
-    //     //       navigation.navigate('Calculator');
-    //     //     });
-    //     // }
-    //   }
+              navigation.navigate('Calculator');
+            });
+        }
+      }
 
 
   return (
@@ -88,8 +94,8 @@ export default function addRoom({ navigation }) {
         title='Create'
         modeValue='contained'
         labelStyle={styles.buttonLabel}
-        // onPress={() => handleButtonPress()}
-        // disabled={roomName.length === 0}
+        onPress={() => handleButtonPress()}
+        disabled={roomName.length === 0}
       />
     </View>
   </View>
