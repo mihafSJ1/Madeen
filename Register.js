@@ -43,6 +43,7 @@ export default function Register({ navigation }) {
   // register backend
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setphone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const fullNameRegexAR = /[\u0600-\u06FF]/;
@@ -110,6 +111,7 @@ export default function Register({ navigation }) {
             fullName: fullName,
             email: email,
             UserImage: "https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a",
+            phone:phone,
           });
       })
       .then(() => navigation.navigate("squares"))
@@ -179,6 +181,16 @@ export default function Register({ navigation }) {
             underlineColorAndroid="transparent"
             autoCapitalize="none"
             keyboardType="email-address"
+          />
+          <Text style={styles.textInputTitle}> رقم الجوال <Text style={styles.textError}> *</Text></Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="رقم الجوال"
+            onChangeText={(text) => setphone(text)}
+            value={email}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+            keyboardType="phone-pad"
           />
           <Text style={styles.textInputTitle}> كلمة السر <Text style={styles.textError}> *</Text></Text>
           <TextInput
