@@ -61,7 +61,7 @@ import { View, StyleSheet , Button, FlatList} from 'react-native';
 import { Title } from 'react-native-paper';
 // import { AuthContext } from '../navigation/AuthProvider';
 // import FormButton from '../components/FormButton';
-
+import { IconButton } from 'react-native-paper';
 export default function HomeScreen({ navigation }) {
 //   const { user, logout } = useContext(AuthContext);
 const [threads, setThreads] = useState([]);
@@ -115,6 +115,13 @@ const [threads, setThreads] = useState([]);
   
 
     <View style={styles.container}>
+      <IconButton
+       style={styles.chatIcon}
+        icon='message-plus'
+        size={38}
+        color='#f1dca7'
+        onPress={() => navigation.navigate('addRoom')}
+      />
   <FlatList
     data={threads}
     keyExtractor={item => item._id}
