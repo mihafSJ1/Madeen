@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component, useState } from "react";
+import { ArabicNumbers } from "react-native-arabic-numbers";
 
 import {
   StyleSheet,
@@ -57,6 +58,8 @@ export default class EditProfile extends React.Component {
     emailf: "email",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
   updatename(name){
     requestArrayU=[];
@@ -188,33 +191,24 @@ export default class EditProfile extends React.Component {
         this.setState({ currentUser });
       });
 
-    //   const upload = async (filepath, filename, filemime) => {
-    //     const metaData = { contentType: filemime };
-    //    res = await firebase
-    //         .storage()
-    //         .ref(`./assets/orange.png/${filename}`)
-    //         .putFile(filepath, metaData); // put image file to GCS
-    //     return res;
-
-    //   };
-    //   async ()=>{
-    // const userId = firebase.auth().currentUser.uid;
-    //  res =  await upload(`orange.png`, `/assets/orange.png`, `orange/png`); // function in step 1
-    // data = {
-    //    fullName:namef,
-    //    email:emailf,
-    //     pic: res.downloadURL, // retrieve image URL
-    // }
-    // };
-
-    // firebase.database().ref('users/' + currentUser.uid ).set({
-
-    //   fullName:namef,
-    //   email:emailf,
-    //    pic: res.downloadURL,
-
-    // });
-
+      let countSubsidy = 0;
+      let countDebts = 0;
+      firebase
+      .database()
+      .ref("requests")
+      .on("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+        if ("مكتمل" == child.val().rqeuestStatus ){
+          if(currentUser.uid == child.val().creditor){
+            countSubsidy++;
+          }else  if(currentUser.uid == child.val().userid){
+            countDebts++;
+          }
+        }
+      });
+      });
+      this.setState({ noDebts: countDebts });
+      this.setState({ noSubsidy: countSubsidy });
     this.setState({ currentUser });
   }
 
@@ -360,10 +354,10 @@ export default class EditProfile extends React.Component {
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
               <View style={styles.PinkRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}> {ArabicNumbers(this.state.noSubsidy)} </Text>
               </View>
               <View style={styles.YellowRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}>{ ArabicNumbers(this.state.noDebts)} </Text>
               </View>
 
               <TouchableOpacity

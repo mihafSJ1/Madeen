@@ -45,27 +45,7 @@ firebase
     });
   });
 
-const currentUser = firebase.auth();
-firebase
-.database()
-.ref("notifications/")
-.on("value", (snapshot) => {
-  snapshot.forEach((child) => {
-    // this.setState({reqID:  })
-    
-      notificationsArray.push({
 
-          creditor:child.val().creditor,
-          debtor:child.val().debtor,
-          title:child.val().title,
-          body:child.val().body,
-          nType: child.val().notificationType,
-          reqKey:child.val().reqID,
-          notficationKey: child.key,    
-  }
-);
-  });
-});
 
 var count =0;
 
@@ -75,8 +55,8 @@ class NotificationsCenter extends React.Component {
     super(props);
     this.state = {
       currentUser: null,
-      reqID:""
-    //   notificationsArray:[],
+      reqID:"",
+      notificationsArray:[],
     };
   }
 
@@ -101,14 +81,14 @@ class NotificationsCenter extends React.Component {
     );
         });
       });
-
+      this.setState({notificationsArray: notificationsArray})
 
     }
 
    
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
-    return notificationsArray.map((c) => {
+    return this.state.notificationsArray.map((c) => {
      count++;
      if (  (c.creditor == currentUser && c.nType == "new request" 
         || c.debtor == currentUser && c.nType == "accept request" 

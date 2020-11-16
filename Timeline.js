@@ -1,4 +1,6 @@
 import { StatusBar } from "expo-status-bar";
+import { ArabicNumbers } from "react-native-arabic-numbers";
+
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -100,6 +102,8 @@ class Timeline extends React.Component {
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       profilePic:
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+      noSubsidy: 0,
+      noDebts: 0,
     };
   }
   // state = { currentUser: null };
@@ -143,6 +147,26 @@ class Timeline extends React.Component {
           }
         });
       });
+///////////////////////////////////// المفترض ارجع كل يوزر وعدد استلافه وتسليفه
+      let countSubsidy = 0;
+      let countDebts = 0;
+      firebase
+      .database()
+      .ref("requests")
+      .on("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+        if ("مكتمل" == child.val().rqeuestStatus ){
+          if(currentUser.uid == child.val().creditor){
+            countSubsidy++;
+          }else  if(currentUser.uid == child.val().userid){
+            countDebts++;
+          }
+        }
+      });
+      });
+      this.setState({ noDebts: countDebts });
+      this.setState({ noSubsidy: countSubsidy });
+
     }
 
   setModalVisible(visible) {
@@ -473,10 +497,10 @@ class Timeline extends React.Component {
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)} </Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> {ArabicNumbers(this.state.noDebts)}</Text>
                     </View>
 
                     <View style={styles.buttonContainer}>
