@@ -12,6 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Rating, AirbnbRating } from 'react-native-elements';
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "@firebase/auth";
@@ -90,8 +91,8 @@ firebase
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-            requestArray.push({
-            creditor:child.val().creditor,
+              requestArray.push({
+              creditor:child.val().creditor,
               expectedDate:child.val().expectedDate,
               installemntPrice:child.val().installemntPrice,
               installmentsType:child.val().installmentsType,
@@ -100,10 +101,13 @@ firebase
               repaymentType:child.val().repaymentType,
             rqeuestStatus:child.val().rqeuestStatus,
               submittedDate:child.val().submittedDate,
-              userName:child.val().userName,
+             userName:child.val().userName,
               userid:child.val().userid,
               key:child.key,
-              remAmount: child.val().remAmount});
+              remAmount: child.val().remAmount,
+              rating : false
+            });
+             
     });
   });
 
@@ -112,6 +116,7 @@ export default class ReqAsCreditor extends React.Component {
   //const [modalVisible, setModalVisible] = useState(false);
 
   state = {
+    ratingVisable: false,
     modalVisible: false,
     modalVisible2: false,
     CreditorEmail:"",
@@ -124,6 +129,10 @@ export default class ReqAsCreditor extends React.Component {
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
+  ratingCompleted = (rating) => {
+    setRating(rating)
+            console.log("Rating is: " + rating)
+  }
 
   componentDidMount() {
     registerForPushNotificationsAsync();
@@ -148,12 +157,14 @@ export default class ReqAsCreditor extends React.Component {
             price:child.val().price,
             reason:child.val().reason,
             repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
+            rqeuestStatus:child.val().rqeuestStatus,
             submittedDate:child.val().submittedDate,
             userName:child.val().userName,
             userid:child.val().userid,
             key:child.key,
-            remAmount: child.val().remAmount });
+            remAmount: child.val().remAmount ,
+            rating: false,
+          });
           
         }
       });
@@ -208,6 +219,9 @@ export default class ReqAsCreditor extends React.Component {
          debtor:userid,
         notificationType: "reject request",
         });
+    }
+    setRatingModalVisible(visible) {
+      this.setState({ ratingVisable: visible });
     }
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -346,7 +360,9 @@ export default class ReqAsCreditor extends React.Component {
       creditorID: item.creditor,
       Rkey: item.key,
       rAmount: item.remAmount,
-      cEmail: item.creditorEmail
+      cEmail: item.creditorEmail,
+      rating : item.rating
+
     });
 
     //  this.openModalWithItem2(item)
@@ -448,7 +464,7 @@ this.setModalVisible(!this.state.modalVisible);
                 {/* {console.log(c)} */}
               
               {/* {this.openModalWithItem2(c)} */}
-              <TouchableOpacity
+              <View
                 // margin={10}
                 style={styles.card}
                 
@@ -485,6 +501,8 @@ this.setModalVisible(!this.state.modalVisible);
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
                     <Text style={styles.status2}> طلب جديد  </Text>
+               
+                    
               </View>
 ):(
                       null
@@ -501,18 +519,57 @@ this.setModalVisible(!this.state.modalVisible);
                     )}
 
 
-{c.rqeuestStatus== "مكتمل" ? (
-                  <View style={styles.CompleteRectangleShapeView}> 
-                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
-              </View>
-):(
-                      null
-                      
-                    )}
+
+{c.rqeuestStatus== "مكتمل" && c.rating == false  ?   
+
+
+                  <TouchableOpacity  style={styles.ProssessRectangleShapeView}
+                      onPress={() => this.setRatingModalVisible(true)}
+                  > 
+                     <Text style={styles.status2}
+             
+               >قيم </Text>
+                    {/* <Text style={styles.status2}>مكتمل </Text> */}
+               {/* <Text style={styles.status2}
+                  onPress={() => setRatingModalVisible(true)}
+               >قيم </Text> */}
+           
+                  
+              </TouchableOpacity>
+            
+// :c.rqeuestStatus== "مكتمل" && c.rating == true ?   
+//   <View style={styles.CompleteRectangleShapeView}> 
+   
+//    <Text style={styles.status2}>مكتمل </Text>
+//     <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+// </View>
+:null}
+          
+                   
+                 
 
                 
                 <View style={styles.rightItems}>
+
                   <View style={styles.textContainer}>
+                         {/* تجربه */}
+
+                  {/* <TouchableOpacity  style={styles.ProssessRectangleShapeView}
+                      onPress={() => this.setRatingModalVisible(true)}
+                  >  */}
+                     <Text style={styles.status2}
+                      onPress={() => this.setRatingModalVisible(true)}
+             
+               >قيم </Text>
+                    {/* <Text style={styles.status2}>مكتمل </Text> */}
+               {/* <Text style={styles.status2}
+                  onPress={() => setRatingModalVisible(true)}
+               >قيم </Text> */}
+           
+                  
+              {/* </TouchableOpacity> */}
+
+                    {/*  */}
                     <Text style={styles.textLabel}>
                       المدين |{" "}
                       <Text
@@ -551,7 +608,7 @@ this.setModalVisible(!this.state.modalVisible);
           ></Image> */}
                   {/* </TouchableOpacity> */}
                 </View>
-              </TouchableOpacity>
+              </View>
               {console.log("here4")}
               <Modal
                 animationType="slide"
@@ -851,6 +908,59 @@ this.setModalVisible(!this.state.modalVisible);
                   </View>
                 </View>
               </Modal>
+              {/* RATING */}
+              <Modal
+       
+       animationType="fade"
+       transparent={true}
+       visible={this.state.ratingVisable}
+     
+     >
+        <View style={styles.ratingcenteredView}>
+          <View style={styles.RatingmodalView}>
+          <Text style={styles.RatingmodalText}> كيف كانت تجربتك؟</Text>
+         <AirbnbRating 
+         reviewSize = {22}
+
+       reviewColor = {'#CBCA9E'}
+             
+type='custom'
+ count={5}
+ ratingBackgroundColor={'green'}
+ ratingColor='#3498db'
+ ratingBackgroundColor='#c8c7c8'
+ reviews={['سيئة','جيدة','متوسطة','ممتازة','رائعة']}
+ defaultRating={5}
+ onFinishRating={this.ratingCompleted}
+
+ ratingColor={'#3498db'}
+ ratingBackgroundColor={'red'}
+ ratingText= {{
+   fontSize: 2,
+   textAlign: 'center',
+   
+  
+ }}
+ 
+
+ size={20}
+
+/>
+          
+
+           <TouchableOpacity
+      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+             onPress={() => {
+              this.setRatingModalVisible(false)
+         
+
+             }}
+           >
+             <Text style={styles.buttonText}>إرسال</Text>
+           </TouchableOpacity>
+         </View>
+       </View>
+     </Modal>
             </View>
           );
         }
@@ -1668,6 +1778,47 @@ backgroundColor:'red',
         backgroundColor: 'transparent',
         opacity: 0.6
         
+      },
+      ratingcenteredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      RatingmodalView: {
+        height:240,
+        width:300,
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+      },
+      RatingmodalText: {
+        fontFamily: "Bahij_TheSansArabic-Light",
+        fontSize:20,
+        marginBottom: 0,
+        textAlign: "center"
+      },
+      Ratingbutton: {
+        alignItems: "center",
+        width: 170,
+        height: 30,
+        marginTop: 50,
+        padding: 5,
+        borderRadius: 15,
+        marginLeft: 10,
+        bottom: 20,
+        backgroundColor: "#fff",
+    
       },
 
 });
