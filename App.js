@@ -22,14 +22,16 @@ import ReqAsCreditor from "./ReqAsCreditor";
 import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
 import PayAsCreditor from './PayAsCreditor';
+//import { firebase, firestore, storage } from "./firebase";
+//import firestore from '@react-native-firebase/firestore';
 
 import PaymentFormView from './PaymentFormView';
 import NotificationsCenter from './NotificationsCenter';
 import  Calculator from './Calculator';
 import  myReqWithFilter from './myReqWithFilter';
 import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
-
-
+// import  chat from './chat';
+import  addRoom from './addRoom';
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -124,6 +126,33 @@ function squaresScreens() {
                 headerTransparent: true,
               }}
             />
+
+{/* <Stack.Screen
+              name="chat"
+              component={chat}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            /> */}
+
+
+
+{/* <Stack.Screen
+              name="addRoom"
+              component={addRoom}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            /> */}
+
 
 
 
@@ -321,10 +350,28 @@ export default function App({ navigation }) {
       />
 
 <Stack.Screen
+        name="addRoom"
+        component={addRoom}
+        options={{ headerShown: false }}
+      />
+
+
+
+<Stack.Screen
         name="ReqAsCreditor"
         component={ReqAsCreditor}
         options={{ headerShown: false }}
       />
+
+<Stack.Screen
+        name="Calculator"
+        component={Calculator}
+        options={{ headerShown: false }}
+      />
+
+
+
+
             <Stack.Screen
               name="login"
               component={login}
@@ -375,6 +422,19 @@ export default function App({ navigation }) {
               }}
             />
          
+         {/* <Stack.Screen
+              name="addRoom"
+              component={addRoom}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            /> */}
+
+
          
               <Stack.Screen
               name="PaymentFormView"
@@ -427,4 +487,3 @@ export default function App({ navigation }) {
     </NavigationContainer>
   );
 }
-
