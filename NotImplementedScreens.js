@@ -57,7 +57,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import Loading from './Loading'; 
 import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet , Button, FlatList} from 'react-native';
+import { View, StyleSheet , Button, FlatList, TouchableOpacity} from 'react-native';
 import { Title } from 'react-native-paper';
 // import { AuthContext } from '../navigation/AuthProvider';
 // import FormButton from '../components/FormButton';
@@ -122,23 +122,29 @@ const [threads, setThreads] = useState([]);
         color='#f1dca7'
         onPress={() => navigation.navigate('addRoom')}
       />
-  <FlatList
-    data={threads}
-    keyExtractor={item => item._id}
-    ItemSeparatorComponent={() => <Divider />}
-    renderItem={({ item }) => (
-      <List.Item
-        title={item.name}
-        description='Item description'
-        titleNumberOfLines={1}
-        titleStyle={styles.listTitle}
-        descriptionStyle={styles.listDescription}
-        descriptionNumberOfLines={1}
+      <View style={styles.RoomList}>
+      <FlatList
+        data={threads}
+        keyExtractor={item => item._id}
+        ItemSeparatorComponent={() => <Divider />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+          onPress={() => navigation.navigate('Room', { thread: item })}
+          >
+            <List.Item
+              title={item.name}
+              description='Item description'
+              titleNumberOfLines={1}
+              titleStyle={styles.listTitle}
+              descriptionStyle={styles.listDescription}
+              descriptionNumberOfLines={1}
+            />
+          </TouchableOpacity>
+        )}
       />
-    )}
-  />
+  </View>
 </View>
-// </View>
+
   );
 }
 
@@ -146,11 +152,21 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     flex: 1
+
   },
   listTitle: {
+
     fontSize: 22
   },
   listDescription: {
     fontSize: 16
+  },
+
+  chatIcon:{
+    top:80,
+    left:170,
+  },
+  RoomList:{
+    top:60,
   }
 });
