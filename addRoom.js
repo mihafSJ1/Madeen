@@ -42,7 +42,7 @@ export default function addRoom({ navigation }) {
             .then(() => {
            
           
-              navigation.navigate('Calculator');
+              navigation.navigate('NotImplementedScreens');
             });
         }
       }
@@ -129,3 +129,6 @@ const styles = StyleSheet.create({
       fontSize: 22
     }
   });
+
+
+
