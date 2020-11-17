@@ -32,6 +32,8 @@ import  myReqWithFilter from './myReqWithFilter';
 import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
 // import  chat from './chat';
 import  addRoom from './addRoom';
+import  Room from './Room';
+
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
@@ -140,18 +142,6 @@ function squaresScreens() {
             /> */}
 
 
-
-{/* <Stack.Screen
-              name="addRoom"
-              component={addRoom}
-              options={{
-                headerShown: true,
-                // navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
-                // headerMode:screen,
-                headerTransparent: true,
-              }}
-            /> */}
 
 
 
@@ -355,6 +345,14 @@ export default function App({ navigation }) {
         options={{ headerShown: false }}
       />
 
+<Stack.Screen
+        name="Room"
+        component={Room}
+        options={({ route }) => ({
+          title: route.params.thread.name
+        })}      />
+
+    
 
 
 <Stack.Screen
@@ -392,11 +390,7 @@ export default function App({ navigation }) {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
-             {/* <Stack.Screen
-              name="myRequestRA"
-              component={myRequestRA}
-              options={{ headerShown: false }}
-            /> */}
+          
 
 
             <Stack.Screen
@@ -421,7 +415,7 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-         
+       
          {/* <Stack.Screen
               name="addRoom"
               component={addRoom}
