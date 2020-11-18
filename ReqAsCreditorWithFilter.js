@@ -99,13 +99,15 @@ firebase
               price:child.val().price,
               reason:child.val().reason,
               repaymentType:child.val().repaymentType,
-            rqeuestStatus:child.val().rqeuestStatus,
+              rqeuestStatus:child.val().rqeuestStatus,
               submittedDate:child.val().submittedDate,
              userName:child.val().userName,
               userid:child.val().userid,
               key:child.key,
               remAmount: child.val().remAmount,
-              rating : false
+              isRated : child.val().isRated,
+              ratingCount: child.val().ratingCount
+
             });
              
     });
@@ -116,6 +118,7 @@ export default class ReqAsCreditor extends React.Component {
   //const [modalVisible, setModalVisible] = useState(false);
 
   state = {
+    rating:5,
     ratingVisable: false,
     modalVisible: false,
     modalVisible2: false,
@@ -123,15 +126,15 @@ export default class ReqAsCreditor extends React.Component {
     specificStatus:false,
     SpecificStatusText:"",
     Searching:false,
-     Found:false,
+    Found:false,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
   ratingCompleted = (rating) => {
-    setRating(rating)
-            console.log("Rating is: " + rating)
+    this.setState({ newRatingValue: rating });
+            // console.log("Rating is: " + rating)
   }
 
   componentDidMount() {
@@ -164,6 +167,7 @@ export default class ReqAsCreditor extends React.Component {
             key:child.key,
             remAmount: child.val().remAmount ,
             rating: false,
+            ratingCount:5
           });
           
         }
@@ -220,8 +224,57 @@ export default class ReqAsCreditor extends React.Component {
         notificationType: "reject request",
         });
     }
-    setRatingModalVisible(visible) {
-      this.setState({ ratingVisable: visible });
+
+    setRatingModalVisible(visible,debtor) {
+      this.setState({
+        ratingVisable: visible,
+        debtorID: debtor.userid,
+        ratingCount: debtor.ratingCount,
+        rating : debtor.rating,
+        requestKey: debtor.key
+      
+}, () => {
+console.log(this.state.debtorID);
+
+     
+
+
+})
+
+      // if (visible == false){
+      //   this.updateRating()
+      // }
+    }
+    closeRatingModal(visible) {
+   
+
+      this.setState({
+        ratingVisable: visible,
+    
+      
+      }, () => {
+    
+        firebase
+       .database()
+   .ref('users/' + this.state.debtorID)
+   .update({
+    RatingCount: this.state.ratingCount+1,
+    rating:  this.state.rating + this.state.newRatingValue,
+ 
+      })
+   .then(() =>console.log("update count")  );
+   firebase
+   .database()
+.ref('requests/' + this.state.requestKey)
+.update({
+
+isRated:  true,
+
+  })
+ 
+    }) 
+  
+  
     }
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -343,6 +396,7 @@ export default class ReqAsCreditor extends React.Component {
       });
   }
 
+
   openModalWithItem(item) {
     this.setState({
       submmitedDate: item.submmitedDate,
@@ -361,7 +415,8 @@ export default class ReqAsCreditor extends React.Component {
       Rkey: item.key,
       rAmount: item.remAmount,
       cEmail: item.creditorEmail,
-      rating : item.rating
+      rating : item.rating,
+      ratingCount:item.ratingCount,
 
     });
 
@@ -520,22 +575,18 @@ this.setModalVisible(!this.state.modalVisible);
 
 
 
-{c.rqeuestStatus== "مكتمل" && c.rating == false  ?   
+{c.rqeuestStatus== "مكتمل"  ?   
 
 
-                  <TouchableOpacity  style={styles.ProssessRectangleShapeView}
-                      onPress={() => this.setRatingModalVisible(true)}
+                  <View  style={styles.CompleteRectangleShapeView}
+                 
                   > 
                      <Text style={styles.status2}
              
-               >قيم </Text>
-                    {/* <Text style={styles.status2}>مكتمل </Text> */}
-               {/* <Text style={styles.status2}
-                  onPress={() => setRatingModalVisible(true)}
-               >قيم </Text> */}
-           
+               >مكتمل </Text>
+              
                   
-              </TouchableOpacity>
+              </View>
             
 // :c.rqeuestStatus== "مكتمل" && c.rating == true ?   
 //   <View style={styles.CompleteRectangleShapeView}> 
@@ -552,24 +603,10 @@ this.setModalVisible(!this.state.modalVisible);
                 <View style={styles.rightItems}>
 
                   <View style={styles.textContainer}>
-                         {/* تجربه */}
 
-                  {/* <TouchableOpacity  style={styles.ProssessRectangleShapeView}
-                      onPress={() => this.setRatingModalVisible(true)}
-                  >  */}
-                     <Text style={styles.status2}
-                      onPress={() => this.setRatingModalVisible(true)}
-             
-               >قيم </Text>
-                    {/* <Text style={styles.status2}>مكتمل </Text> */}
-               {/* <Text style={styles.status2}
-                  onPress={() => setRatingModalVisible(true)}
-               >قيم </Text> */}
+                    
            
-                  
-              {/* </TouchableOpacity> */}
-
-                    {/*  */}
+             
                     <Text style={styles.textLabel}>
                       المدين |{" "}
                       <Text
@@ -595,6 +632,16 @@ this.setModalVisible(!this.state.modalVisible);
                       {" "}
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
+
+                         {/* تجربه */}
+                         {c.rqeuestStatus== "مكتمل" && c.isRated == false  ?   
+                     <Text style={styles.RatingButton}
+      
+                      onPress={() =>{ this.setRatingModalVisible(true,c)}}
+             
+               >قيم </Text>
+                
+               :  null }
                   </View>
                   {/* <TouchableOpacity style={styles.imageT} 
           onPress={() => {
@@ -951,12 +998,14 @@ type='custom'
            <TouchableOpacity
       style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
              onPress={() => {
-              this.setRatingModalVisible(false)
+             this.closeRatingModal(false)
+         
          
 
              }}
            >
              <Text style={styles.buttonText}>إرسال</Text>
+
            </TouchableOpacity>
          </View>
        </View>
@@ -1820,5 +1869,12 @@ backgroundColor:'red',
         backgroundColor: "#fff",
     
       },
+      RatingButton:{
+        color: "#A8CB9E",
+        fontFamily: "Bahij_TheSansArabic-Bold",
+        fontSize:18,
+        textAlign:'right'
+      }
+
 
 });

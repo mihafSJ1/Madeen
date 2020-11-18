@@ -249,6 +249,7 @@ class Request extends React.Component {
           }
         });
       });
+      console.log(applicationUsers)
     this.setState({
       userValue: applicationUsers,
     });
@@ -364,7 +365,9 @@ else{
           creditor: keyC,
           creditorName:Cname,
           creditorEmail:values.user,
-          remAmount: values.price
+          remAmount: values.price,
+          isRated:false
+
         },
         function (error) {
           if (error) {
