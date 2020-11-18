@@ -118,7 +118,8 @@ export default class ReqAsCreditor extends React.Component {
   //const [modalVisible, setModalVisible] = useState(false);
 
   state = {
-    rating:5,
+    newRatingValue:5,
+    // rating:5,
     ratingVisable: false,
     modalVisible: false,
     modalVisible2: false,
@@ -167,7 +168,7 @@ export default class ReqAsCreditor extends React.Component {
             key:child.key,
             remAmount: child.val().remAmount ,
             rating: false,
-            ratingCount:5
+            ratingCount:child.val().ratingCount
           });
           
         }
