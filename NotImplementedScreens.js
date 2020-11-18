@@ -62,10 +62,29 @@ import { Title } from 'react-native-paper';
 // import { AuthContext } from '../navigation/AuthProvider';
 // import FormButton from '../components/FormButton';
 import { IconButton } from 'react-native-paper';
+import { AuthContext } from './AuthProvider';
+
+
+
+
 export default function HomeScreen({ navigation }) {
-//   const { user, logout } = useContext(AuthContext);
+  const { currentUser } = firebase.auth();
+  firebase
+    .database()
+    .ref("users/" + currentUser.uid)
+    .on("value", (snapshot) => {
+      // this.setName(snapshot.val().fullName);
+      //   this.setEmail(snapshot.val().email),
+      //   this.setPic(snapshot.val().UserImage);
+      // emailf=snapshot.val().email;
+      // pic=snapshot.val().UserImage;
+    });
+  const { user, logout } = useContext(AuthContext);
+
 const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  
   useEffect(() => {
     const unsubscribe = firebase.firestore()
       .collection('THREADS')
@@ -115,6 +134,7 @@ const [threads, setThreads] = useState([]);
   
 
     <View style={styles.container}>
+          <Title>{currentUser.uid}</Title>
       <IconButton
        style={styles.chatIcon}
         icon='message-plus'
@@ -151,7 +171,9 @@ const [threads, setThreads] = useState([]);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
-    flex: 1
+    flex: 1,
+    bottom:-100,
+    top:30,
 
   },
   listTitle: {
@@ -168,5 +190,6 @@ const styles = StyleSheet.create({
   },
   RoomList:{
     top:60,
+    bottom:100,
   }
 });

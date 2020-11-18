@@ -26,26 +26,63 @@ import 'firebase/firestore';
 
 
 export default function addRoom({ navigation }) {
+//data base real time code 
+  const { currentUser } = firebase.auth();
+const [userName, setUserName] = useState("");
+
+
+
+      
+
+    // this.setState({ currentUser });
     const [roomName, setRoomName] = useState('');
     const db = firebase.firestore();
+    
 
-    function handleButtonPress() {
+    // function handleButtonPress() {
 
 
+    //     if (roomName.length > 0) {
+    //       firebase.firestore()
+    //         .collection('THREADS')
+    //         .doc(currentUser.uid)
+    //         .set({
+    //           name: roomName,
+           
+    //         })
+    //         .then(() => {
+           
+          
+    //           navigation.navigate('NotImplementedScreens');
+    //         });
+    //     }
+    //   }
+
+      function handleButtonPress() {
         if (roomName.length > 0) {
           firebase.firestore()
             .collection('THREADS')
-            .add({
+            .doc(currentUser.uid)
+            .set({
               name: roomName,
-           
+              latestMessage: {
+                text: `You have joined the room  ${roomName}.`,
+                createdAt: new Date().getTime()
+              }
             })
-            .then(() => {
-           
-          
+            .then(docRef => {
+              docRef.doc(currentUser.uid).collection.add({
+                text: `You have joined the room3 ${roomName}.`,
+                createdAt: new Date().getTime(),
+                system: true
+              });
               navigation.navigate('NotImplementedScreens');
             });
         }
       }
+
+  
+      
 
 
   return (
