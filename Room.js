@@ -128,6 +128,9 @@ export default function addRoom({ route }) {
         setMessages(messages);
       });
 
+
+
+      
     // Stop listening for updates whenever the component unmounts
     return () => messagesListener();
   }, []);

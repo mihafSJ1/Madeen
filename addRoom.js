@@ -84,7 +84,6 @@ const [userName, setUserName] = useState("");
   
       
 
-
   return (
 
     <View style={styles.rootContainer}>

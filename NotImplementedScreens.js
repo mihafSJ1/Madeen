@@ -176,10 +176,7 @@ const styles = StyleSheet.create({
     top:30,
 
   },
-  listTitle: {
 
-    fontSize: 22
-  },
   listDescription: {
     fontSize: 16
   },
@@ -191,5 +188,9 @@ const styles = StyleSheet.create({
   RoomList:{
     top:60,
     bottom:100,
-  }
+  },
+  listTitle: {
+
+    fontSize: 22
+  },
 });
