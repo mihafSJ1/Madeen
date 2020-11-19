@@ -181,16 +181,24 @@ export default class EditProfile extends React.Component {
   };
 
   componentDidMount() {
+    var x = 0
     const { currentUser } = firebase.auth();
     firebase
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        this.setRatingCount(snapshot.val().RatingCount),
-        this.setRating(snapshot.val().rating),
-        // namef   = snapshot.val().fullName;
-        // emailf   = snapshot.val().email;
-        // pic=snapshot.val().UserImage;
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+          this.state.rating / this.state.RatingCount
+               
+          x =    Math.round(this.state.rating / this.state.RatingCount)
+
+             console.log(x +"ccc");
+          })
+    
+    
+   
+
 
         this.setName(snapshot.val().fullName),
           this.setEmail(snapshot.val().email),
@@ -202,9 +210,12 @@ export default class EditProfile extends React.Component {
 
     this.setState({ currentUser });
     if (this.state.RatingCount != 0){
-    this.setState({ ratingValue:round(this.state.rating / this.state.RatingCount)})
-    }
-  }
+    this.setState({ ratingValue:x}, () => {
+      console.log(this.state.ratingValue);
+ 
+    })
+}
+}
 
   editProfile(URL) {
     const { currentUser } = firebase.auth();
@@ -267,15 +278,7 @@ export default class EditProfile extends React.Component {
     return (
       <KeyboardAwareScrollView>
         <TopBar />
-        {/* <Text style={{ fontSize: 20 }}>
-          Hi{" "}
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-            {currentUser && currentUser.email}!!
-          </Text>
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-           الاسم {namef}!!
-          </Text>
-        </Text> */}
+     
 
         <View style={styles.container3}>
           <View style={styles.container2}>
@@ -283,11 +286,7 @@ export default class EditProfile extends React.Component {
               style={styles.UserImagetuch}
               onPress={() => this.onChooseImagePress()}
             >
-              {/* <Image style={styles.UserImage}  source={require(this.state.profileImageUrl)} />  */}
-              {/* <Image
- style={styles.UserImage}
- source={require("./assets/UserImageProfile.png")} 
-/> */}
+      
               <Image
                 style={styles.UserImage}
                 source={{ uri: this.state.pic }}
@@ -296,19 +295,7 @@ export default class EditProfile extends React.Component {
 
             {/* <Image style={styles.UserImage} source={pic} />  */}
             <View style={styles.registerBackground}>
-              {/* <Text style={styles.UserName}>{namef}</Text> */}
-
-              {/* <TextInput style={styles.textinput}
-        autoFocus = {true}
-        autoCorrect = {false}
-        autoCapitalize = "none"
-        // onPress={() => firebase.database().ref('users/' + currentUser.uid ).update({
-        //      namef: value ,
-        //   })}
-     
-        placeholder={namef}
-        editable={false}
-        /> */}
+       
 
               <TouchableOpacity
                 onPress={() => {
@@ -338,45 +325,47 @@ export default class EditProfile extends React.Component {
               <Text style={styles.Email}> {this.state.emailf} </Text>
 
               <Text style={styles.RateStarts}>
-                {this.state.ratingValue == 0 }?
+                {this.state.ratingValue == 0 ?
+                <View
              
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  {this.state.ratingValue == 1 }?
+                </View>
+                :  this.state.ratingValue == 1 ?
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  {this.state.ratingValue == 2 }?
+                :  this.state.ratingValue == 2?
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  {this.state.ratingValue == 3 }?
+                :  this.state.ratingValue == 3 ?
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  {this.state.ratingValue == 4 }?
+                :  this.state.ratingValue == 4 ?
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :
-                :  {this.state.ratingValue == 4 }?
+             
+                :  this.state.ratingValue == 5 ?
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
-              </Text>
+              </Text>}
 
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>

@@ -106,7 +106,7 @@ firebase
               key:child.key,
               remAmount: child.val().remAmount,
               isRated : child.val().isRated,
-              ratingCount: child.val().ratingCount
+              RatingCount: child.val().RatingCount
 
             });
              
@@ -167,8 +167,9 @@ export default class ReqAsCreditor extends React.Component {
             userid:child.val().userid,
             key:child.key,
             remAmount: child.val().remAmount ,
-            rating: false,
-            ratingCount:child.val().ratingCount
+            isRated: child.val().isRated,
+          
+            RatingCount:child.val().RatingCount
           });
           
         }
@@ -227,15 +228,23 @@ export default class ReqAsCreditor extends React.Component {
     }
 
     setRatingModalVisible(visible,debtor) {
+      var RatingCount = null;
+      var rating = 0;
+      firebase
+      .database()
+      .ref("users/"+ debtor.userid,).on("value", (snapshot) => {
+        RatingCount = snapshot.val().RatingCount;
+        rating = snapshot.val().rating;
+      });
       this.setState({
         ratingVisable: visible,
         debtorID: debtor.userid,
-        ratingCount: debtor.ratingCount,
-        rating : debtor.rating,
+        RatingCount: RatingCount,
+        rating :rating,
         requestKey: debtor.key
       
 }, () => {
-console.log(this.state.debtorID);
+console.log(this.state.RatingCount+this.state.requestKey);
 
      
 
@@ -254,16 +263,19 @@ console.log(this.state.debtorID);
     
       
       }, () => {
+     console.log( this.state.debtorID)
+     console.log( this.state.RatingCount)
+     console.log( this.state.newRatingValue)
     
         firebase
        .database()
    .ref('users/' + this.state.debtorID)
    .update({
-    RatingCount: this.state.ratingCount+1,
+    RatingCount: this.state.RatingCount+1,
     rating:  this.state.rating + this.state.newRatingValue,
  
       })
-   .then(() =>console.log("update count")  );
+   
    firebase
    .database()
 .ref('requests/' + this.state.requestKey)
@@ -417,7 +429,7 @@ isRated:  true,
       rAmount: item.remAmount,
       cEmail: item.creditorEmail,
       rating : item.rating,
-      ratingCount:item.ratingCount,
+      RatingCount:item.RatingCount,
 
     });
 
@@ -520,7 +532,7 @@ this.setModalVisible(!this.state.modalVisible);
                 {/* {console.log(c)} */}
               
               {/* {this.openModalWithItem2(c)} */}
-              <View
+              <TouchableOpacity
                 // margin={10}
                 style={styles.card}
                 
@@ -656,7 +668,7 @@ this.setModalVisible(!this.state.modalVisible);
           ></Image> */}
                   {/* </TouchableOpacity> */}
                 </View>
-              </View>
+              </TouchableOpacity>
               {console.log("here4")}
               <Modal
                 animationType="slide"
