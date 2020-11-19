@@ -31,7 +31,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var notificationsArray = [];
 var usersArray = [];
 var requestArray = [];
 
@@ -61,34 +60,35 @@ class NotificationsCenter extends React.Component {
   }
 
   componentDidMount() { 
-    notificationsArray=[];
-   let reqID;
+    // alert("compo")
+    var notfArr = [];
+    try{
     firebase
       .database()
       .ref("notifications/")
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
-          // this.setState({reqID:  })
-            notificationsArray.push({
+          notfArr.push({
                 creditor:child.val().creditor,
                 debtor:child.val().debtor,
                 title:child.val().title,
                 body:child.val().body,
                 nType: child.val().notificationType,
-                // reqKey:child.val().reqID,
                 notficationKey: child.key,    
         }
     );
         });
       });
-      this.setState({notificationsArray: notificationsArray})
-
+      this.setState({notificationsArray: notfArr})
+    }catch(error){
+      console.log(error)
+    }
     }
 
-   
-  list = () => {
-    const currentUser = firebase.auth().currentUser.uid;
-    return this.state.notificationsArray.map((c) => {
+  render() {
+  const list = () => {
+  const currentUser = firebase.auth().currentUser.uid;
+    return this.state.notificationsArray.map((c) => { 
      count++;
      if (  (c.creditor == currentUser && c.nType == "new request" 
         || c.debtor == currentUser && c.nType == "accept request" 
@@ -100,6 +100,7 @@ class NotificationsCenter extends React.Component {
                
               <TouchableOpacity
                 style={styles.card}
+                key={c.key}
               >
                 <View style={styles.leftItems}>
 
@@ -136,7 +137,7 @@ class NotificationsCenter extends React.Component {
       });
   };
 
-  render() {
+
 
     setTimeout(function() {
         firebase
@@ -186,7 +187,7 @@ class NotificationsCenter extends React.Component {
 
         {/* -------------------------------------- CARD 1*/}
 
-        <ScrollView style =  {styles.scrollStyle}>{this.list()}</ScrollView>
+        <ScrollView style =  {styles.scrollStyle}>{list()}</ScrollView>
 
         {/*View request */}
       </View>

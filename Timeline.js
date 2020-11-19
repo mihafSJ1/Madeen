@@ -121,7 +121,7 @@ class Timeline extends React.Component {
   componentDidMount() {
   
     requestArray=[];
-   
+
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -148,24 +148,9 @@ class Timeline extends React.Component {
         });
       });
 ///////////////////////////////////// المفترض ارجع كل يوزر وعدد استلافه وتسليفه
-      let countSubsidy = 0;
-      let countDebts = 0;
-      firebase
-      .database()
-      .ref("requests")
-      .on("value", function (snapshot) {
-        snapshot.forEach(function (child) {
-        if ("مكتمل" == child.val().rqeuestStatus ){
-          if(currentUser.uid == child.val().creditor){
-            countSubsidy++;
-          }else  if(currentUser.uid == child.val().userid){
-            countDebts++;
-          }
-        }
-      });
-      });
-      this.setState({ noDebts: countDebts });
-      this.setState({ noSubsidy: countSubsidy });
+
+      
+
 
     }
 
@@ -188,18 +173,34 @@ class Timeline extends React.Component {
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-      
-
         this.setprofilePic(snapshot.val().UserImage);
-
-        console.log(this.state.profilePic);
       });
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-  
+
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if(item.userid == child.val().creditor){
+          if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+            countSubsidy++;
+        }
+        }else  if(item.userid == child.val().userid){
+          if ("مكتمل" == child.val().rqeuestStatus ){
+          countDebts++;
+        }
+      }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
   }
  
 
@@ -522,7 +523,6 @@ class Timeline extends React.Component {
   };
 
   render() {
-    console.log;
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -565,6 +565,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+    marginBottom:130,
   },
   container2: {
     marginTop: 40,
@@ -719,18 +720,6 @@ const styles = StyleSheet.create({
     borderColor: "red",
   },
 
-  UserImage: {
-    alignItems: "center",
-    marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    left: 130,
-    top: -20,
-    zIndex: 2,
-    width: 160,
-    height: 160,
-    resizeMode: "stretch",
-  },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
@@ -744,7 +733,7 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 140,
+    left: 110,
     bottom: 50,
   },
 
@@ -756,7 +745,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left: 185,
+    left: 160,
     top: -35,
     backgroundColor: "#D9AE94",
     borderColor: "#D3CECA",
@@ -771,7 +760,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    right: -25,
+    // right: -10,
     top: -104,
     backgroundColor: "#F1DCA7",
     borderColor: "#D3CECA",
@@ -784,7 +773,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#404040",
     top: -37,
-    left: 70,
+    left: 50,
     zIndex: 2,
   },
   subsidy: {
@@ -793,7 +782,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#404040",
     top: -10,
-    right: 75,
+    right: 40,
   },
   buttonText: {
     textAlign: "center",
@@ -807,7 +796,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 127,
+    left: 100,
     top: -50,
     zIndex: 2,
     width: 160,

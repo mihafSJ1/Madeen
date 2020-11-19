@@ -138,13 +138,15 @@ export default class viewProfile extends React.Component {
       .ref("requests")
       .on("value", function (snapshot) {
         snapshot.forEach(function (child) {
-        if ("مكتمل" == child.val().rqeuestStatus ){
           if(currentUser.uid == child.val().creditor){
-            countSubsidy++;
-          }else  if(currentUser.uid == child.val().userid){
-            countDebts++;
-          }
-        }
+            if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+              }
+              }else  if(currentUser.uid == child.val().userid){
+                if ("مكتمل" == child.val().rqeuestStatus ){
+                countDebts++;
+              }
+            }
       });
       });
       this.setState({ noDebts: countDebts });

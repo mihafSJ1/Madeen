@@ -17,12 +17,9 @@ import NotImplementedScreens from "./NotImplementedScreens";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
-import myRequest from "./myRequest";
-import ReqAsCreditor from "./ReqAsCreditor";
 import PayAsDebtor from './PayAsDebtor';
 import EditRequest from"./EditRequest";
 import PayAsCreditor from './PayAsCreditor';
-
 import PaymentFormView from './PaymentFormView';
 import NotificationsCenter from './NotificationsCenter';
 import  Calculator from './Calculator';
@@ -50,31 +47,21 @@ function squaresScreens() {
         component={Timeline}
         options={{ headerShown: false }}
       />
-      
 
-      <Stack.Screen
-        name="myRequest"
-        component={myRequest}
-        options={{ headerShown: false }}
-      />
       {/* حل موقت  */}
   <Stack.Screen
         name="myRequestP"
-        component={myRequest}
+        component={myReqWithFilter}
         options={{ headerShown: false }}
       />
 
 <Stack.Screen
         name="ReqAsCreditorP"
-        component={ReqAsCreditor}
+        component={ReqAsCreditorWithFilter}
         options={{ headerShown: false }}
       />
        {/* حل موقت  */}
-<Stack.Screen
-        name="ReqAsCreditor"
-        component={ReqAsCreditor}
-        options={{ headerShown: false }}
-      />
+
 
            <Stack.Screen
               name="PayAsCreditor"
@@ -304,27 +291,17 @@ export default function App({ navigation }) {
      
       <Stack.Screen
         name="myRequestP"
-        component={myRequest}
+        component={myReqWithFilter}
         options={{ headerShown: false }}
       />
 
 <Stack.Screen
         name="ReqAsCreditorP"
-        component={ReqAsCreditor}
+        component={ReqAsCreditorWithFilter}
         options={{ headerShown: false }}
       />
        {/* حل موقت  */}
-       <Stack.Screen
-        name="myRequest"
-        component={myRequest}
-        options={{ headerShown: false }}
-      />
-
-<Stack.Screen
-        name="ReqAsCreditor"
-        component={ReqAsCreditor}
-        options={{ headerShown: false }}
-      />
+  
             <Stack.Screen
               name="login"
               component={login}

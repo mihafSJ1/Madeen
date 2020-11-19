@@ -25,6 +25,8 @@ import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
+import { ArabicNumbers } from "react-native-arabic-numbers";
+
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -123,6 +125,8 @@ export default class ReqAsCreditor extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
 
   componentDidMount() {
@@ -297,11 +301,7 @@ export default class ReqAsCreditor extends React.Component {
         console.log(this.state.profilePic);
       });
 
-    console.log("بتنحل");
 
-    console.log("here");
-
-    console.log("here");
 
     this.setState({
       modalVisible2: true,
@@ -310,8 +310,26 @@ export default class ReqAsCreditor extends React.Component {
       
       
     });
-    console.log("يارب١");
-    console.log("يارب٢");
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if(item.userid == child.val().creditor){
+          if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+            }
+            }else  if(item.userid == child.val().userid){
+              if ("مكتمل" == child.val().rqeuestStatus ){
+              countDebts++;
+            }
+          }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
     
   }
   //Areej Test
@@ -834,10 +852,10 @@ this.setModalVisible(!this.state.modalVisible);
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> {ArabicNumbers(this.state.noDebts)}</Text>
                     </View>
 
                     <View style={styles.buttonContainer}>
