@@ -187,7 +187,7 @@ export default function Register({ navigation }) {
             style={styles.textInput}
             placeholder="رقم الجوال"
             onChangeText={(text) => setphone(text)}
-            value={email}
+            value={phone}
             underlineColorAndroid="transparent"
             autoCapitalize="none"
             keyboardType="phone-pad"

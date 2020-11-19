@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import { loadContacts} from "./ExpoPermissions";
 import { useFonts } from "expo-font";
 import { AppLoading } from "expo";
 
@@ -94,6 +95,7 @@ export default function login({ navigation }) {
       });
       registerForPushNotificationsAsync();
     console.log("handleLogin");
+    loadContacts();
   };
 
   return (

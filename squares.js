@@ -28,6 +28,7 @@ export default function squares({ navigation }) {
     "Bahij_TheSansArabic-Light": require("./assets/fonts/Bahij_TheSansArabic-Light.ttf"),
   });
   return (
+    
     <View style={styles.container}>
       <TouchableOpacity>
         <ImageBackground
