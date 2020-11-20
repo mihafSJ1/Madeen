@@ -46,42 +46,38 @@ setRoomName(name) {
        handleButtonPress() {
         const { currentUser } = firebase.auth();
         const {secondID} = this.props.route.params;
-
+        const{reqIDforChat}=this.props.route.params;
+        console.log(reqIDforChat);
         if (this.state.roomName.length > 0) {
           firebase.firestore()
-            .collection('THREADS')
-            .doc(currentUser.uid)
-            .collection('allChat')
-            .doc(secondID)
-            .set({
-              name: this.state.roomName,
-              latestMessage: {
-                text: `You have joined the room  ${this.state.roomName}.`,
-                createdAt: new Date().getTime()
-              }
-            })
-            // .then({
-            //   // docRef => {
-            //   // docRef.collection('MESSAGES').add({
-            //   //   text: `You have joined the room3 ${this.state.roomName}.`,
-            //   //   createdAt: new Date().getTime(),
-            //   //   system: true
-            //   // });
-              
-            // }
-            // navigation.navigate('Room');
-            // );
-            .then(() => {
-              navigation.navigate('Room');
-            });
+          .collection('THREADS')
+          .doc(currentUser.uid)
+          .collection('allChat')
+          .doc(reqIDforChat)
+          .set({
+            name: this.state.roomName,
+            latestMessage: {
+              text: `You have joined the room  ${this.state.roomName}.`,
+              createdAt: new Date().getTime(),
+              to:`${secondID}`
+            }
+          })
+            docRef => {
+              docRef.collection('MESSAGES').add({
+                text: `You have joined the room ررررر ${this.state.roomName}.`,
+                createdAt: new Date().getTime(),
+                system: true
+              });
+           
+            };
+
+            this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat});
         }
-
-
-       this.props.navigation.navigate('Room', {sID:secondID});
        
         }
 
       
+
 
 
      
@@ -90,6 +86,7 @@ setRoomName(name) {
       render(){
         const { currentUser } = firebase.auth();
         const {secondID} = this.props.route.params;
+        const{reqIDforChat}=this.props.route.params;
 
 //const [userName, setUserName] = useState("");
 
@@ -115,7 +112,9 @@ setRoomName(name) {
           </View>
           <View style={styles.innerContainer}>
 {console.log({secondID})
-}        
+}    
+{console.log({reqIDforChat})
+}     
  {/* // <Title style={styles.title}>Ccc {secondID}</Title> */}
 
             <Title style={styles.title}>Create a new chat room</Title>

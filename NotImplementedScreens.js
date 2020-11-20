@@ -38,6 +38,8 @@ const [threads, setThreads] = useState([]);
   useEffect(() => {
     const unsubscribe = firebase.firestore()
       .collection('THREADS')
+      .doc(currentUser.uid)
+      .collection('allChat')
       .onSnapshot(querySnapshot => {
         const threads = querySnapshot.docs.map(documentSnapshot => {
           return {
@@ -84,14 +86,14 @@ const [threads, setThreads] = useState([]);
   
 
     <View style={styles.container}>
-          <Title>{currentUser.uid}</Title>
-      <IconButton
+          <Title> {currentUser.uid}</Title>
+      {/* <IconButton
        style={styles.chatIcon}
         icon='message-plus'
         size={38}
         color='#f1dca7'
         onPress={() => navigation.navigate('addRoom')}
-      />
+      /> */}
       <View style={styles.RoomList}>
       <FlatList
         data={threads}
@@ -99,7 +101,8 @@ const [threads, setThreads] = useState([]);
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item }) => (
           <TouchableOpacity
-          onPress={() => navigation.navigate('Room')}
+
+          onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id})}
           >
             <List.Item
               title={item.name}
@@ -112,6 +115,16 @@ const [threads, setThreads] = useState([]);
           </TouchableOpacity>
         )}
       />
+
+
+
+
+
+
+
+
+
+      
   </View>
 </View>
 

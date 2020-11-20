@@ -175,6 +175,7 @@ class Timeline extends React.Component {
       modalVisible2: true,
       namef: item.userName,
       creditorID: item.userid,
+      ReqIDforChat:item.key
       
       
       //creditorID: item.creditor
@@ -447,8 +448,8 @@ class Timeline extends React.Component {
         size={38}
         color='#f1dca7'
         //,{secondID:this.state.creditor}
-
-        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.creditorID}),this.setModalVisible2(!this.state.modalVisible2)}}
+      
+        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.creditorID , reqIDforChat:this.state.ReqIDforChat}),this.setModalVisible2(!this.state.modalVisible2)}}
       />
       
                     <Text style={styles.RateStarts}>
@@ -484,6 +485,7 @@ class Timeline extends React.Component {
                       />
                     </Text>
                     <Text style={styles.subsidy}> {this.state.creditorID} </Text>
+                    <Text style={styles.subsidy}> {this.state.ReqIDforChat} </Text>
 
 {
 console.log(this.state.creditorID)
