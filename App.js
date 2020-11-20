@@ -344,15 +344,19 @@ export default function App({ navigation }) {
         component={addRoom}
         options={{ headerShown: false }}
       />
-
+{/* 
 <Stack.Screen
         name="Room"
         component={Room}
         options={({ route }) => ({
           title: route.params.thread.name
-        })}      />
+        })}      /> */}
 
-    
+<Stack.Screen
+        name="Room"
+        component={Room}
+        options={{ headerShown: false }}
+      />
 
 
 <Stack.Screen
