@@ -5,13 +5,13 @@ import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import React, { useState, useContext, useEffect } from 'react';
+import { render } from 'react-dom';
 
 
 
-export default function addRoom({ route }) {
-  const [messages, setMessages] = useState([]);
-  const { thread } = route.params;
-  const { currentUser } = firebase.auth();
+//export default function Room({ route, navigation, props, sID }) {
+  export default class Room extends React.Component {
+
   
 
 
@@ -20,7 +20,7 @@ export default function addRoom({ route }) {
   //   setMessages(GiftedChat.append(messages, newMessage));
   // }
 
-  function renderBubble(props) {
+   renderBubble(props) {
     return (
       // Step 3: return the component
       <Bubble
@@ -40,7 +40,7 @@ export default function addRoom({ route }) {
     );
   }
   
-  function renderSend(props) {
+   renderSend(props) {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -49,7 +49,7 @@ export default function addRoom({ route }) {
       </Send>
     );
   }
-  function scrollToBottomComponent(props) {
+   scrollToBottomComponent(props) {
     return (
         <Send {...props}>
       <View style={styles.bottomComponentContainer}>
@@ -59,7 +59,7 @@ export default function addRoom({ route }) {
     );
   }//ما تشتغل الكلبة
 
-  function renderLoading() {
+   renderLoading() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size='large' color='#6646ee' />
@@ -68,12 +68,16 @@ export default function addRoom({ route }) {
   }
 
 //عدنا
-  async function handleSend(messages) {
+  async  handleSend(messages) {
     const text = messages[0].text;
+
+   
 
     firebase.firestore()
       .collection('THREADS')
       .doc(currentUser.uid)
+      .collection('allChat')
+    .doc(sID2)
       .collection('MESSAGES')
       .add({
         text,
@@ -87,7 +91,10 @@ export default function addRoom({ route }) {
     await firebase.firestore()
       .collection('THREADS')
       .doc(currentUser.uid)
-      .set(
+      .collection('allChat')
+    .doc(sID2)
+      .collection('MESSAGES')
+      .add(
         {
           latestMessage: {
             text,
@@ -96,12 +103,14 @@ export default function addRoom({ route }) {
         },
         { merge: true }
       );
-  }
+  };
 
   useEffect(() => {
-    const messagesListener = firebase.firestore()
+    const {messagesListener} = firebase.firestore()
       .collection('THREADS')
       .doc(currentUser.uid)
+      .collection('allChat')
+    .doc(sID)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
@@ -135,7 +144,7 @@ export default function addRoom({ route }) {
     return () => messagesListener();
   }, []);
 
-  function renderSystemMessage(props) {
+   renderSystemMessage(props) {
     return (
       <SystemMessage
         {...props}
@@ -147,7 +156,11 @@ export default function addRoom({ route }) {
   
 
 
-
+render(){
+  
+  const [messages, setMessages] = useState([]);
+ const { sID2 } = sID;
+  const { currentUser } = firebase.auth();
   return (
     <GiftedChat
       messages={messages}
@@ -166,22 +179,10 @@ export default function addRoom({ route }) {
     />
   
 
-  //   <GiftedChat
-  //   messages={messages}
-  //   onSend={handleSend}
-  //   user={{ _id: currentUser.uid }}
-  //   placeholder='Type your message here...'
-  //   alwaysShowSend
-  //   showUserAvatar
-  //   scrollToBottom
-  //   renderBubble={renderBubble}
-  //   renderLoading={renderLoading}
-  //   renderSend={renderSend}
-  //   scrollToBottomComponent={scrollToBottomComponent}
-  //   // renderSystemMessage={renderSystemMessage}
-  // />
-  );
+  );//end return
 }
+
+}//end class
 
 const styles = StyleSheet.create({
     sendingContainer: {
