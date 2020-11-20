@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet,
     Text,
@@ -21,122 +21,148 @@ import {
   //import '@firebase/firestore';
   import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { render } from 'react-dom';
 // import FormButton from '../components/FormButton';
 
 
 
-export default function addRoom({ navigation }) {
+//export default function addRoom({ navigation }) {
+  export default class addRoom extends React.Component {
+    constructor(props) {
+      super(props);
+    
+    };
+    state = {
+       
+      roomName: "",
+    };
 //data base real time code 
-  const { currentUser } = firebase.auth();
-const [userName, setUserName] = useState("");
+setRoomName(name) {
+  this.setState({ roomName: name });
+}
+    
 
+
+       handleButtonPress() {
+        const { currentUser } = firebase.auth();
+        const {secondID} = this.props.route.params;
+
+        if (this.state.roomName.length > 0) {
+          firebase.firestore()
+            .collection('THREADS')
+            .doc(currentUser.uid)
+            .collection('allChat')
+            .doc(secondID)
+            .set({
+              name: this.state.roomName,
+              latestMessage: {
+                text: `You have joined the room  ${this.state.roomName}.`,
+                createdAt: new Date().getTime()
+              }
+            })
+            // .then({
+            //   // docRef => {
+            //   // docRef.collection('MESSAGES').add({
+            //   //   text: `You have joined the room3 ${this.state.roomName}.`,
+            //   //   createdAt: new Date().getTime(),
+            //   //   system: true
+            //   // });
+              
+            // }
+            // navigation.navigate('Room');
+            // );
+            .then(() => {
+              navigation.navigate('Room');
+            });
+        }
+
+
+       this.props.navigation.navigate('Room', {sID:secondID});
+       
+        }
+
+      
+
+
+     
+
+  
+      render(){
+        const { currentUser } = firebase.auth();
+        const {secondID} = this.props.route.params;
+
+//const [userName, setUserName] = useState("");
+
+//const {secondID} = this.props.route.params;//
 
 
       
 
     // this.setState({ currentUser });
-    const [roomName, setRoomName] = useState('');
+    //const [roomName, setRoomName] = useState('');
     const db = firebase.firestore();
-    
+        return (
 
-    // function handleButtonPress() {
-
-
-    //     if (roomName.length > 0) {
-    //       firebase.firestore()
-    //         .collection('THREADS')
-    //         .doc(currentUser.uid)
-    //         .set({
-    //           name: roomName,
+          <View style={styles.rootContainer}>
+          <View style={styles.closeButtonContainer}>
            
-    //         })
-    //         .then(() => {
-           
-          
-    //           navigation.navigate('NotImplementedScreens');
-    //         });
-    //     }
-    //   }
+            <IconButton
+              icon='close-circle'
+              size={50}
+              color='#6646ee'
+              onPress={() => this.props.navigation.goBack()}
+            />
+          </View>
+          <View style={styles.innerContainer}>
+{console.log({secondID})
+}        
+ {/* // <Title style={styles.title}>Ccc {secondID}</Title> */}
 
-      function handleButtonPress() {
-        if (roomName.length > 0) {
-          firebase.firestore()
-            .collection('THREADS')
-            .doc(currentUser.uid)
-            .set({
-              name: roomName,
-              latestMessage: {
-                text: `You have joined the room  ${roomName}.`,
-                createdAt: new Date().getTime()
-              }
-            })
-            .then(docRef => {
-              docRef.doc(currentUser.uid).collection.add({
-                text: `You have joined the room3 ${roomName}.`,
-                createdAt: new Date().getTime(),
-                system: true
-              });
-              navigation.navigate('NotImplementedScreens');
-            });
-        }
+            <Title style={styles.title}>Create a new chat room</Title>
+            <TextInput
+              // labelName='Room Name'
+              // value={roomName}
+              // onChangeText={text => setRoomName(text)}
+              // clearButtonMode='while-editing'
+              style={styles.textinput}
+              placeholder="room name "
+              name="fullname"
+              value={this.state.roomName}
+              onChangeText={text => this.setRoomName(text)}
+              value={this.state.roomName}
+              input={this.state.roomName}
+            />
+      {/* 
+      <TextInput
+                      style={styles.textinput}
+                      placeholder={this.state.namef}
+                      name="fullname"
+                      onChangeText={(userInput) => saveUserInput(userInput)}
+                      // onChangeText={text => this.setState({text})}
+                      value={this.state.text}
+                      input={this.state.text}
+                    /> */}
+      
+      
+      
+      
+      
+      
+            <Button
+              title='Create'
+              modeValue='contained'
+              labelStyle={styles.buttonLabel}
+              onPress={() => this.handleButtonPress()}
+              disabled={this.state.roomName.length === 0}
+            />
+          </View>
+        </View>
+        );
       }
 
-  
-      
 
-  return (
-
-    <View style={styles.rootContainer}>
-    <View style={styles.closeButtonContainer}>
-      <IconButton
-        icon='close-circle'
-        size={50}
-        color='#6646ee'
-        onPress={() => navigation.goBack()}
-      />
-    </View>
-    <View style={styles.innerContainer}>
-      <Title style={styles.title}>Create a new chat room</Title>
-      <TextInput
-        // labelName='Room Name'
-        // value={roomName}
-        // onChangeText={text => setRoomName(text)}
-        // clearButtonMode='while-editing'
-        style={styles.textinput}
-        placeholder="room name "
-        name="fullname"
-        value={roomName}
-        onChangeText={text => setRoomName(text)}
-        value={roomName}
-        input={roomName}
-      />
-{/* 
-<TextInput
-                style={styles.textinput}
-                placeholder={this.state.namef}
-                name="fullname"
-                onChangeText={(userInput) => saveUserInput(userInput)}
-                // onChangeText={text => this.setState({text})}
-                value={this.state.text}
-                input={this.state.text}
-              /> */}
-
-
-
-
-
-
-      <Button
-        title='Create'
-        modeValue='contained'
-        labelStyle={styles.buttonLabel}
-        onPress={() => handleButtonPress()}
-        disabled={roomName.length === 0}
-      />
-    </View>
-  </View>
-  );
 }
+
 
 
 
@@ -168,3 +194,4 @@ const styles = StyleSheet.create({
 
 
 
+  
