@@ -11,6 +11,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import { IconButton } from 'react-native-paper';
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -173,7 +174,10 @@ class Timeline extends React.Component {
     this.setState({
       modalVisible2: true,
       namef: item.userName,
-      UserIDImage: item.userid,
+      creditorID: item.userid,
+      
+      
+      //creditorID: item.creditor
     });
   
   }
@@ -437,6 +441,16 @@ class Timeline extends React.Component {
                       source={{ uri: this.state.profilePic }}
                     />
                     <Text style={styles.UserName}>{this.state.namef}</Text>
+                    <IconButton
+       style={styles.chatIcon}
+        icon='message-plus'
+        size={38}
+        color='#f1dca7'
+        //,{secondID:this.state.creditor}
+
+        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.creditorID}),this.setModalVisible2(!this.state.modalVisible2)}}
+      />
+      
                     <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
@@ -469,6 +483,11 @@ class Timeline extends React.Component {
                         solid
                       />
                     </Text>
+                    <Text style={styles.subsidy}> {this.state.creditorID} </Text>
+
+{
+console.log(this.state.creditorID)
+} 
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -793,35 +812,10 @@ const styles = StyleSheet.create({
     borderColor: "#CBCA9E",
     borderWidth: 4,
   },
-
-  // button1:{
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginRight: 20,
-  //   marginLeft: 25,
-  //   fontSize: 5,
-  // borderRadius:15,
-  // },
-  // button: {
-  //   alignItems: "center",
-  //   width: 170,
-  //   height: 30,
-  //   marginTop: 80,
-  //   padding: 5,
-  //   borderRadius: 15,
-  //   marginLeft: 10,
-  //   backgroundColor: "#fff",
-  //   fontSize: 10,
-  //   // alignItems: "center",
-  //   // width: 170,
-  //   // height: 30,
-  //   // marginTop: 10,
-  //   // padding: 5,
-  //   // borderRadius: 15,
-  //   // marginLeft: 10,
-  //   // backgroundColor: "#fff",
-  // },
-
+  chatIcon:{
+    bottom:120,
+    left:60,
+  },
   //end
 });
 export default withNavigation(Timeline);
