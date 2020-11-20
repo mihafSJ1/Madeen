@@ -53,6 +53,7 @@ var key;
 var remAmount;
 var requestArray = [];
 var usersArray = [];
+var x = 0;
 firebase
   .database()
   .ref("users")
@@ -165,7 +166,19 @@ class Timeline extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
       
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+          this.state.rating / this.state.RatingCount
+               
+          if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
 
+           }
+          })
         this.setprofilePic(snapshot.val().UserImage);
 
         console.log(this.state.profilePic);
@@ -278,11 +291,7 @@ class Timeline extends React.Component {
                     solid
                     style={{ marginTop: 30, marginRight: 45 }}
                   />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+              
                 </View>
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
@@ -437,38 +446,62 @@ class Timeline extends React.Component {
                       source={{ uri: this.state.profilePic }}
                     />
                     <Text style={styles.UserName}>{this.state.namef}</Text>
-                    <Text style={styles.RateStarts}>
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                    </Text>
+                    {this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue == 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 {this.state.ratingValue== 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                {this.state.ratingValue == 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -566,7 +599,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -120,
+    left: -60,
   },
 
   leftItems: {
@@ -700,12 +733,15 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 130,
-    top: -20,
+    left: 100,
+    top: 0,
     zIndex: 2,
     width: 160,
     height: 160,
     resizeMode: "stretch",
+    borderRadius: 100,
+    borderColor: "#CBCA9E",
+    borderWidth: 4,
   },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",

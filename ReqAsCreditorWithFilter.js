@@ -53,6 +53,7 @@ var Searching=false;
 var Found=false;
 var specificStatus=false;
 let arrayFiltered22=[];
+var x = 0;
 
 firebase
   .database()
@@ -60,6 +61,7 @@ firebase
   .once("value", function (snapshot) {
     snapshot.forEach(function (childSnapshot) {
       var Data = childSnapshot.val();
+
       usersArray.push(Data);
     });
   });
@@ -370,7 +372,20 @@ isRated:  true,
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
 
+               }
+
+             console.log(x +"c");
+          })
         this.setprofilePic(snapshot.val().UserImage)
         this.setCreditorEmail(snapshot.val().email);
 
@@ -396,18 +411,18 @@ isRated:  true,
   }
   //Areej Test
 
-  viewTimelineImageFunction(item) {
-    firebase.auth();
+  // viewTimelineImageFunction(item) {
+  //   firebase.auth();
 
-    firebase
-      .database()
-      .ref("users/" + item.userid)
-      .on("value", (snapshot) => {
-        this.setTimelinePic(snapshot.val().UserImage);
-        console.log("Areej Test");
-        console.log(this.state.setTimelinePic);
-      });
-  }
+  //   firebase
+  //     .database()
+  //     .ref("users/" + item.userid)
+  //     .on("value", (snapshot) => {
+  //       this.setTimelinePic(snapshot.val().UserImage);
+  //       console.log("Areej Test");
+  //       console.log(this.state.setTimelinePic);
+  //     });
+  // }
 
 
   openModalWithItem(item) {
@@ -446,6 +461,21 @@ isRated:  true,
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log(" الثانيه  جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.ratingValue );
+          if (this.state.RatingCount!=0){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+
+           }
+      
+               
+        
+
+          })
    
         console.log("inside retrive");
         this.setTimelinePic(snapshot.val().UserImage);
@@ -469,22 +499,7 @@ isRated:  true,
       { cancelable: false }
     );
   }
-  // updatestateAccept(k,props){
-    
-  // //   this.setModalVisible(!this.state.modalVisible);
-  // //  props.navigate("squares");
-  // //   const { currentUser } = firebase.auth();
-  // //   firebase
-  // //   .database()
-  // //   .ref('requests/' + k)
-  // //   .update({
-  // //     creditor:currentUser.uid,
-  // //     rqeuestStatus: "قيد التنفيذ",
-  // //   })
-  // //   .then(() => console.log('Data updated.'));
-    
-  
-  // }
+
   
   conformupdateReject(k,props){
     Alert.alert(
@@ -558,13 +573,9 @@ this.setModalVisible(!this.state.modalVisible);
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                
                 </View>
-                {console.log("here3")}
+            
 
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
@@ -915,7 +926,7 @@ this.setModalVisible(!this.state.modalVisible);
                   
                     <Text style={styles.UserName}>{this.state.namef}</Text>
                     <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-                    <Text style={styles.RateStarts}>
+                    {/* <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
                         size={33}
@@ -946,7 +957,63 @@ this.setModalVisible(!this.state.modalVisible);
                         color="#E4E4E4"
                         solid
                       />
-                    </Text>
+                    </Text> */}
+                                  {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -1260,7 +1327,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -1439,7 +1506,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: 5,
     borderRadius: 15,
-    marginLeft: 0,
+    marginLeft: 20,
     marginBottom: 0,
     right: 0,
     top: -130,
@@ -1483,7 +1550,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#F1DCA7",
     
@@ -1494,7 +1561,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#D9AE94",
     
@@ -1505,7 +1572,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#BE6A6C",
   
@@ -1516,7 +1583,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#A8CB9E",
     

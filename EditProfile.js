@@ -44,6 +44,7 @@ if (!firebase.apps.length) {
 var requestArrayU=[];
 var requestArrayC=[];
 let input = "";
+var x = 0;
 const fullNameRegexAR = /[\u0600-\u06FF]/;
 const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
 export default class EditProfile extends React.Component {
@@ -55,7 +56,7 @@ export default class EditProfile extends React.Component {
   state = {
     namef: "name",
     emailf: "email",
-    ratingValue: 0,
+    ratingValue: null,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
   };
@@ -181,7 +182,7 @@ export default class EditProfile extends React.Component {
   };
 
   componentDidMount() {
-    var x = 0
+    
     const { currentUser } = firebase.auth();
     firebase
       .database()
@@ -191,10 +192,18 @@ export default class EditProfile extends React.Component {
           console.log(this.state.rating );
           this.state.rating / this.state.RatingCount
                
-          x =    Math.round(this.state.rating / this.state.RatingCount)
+          if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
 
-             console.log(x +"ccc");
+           }
           })
+      
+       
+        
     
     
    
@@ -209,13 +218,9 @@ export default class EditProfile extends React.Component {
 
 
     this.setState({ currentUser });
-    if (this.state.RatingCount != 0){
-    this.setState({ ratingValue:x}, () => {
-      console.log(this.state.ratingValue);
+  
  
-    })
-}
-}
+  }
 
   editProfile(URL) {
     const { currentUser } = firebase.auth();
@@ -309,7 +314,6 @@ export default class EditProfile extends React.Component {
                   color="#9B9B7A"
                 />
               </TouchableOpacity>
-
               <TextInput
                 style={styles.textinput}
                 placeholder={this.state.namef}
@@ -323,49 +327,64 @@ export default class EditProfile extends React.Component {
               {/* field number1  */}
 
               <Text style={styles.Email}> {this.state.emailf} </Text>
-
+              {console.log(this.state.ratingValue)}
+              { this.state.ratingValue== 0 ?
               <Text style={styles.RateStarts}>
-                {this.state.ratingValue == 0 ?
-                <View
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
              
-                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                </View>
-                :  this.state.ratingValue == 1 ?
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  this.state.ratingValue == 2?
+                </Text>
+                : null}
+                {this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  this.state.ratingValue == 3 ?
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-                :  this.state.ratingValue == 4 ?
+                </Text>
+                : null}
+                 {this.state.ratingValue== 4 ?
+                <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
              
-                :  this.state.ratingValue == 5 ?
+                : null}
+                {this.state.ratingValue == 5?
+                <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
-              </Text>}
+  
+                </Text>:null}
+
 
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
