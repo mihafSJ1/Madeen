@@ -57,10 +57,33 @@ const [threads, setThreads] = useState([]);
         }
       });
 
+      // firebase.firestore()
+      // .collection('THREADS')
+      // .doc(sID)
+      // .collection('allChat')
+      // .onSnapshot(querySnapshot => {
+      //   const threads = querySnapshot.docs.map(documentSnapshot => {
+      //     return {
+      //       _id: documentSnapshot.id,
+      //       // give defaults
+      //       name: '',
+      //       ...documentSnapshot.data()
+      //     };
+      //   });
+
+      //   setThreads(threads);
+
+      //   if (loading) {
+      //     setLoading(false);
+      //   }
+      // });
     /**
      * unsubscribe listener
      */
     return () => unsubscribe();
+
+
+
   }, []);
 
   if (loading) {
@@ -102,7 +125,7 @@ const [threads, setThreads] = useState([]);
         renderItem={({ item }) => (
           <TouchableOpacity
 
-          onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id})}
+          onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:currentUser.uid})}
           >
             <List.Item
               title={item.name}
