@@ -125,7 +125,7 @@ const [threads, setThreads] = useState([]);
         renderItem={({ item }) => (
           <TouchableOpacity
 
-          onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:currentUser.uid})}
+          onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:item.latestMessage.createdBy})}
           >
             <List.Item
               title={item.name}
@@ -147,7 +147,7 @@ const [threads, setThreads] = useState([]);
 
 
 
-      
+
   </View>
 </View>
 

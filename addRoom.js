@@ -60,7 +60,7 @@ setRoomName(name) {
               text: `You have joined the room  ${this.state.roomName}.`,
               createdAt: new Date().getTime(),
               to:`${secondID}`,
-              createdBy: `${currentUser.uid}`,
+              createdBy:`${currentUser.uid}`,
             }
           })
             docRef => {
@@ -72,7 +72,7 @@ setRoomName(name) {
            
             };
 
-            // this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat});
+            this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat , Created:currentUser.uid});
         }
 
         if (this.state.roomName.length > 0) {
@@ -87,7 +87,7 @@ setRoomName(name) {
               text: `You have joined the room  ${this.state.roomName}.`,
               createdAt: new Date().getTime(),
               to:`${currentUser.uid}`,
-              createdBy: `${currentUser.uid}`,
+              createdBy:`${currentUser.uid}`,
 
             }
           })
@@ -100,7 +100,7 @@ setRoomName(name) {
            
             };
 
-            this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat});
+            this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat });
         }
        
         }

@@ -210,14 +210,14 @@
 
 
 /////////// Room as function 
-import { GiftedChat, Bubble, Send ,  SystemMessage} from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText} from 'react-native-gifted-chat';
 import { IconButton } from 'react-native-paper';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import React, { useState, useContext, useEffect,alert } from 'react';
 
-
+import RequestBackgroundComp from "./RequestBackgroundComp";
 
 export default function Room({ route, navigation }) {
   const [messages, setMessages] = useState([]);
@@ -242,17 +242,42 @@ export default function Room({ route, navigation }) {
         wrapperStyle={{
           right: {
             // Here is the color change
-            backgroundColor: '#d9ae94'
+            backgroundColor:  '#FFEEC4' 
+          },
+          left: {
+            // Here is the color change
+            backgroundColor: '#d9ae94',
+
           }
+        
         }}
+        textProps={{
+          style: {
+            color: props.position === 'left' ? '#fff' : '#746356',
+          },
+        }}
+
         textStyle={{
           right: {
+            color: 'black'
+          },
+          left: {
             color: '#fff'
-          }
+          },
+
         }}
+
+
       />
     );
   }
+
+
+
+
+
+
+  
   
   function renderSend(props) {
     return (
@@ -492,6 +517,9 @@ firebase.firestore()
         {...props}
         wrapperStyle={styles.systemMessageWrapper}
         textStyle={styles.systemMessageText}
+        containerStyle={{ backgroundColor: 'pink' }}
+           wrapperStyle={{ borderWidth: 10, borderColor: 'white' }}
+               textStyle={{ color: 'crimson', fontWeight: '900' }}
       />
     );
   }
@@ -502,12 +530,12 @@ firebase.firestore()
   return (
    
 
+
     <GiftedChat
- 
       messages={messages}
       messages2={messages2}
       onSend={handleSend}
-
+ 
     
       // onSend={handleSend2}
       user={{ _id: currentUser.uid }}
@@ -520,6 +548,7 @@ firebase.firestore()
       scrollToBottomComponent={scrollToBottomComponent}
       renderLoading={renderLoading}
       renderSystemMessage={renderSystemMessage}
+      // renderMessageText={renderMessageText}
 
     />
 
