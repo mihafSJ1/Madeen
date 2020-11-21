@@ -663,7 +663,7 @@ this.setModalVisible(!this.state.modalVisible);
       
                       onPress={() =>{ this.setRatingModalVisible(true,c)}}
              
-               >قيم </Text>
+               >قــيّــم!</Text>
                 
                :  null }
                   </View>
@@ -1556,7 +1556,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
   },
@@ -1578,7 +1578,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+     top: 18,
     backgroundColor: "#BE6A6C",
   
   },
@@ -1589,7 +1589,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
   },
@@ -1956,15 +1956,25 @@ backgroundColor:'red',
     
       },
       RatingButton:{
-        color: "#A8CB9E",
+        color: "#EDD44D",
         fontFamily: "Bahij_TheSansArabic-Bold",
         fontSize:18,
         textAlign:'right',
-        right:270,
-        bottom:70,
-
-
+        right:260,
+        bottom:15,
+        shadowColor: "grey",
+        shadowOffset: {
+          width: 0,
+          height: 1
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+        elevation: 5
       },
+     
+
+
+   
       shadow:{
         position:'absolute',
         height:2000,
