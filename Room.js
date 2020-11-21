@@ -221,6 +221,7 @@ import React, { useState, useContext, useEffect,alert } from 'react';
 
 export default function Room({ route, navigation }) {
   const [messages, setMessages] = useState([]);
+  const [messages2, setMessages2] = useState([]);
   const { sID } = route.params;
   const { rID } = route.params;
   const { currentUser } = firebase.auth();
@@ -281,9 +282,11 @@ export default function Room({ route, navigation }) {
   }
 
 
-  async function handleSend(messages) {
+  async function handleSend(messages, messages2) {
     const text = messages[0].text;
-
+   // const text2 = messages[0].text;
+    console.log("herehere");
+console.log({text});
     firebase.firestore()
     .collection('THREADS')
     .doc(currentUser.uid)
@@ -295,27 +298,116 @@ export default function Room({ route, navigation }) {
         createdAt: new Date().getTime(),
         user: {
           _id: currentUser.uid,
+          to: sID,
           email: currentUser.email
         }
       });
-
-    await firebase.firestore()
-    .collection('THREADS')
-    .doc(currentUser.uid)
-    .collection('allChat')
-    .doc(rID)
-      .collection('MESSAGES')
-      .add(
-        {
-          latestMessage: {
+      console.log("here2");
+      if (sID!=currentUser.uid){
+        firebase.firestore()
+        .collection('THREADS')
+        .doc(sID)
+        .collection('allChat')
+        .doc(rID)
+          .collection('MESSAGES')
+          .add({
             text,
-            createdAt: new Date().getTime()
-          }
-        },
-        { merge: true }
-      );
-  };
+            createdAt: new Date().getTime(),
+            user: {
+              _id: currentUser.uid,
+              to: sID,
+              email: currentUser.email
+            }
+          });
+      }
 
+   
+
+      //دبلكيت 
+       //text = messages2[0].text;
+      console.log("handle 2 here");
+      // firebase.firestore()
+      // .collection('THREADS')
+      // .doc(sID)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add({
+      //     text,
+      //     createdAt: new Date().getTime(),
+      //     user: {
+      //       _id: currentUser.uid,
+      //       email: currentUser.email
+      //     }
+      //   });
+  
+      //يبدا الاويت
+      // await firebase.firestore()
+      // .collection('THREADS')
+      // .doc(sID)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add(
+      //     {
+      //       latestMessage: {
+      //         text,
+      //         createdAt: new Date().getTime()
+      //       }
+      //     },
+      //     { merge: true }
+      //   );
+      //   console.log("قبل اويت كرنت يوزر");
+      //   await firebase.firestore()
+      // .collection('THREADS')
+      // .doc(currentUser.uid)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add(
+      //     {
+      //       latestMessage: {
+      //         text,
+      //         createdAt: new Date().getTime()
+      //       }
+      //     },
+      //     { merge: true }
+      //   );
+  };
+  // async function handleSend2(messages2) {
+  //   const text = messages2[0].text;
+  //   console.log("handle 2 here");
+  //   firebase.firestore()
+  //   .collection('THREADS')
+  //   .doc(sID)
+  //   .collection('allChat')
+  //   .doc(rID)
+  //     .collection('MESSAGES')
+  //     .add({
+  //       text,
+  //       createdAt: new Date().getTime(),
+  //       user: {
+  //         _id: currentUser.uid,
+  //         email: currentUser.email
+  //       }
+  //     });
+
+  //   await firebase.firestore()
+  //   .collection('THREADS')
+  //   .doc(sID)
+  //   .collection('allChat')
+  //   .doc(rID)
+  //     .collection('MESSAGES')
+  //     .add(
+  //       {
+  //         latestMessage: {
+  //           text,
+  //           createdAt: new Date().getTime()
+  //         }
+  //       },
+  //       { merge: true }
+  //     );
+  // };
   
 
   useEffect(() => {
@@ -349,7 +441,38 @@ export default function Room({ route, navigation }) {
 
         setMessages(messages);
       });
+// ذبلكيت مسج
+console.log("يا كلب اضبط ريحني ")
+firebase.firestore()
+    .collection('THREADS')
+    .doc(sID)
+    .collection('allChat')
+    .doc(rID)
+      .collection('MESSAGES')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+        const messages2 = querySnapshot.docs.map(doc => {
+          const firebaseData = doc.data();
 
+          const data = {
+            _id: doc.id,
+            text: '',
+            createdAt: new Date().getTime(),
+            ...firebaseData
+          };
+
+          if (!firebaseData.system) {
+            data.user = {
+              ...firebaseData.user,
+              name: firebaseData.user.email
+            };
+          }
+
+          return data;
+        });
+
+        setMessages2(messages2);
+      });
 
 
       
@@ -382,7 +505,11 @@ export default function Room({ route, navigation }) {
     <GiftedChat
  
       messages={messages}
+      messages2={messages2}
       onSend={handleSend}
+
+    
+      // onSend={handleSend2}
       user={{ _id: currentUser.uid }}
       renderBubble={renderBubble}
       placeholder='Type your message here...'
