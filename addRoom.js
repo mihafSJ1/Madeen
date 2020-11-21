@@ -59,7 +59,36 @@ setRoomName(name) {
             latestMessage: {
               text: `You have joined the room  ${this.state.roomName}.`,
               createdAt: new Date().getTime(),
-              to:`${secondID}`
+              to:`${secondID}`,
+              createdBy: `${currentUser.uid}`,
+            }
+          })
+            docRef => {
+              docRef.collection('MESSAGES').add({
+                text: `You have joined the room ررررر ${this.state.roomName}.`,
+                createdAt: new Date().getTime(),
+                system: true
+              });
+           
+            };
+
+            // this.props.navigation.navigate('Room', {sID:secondID, rID:reqIDforChat});
+        }
+
+        if (this.state.roomName.length > 0) {
+          firebase.firestore()
+          .collection('THREADS')
+          .doc(secondID)
+          .collection('allChat')
+          .doc(reqIDforChat)
+          .set({
+            name: this.state.roomName,
+            latestMessage: {
+              text: `You have joined the room  ${this.state.roomName}.`,
+              createdAt: new Date().getTime(),
+              to:`${currentUser.uid}`,
+              createdBy: `${currentUser.uid}`,
+
             }
           })
             docRef => {
