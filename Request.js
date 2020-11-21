@@ -59,14 +59,7 @@ if (!firebase.apps.length) {
 let applicationUsers = [];
 let installmentsDropDownArray = [];
 const numericKeyboard = /[^0-9]/;
-const emailORphone = [
-  {
-    label: "بالبريد الإلكتروني",
-  },
-  {
-    label: "برقم الجوال",
-  },
-];
+
 const data = [
   {
     label: "السداد دفعة واحدة",
@@ -241,7 +234,6 @@ class Request extends React.Component {
     registerForPushNotificationsAsync();
     Notifications.addNotificationReceivedListener(this._handleNotification);
     Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
-   
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -373,7 +365,7 @@ else{
           creditorName:Cname,
           creditorEmail:values.user,
           remAmount: values.price,
-          isRated: false,
+          isRated:false
         },
         function (error) {
           if (error) {
@@ -449,7 +441,6 @@ else{
                 reason: "",
                 rqeuestStatus: "Waiting",
                 submittedDate: new Date(),
-                emailORphone:"",
               }}
               onReset={(values, { resetForm }) => {}}
               onSubmit={(values, action) => {
@@ -487,419 +478,100 @@ else{
                   </Text>
 
                   {formprops.values.usersSelect ? (
-                     <View style={styles.radio}>
-                    <RadioButtonRN
-                      initial={1}
-                      data={emailORphone}
-                      box={false}
-                      circleSize={10}
-                      activeColor={"#CBCA9E"}
-                      style={{
-                        flexDirection: "row-reverse ",
-                        justifyContent: "flex-end",
-                        left: 160,
-                        marginTop: -15,
-                        textAlign: "right",
-                      }}
-                      boxStyle={{
-                        justifyContent: "flex-end",
-                        textAlign: "right",
-                        flexDirection: "column-reverse ",
-                      }}
-                      textStyle={{
-                        fontSize: 17,
-                        textAlign: "right",
-                        left: 50,
-                        bottom: 20,
-                        // marginLeft: 160,
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                        marginRight: -110,
-                        // backgroundColor: "#000",
-                      }}
-                      selectedBtn={(e) =>
-                        formprops.setFieldValue("emailORphone", e.label)
-                      }
-                    />
-              </View>
-            //   ///need double check*******
-            
-            //   {formprops.values.emailORphone == emailORphone[1].label ? (
-            //   <DropDownPicker
-            //     searchable={true}
-            //     searchablePlaceholder="البحث عن دائن"
-            //     searchablePlaceholderTextColor= {"#CBCBCC" }
-            //     searchablePlaceholderStyle={{
-            //    fontSize:50,
-            //     textAlign: "right",
-            //     flexDirection: "row-reverse",
-            //   justifyContent: "flex-start",
-            //   fontFamily: "Bahij_TheSansArabic-Light" 
-            //  }
-         
-            //  }
-            //  searchableStyle={{
-            //   fontSize:15,
-            //  textAlign: "right",
-            //  fontFamily: "Bahij_TheSansArabic-Light"
-            //    }}
-            //     // seachableStyle={{
-             
-         
-               
-         
-         
-            //     searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
-            //       style={styles.DropDownPicker}
-            //       items={applicationUsers}
-            //       placeholder="اختر دائن "
-            //       placeholderStyle={{ color: "#CBCBCC" }}
-            //       value={formprops.values.user}
-            //       containerStyle={{
-            //         borderTopLeftRadius: 50,
-            //         borderTopRightRadius: 50,
-            //         borderBottomLeftRadius: 40,
-            //         borderBottomRightRadius: 50,
-            //         borderColor: "#CBCA9E",
-            //       }}
-            //       style={{
-            //         borderTopLeftRadius: 50,
-            //         borderTopRightRadius: 50,
-            //         borderBottomLeftRadius: 40,
-            //         borderBottomRightRadius: 50,
-            //         borderColor: "#57694C",
-            //         borderWidth: 1,
-            //         width: 100,
-            
-            //       }}
-            //       arrowColor="#9b9b7a"
-            //       arrowSize={18}
-            //       containerStyle={{
-            //         width: 352,
-            //         height: 40,
-            //         marginLeft: 35,
-            //         borderTopLeftRadius: 50,
-            //         borderTopRightRadius: 50,
-            //         borderBottomLeftRadius: 60,
-            //         borderBottomRightRadius: 50,
-            //         marginBottom: 25,
-            //       }}
-            //       itemStyle={{
-            //         backgroundColor: "#fff",
-            //         textAlign: "right",
-            //         flexDirection: "row-reverse",
-            //         justifyContent: "flex-start",
-            //         fontFamily: "Bahij_TheSansArabic-Light",
-         
-            //         // to make the list to the right side
-            //       }}
-            //       dropDownStyle={{height:300,}}
-            //       selectedLabelStyle={{
-            //         color: "#57694C",
-            //         fontFamily: "Bahij_TheSansArabic-Light",
-            //       }}
-            //       activeLabelStyle={{
-            //         color: "#57694C",
-            //       }}
-            //       dropDownStyle={{height:900,}}
-            //       labelStyle={{
-            //         backgroundColor: "#fff",
-            //         fontSize: 16,
-            //         textAlign: "right",
-            //         color: "#000",
-            //         fontFamily: "Bahij_TheSansArabic-Light",
-            //       }}
-            //       style={{
-            //         flexDirection: "row-reverse",
-            //         // to support RTL
-            //       }}
-            //       onChangeItem={(item) =>
-            //         formprops.setFieldValue("user", item.label)
-            //       }
-            //       />):(
-            //       <DropDownPicker
-            //         searchable={true}
-            //         searchablePlaceholder="البحث عن دائن"
-            //         searchablePlaceholderTextColor= {"#CBCBCC" }
-            //         searchablePlaceholderStyle={{
-            //        fontSize:50,
-            //         textAlign: "right",
-            //         flexDirection: "row-reverse",
-            //       justifyContent: "flex-start",
-            //       fontFamily: "Bahij_TheSansArabic-Light" 
-            //      }
-             
-            //      }
-            //      searchableStyle={{
-            //       fontSize:15,
-            //      textAlign: "right",
-            //      fontFamily: "Bahij_TheSansArabic-Light"
-            //        }}
-            //         // seachableStyle={{
+                    <DropDownPicker
+                    searchable={true}
+                    searchablePlaceholder="البحث عن دائن"
+                    searchablePlaceholderTextColor= {"#CBCBCC" }
+                    searchablePlaceholderStyle={{
+                   fontSize:50,
+                    textAlign: "right",
+                    flexDirection: "row-reverse",
+                  justifyContent: "flex-start",
+                  fontFamily: "Bahij_TheSansArabic-Light" 
+                 }
+
+                 }
+                 searchableStyle={{
+                  fontSize:15,
+                 textAlign: "right",
+                 fontFamily: "Bahij_TheSansArabic-Light"
+                   }}
+                    // seachableStyle={{
                  
-             
+
                    
-             
-             
-            //         searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
-            //           style={styles.DropDownPicker}
-            //           items={applicationUsers}
-            //           placeholder="اختر دائن "
-            //           placeholderStyle={{ color: "#CBCBCC" }}
-            //           value={formprops.values.user}
-            //           containerStyle={{
-            //             borderTopLeftRadius: 50,
-            //             borderTopRightRadius: 50,
-            //             borderBottomLeftRadius: 40,
-            //             borderBottomRightRadius: 50,
-            //             borderColor: "#CBCA9E",
-            //           }}
-            //           style={{
-            //             borderTopLeftRadius: 50,
-            //             borderTopRightRadius: 50,
-            //             borderBottomLeftRadius: 40,
-            //             borderBottomRightRadius: 50,
-            //             borderColor: "#57694C",
-            //             borderWidth: 1,
-            //             width: 100,
+   
+
+                    searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
+                      style={styles.DropDownPicker}
+                      items={applicationUsers}
+                      placeholder="اختر دائن "
+                      placeholderStyle={{ color: "#CBCBCC" }}
+                      value={formprops.values.user}
+                      containerStyle={{
+                        borderTopLeftRadius: 50,
+                        borderTopRightRadius: 50,
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 50,
+                        borderColor: "#CBCA9E",
+                      }}
+                      style={{
+                        borderTopLeftRadius: 50,
+                        borderTopRightRadius: 50,
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 50,
+                        borderColor: "#57694C",
+                        borderWidth: 1,
+                        width: 100,
                 
-            //           }}
-            //           arrowColor="#9b9b7a"
-            //           arrowSize={18}
-            //           containerStyle={{
-            //             width: 352,
-            //             height: 40,
-            //             marginLeft: 35,
-            //             borderTopLeftRadius: 50,
-            //             borderTopRightRadius: 50,
-            //             borderBottomLeftRadius: 60,
-            //             borderBottomRightRadius: 50,
-            //             marginBottom: 25,
-            //           }}
-            //           itemStyle={{
-            //             backgroundColor: "#fff",
-            //             textAlign: "right",
-            //             flexDirection: "row-reverse",
-            //             justifyContent: "flex-start",
-            //             fontFamily: "Bahij_TheSansArabic-Light",
-             
-            //             // to make the list to the right side
-            //           }}
-            //           dropDownStyle={{height:300,}}
-            //           selectedLabelStyle={{
-            //             color: "#57694C",
-            //             fontFamily: "Bahij_TheSansArabic-Light",
-            //           }}
-            //           activeLabelStyle={{
-            //             color: "#57694C",
-            //           }}
-            //           dropDownStyle={{height:900,}}
-            //           labelStyle={{
-            //             backgroundColor: "#fff",
-            //             fontSize: 16,
-            //             textAlign: "right",
-            //             color: "#000",
-            //             fontFamily: "Bahij_TheSansArabic-Light",
-            //           }}
-            //           style={{
-            //             flexDirection: "row-reverse",
-            //             // to support RTL
-            //           }}
-            //           onChangeItem={(item) =>
-            //             formprops.setFieldValue("user", item.label)
-            //           }
-            //           />)}
-                   ) : null}  
-                      {formprops.values.usersSelect && formprops.values.emailORphone == emailORphone[1].label ? (
-              <DropDownPicker
-                searchable={true}
-                searchablePlaceholder="البحث عن دائن"
-                searchablePlaceholderTextColor= {"#CBCBCC" }
-                searchablePlaceholderStyle={{
-               fontSize:50,
-                textAlign: "right",
-                flexDirection: "row-reverse",
-              justifyContent: "flex-start",
-              fontFamily: "Bahij_TheSansArabic-Light" 
-             }
-         
-             }
-             searchableStyle={{
-              fontSize:15,
-             textAlign: "right",
-             fontFamily: "Bahij_TheSansArabic-Light"
-               }}
-                // seachableStyle={{
-             
-         
-               
-         
-         
-                searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
-                  style={styles.DropDownPicker}
-                  items={applicationUsers}
-                  placeholder="اختر دائن "
-                  placeholderStyle={{ color: "#CBCBCC" }}
-                  value={formprops.values.user}
-                  containerStyle={{
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                    borderBottomLeftRadius: 40,
-                    borderBottomRightRadius: 50,
-                    borderColor: "#CBCA9E",
-                  }}
-                  style={{
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                    borderBottomLeftRadius: 40,
-                    borderBottomRightRadius: 50,
-                    borderColor: "#57694C",
-                    borderWidth: 1,
-                    width: 100,
-            
-                  }}
-                  arrowColor="#9b9b7a"
-                  arrowSize={18}
-                  containerStyle={{
-                    width: 352,
-                    height: 40,
-                    marginLeft: 35,
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                    borderBottomLeftRadius: 60,
-                    borderBottomRightRadius: 50,
-                    marginBottom: 25,
-                  }}
-                  itemStyle={{
-                    backgroundColor: "#fff",
-                    textAlign: "right",
-                    flexDirection: "row-reverse",
-                    justifyContent: "flex-start",
-                    fontFamily: "Bahij_TheSansArabic-Light",
-         
-                    // to make the list to the right side
-                  }}
-                  dropDownStyle={{height:300,}}
-                  selectedLabelStyle={{
-                    color: "#57694C",
-                    fontFamily: "Bahij_TheSansArabic-Light",
-                  }}
-                  activeLabelStyle={{
-                    color: "#57694C",
-                  }}
-                  dropDownStyle={{height:900,}}
-                  labelStyle={{
-                    backgroundColor: "#fff",
-                    fontSize: 16,
-                    textAlign: "right",
-                    color: "#000",
-                    fontFamily: "Bahij_TheSansArabic-Light",
-                  }}
-                  style={{
-                    flexDirection: "row-reverse",
-                    // to support RTL
-                  }}
-                  onChangeItem={(item) =>
-                    formprops.setFieldValue("user", item.label)
-                  }
-                  />): null}
-                      { formprops.values.usersSelect &&formprops.values.emailORphone == emailORphone[0].label ? (
-                        
-                        
-                        <DropDownPicker
-                        searchable={true}
-                        searchablePlaceholder="البحث عن دائن"
-                        searchablePlaceholderTextColor= {"#CBCBCC" }
-                        searchablePlaceholderStyle={{
-                       fontSize:50,
+                      }}
+                      arrowColor="#9b9b7a"
+                      arrowSize={18}
+                      containerStyle={{
+                        width: 352,
+                        height: 40,
+                        marginLeft: 35,
+                        borderTopLeftRadius: 50,
+                        borderTopRightRadius: 50,
+                        borderBottomLeftRadius: 60,
+                        borderBottomRightRadius: 50,
+                        marginBottom: 25,
+                      }}
+                      itemStyle={{
+                        backgroundColor: "#fff",
                         textAlign: "right",
                         flexDirection: "row-reverse",
-                      justifyContent: "flex-start",
-                      fontFamily: "Bahij_TheSansArabic-Light" 
-                     }
-                 
-                     }
-                     searchableStyle={{
-                      fontSize:15,
-                     textAlign: "right",
-                     fontFamily: "Bahij_TheSansArabic-Light"
-                       }}
-                        // seachableStyle={{
-                     
-                 
-                       
-                 
-                 
-                        searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
-                          style={styles.DropDownPicker}
-                          items={applicationUsers}
-                          placeholder="برقم الجوال  "
-                          placeholderStyle={{ color: "#CBCBCC" }}
-                          value={formprops.values.user}
-                          containerStyle={{
-                            borderTopLeftRadius: 50,
-                            borderTopRightRadius: 50,
-                            borderBottomLeftRadius: 40,
-                            borderBottomRightRadius: 50,
-                            borderColor: "#CBCA9E",
-                          }}
-                          style={{
-                            borderTopLeftRadius: 50,
-                            borderTopRightRadius: 50,
-                            borderBottomLeftRadius: 40,
-                            borderBottomRightRadius: 50,
-                            borderColor: "#57694C",
-                            borderWidth: 1,
-                            width: 100,
-                    
-                          }}
-                          arrowColor="#9b9b7a"
-                          arrowSize={18}
-                          containerStyle={{
-                            width: 352,
-                            height: 40,
-                            marginLeft: 35,
-                            borderTopLeftRadius: 50,
-                            borderTopRightRadius: 50,
-                            borderBottomLeftRadius: 60,
-                            borderBottomRightRadius: 50,
-                            marginBottom: 25,
-                          }}
-                          itemStyle={{
-                            backgroundColor: "#fff",
-                            textAlign: "right",
-                            flexDirection: "row-reverse",
-                            justifyContent: "flex-start",
-                            fontFamily: "Bahij_TheSansArabic-Light",
-                 
-                            // to make the list to the right side
-                          }}
-                          dropDownStyle={{height:300,}}
-                          selectedLabelStyle={{
-                            color: "#57694C",
-                            fontFamily: "Bahij_TheSansArabic-Light",
-                          }}
-                          activeLabelStyle={{
-                            color: "#57694C",
-                          }}
-                          dropDownStyle={{height:900,}}
-                          labelStyle={{
-                            backgroundColor: "#fff",
-                            fontSize: 16,
-                            textAlign: "right",
-                            color: "#000",
-                            fontFamily: "Bahij_TheSansArabic-Light",
-                          }}
-                          style={{
-                            flexDirection: "row-reverse",
-                            // to support RTL
-                          }}
-                          onChangeItem={(item) =>
-                            formprops.setFieldValue("user", item.label)
-                          }
-                          />
-            
-            ): null}
-  
+                        justifyContent: "flex-start",
+                        fontFamily: "Bahij_TheSansArabic-Light",
+
+                        // to make the list to the right side
+                      }}
+                      dropDownStyle={{height:300,}}
+                      selectedLabelStyle={{
+                        color: "#57694C",
+                        fontFamily: "Bahij_TheSansArabic-Light",
+                      }}
+                      activeLabelStyle={{
+                        color: "#57694C",
+                      }}
+                      dropDownStyle={{height:900,}}
+                      labelStyle={{
+                        backgroundColor: "#fff",
+                        fontSize: 16,
+                        textAlign: "right",
+                        color: "#000",
+                        fontFamily: "Bahij_TheSansArabic-Light",
+                      }}
+                      style={{
+                        flexDirection: "row-reverse",
+                        // to support RTL
+                      }}
+                      onChangeItem={(item) =>
+                        formprops.setFieldValue("user", item.label)
+                      }
+
+                    />
+                  ) : null}
                   <Text style={[styles.textError, { top: -20 }]}>
                     {formprops.errors.user}
                   </Text>
