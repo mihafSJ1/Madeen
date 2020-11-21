@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
+import { Button, Overlay } from 'react-native-elements';
 
 import {
   StyleSheet,
@@ -244,6 +245,22 @@ export default class MyReqWithFilter extends React.Component {
       .ref("users/" + item.creditor)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
+
+               }
+
+            
+          })
+        
+        
 
         this.setprofilePic(snapshot.val().UserImage);
         this.setCreditorName(snapshot.val().fullName);
@@ -409,7 +426,7 @@ console.log(text)
         if (true) {
           console.log("داخل الليست ٢٢٢٢");
           return (
-         
+    
             <View>
                 
                 {console.log("داخل الفيووووو")}
@@ -439,11 +456,11 @@ console.log(text)
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
+                  {/* <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid /> */}
                 </View>
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
@@ -535,6 +552,7 @@ console.log(text)
                 </View>
               </TouchableOpacity>
               {/* {console.log("here4")} */}
+       
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -700,7 +718,6 @@ console.log(text)
                       )}
                     </Text>
 
-                   {/* كان هنا فيه كود المتبقي من الدين */}
 
 
 
@@ -763,14 +780,7 @@ console.log(text)
                       )}
   </Text>
 
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-تاريخ الطلب |{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.submmitedDate}{" "}
-    </Text>{" "}
-  </Text> */}
+
   <Text style={styles.textInputTitle}>
     نوع التسديد |{" "}
     <Text style={styles.textData}> {this.state.Type} </Text>
@@ -806,7 +816,6 @@ console.log(text)
       
     )}
   </Text>
-
   // */}
   <Text style={styles.textInputTitle}>
                     
@@ -927,6 +936,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                   </View>
                 </View>
               </Modal>
+        
 
               <Modal
                 animationType="slide"
@@ -966,7 +976,63 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName!=""? ( 
+                        {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+                    {/* {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -1001,7 +1067,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                     ): null }
+                     ): null } */}
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1152,6 +1218,7 @@ console.log(check)
 
     return (
       <View style={styles.container}>
+        
           
         <LinearGradient
           colors={[
@@ -1173,8 +1240,14 @@ console.log(check)
             right: -660,
             top: -630,
             position: "absolute",
+          
           }}
         ></LinearGradient>
+ {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1280,6 +1353,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+
   },
   container2: {
     marginTop: 40,
@@ -1312,7 +1386,7 @@ top:-32,
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -1666,7 +1740,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#F1DCA7",
     
@@ -1679,7 +1753,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#D3CDC8",
     
@@ -1692,7 +1766,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#BE6A6C",
     
@@ -1705,12 +1779,10 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#A8CB9E",
     
-   
-
   },
   status3:{
     textAlign: "center",
@@ -2072,7 +2144,16 @@ left:20,
     opacity: 0.6
     
   },
+shadow:{
+  position:'absolute',
+  height:2000,
+  width:'100%',
+  opacity:0.5,
+  padding:100,
+  backgroundColor:"gray",
+  zIndex:120,
 
+}
 
   //end
 });

@@ -217,7 +217,7 @@ export default class PayAsCreditor extends React.Component {
   // render the subscription view component and pass the props to it
   render() {
     const { submitted, error } = this.state;
-    const {amount} = this.props.route.params;
+    const {amount} = this.props.m.params;
     const {reqID} = this.props.route.params;
     return (
           <View style={styles.container}>

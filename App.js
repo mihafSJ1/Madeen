@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Register from "./Register";
 import login from "./login";
+import Rating from "./Rating";
 import CalendarView from './CalendarView';
 import ResetPassword from "./ResetPassword";
 import Home from "./Home";
@@ -104,6 +105,17 @@ function squaresScreens() {
 <Stack.Screen
               name="myReqWithFilter"
               component={myReqWithFilter}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            />
+            <Stack.Screen
+              name="Rating"
+              component={Rating}
               options={{
                 headerShown: true,
                 // navigation: { navigation },
