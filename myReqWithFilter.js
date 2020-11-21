@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
+import { Button, Overlay } from 'react-native-elements';
 
 import {
   StyleSheet,
@@ -425,7 +426,7 @@ console.log(text)
         if (true) {
           console.log("داخل الليست ٢٢٢٢");
           return (
-         
+    
             <View>
                 
                 {console.log("داخل الفيووووو")}
@@ -551,6 +552,7 @@ console.log(text)
                 </View>
               </TouchableOpacity>
               {/* {console.log("here4")} */}
+       
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -814,7 +816,6 @@ console.log(text)
       
     )}
   </Text>
-
   // */}
   <Text style={styles.textInputTitle}>
                     
@@ -935,6 +936,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                   </View>
                 </View>
               </Modal>
+        
 
               <Modal
                 animationType="slide"
@@ -1216,6 +1218,7 @@ console.log(check)
 
     return (
       <View style={styles.container}>
+        
           
         <LinearGradient
           colors={[
@@ -1237,8 +1240,14 @@ console.log(check)
             right: -660,
             top: -630,
             position: "absolute",
+          
           }}
         ></LinearGradient>
+ {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1344,6 +1353,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+
   },
   container2: {
     marginTop: 40,
@@ -2134,7 +2144,16 @@ left:20,
     opacity: 0.6
     
   },
+shadow:{
+  position:'absolute',
+  height:2000,
+  width:'100%',
+  opacity:0.5,
+  padding:100,
+  backgroundColor:"gray",
+  zIndex:120,
 
+}
 
   //end
 });

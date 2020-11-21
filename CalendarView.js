@@ -232,7 +232,7 @@ firebase
       },{});
       // console.log("hello")
       console.log("once")
-      console.log(array)
+      console.log(onceMarkedDates)
       // console.log("hellolll")
       // console.log(onceMarkedDates)
   

@@ -556,6 +556,11 @@ class Timeline extends React.Component {
             position: "absolute",
           }}
         ></LinearGradient>
+         {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -828,36 +833,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#CBCA9E",
     borderWidth: 4,
-  },
+  },   shadow:{
+    position:'absolute',
+    height:2000,
+    width:'100%',
+    opacity:0.5,
+    padding:100,
+    backgroundColor:"gray",
+    zIndex:120,
+  
+  }
 
-  // button1:{
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginRight: 20,
-  //   marginLeft: 25,
-  //   fontSize: 5,
-  // borderRadius:15,
-  // },
-  // button: {
-  //   alignItems: "center",
-  //   width: 170,
-  //   height: 30,
-  //   marginTop: 80,
-  //   padding: 5,
-  //   borderRadius: 15,
-  //   marginLeft: 10,
-  //   backgroundColor: "#fff",
-  //   fontSize: 10,
-  //   // alignItems: "center",
-  //   // width: 170,
-  //   // height: 30,
-  //   // marginTop: 10,
-  //   // padding: 5,
-  //   // borderRadius: 15,
-  //   // marginLeft: 10,
-  //   // backgroundColor: "#fff",
-  // },
-
+  
   //end
 });
 export default withNavigation(Timeline);

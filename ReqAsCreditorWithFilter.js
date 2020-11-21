@@ -657,7 +657,7 @@ this.setModalVisible(!this.state.modalVisible);
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
 
-                         {/* تجربه */}
+                         {console.log(c.is)}
                          {c.rqeuestStatus== "مكتمل" && c.isRated == false  ?   
                      <Text style={styles.RatingButton}
       
@@ -1231,6 +1231,11 @@ searchStatus = (textTosearch)  =>{
             position: "absolute",
           }}
         ></LinearGradient>
+         {this.state.modalVisible || this.state.modalVisible2||this.state.ratingVisable?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1945,7 +1950,8 @@ backgroundColor:'red',
         padding: 5,
         borderRadius: 15,
         marginLeft: 10,
-        bottom: 20,
+        bottom: 10,
+        // right:200,
         backgroundColor: "#fff",
     
       },
@@ -1953,7 +1959,21 @@ backgroundColor:'red',
         color: "#A8CB9E",
         fontFamily: "Bahij_TheSansArabic-Bold",
         fontSize:18,
-        textAlign:'right'
+        textAlign:'right',
+        right:270,
+        bottom:70,
+
+
+      },
+      shadow:{
+        position:'absolute',
+        height:2000,
+        width:'100%',
+        opacity:0.5,
+        padding:100,
+        backgroundColor:"gray",
+        zIndex:120,
+      
       }
 
 
