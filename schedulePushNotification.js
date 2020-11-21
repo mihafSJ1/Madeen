@@ -77,18 +77,6 @@ setTimeout(() => {
 }, s*1000);
   
   }
- // await Notifications.cancelScheduledNotificationAsync(RequestIdentifire);   
-// async function registerForPushNotificationsAsync() {
-//   let Token;
-//     firebase
-//     .database()
-//     .ref("users/"+userid).on("value", (snapshot) => {
-//       Token = snapshot.val().push_Notification_token;
-//     });
-//     return Token;
-//   }
 
-
-// return RequestIdentifire ;
 
 }
