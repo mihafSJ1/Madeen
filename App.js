@@ -39,6 +39,7 @@ import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+console.disableYellowBox = true;
 function squaresScreens() {
   return (
     <Stack.Navigator>
