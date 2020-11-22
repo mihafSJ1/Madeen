@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
 import { ArabicNumbers } from "react-native-arabic-numbers";
+import { Button, Overlay } from 'react-native-elements';
 
 import {
   StyleSheet,
@@ -246,6 +247,22 @@ export default class MyReqWithFilter extends React.Component {
       .ref("users/" + item.creditor)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
+
+               }
+
+            
+          })
+        
+        
 
         this.setprofilePic(snapshot.val().UserImage);
         this.setCreditorName(snapshot.val().fullName);
@@ -419,657 +436,11 @@ console.log(text)
         // console.log(specificStatus);
         console.log(this.state.specificStatus);
 
-//         if (this.state.specificStatus==true){
-//           console.log("444444")
-//           if (text==c.rqeuestStatus){
-//             // alert("٢٢٢وبعدين")
-//           return (
-         
-//             <View>
-                
-//                 {console.log("داخل الفيووووو")}
-              
-           
-//               <TouchableOpacity
-//                 // margin={10}
-//                 style={styles.card}
-                
-//                 onPress={() => {
-//                   console.log("نداااء");
-          
-//                   this.openModalWithItem(c);
-               
-//                   console.log("رغد الحلوه");
-              
-//                   // this.viewProfileFunction(this.state.UserID);
-//                 }}
-//               >
-//                  {/* {console.log("here2")}
-//                  {console.log(c.userName)} */}
-//                 <View style={styles.leftItems}>
-//                   <Ionicons
-//                     name="ios-arrow-back"
-//                     size={25}
-//                     color="#9B9B7A"
-//                     solid
-//                     style={{ marginTop: 25, marginRight: 15 }}
-//                   />
-//                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-//                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-//                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-//                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-//                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-//                 </View>
-//                 {c.rqeuestStatus== "قيد الإنتظار" ? (
-//                   <View style={styles.waitingRectangleShapeView}> 
-//                     <Text style={styles.status2}> {c.rqeuestStatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
 
-// {c.rqeuestStatus== "قيد التنفيذ" ? (
-//                   <View style={styles.ProssessRectangleShapeView}> 
-//                     <Text style={styles.status2}> {c.rqeuestStatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-
-// {c.rqeuestStatus== "مكتمل" ? (
-//                   <View style={styles.CompleteRectangleShapeView}> 
-//                     <Text style={styles.status2}> {c.rqeuestStatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-// {c.rqeuestStatus== "مرفوض" ? (
-//                   <View style={styles.RejectRectangleShapeView}> 
-//                     <Text style={styles.status3}> {c.rqeuestStatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-                
-                    
-//                 {/* {console.log("here3")} */}
-                
-//                 <View style={styles.rightItems}>
-//                   <View style={styles.textContainer}>
-//                 {/* {  this.Creditor(c.creditor)} */}
-//                     <Text style={styles.textLabel}>
-//                       الدائن |{" "}
-//                       <Text
-//                         style={styles.textData}
-//                         onPress={() => this.viewProfileFunction(c)}
-//                       >
-//                         {" "}
-                        
-//              {c.creditorName == "" ? <Text style={styles.textData}>لايوجد دائن محدد </Text>: (
-//                      <Text style={styles.textData}> {c.creditorName} </Text>
-                        
-                        
-//                       )}
-
-
-                       
-//                       </Text>
-//                     </Text>
-
-//                     <Text style={styles.textLabel}>
-//                       {" "}
-//                       المبلغ |<Text style={styles.textData}> {c.price} <Text>ريال سعودي </Text></Text>
-//                     </Text>
-
-                   
-
-                    
-
-//                     <Text style={styles.textLabel}>
-//                       {" "}
-//                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
-//                     </Text>
-//                   </View>
-//                   {/* <TouchableOpacity style={styles.imageT} 
-//            onPress={() => {
-//             // this.setModalVisible2(!this.state.modalVisible2);
-//              this.viewProfileFunction(c);
-//            }}>  */}
-//                   {/* {console.log(this.state.pic)} */}
-//                   {/* <Image style={styles.imageT}
-//             // source={{uri: this.state.pic}}
-//             source={{uri: this.state.pic}}
-//           ></Image> */}
-//                   {/* </TouchableOpacity> */}
-//                 </View>
-//               </TouchableOpacity>
-//               {/* {console.log("here4")} */}
-//               <Modal
-//                 animationType="slide"
-//                 transparent={true}
-//                 visible={this.state.modalVisible}
-//               >
-//                 <View style={styles.centeredView}>
-//                   <View style={styles.modalView}>
-                    
-//                   <TouchableOpacity
-               
-//                  style={styles.Editicon}
-//                  onPress={() => this.EditRequest(this.state.Rkey,this.state.Rstatus)}>
-   
-//                  {this.state.Rstatus!= "قيد الإنتظار" ? null:(
-                
-               
-//                  <Text style={styles.Editicon1}>
-//                    <Ionicons name="md-create" size={30} color="#808065" solid />
-//                  </Text>)}
-//                </TouchableOpacity>
-//                     <TouchableOpacity style={styles.Editicon3}
-//                       onPress={() => {
-//                         this.setModalVisible(!this.state.modalVisible);
-//                       }}
-//                     >
-//                 {this.state.Rstatus== "قيد الإنتظار" ? (
-                  
-//                   <AntDesign 
-//                   style={styles.waitclose}
-//                   name="close"
-//                   size={24}
-//                   color="#746356"
-//                 />
-//              ):(
-                   
-//                  <AntDesign style={styles.close}  name="close" size={24}
-//                            color="#746356"
-//                                />    )}
-
-
-
-
-
-                      
-                   
-//                     </TouchableOpacity>
-                    
-//                     {this.state.Rstatus== "قيد التنفيذ" ? (
-//                   <View style={styles.ProRectangleShapeView}> 
-//                     <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-// {this.state.Rstatus== "قيد الإنتظار" ? (
-//                   <View style={styles.WRectangleShapeView}> 
-//                     <Text style={styles.statusInside2}> {this.state.Rstatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-
-// {this.state.Rstatus== "مكتمل" ? (
-//                   <View style={styles.CRectangleShapeView}> 
-//                     <Text style={styles.statusInside}> {this.state.Rstatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-// {this.state.Rstatus== "مرفوض" ? (
-//                   <View style={styles.RRectangleShapeView}> 
-//                     <Text style={styles.statusInsideReject}> {this.state.Rstatus} </Text>
-//               </View>
-// ):(
-//                       null
-                      
-//                      )}
-
-
-//                      {/* header */}
-// {this.state.Rstatus== "قيد الإنتظار" ? (
-//            <Text style={styles.waitheader}>تفاصيل الطلب </Text>    
-// ):(
-//   <Text style={styles.header}>تفاصيل الطلب </Text>
-                      
-//                      )}
-
-
-
-
-
-
-
-         
-//                     {/* <Text style={styles.textInputTitle}>
-//                       {" "}
-//                       حالة الطلب |{" "}
-//                       <Text style={styles.textData}> {this.state.Rstatus} </Text>
-//                     </Text> */}
-//                   {/* {  this.Creditor(c.creditor)} */}
-
-//                   {this.state.Rstatus== "قيد الإنتظار" ? (
-//                     <View style={styles.waitContent}>  
-
-//                     <Text style={styles.textInputTitle}>
-//                       {" "}
-//                      الدائن |{" "}
-//                      {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
-//                      <Text style={styles.textData}> {this.state.CreName} </Text>
-                        
-                        
-//                       )}
-                     
-//                     </Text>
-
-//                     {/* <Text style={styles.textInputTitle}>
-//                       {" "}
-//                   تاريخ الطلب |{" "}
-//                       <Text style={styles.textData}>
-//                         {" "}
-//                         {this.state.submmitedDate}{" "}
-//                       </Text>{" "}
-//                     </Text> */}
-//                     <Text style={styles.textInputTitle}>
-//                       نوع التسديد |{" "}
-//                       <Text style={styles.textData}> {this.state.Type} </Text>
-//                     </Text>
-//                     <Text style={styles.textInputTitle}>
-//                       {" "}
-//                       المبلغ|
-//                       <Text style={styles.textData}>
-//                         {" "}
-//                         {this.state.Price}{" "}
-//                         <Text>ريال سعودي </Text>
-//                       </Text>{" "}
-                    
-//                     </Text>
-
-//                     <Text style={styles.textInputTitle}>
-//                       {" "}
-//                       التاريخ المتوقع لإكمال التسديد|{" "}
-//                       <Text style={styles.textData}>
-//                         {" "}
-//                         {this.state.EDate}{" "}
-//                       </Text>{" "}
-//                     </Text>
-//                     <Text style={styles.textInputTitle}>
-//                       {" "}
-//                       {this.state.Reason == "" ? <Text> السبب |</Text>: <Text> السبب |</Text>}
-//                       {this.state.Reason == "" ? <Text style={styles.textData}> لايوجد سبب </Text>: (
-//                         <Text style={styles.textData}>
-//                           {" "}
-//                           {this.state.Reason}{" "}
-//                         </Text>
-                        
-                        
-//                       )}
-//                     </Text>
-
-//                    {/* كان هنا فيه كود المتبقي من الدين */}
-
-
-
-
-                   
-
-
-
-
-
-
-
-
-
-                   
-
-
-
-
-
-
-                    
-
-//                     <Text style={styles.textInputTitle}>
-
-//                        {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-//                        {this.state.Duration == "" ? null : (
-//                     <Text style={styles.textData}> {this.state.Duration} </Text>
-//                        )}
-//                       </Text><Text style={styles.textInputTitle}>{" "}
-//                       {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
-//                        {this.state.iType == "" ? null : (
-//                       <Text style={styles.textData}> {this.state.iType} </Text>
-//                        )}
-//                       </Text>
-//                         <Text style={styles.textInputTitle}>
-//                         {" "}
-//                        {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
-//                         {this.state.Tprice == "" ? null : (
-//                        <Text style={styles.textData}> {this.state.Tprice} </Text>
-//                         )}
-//                         </Text>
-
-
-//                         </View>
-//                       //  /end content wait  
-// ):(
-//   <View style={styles.Content}>  
-
-//   <Text style={styles.textInputTitle}>
-//     {" "}
-//    الدائن |{" "}
-
-
-
-//    {this.state.CreName == "" ? <Text style={styles.textData}> لايوجد دائن محدد </Text>: (
-//                      <Text style={styles.textData}> {this.state.CreName} </Text>
-                        
-                        
-//                       )}
-//   </Text>
-
-//   {/* <Text style={styles.textInputTitle}>
-//     {" "}
-// تاريخ الطلب |{" "}
-//     <Text style={styles.textData}>
-//       {" "}
-//       {this.state.submmitedDate}{" "}
-//     </Text>{" "}
-//   </Text> */}
-//   <Text style={styles.textInputTitle}>
-//     نوع التسديد |{" "}
-//     <Text style={styles.textData}> {this.state.Type} </Text>
-//   </Text>
-//   <Text style={styles.textInputTitle}>
-//     {" "}
-//     المبلغ|
-//     <Text style={styles.textData}>
-//       {" "}
-//       {this.state.Price}{" "}
-//       <Text>ريال سعودي </Text>
-//     </Text>{" "}
-  
-//   </Text>
-
-//   <Text style={styles.textInputTitle}>
-//     {" "}
-//     التاريخ المتوقع لإكمال التسديد|{" "}
-//     <Text style={styles.textData}>
-//       {" "}
-//       {this.state.EDate}{" "}
-//     </Text>{" "}
-//   </Text>
-//   {/* <Text style={styles.textInputTitle}>
-//     {" "}
-//     {this.state.Reason == "" ? null : <Text> السبب |</Text>}
-//     {this.state.Reason == "" ? null : (
-//       <Text style={styles.textData}>
-//         {" "}
-//         {this.state.Reason}{" "}
-//       </Text>
-      
-      
-//     )}
-//   </Text>
-
-//   // */}
-//   <Text style={styles.textInputTitle}>
-                    
-//                       <Text> السبب |</Text>
-//                       {this.state.Reason == "" ? (
-//                         <Text style={styles.textData}>
-                        
-//                         لا يوجد سبب
-                       
-//                       </Text>
-//                       ) : (
-//                         <Text style={styles.textData}>
-                        
-//                           {this.state.Reason}
-//                         </Text>
-                        
-//                       )}
-//                     </Text>
-
-
-
-//   <Text style={styles.textInputTitle}>
-
-//      {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
-//      {this.state.Duration == "" ? null : (
-//   <Text style={styles.textData}> {this.state.Duration} </Text>
-//      )}
-//     </Text><Text style={styles.textInputTitle}>{" "}
-//     {this.state.iType == "" ? null : <Text> طريقة التقسيط |</Text>}
-//      {this.state.iType == "" ? null : (
-//     <Text style={styles.textData}> {this.state.iType} </Text>
-//      )}
-//     </Text>
-//       <Text style={styles.textInputTitle}>
-//       {" "}
-//      {this.state.Tprice == "" ? null : <Text> مبلغ التقسيط |</Text>}
-//       {this.state.Tprice == "" ? null : (
-//      <Text style={styles.textData}> {this.state.Tprice} </Text>
-//       )}
-//       </Text>
-
-//       {this.state.Rstatus == "قيد التنفيذ" && this.state.repType == "السداد بالتقسيط" ? (
-//                       <Text style={styles.textInputTitle}>
-//                       {" "}
-//                       المتبقي من الدين|
-//                       <Text style={styles.textData}>
-//                         {" "}
-
-//                         {this.state.RemAmount}{" "}
-//                         <Text>ريال سعودي </Text>
-//                       </Text>{" "}
-//                     {console.log("دخلت ولا لا ")}
-//                     </Text>
-                  
-                    
-//                     ) : null }
-
-
-//       </View>
-//       // end content 
-                      
-//                      )}
-
-
-
-
-
-               
-
-//                     <View style={styles.buttonContainer}>
-                    
-//                     {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
-
-// {/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
-// {this.state.Rstatus== "قيد الإنتظار" ? (
-//                          <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
-                        
-// ):(
-//                       // <TouchableOpacity
-//                       //   style={[styles.button, { backgroundColor: "#D4CEC9" }]}
-//                       // >
-//                       //   <Text style={styles.buttonText}> رفض </Text>
-//                       // </TouchableOpacity>
-//                       null
-                      
-//                      )}
-                    
-//                 {this.state.Rstatus== "قيد الإنتظار" ? (    
-//                     <TouchableOpacity
-//                          style={[styles.dbutton, { backgroundColor: "#BE4F4F" }]}
-//                          onPress={() => this.conformRemove(this.state.Rkey,this.state.Rstatus,this.props.navigation)}><Text style={styles.buttonTextDelete}> حذف </Text>
-//                          </TouchableOpacity>):(null)}
-
-
-// {this.state.Rstatus== "قيد التنفيذ" ? ( 
-// <TouchableOpacity
-// onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.state.RemAmount, reqID: this.state.Rkey,type:this.state.Type}),this.setModalVisible(!this.state.modalVisible)}}
-//     style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
-//   >
-//     <Text style={styles.PaybuttonText}> دفع </Text>
-//   </TouchableOpacity>):(null
-  
-//  )}
-
-// {this.state.Rstatus== "مكتمل" ? ( 
-//                        <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
-  
-//  ): null }
- 
-//  {this.state.Rstatus== "مرفوض" ? ( 
-//                        <Text style={styles.textReject}> نعتذر، تم رفض طلبك </Text>
-  
-//  ): null }
-      
-
-
-//                     </View>
-//                   </View>
-//                 </View>
-//               </Modal>
-
-//               <Modal
-//                 animationType="slide"
-//                 transparent={true}
-//                 visible={this.state.modalVisible2}
-//               >
-//                 <View style={styles.centeredView}>
-//                   <View style={styles.modalView}>
-//                     <TouchableOpacity
-//                       onPress={() => {
-//                         this.setModalVisible2(!this.state.modalVisible2);
-//                       }}
-//                     >
-//                       <AntDesign
-//                         style={styles.closeProfile}
-//                         name="close"
-//                         size={24}
-//                         color="#746356"
-//                       />
-            
-                      
-//                     </TouchableOpacity>
-//                     {this.state.CreditorName=""? ( 
-//                       <Image
-//                       style={styles.UserImage}
-//                       source={{ uri: this.state.profilePic }}
-//                     />
-      
-//  ): null }
-                    
-//                     {this.state.CreditorName=""? ( 
-//                                          <Text style={styles.UserName}>{this.state.CreditorName}</Text>
-
-      
-//  ): null }
-//           {this.state.CreditorName=""? ( 
-//                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-
-//  ): null }
-//                     {this.state.CreditorName=""? ( 
-      
-     
-//                     <Text style={styles.RateStarts}>
-//                       <Ionicons
-//                         name="ios-star"
-//                         size={33}
-//                         color="#E4E4E4"
-//                         solid
-//                       />
-//                       <Ionicons
-//                         name="ios-star"
-//                         size={33}
-//                         color="#E4E4E4"
-//                         solid
-//                       />
-//                       <Ionicons
-//                         name="ios-star"
-//                         size={33}
-//                         color="#E4E4E4"
-//                         solid
-//                       />
-//                       <Ionicons
-//                         name="ios-star"
-//                         size={33}
-//                         color="#E4E4E4"
-//                         solid
-//                       />
-//                       <Ionicons
-//                         name="ios-star"
-//                         size={33}
-//                         color="#E4E4E4"
-//                         solid
-//                       />
-//                     </Text>
-//                      ): null }
-//                     {this.state.CreditorName=""? ( 
-//                           <Text style={styles.subsidy}> عدد التسليف </Text>
-
-//       ): null }
-//                     {this.state.CreditorName=""? ( 
-//                           <Text style={styles.debts}> عدد الاستلاف </Text>
-
-//       ): null }
-//                     {this.state.CreditorName=""? ( 
-//         <View style={styles.PinkRectangleShapeView}>
-//         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
-//       </View>
-
-//       ): null }
-                  
-//                     {this.state.CreditorName=""? ( 
-//         <View style={styles.YellowRectangleShapeView}>
-//         <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
-//       </View>
-//       ): null }
-                  
-//                     {this.state.CreditorName=""? ( 
-//        <View style={styles.buttonContainer}>
-//        <TouchableOpacity
-//          style={[styles.button, { backgroundColor: "#fff" }]}
-//        ></TouchableOpacity>
-//        <TouchableOpacity
-//          style={[styles.button, { backgroundColor: "#fff" }]}
-//        ></TouchableOpacity>
-//      </View>
-//       ): null }
-//                  {this.state.CreditorName=""? ( 
-// null
-//       ): 
-//       <Text style={styles.noUser}>لا يوجد دائن محدد</Text>
-//     }    
-             
-
-                   
-//                   </View>
-//                 </View>
-//               </Modal>
-//             </View>
-//           );
-
-//   }
-
-//         }
-        // console.log("داخل بدون ستيتوس");
         if (true) {
           console.log("داخل الليست ٢٢٢٢");
           return (
-         
+    
             <View>
                 
                 {console.log("داخل الفيووووو")}
@@ -1099,11 +470,11 @@ console.log(text)
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
+                  {/* <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid /> */}
                 </View>
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
@@ -1195,6 +566,7 @@ console.log(text)
                 </View>
               </TouchableOpacity>
               {/* {console.log("here4")} */}
+       
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -1360,7 +732,6 @@ console.log(text)
                       )}
                     </Text>
 
-                   {/* كان هنا فيه كود المتبقي من الدين */}
 
 
 
@@ -1423,14 +794,7 @@ console.log(text)
                       )}
   </Text>
 
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-تاريخ الطلب |{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.submmitedDate}{" "}
-    </Text>{" "}
-  </Text> */}
+
   <Text style={styles.textInputTitle}>
     نوع التسديد |{" "}
     <Text style={styles.textData}> {this.state.Type} </Text>
@@ -1466,7 +830,6 @@ console.log(text)
       
     )}
   </Text>
-
   // */}
   <Text style={styles.textInputTitle}>
                     
@@ -1587,6 +950,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                   </View>
                 </View>
               </Modal>
+        
 
               <Modal
                 animationType="slide"
@@ -1626,7 +990,63 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName!=""? ( 
+                        {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+                    {/* {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -1661,7 +1081,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                     ): null }
+                     ): null } */}
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1812,6 +1232,7 @@ console.log(check)
 
     return (
       <View style={styles.container}>
+        
           
         <LinearGradient
           colors={[
@@ -1833,8 +1254,14 @@ console.log(check)
             right: -660,
             top: -630,
             position: "absolute",
+          
           }}
         ></LinearGradient>
+ {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1940,6 +1367,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+
   },
   container2: {
     marginTop: 40,
@@ -1972,7 +1400,7 @@ top:-32,
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -2326,7 +1754,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#F1DCA7",
     
@@ -2339,7 +1767,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#D3CDC8",
     
@@ -2352,7 +1780,7 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#BE6A6C",
     
@@ -2365,12 +1793,10 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
+    left:10,
     top: 75,
     backgroundColor: "#A8CB9E",
     
-   
-
   },
   status3:{
     textAlign: "center",
@@ -2732,7 +2158,16 @@ left:20,
     opacity: 0.6
     
   },
+shadow:{
+  position:'absolute',
+  height:2000,
+  width:'100%',
+  opacity:0.5,
+  padding:100,
+  backgroundColor:"gray",
+  zIndex:120,
 
+}
 
   //end
 });

@@ -109,6 +109,8 @@ export default function Register({ navigation }) {
           .set({
             fullName: fullName,
             email: email,
+            RatingCount:0,
+            rating:0,
             UserImage: "https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a",
           });
       })

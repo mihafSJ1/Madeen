@@ -177,7 +177,7 @@ export default class PayAsCreditor extends React.Component {
       .then(() => Alert.alert(
         "تنبيه ",
         "من سار بين الناس جابرًا للخواطر أدركه الله في جوف المخاطر! تم الدفع بنجاح.",
-        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorP") }],
+        [{ text: "موافق", onPress: () => this.props.navigation.navigate("ReqAsCreditorWithFilter") }],
         { cancelable: false }
       ));
     // Disable the Submit button after the request is sent
@@ -217,7 +217,7 @@ export default class PayAsCreditor extends React.Component {
   // render the subscription view component and pass the props to it
   render() {
     const { submitted, error } = this.state;
-    const {amount} = this.props.route.params;
+    const {amount} = this.props.m.params;
     const {reqID} = this.props.route.params;
     return (
           <View style={styles.container}>

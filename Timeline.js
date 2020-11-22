@@ -55,6 +55,7 @@ var key;
 var remAmount;
 var requestArray = [];
 var usersArray = [];
+var x = 0;
 firebase
   .database()
   .ref("users")
@@ -173,6 +174,20 @@ class Timeline extends React.Component {
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
+      
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+          this.state.rating / this.state.RatingCount
+               
+          if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+
+           }
+          })
         this.setprofilePic(snapshot.val().UserImage);
       });
     this.setState({
@@ -303,11 +318,7 @@ class Timeline extends React.Component {
                     solid
                     style={{ marginTop: 30, marginRight: 45 }}
                   />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+              
                 </View>
                 <View style={styles.rightItems}>
                   <View style={styles.textContainer}>
@@ -462,38 +473,62 @@ class Timeline extends React.Component {
                       source={{ uri: this.state.profilePic }}
                     />
                     <Text style={styles.UserName}>{this.state.namef}</Text>
-                    <Text style={styles.RateStarts}>
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                    </Text>
+                    {this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue == 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 {this.state.ratingValue== 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                {this.state.ratingValue == 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -547,6 +582,11 @@ class Timeline extends React.Component {
             position: "absolute",
           }}
         ></LinearGradient>
+         {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -591,7 +631,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -120,
+    left: -60,
   },
 
   leftItems: {
@@ -720,6 +760,21 @@ const styles = StyleSheet.create({
     borderColor: "red",
   },
 
+  UserImage: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    left: 100,
+    top: 0,
+    zIndex: 2,
+    width: 160,
+    height: 160,
+    resizeMode: "stretch",
+    borderRadius: 100,
+    borderColor: "#CBCA9E",
+    borderWidth: 4,
+  },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
@@ -805,36 +860,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#CBCA9E",
     borderWidth: 4,
-  },
+  },   shadow:{
+    position:'absolute',
+    height:2000,
+    width:'100%',
+    opacity:0.5,
+    padding:100,
+    backgroundColor:"gray",
+    zIndex:120,
+  
+  }
 
-  // button1:{
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginRight: 20,
-  //   marginLeft: 25,
-  //   fontSize: 5,
-  // borderRadius:15,
-  // },
-  // button: {
-  //   alignItems: "center",
-  //   width: 170,
-  //   height: 30,
-  //   marginTop: 80,
-  //   padding: 5,
-  //   borderRadius: 15,
-  //   marginLeft: 10,
-  //   backgroundColor: "#fff",
-  //   fontSize: 10,
-  //   // alignItems: "center",
-  //   // width: 170,
-  //   // height: 30,
-  //   // marginTop: 10,
-  //   // padding: 5,
-  //   // borderRadius: 15,
-  //   // marginLeft: 10,
-  //   // backgroundColor: "#fff",
-  // },
-
+  
   //end
 });
 export default withNavigation(Timeline);
