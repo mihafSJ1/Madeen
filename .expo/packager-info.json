@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 32214,
+  "expoServerNgrokUrl": "https://v7-2vh.anonymous.madeen.exp.direct",
+  "packagerNgrokUrl": "https://packager.v7-2vh.anonymous.madeen.exp.direct",
+  "ngrokPid": 32306,
   "webpackServerPort": null
 }
