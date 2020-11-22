@@ -681,7 +681,7 @@ this.setModalVisible(!this.state.modalVisible);
       
                       onPress={() =>{ this.setRatingModalVisible(true,c)}}
              
-               >قــيّــم! </Text>
+               >قــيّــم!</Text>
                 
                :  null }
                   </View>
@@ -1596,7 +1596,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 18,
+     top: 18,
     backgroundColor: "#BE6A6C",
   
   },
@@ -1989,8 +1989,10 @@ backgroundColor:'red',
         shadowRadius: 3,
         elevation: 5
       },
+     
 
 
+   
       shadow:{
         position:'absolute',
         height:2000,
