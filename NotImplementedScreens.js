@@ -42,10 +42,15 @@ const [threads, setThreads] = useState([]);
       .collection('THREADS')
       .doc(currentUser.uid)
       .collection('allChat')
+      .orderBy('latestMessage.createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         const threads = querySnapshot.docs.map(documentSnapshot => {
           return {
             _id: documentSnapshot.id,
+            name: '',
+            latestMessage: {
+              text: ''
+            },
             // give defaults
             name: '',
             ...documentSnapshot.data()
@@ -59,29 +64,6 @@ const [threads, setThreads] = useState([]);
         }
       });
 
-      // firebase.firestore()
-      // .collection('THREADS')
-      // .doc(sID)
-      // .collection('allChat')
-      // .onSnapshot(querySnapshot => {
-      //   const threads = querySnapshot.docs.map(documentSnapshot => {
-      //     return {
-      //       _id: documentSnapshot.id,
-      //       // give defaults
-      //       name: '',
-      //       ...documentSnapshot.data()
-      //     };
-      //   });
-
-      //   setThreads(threads);
-
-      //   if (loading) {
-      //     setLoading(false);
-      //   }
-      // });
-    /**
-     * unsubscribe listener
-     */
     return () => unsubscribe();
 
 
@@ -163,7 +145,8 @@ style={styles.chatTouch}
   
                 style={styles.card}
               title={item.name}
-              description='Item description'
+              // description='Item description'
+              description={item.latestMessage.text}
               titleNumberOfLines={1}
               titleStyle={styles.listTitle}
               descriptionStyle={styles.listDescription}

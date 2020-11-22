@@ -240,6 +240,12 @@ function Homenav() {
           ),
         }}
       />
+
+
+
+
+
+      
       <Tab.Screen
         name="Request"
         
@@ -353,11 +359,11 @@ export default function App({ navigation }) {
           title: route.params.thread.name
         })}      /> */}
 
-<Stack.Screen
+{/* <Stack.Screen
         name="Room"
         component={Room}
         options={{ headerShown: false }}
-      />
+      /> */}
 
 
 <Stack.Screen
@@ -373,7 +379,11 @@ export default function App({ navigation }) {
       />
 
 
-
+<Stack.Screen
+              name="Room"
+              component={Room}
+              options={{ headerShown: false }}
+            />
 
             <Stack.Screen
               name="login"

@@ -22,6 +22,8 @@ import {
   import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { render } from 'react-dom';
+import RequestBackgroundComp from "./RequestBackgroundComp";
+
 // import FormButton from '../components/FormButton';
 
 
@@ -129,9 +131,13 @@ setRoomName(name) {
     const db = firebase.firestore();
         return (
 
+          // <View style={styles.container}>
+          // <View style={styles.background}>
+
           <View style={styles.rootContainer}>
+                 <RequestBackgroundComp />    
           <View style={styles.closeButtonContainer}>
-           
+         
             <IconButton
               icon='close-circle'
               size={50}
@@ -140,6 +146,7 @@ setRoomName(name) {
             />
           </View>
           <View style={styles.innerContainer}>
+          <View style={styles.registerBackground}>
 {console.log({secondID})
 }    
 {console.log({reqIDforChat})
@@ -183,8 +190,13 @@ setRoomName(name) {
               onPress={() => this.handleButtonPress()}
               disabled={this.state.roomName.length === 0}
             />
+
+</View>
           </View>
         </View>
+
+        // </View>
+        // </View>
         );
       }
 
@@ -197,6 +209,31 @@ setRoomName(name) {
 
 
 const styles = StyleSheet.create({
+
+  container: {
+    backgroundColor: '#f5f5f5',
+    flex: 1,
+bottom:10,
+    top:30,
+
+  },
+
+  background: {
+    bottom: 500,
+    position: "absolute",
+    height: 480,
+    // paddingBottom:100,
+  },
+
+  container: {
+    textAlign: "right",
+    fontFamily: "Bahij_TheSansArabic-Light",
+    flex: 1,
+    marginTop: -40,
+    backgroundColor: "#F2F4F1",
+    justifyContent: "center",
+    fontSize: 25,
+  },
     rootContainer: {
       flex: 1
     },
@@ -207,16 +244,34 @@ const styles = StyleSheet.create({
       zIndex: 3
     },
     innerContainer: {
+      top:-100,
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     title: {
       fontSize: 24,
-      marginBottom: 10
+      marginBottom: 10,
+      textAlign:'center',
     },
     buttonLabel: {
-      fontSize: 22
+      fontSize: 22,
+      textAlign:'center',
+    },
+
+    registerBackground: {
+      overflow: "hidden",
+      flex: 1,
+      borderTopRightRadius: 60,
+      borderTopLeftRadius: 60,
+      backgroundColor: "#fff",
+      width:410,
+      height:1000,
+      top:-300,
+      marginBottom:-500,
+    },
+    textinput:{
+      textAlign:'center',
     }
   });
 

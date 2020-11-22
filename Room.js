@@ -577,7 +577,7 @@ firebase.firestore()
 
   return (
    
-
+   
 
 
     <GiftedChat
