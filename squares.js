@@ -82,8 +82,8 @@ export default function squares({ navigation }) {
           <Text
             style={styles.greenText}
             // onPress={() => navigation.navigate("Calculator")}
-            onPress={() => navigation.navigate("Rating")}
-          >
+            onPress={() => navigation.navigate("Calculator")}
+                      >
             {" "}
             الحاسبة
           </Text>

@@ -1741,7 +1741,7 @@ waitContent:{
     marginBottom: 0,
     right: 0,
     left:164,
-    top: -32,
+    top: -38,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1755,7 +1755,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
    
@@ -1768,7 +1768,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#D3CDC8",
     
    
@@ -1781,7 +1781,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#BE6A6C",
     
    
@@ -1794,7 +1794,7 @@ waitContent:{
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 75,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
   },
