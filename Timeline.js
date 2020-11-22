@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
    // marginRight: 20,
     marginLeft: 79,
-
+    marginTop: -79,
     fontSize: 10,
   },
   header: {
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
     color: "#57694C",
     textAlign: "right",
 
-    marginRight: 35,
+    marginRight: 10,
   },
   close: {
     marginLeft: 20,
