@@ -31,7 +31,7 @@ import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import {schedulePushNotification} from './schedulePushNotification';
-
+import {loadContacts} from './ExpoPermissions';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -56,6 +56,12 @@ if (!firebase.apps.length) {
 }
 
 //-------------------------------------------- Data
+let applicationUsers_phone=[];
+for (var i = 0 ; i< loadContacts() ; i++){
+  applicationUsers_phone.push(loadContacts()[i]);
+  console.log(loadContacts()[i]);
+}
+
 let applicationUsers = [];
 let installmentsDropDownArray = [];
 const numericKeyboard = /[^0-9]/;
@@ -257,6 +263,7 @@ class Request extends React.Component {
           }
         });
       });
+
     this.setState({
       userValue: applicationUsers,
     });
@@ -326,7 +333,7 @@ class Request extends React.Component {
   .ref("users/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-      if (child.val().email == k) {
+      if (child.val().email == k||child.val().phone==k) {
         keyC= child.key;
         Cname=child.val().fullName;
 }
@@ -481,10 +488,11 @@ else{
                     />
                   </View>
 
-                  <Text style={styles.textNote}>
-                    ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{" "}
+<Text style={styles.textNote}>
+                 
+                    ملاحظة : عند اختيار هذا الخيار سيظهر طلبك للشخص المحدد فقط{"  "} 
+                    {"\n"}
                   </Text>
-
                   {formprops.values.usersSelect ? (
                      <View style={styles.radio}>
                     <RadioButtonRN
@@ -519,14 +527,12 @@ else{
                         formprops.setFieldValue("emailORphone", e.label)
                       }
                     />
-                 
-              </View> ):
+              </View>
+           
+                   ) : null}  
+                   
 
-              ///need double check***
-
-          
-              formprops.values.emailORphone == emailORphone[1].label ? (
-               
+                      {formprops.values.usersSelect && formprops.values.emailORphone == emailORphone[1].label ? (
               <DropDownPicker
                 searchable={true}
                 searchablePlaceholder="البحث عن دائن"
@@ -553,8 +559,9 @@ else{
          
                 searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
                   style={styles.DropDownPicker}
-                  items={applicationUsers}
-                  placeholder="اختر دائن "
+                  items={applicationUsers_phone}
+                        
+                  placeholder="برقم الجوال  "
                   placeholderStyle={{ color: "#CBCBCC" }}
                   value={formprops.values.user}
                   containerStyle={{
@@ -618,103 +625,110 @@ else{
                   onChangeItem={(item) =>
                     formprops.setFieldValue("user", item.label)
                   }
-                  />):(
-                  <DropDownPicker
-                    searchable={true}
-                    searchablePlaceholder="البحث عن دائن"
-                    searchablePlaceholderTextColor= {"#CBCBCC" }
-                    searchablePlaceholderStyle={{
-                   fontSize:50,
-                    textAlign: "right",
-                    flexDirection: "row-reverse",
-                  justifyContent: "flex-start",
-                  fontFamily: "Bahij_TheSansArabic-Light" 
-                 }
-             
-                 }
-                 searchableStyle={{
-                  fontSize:15,
-                 textAlign: "right",
-                 fontFamily: "Bahij_TheSansArabic-Light"
-                   }}
-                    // seachableStyle={{
+                  />): null}
+                      { formprops.values.usersSelect &&formprops.values.emailORphone == emailORphone[0].label ? (
+                        
+                        
+                        <DropDownPicker
+                        searchable={true}
+                        searchablePlaceholder="البحث عن دائن"
+                        searchablePlaceholderTextColor= {"#CBCBCC" }
+                        searchablePlaceholderStyle={{
+                       fontSize:50,
+                        textAlign: "right",
+                        flexDirection: "row-reverse",
+                      justifyContent: "flex-start",
+                      fontFamily: "Bahij_TheSansArabic-Light" 
+                     }
                  
-             
-                   
-             
-             
-                    searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
-                      style={styles.DropDownPicker}
-                      items={applicationUsers}
-                      placeholder="اختر دائن "
-                      placeholderStyle={{ color: "#CBCBCC" }}
-                      value={formprops.values.user}
-                      containerStyle={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#CBCA9E",
-                      }}
-                      style={{
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 40,
-                        borderBottomRightRadius: 50,
-                        borderColor: "#57694C",
-                        borderWidth: 1,
-                        width: 100,
-                
-                      }}
-                      arrowColor="#9b9b7a"
-                      arrowSize={18}
-                      containerStyle={{
-                        width: 352,
-                        height: 40,
-                        marginLeft: 35,
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50,
-                        borderBottomLeftRadius: 60,
-                        borderBottomRightRadius: 50,
-                        marginBottom: 25,
-                      }}
-                      itemStyle={{
-                        backgroundColor: "#fff",
-                        textAlign: "right",
-                        flexDirection: "row-reverse",
-                        justifyContent: "flex-start",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-             
-                        // to make the list to the right side
-                      }}
-                      dropDownStyle={{height:300,}}
-                      selectedLabelStyle={{
-                        color: "#57694C",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      activeLabelStyle={{
-                        color: "#57694C",
-                      }}
-                      dropDownStyle={{height:900,}}
-                      labelStyle={{
-                        backgroundColor: "#fff",
-                        fontSize: 16,
-                        textAlign: "right",
-                        color: "#000",
-                        fontFamily: "Bahij_TheSansArabic-Light",
-                      }}
-                      style={{
-                        flexDirection: "row-reverse",
-                        // to support RTL
-                      }}
-                      onChangeItem={(item) =>
-                        formprops.setFieldValue("user", item.label)
-                      }
-                      />)}
-                   )         
+                     }
+                     searchableStyle={{
+                      fontSize:15,
+                     textAlign: "right",
+                     fontFamily: "Bahij_TheSansArabic-Light"
+                       }}
+                        // seachableStyle={{
+                     
+                 
+                       
+                 
+                 
+                        searchableError={() => <Text style = {styles.textError}> لا يوجد دائن  </Text>} 
+                          style={styles.DropDownPicker}
+                          items={applicationUsers}
+                        
+                          placeholder="بالبريد الإلكتروني"
+                          placeholderStyle={{ color: "#CBCBCC" }}
+                          value={formprops.values.user}
+                          containerStyle={{
+                            borderTopLeftRadius: 50,
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 40,
+                            borderBottomRightRadius: 50,
+                            borderColor: "#CBCA9E",
+                          }}
+                          style={{
+                            borderTopLeftRadius: 50,
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 40,
+                            borderBottomRightRadius: 50,
+                            borderColor: "#57694C",
+                            borderWidth: 1,
+                            width: 100,
+                    
+                          }}
+                          arrowColor="#9b9b7a"
+                          arrowSize={18}
+                          containerStyle={{
+                            width: 352,
+                            height: 40,
+                            marginLeft: 35,
+                            borderTopLeftRadius: 50,
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 60,
+                            borderBottomRightRadius: 50,
+                            marginBottom: 25,
+                          }}
+                          itemStyle={{
+                            backgroundColor: "#fff",
+                            textAlign: "right",
+                            flexDirection: "row-reverse",
+                            justifyContent: "flex-start",
+                            fontFamily: "Bahij_TheSansArabic-Light",
+                 
+                            // to make the list to the right side
+                          }}
+                          dropDownStyle={{height:300,}}
+                          selectedLabelStyle={{
+                            color: "#57694C",
+                            fontFamily: "Bahij_TheSansArabic-Light",
+                          }}
+                          activeLabelStyle={{
+                            color: "#57694C",
+                          }}
+                          dropDownStyle={{height:900,}}
+                          labelStyle={{
+                            backgroundColor: "#fff",
+                            fontSize: 16,
+                            textAlign: "right",
+                            color: "#000",
+                            fontFamily: "Bahij_TheSansArabic-Light",
+                          }}
+                          style={{
+                            flexDirection: "row-reverse",
+                            // to support RTL
+                          }}
+                          onChangeItem={(item) =>
+                            formprops.setFieldValue("user", item.label)
+                          }
+                          />
+            
+            ): null}
+   
                   <Text style={[styles.textError, { top: -20 }]}>
                     {formprops.errors.user}
                   </Text>
+                  
                   <Text style={styles.textInputTitle}>
                     المبلغ <Text style={styles.textError}> *</Text>
                   </Text>
