@@ -7,16 +7,18 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import Loading from './Loading'; 
 import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet , Button, FlatList, TouchableOpacity} from 'react-native';
+import { View, StyleSheet , Button, FlatList, TouchableOpacity,  Dimensions,} from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
 import { Title } from 'react-native-paper';
 // import { AuthContext } from '../navigation/AuthProvider';
 // import FormButton from '../components/FormButton';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from './AuthProvider';
+import { Right } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import BackgroundComponent from "./BackgroundComponent";
 
-
-
-
+import { MaterialIcons } from '@expo/vector-icons'; 
 export default function HomeScreen({ navigation }) {
   const { currentUser } = firebase.auth();
   firebase
@@ -109,7 +111,28 @@ const [threads, setThreads] = useState([]);
   
 
     <View style={styles.container}>
-          <Title> {currentUser.uid}</Title>
+               <LinearGradient
+          colors={[
+            "rgba(217,174,148,0.36)",
+            "rgba(241,220,167,0.43)",
+            "#EEF2ED",
+          ]}
+          start={{ x: 1, y: 1 }}
+          end={{ x: 0.5, y: 0 }}
+          useAngle
+          angle={180}
+          style={{
+            borderRadius:
+              Math.round(
+                Dimensions.get("window").width + Dimensions.get("window").height
+              ) / 2,
+            width: Dimensions.get("window").width * 2.1,
+            height: Dimensions.get("window").width * 3.1,
+            right: -660,
+            top: -630,
+            position: "absolute",
+          }}
+        ></LinearGradient>
       {/* <IconButton
        style={styles.chatIcon}
         icon='message-plus'
@@ -117,25 +140,39 @@ const [threads, setThreads] = useState([]);
         color='#f1dca7'
         onPress={() => navigation.navigate('addRoom')}
       /> */}
+    
       <View style={styles.RoomList}>
+  
       <FlatList
+      textalign
         data={threads}
+       
         keyExtractor={item => item._id}
-        ItemSeparatorComponent={() => <Divider />}
+        // ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item }) => (
+          < View>
+           
           <TouchableOpacity
-
+style={styles.chatTouch}
           onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:item.latestMessage.createdBy})}
           >
+  <MaterialIcons style={styles.chat}  name="chat-bubble" size={34} color="#D9AE94" />
+{/* <Ionicons  style={styles.chat} name="md-chatboxes" size={34} color="#D9AE94" /> */}
+               {/* <Ionicons   style={styles.chat} name="ios-chatboxes" size={44} color="#D9AE94" /> */}
             <List.Item
+  
+                style={styles.card}
               title={item.name}
               description='Item description'
               titleNumberOfLines={1}
               titleStyle={styles.listTitle}
               descriptionStyle={styles.listDescription}
               descriptionNumberOfLines={1}
+           
             />
+         
           </TouchableOpacity>
+          </View>
         )}
       />
 
@@ -149,6 +186,7 @@ const [threads, setThreads] = useState([]);
 
 
   </View>
+  
 </View>
 
   );
@@ -158,13 +196,18 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     flex: 1,
-    bottom:-100,
+bottom:10,
     top:30,
 
   },
 
   listDescription: {
-    fontSize: 16
+    fontSize: 16,
+    width: 380,
+    textAlign:'right',
+    zIndex:6,
+    fontFamily: "Bahij_TheSansArabic-Light",
+   
   },
 
   chatIcon:{
@@ -172,11 +215,52 @@ const styles = StyleSheet.create({
     left:170,
   },
   RoomList:{
-    top:60,
-    bottom:100,
+    top:70,
+marginBottom:10,
+    zIndex:3,
+    height:1000,
+   
   },
   listTitle: {
-
-    fontSize: 22
+textAlign:'right',
+// backgroundColor:'red',
+width: 380,
+    fontSize: 18,
+    zIndex:5,
+    fontFamily: "Bahij_TheSansArabic-Bold",
+    color:'#9b9b7a',
   },
+
+  card: {
+    // top:30,
+    borderRadius:6,
+    textAlign:'right',
+    backgroundColor: "#fff",
+    marginBottom: 10,
+    width: 400,
+    height:80,
+    shadowColor: "#D9AE94",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+
+    flexDirection: "row",
+    // zIndex:-3,
+    left:5,
+    // justifyContent: "flex-end",
+  },
+
+chat:{
+  top:60,
+left:35,
+zIndex:3,
+// backgroundColor:'red'
+},
+
+chatTouch:{
+marginBottom:-30,
+}
+
 });

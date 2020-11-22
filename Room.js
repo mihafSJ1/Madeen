@@ -210,14 +210,19 @@
 
 
 /////////// Room as function 
-import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText} from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText,ImageBackground,Time} from 'react-native-gifted-chat';
 import { IconButton } from 'react-native-paper';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import React, { useState, useContext, useEffect,alert } from 'react';
+import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 
 import RequestBackgroundComp from "./RequestBackgroundComp";
+
+
+import BackgroundComponent from "./BackgroundComponent";
+
 
 export default function Room({ route, navigation }) {
   const [messages, setMessages] = useState([]);
@@ -296,13 +301,29 @@ export default function Room({ route, navigation }) {
       </View>
       </Send>
     );
-  }//ما تشتغل الكلبة
+  }
 
   function renderLoading() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size='large' color='#6646ee' />
       </View>
+    );
+  }
+
+  function     renderTime(props) {
+    return (
+      <Time
+        {...props}
+       timeTextStyle={{
+right: {
+color: '#746356',
+},
+left: {
+color: 'white',
+},
+}}
+      />
     );
   }
 
@@ -467,7 +488,7 @@ console.log({text});
         setMessages(messages);
       });
 // ذبلكيت مسج
-console.log("يا كلب اضبط ريحني ")
+
 firebase.firestore()
     .collection('THREADS')
     .doc(sID)
@@ -531,7 +552,16 @@ firebase.firestore()
    
 
 
+
     <GiftedChat
+    listViewProps={{
+      style: {
+        backgroundColor: '#FFFDF9',
+      
+      },
+
+  
+    }}
       messages={messages}
       messages2={messages2}
       onSend={handleSend}
@@ -540,34 +570,25 @@ firebase.firestore()
       // onSend={handleSend2}
       user={{ _id: currentUser.uid }}
       renderBubble={renderBubble}
-      placeholder='Type your message here...'
-      showUserAvatar
-      alwaysShowSend
+      placeholder='اكتب رسالتك هنا...'
+      // showUserAvatar
+      // alwaysShowSend
       // Step 4: add the prop
       renderSend={renderSend}
       scrollToBottomComponent={scrollToBottomComponent}
       renderLoading={renderLoading}
       renderSystemMessage={renderSystemMessage}
+      renderAvatar={() => null}
+      renderTime={renderTime}
+    
       // renderMessageText={renderMessageText}
 
     />
 
 
-  //   <GiftedChat
-  //   messages={messages}
-  //   onSend={handleSend}
-  //   user={{ _id: currentUser.uid }}
-  //   placeholder='Type your message here...'
-  //   alwaysShowSend
-  //   showUserAvatar
-  //   scrollToBottom
-  //   renderBubble={renderBubble}
-  //   renderLoading={renderLoading}
-  //   renderSend={renderSend}
-  //   scrollToBottomComponent={scrollToBottomComponent}
-  //   // renderSystemMessage={renderSystemMessage}
-  // />
-  
+
+
+
   );
 }
 
