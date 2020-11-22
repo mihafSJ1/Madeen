@@ -210,12 +210,12 @@
 
 
 /////////// Room as function 
-import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText,ImageBackground,Time} from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText,ImageBackground,Time,InputToolbar} from 'react-native-gifted-chat';
 import { IconButton } from 'react-native-paper';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import React, { useState, useContext, useEffect,alert } from 'react';
+import React, { useState, useContext, useEffect,alert,Text } from 'react';
 import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 
 import RequestBackgroundComp from "./RequestBackgroundComp";
@@ -247,27 +247,37 @@ export default function Room({ route, navigation }) {
         wrapperStyle={{
           right: {
             // Here is the color change
-            backgroundColor:  '#FFEEC4' 
+            backgroundColor:  '#FFEEC4',
+            fontFamily: "Bahij_TheSansArabic-Light",
+
           },
           left: {
             // Here is the color change
             backgroundColor: '#d9ae94',
-
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 16,
           }
         
         }}
         textProps={{
+          ////هذي اللي تغير
           style: {
             color: props.position === 'left' ? '#fff' : '#746356',
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 15,
           },
         }}
 
         textStyle={{
           right: {
-            color: 'black'
+            color: 'black',
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 10,
           },
           left: {
-            color: '#fff'
+            color: '#fff',
+            fontFamily: "Bahij_TheSansArabic-Light",
+            fontSize: 10,
           },
 
         }}
@@ -545,7 +555,24 @@ firebase.firestore()
     );
   }
   
+  function renderInputToolbar (props) {
 
+    return ( 
+      <InputToolbar
+      {...props}
+      containerStyle={{
+        backgroundColor: "#fff",
+        borderTopColor: "#E8E8E8",
+        borderTopWidth: 1,
+        padding: 0,
+        fontFamily: "Bahij_TheSansArabic-Light",
+        fontSize: 100,
+        textalign:'right'
+      }}
+    />
+   
+   );
+}
 
 
   return (
@@ -554,6 +581,7 @@ firebase.firestore()
 
 
     <GiftedChat
+   
     listViewProps={{
       style: {
         backgroundColor: '#FFFDF9',
@@ -570,7 +598,8 @@ firebase.firestore()
       // onSend={handleSend2}
       user={{ _id: currentUser.uid }}
       renderBubble={renderBubble}
-      placeholder='اكتب رسالتك هنا...'
+      placeholder ='اكتب رسالتك هنا...                                                                .'
+      // 'اكتب رسالتك هنا...'
       // showUserAvatar
       // alwaysShowSend
       // Step 4: add the prop
@@ -580,6 +609,8 @@ firebase.firestore()
       renderSystemMessage={renderSystemMessage}
       renderAvatar={() => null}
       renderTime={renderTime}
+      renderInputToolbar={renderInputToolbar}
+
     
       // renderMessageText={renderMessageText}
 
