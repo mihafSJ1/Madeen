@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
+import { ArabicNumbers } from "react-native-arabic-numbers";
 import { Button, Overlay } from 'react-native-elements';
 
 import {
@@ -123,7 +124,8 @@ export default class MyReqWithFilter extends React.Component {
       searchTerm: '',
 
     arrayFiltered:requestArray,
-   
+    noSubsidy: 0,
+    noDebts: 0,
   };
   }
 
@@ -267,20 +269,32 @@ export default class MyReqWithFilter extends React.Component {
         this.setCreditorEmail(snapshot.val().email);
         console.log(this.state.profilePic);
       });
-
-    console.log("بتنحل");
-
-
-
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-    console.log("يارب١");
 
-    console.log("يارب٢");
-  
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+       if(item.creditor == child.val().creditor){
+        if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+          countSubsidy++;
+        }
+        }else  if(item.creditor == child.val().userid){
+          if ("مكتمل" == child.val().rqeuestStatus ){
+          countDebts++;
+        }
+      }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
   }
 
 
@@ -1078,14 +1092,14 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       ): null }
                     {this.state.CreditorName!=""? ( 
         <View style={styles.PinkRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
       </View>
 
       ): null }
                   
                     {this.state.CreditorName!=""? ( 
         <View style={styles.YellowRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noDebts)}</Text>
       </View>
       ): null }
                   

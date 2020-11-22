@@ -1,4 +1,6 @@
 import { StatusBar } from "expo-status-bar";
+import { ArabicNumbers } from "react-native-arabic-numbers";
+
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -101,6 +103,8 @@ class Timeline extends React.Component {
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       profilePic:
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+      noSubsidy: 0,
+      noDebts: 0,
     };
   }
   // state = { currentUser: null };
@@ -118,7 +122,7 @@ class Timeline extends React.Component {
   componentDidMount() {
   
     requestArray=[];
-   
+
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -144,6 +148,11 @@ class Timeline extends React.Component {
           }
         });
       });
+///////////////////////////////////// المفترض ارجع كل يوزر وعدد استلافه وتسليفه
+
+      
+
+
     }
 
   setModalVisible(visible) {
@@ -180,15 +189,33 @@ class Timeline extends React.Component {
            }
           })
         this.setprofilePic(snapshot.val().UserImage);
-
-        console.log(this.state.profilePic);
       });
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-  
+
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if(item.userid == child.val().creditor){
+          if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+            countSubsidy++;
+        }
+        }else  if(item.userid == child.val().userid){
+          if ("مكتمل" == child.val().rqeuestStatus ){
+          countDebts++;
+        }
+      }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
   }
  
 
@@ -506,10 +533,10 @@ class Timeline extends React.Component {
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)} </Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> {ArabicNumbers(this.state.noDebts)}</Text>
                     </View>
 
                     <View style={styles.buttonContainer}>
@@ -531,7 +558,6 @@ class Timeline extends React.Component {
   };
 
   render() {
-    console.log;
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -579,6 +605,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+    marginBottom:130,
   },
   container2: {
     marginTop: 40,
@@ -761,7 +788,7 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 140,
+    left: 110,
     bottom: 50,
   },
 
@@ -773,7 +800,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    left: 185,
+    left: 160,
     top: -35,
     backgroundColor: "#D9AE94",
     borderColor: "#D3CECA",
@@ -788,7 +815,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 33,
     marginBottom: 0,
-    right: -25,
+    // right: -10,
     top: -104,
     backgroundColor: "#F1DCA7",
     borderColor: "#D3CECA",
@@ -801,7 +828,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#404040",
     top: -37,
-    left: 70,
+    left: 50,
     zIndex: 2,
   },
   subsidy: {
@@ -810,7 +837,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#404040",
     top: -10,
-    right: 75,
+    right: 40,
   },
   buttonText: {
     textAlign: "center",
@@ -824,7 +851,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 0,
     marginBottom: 0,
-    left: 127,
+    left: 100,
     top: -50,
     zIndex: 2,
     width: 160,

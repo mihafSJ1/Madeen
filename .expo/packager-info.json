@@ -1,9 +1,6 @@
 {
-  "devToolsPort": 19011,
+  "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19007,
-  "packagerPid": 85103,
-  "expoServerNgrokUrl": "https://5j-47b.mihafsj.madeen.exp.direct",
-  "packagerNgrokUrl": "https://packager.5j-47b.mihafsj.madeen.exp.direct",
-  "ngrokPid": 71374
+  "packagerPort": 19001,
+  "packagerPid": 25993
 }

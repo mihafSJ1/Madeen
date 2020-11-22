@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component, useState } from "react";
+import { ArabicNumbers } from "react-native-arabic-numbers";
 
 import {
   StyleSheet,
@@ -59,6 +60,8 @@ export default class EditProfile extends React.Component {
     ratingValue: null,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
   updatename(name){
     requestArrayU=[];
@@ -216,7 +219,26 @@ export default class EditProfile extends React.Component {
         this.setState({ currentUser });
       });
 
-
+      let countSubsidy = 0;
+      let countDebts = 0;
+      firebase
+      .database()
+      .ref("requests")
+      .on("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+          if(currentUser.uid == child.val().creditor){
+            if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+              }
+              }else  if(currentUser.uid == child.val().userid){
+                if ("مكتمل" == child.val().rqeuestStatus ){
+                countDebts++;
+              }
+            }
+      });
+      });
+      this.setState({ noDebts: countDebts });
+      this.setState({ noSubsidy: countSubsidy });
     this.setState({ currentUser });
   
  
@@ -389,10 +411,10 @@ export default class EditProfile extends React.Component {
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
               <View style={styles.PinkRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}> {ArabicNumbers(this.state.noSubsidy)} </Text>
               </View>
               <View style={styles.YellowRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}>{ ArabicNumbers(this.state.noDebts)} </Text>
               </View>
 
               <TouchableOpacity
