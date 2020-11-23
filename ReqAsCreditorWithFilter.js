@@ -26,6 +26,7 @@ import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
+import { color } from "react-native-reanimated";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -256,6 +257,25 @@ console.log(this.state.RatingCount+this.state.requestKey);
       // if (visible == false){
       //   this.updateRating()
       // }
+    }
+    cancelRatingModal(visible){
+      this.setState({
+        ratingVisable: visible,
+    
+      
+      }, () => {
+ 
+   firebase
+   .database()
+.ref('requests/' + this.state.requestKey)
+.update({
+
+isRated:  true,
+
+  })
+ 
+    }) 
+
     }
     closeRatingModal(visible) {
    
@@ -1045,6 +1065,7 @@ this.setModalVisible(!this.state.modalVisible);
      >
         <View style={styles.ratingcenteredView}>
           <View style={styles.RatingmodalView}>
+       
           <Text style={styles.RatingmodalText}> كيف كانت تجربتك؟</Text>
          <AirbnbRating 
          reviewSize = {22}
@@ -1073,10 +1094,22 @@ type='custom'
  size={20}
 
 />
-          
+<View style={styles.buttonContainer}>
+<TouchableOpacity
+      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+             onPress={() => {
+             this.cancelRatingModal(false)
+         
+         
+
+             }}
+           >
+             <Text  style={[styles.buttonText,{fontSize:12}]}>تخطي</Text>
+
+           </TouchableOpacity>
 
            <TouchableOpacity
-      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+      style={[styles.Ratingbutton, { backgroundColor: "#CBCA9E" }]}
              onPress={() => {
              this.closeRatingModal(false)
          
@@ -1084,9 +1117,12 @@ type='custom'
 
              }}
            >
-             <Text style={styles.buttonText}>إرسال</Text>
+             <Text style={[styles.buttonText,{fontSize:12}]}>إرسال</Text>
 
            </TouchableOpacity>
+
+       
+           </View>
          </View>
        </View>
      </Modal>
@@ -1944,8 +1980,8 @@ backgroundColor:'red',
       },
       Ratingbutton: {
         alignItems: "center",
-        width: 170,
-        height: 30,
+        width: 100,
+        height: 25,
         marginTop: 50,
         padding: 5,
         borderRadius: 15,
@@ -1984,7 +2020,14 @@ backgroundColor:'red',
         backgroundColor:"gray",
         zIndex:120,
       
-      }
+      },
+      buttonContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        // marginLeft: 25,
+        // fontSize: 30,
+      },
+    
 
 
 });
