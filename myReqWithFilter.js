@@ -46,63 +46,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 var requestArray = [];
-
-var arrayFiltered=[];
-
-var myRequest = [];
-var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-var Searching=false;
-var Found=false;
-var specificStatus=false;
-// var SpecificStatusText="لا يوجد";
 let arrayFiltered2=[];
 
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
 
-
-const currentUser = firebase.auth();
-//this.setState({ currentUser });
-firebase
-
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-           cName:child.val().creditorName,
-            key:child.key,});
-      //  }
-    });
-  });
-  //هنا الاسناد الصح 
-  arrayFiltered=requestArray;
-  // arrayFiltered2=requestArray;
 export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
@@ -123,9 +69,10 @@ export default class MyReqWithFilter extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       searchTerm: '',
 
-    arrayFiltered:requestArray,
+    // arrayFiltered:requestArray,
     noSubsidy: 0,
     noDebts: 0,
+    requestsArr:[],
   };
   }
 
@@ -140,7 +87,6 @@ export default class MyReqWithFilter extends React.Component {
       .ref("requests/")
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
-          if (true) {
             requestArray.push({         
               creditor:child.val().creditor,
               expectedDate:child.val().expectedDate,
@@ -158,10 +104,11 @@ export default class MyReqWithFilter extends React.Component {
                key:child.key,
                remAmount: child.val().remAmount });
             
-          }
+
         });
+        this.setState({requestsArr: requestArray.reverse()})
       });
-      arrayFiltered=requestArray;
+
     
      
     }
@@ -1152,10 +1099,10 @@ searchStatus = (textTosearch)  =>{
 }
 
    var check=false;
-  for(var i =0 ,j = 0;i<requestArray.length;i++){
+  for(var i =0 ,j = 0;i<this.state.requestsArr.length;i++){
     console.log(textTosearch)
     if(textTosearch!=""){
-    if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+    if(textTosearch.trim()==this.state.requestsArr[i].rqeuestStatus.trim()){
      check=true;
       this.setFound(true);
       // this.setSearching(true);
@@ -1168,7 +1115,7 @@ searchStatus = (textTosearch)  =>{
       // this.setSpecificStatusText(textTosearch);
       console.log(this.state.SpecificStatusText);
     // alert(requestArray[i].creditorName)
-    arrayFiltered2[j++]=requestArray[i]
+    arrayFiltered2[j++]=this.state.requestsArr[i]
     console.log(" دخلت الاف  ")
 
     // this.setState({
@@ -1329,7 +1276,7 @@ console.log(check)
 ):this.state.Searching && !this.state.Found?(
 
 
-null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+null): <ScrollView>{this.list(this.state.requestsArr,null)}</ScrollView>}
 
 
 
@@ -1754,8 +1701,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
    
@@ -1767,8 +1714,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#D3CDC8",
     
    
@@ -1780,8 +1727,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#BE6A6C",
     
    
@@ -1793,8 +1740,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
   },
@@ -1938,8 +1885,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -8,
-    // bottom:5,
+    top: -5,
     left: 180,
     right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -2145,6 +2091,7 @@ top:-10,
     fontFamily: "Bahij_TheSansArabic-Light",
     left:0,
     textAlign:'right',
+    marginBottom:10,
     backgroundColor:'#ffffff',
   
   },

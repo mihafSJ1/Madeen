@@ -15,7 +15,6 @@ import "firebase/firestore";
 import { withNavigation } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
-import { date } from "yup";
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -31,41 +30,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var notificationsArray = [];
-var usersArray = [];
-var requestArray = [];
-
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
-
-const currentUser = firebase.auth();
-firebase
-.database()
-.ref("notifications/")
-.on("value", (snapshot) => {
-  snapshot.forEach((child) => {
-    // this.setState({reqID:  })
-    
-      notificationsArray.push({
-
-          creditor:child.val().creditor,
-          debtor:child.val().debtor,
-          title:child.val().title,
-          body:child.val().body,
-          nType: child.val().notificationType,
-          reqKey:child.val().reqID,
-          notficationKey: child.key,    
-  }
-);
-  });
-});
 
 var count =0;
 
@@ -75,41 +39,41 @@ class NotificationsCenter extends React.Component {
     super(props);
     this.state = {
       currentUser: null,
-      reqID:""
-    //   notificationsArray:[],
+      reqID:"",
+      notificationsArray:[],
     };
   }
 
   componentDidMount() { 
-    notificationsArray=[];
-   let reqID;
-   if(notificationsArray.length == 0){
-    firebase
-      .database()
-      .ref("notifications/")
-      .on("value", (snapshot) => {
-        snapshot.forEach((child) => {
-          // this.setState({reqID:  })
-            notificationsArray.push({
-                creditor:child.val().creditor,
-                debtor:child.val().debtor,
-                title:child.val().title,
-                body:child.val().body,
-                nType: child.val().notificationType,
-                // reqKey:child.val().reqID,
-                notficationKey: child.key,    
+    var notfArr = [];
+      try{
+        firebase
+          .database()
+          .ref("notifications/")
+          .on("value", (snapshot) => {
+            snapshot.forEach((child) => {
+              notfArr.push({
+                    creditor:child.val().creditor,
+                    debtor:child.val().debtor,
+                    title:child.val().title,
+                    body:child.val().body,
+                    nType: child.val().notificationType,
+                    notficationKey: child.key,    
+            }
+        );
+            });
+
+           this.setState({notificationsArray: notfArr.reverse()})
+          });
+        
+        }catch(error){
+          console.log(error)
         }
-    );
-        });
-      });
-
-    }
-    }
-
-   
-  list = () => {
-    const currentUser = firebase.auth().currentUser.uid;
-    return notificationsArray.map((c) => {
+      }
+  render() {
+  const list = () => {
+  const currentUser = firebase.auth().currentUser.uid;
+    return this.state.notificationsArray.map((c) => { 
      count++;
      if (  (c.creditor == currentUser && c.nType == "new request" 
         || c.debtor == currentUser && c.nType == "accept request" 
@@ -121,6 +85,7 @@ class NotificationsCenter extends React.Component {
                
               <TouchableOpacity
                 style={styles.card}
+                key={c.key}
               >
                 <View style={styles.leftItems}>
 
@@ -157,7 +122,7 @@ class NotificationsCenter extends React.Component {
       });
   };
 
-  render() {
+
 
     setTimeout(function() {
         firebase
@@ -207,7 +172,7 @@ class NotificationsCenter extends React.Component {
 
         {/* -------------------------------------- CARD 1*/}
 
-        <ScrollView style =  {styles.scrollStyle}>{this.list()}</ScrollView>
+        <ScrollView style =  {styles.scrollStyle}>{list()}</ScrollView>
 
         {/*View request */}
       </View>
