@@ -1326,7 +1326,7 @@ const styles = StyleSheet.create({
   ViewList:{
 marginBottom:220,
 // backgroundColor:'blue',
-top:-32,
+top:-25,
   },
   card: {
       top:1,
@@ -2080,7 +2080,7 @@ top:-10,
 
 
   searchInput:{
-    top:8,
+  
     padding: 10,
     borderColor: '#ffffff',
     borderWidth: 1,
