@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -42,18 +41,8 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-var requestArray = [];
-var myRequest = [];
+
 var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-var Searching=false;
-var Found=false;
-var specificStatus=false;
 let arrayFiltered22=[];
 var x = 0;
 
@@ -65,55 +54,6 @@ firebase
       var Data = childSnapshot.val();
 
       usersArray.push(Data);
-    });
-  });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
-
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
-
-const currentUser = firebase.auth();
-firebase
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-              requestArray.push({
-              creditor:child.val().creditor,
-              expectedDate:child.val().expectedDate,
-              installemntPrice:child.val().installemntPrice,
-              installmentsType:child.val().installmentsType,
-              price:child.val().price,
-              reason:child.val().reason,
-              repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-              submittedDate:child.val().submittedDate,
-             userName:child.val().userName,
-              userid:child.val().userid,
-              key:child.key,
-              remAmount: child.val().remAmount,
-              isRated : child.val().isRated,
-              RatingCount: child.val().RatingCount
-
-            });
-             
     });
   });
 
@@ -138,6 +78,7 @@ export default class ReqAsCreditor extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
+    requestsArr: []
   };
   ratingCompleted = (rating) => {
     this.setState({ newRatingValue: rating });
@@ -148,8 +89,8 @@ export default class ReqAsCreditor extends React.Component {
     registerForPushNotificationsAsync();
     Notifications.addNotificationReceivedListener(this._handleNotification);
     Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
-    requestArray=[];
-  
+    var requestArray = [];
+
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -157,7 +98,7 @@ export default class ReqAsCreditor extends React.Component {
     .ref("requests/")
     .on("value", (snapshot) => {
       snapshot.forEach((child) => {
-        if (true) {
+
           requestArray.push({         
             creditor:child.val().creditor,
             expectedDate:child.val().expectedDate,
@@ -178,8 +119,9 @@ export default class ReqAsCreditor extends React.Component {
             RatingCount:child.val().RatingCount
           });
           
-        }
+        
       });
+      this.setState({requestsArr:requestArray.reverse()})
     });
     }
 
@@ -1148,10 +1090,10 @@ searchStatus = (textTosearch)  =>{
 
   
      var check=false;
-    for(var i =0 ,j = 0;i<requestArray.length;i++){
+    for(var i =0 ,j = 0;i<this.state.requestsArr.length;i++){
       console.log(textTosearch)
       if(textTosearch!=""){
-      if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+      if(textTosearch.trim()==this.state.requestsArr[i].rqeuestStatus.trim()){
        check=true;
         this.setFound(true);
         // this.setSearching(true);
@@ -1164,7 +1106,7 @@ searchStatus = (textTosearch)  =>{
         // this.setSpecificStatusText(textTosearch);
         console.log(this.state.SpecificStatusText);
       // alert(requestArray[i].creditorName)
-      arrayFiltered22[j++]=requestArray[i]
+      arrayFiltered22[j++]=this.state.requestsArr[i]
       console.log(" دخلت الاف  ")
   
       // this.setState({
@@ -1302,7 +1244,7 @@ searchStatus = (textTosearch)  =>{
 ):this.state.Searching && !this.state.Found?(
 
 
-null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+null): <ScrollView>{this.list(this.state.requestsArr,null)}</ScrollView>}
 
             </View>
         {/*View request */}

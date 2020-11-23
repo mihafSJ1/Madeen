@@ -1,7 +1,6 @@
-import { StatusBar } from "expo-status-bar";
 import { ArabicNumbers } from "react-native-arabic-numbers";
-
 import React, { useState } from "react";
+
 import {
   StyleSheet,
   Text,
@@ -19,12 +18,9 @@ import * as firebase from "firebase";
 import "@firebase/auth";
 import "firebase/database";
 import "firebase/firestore";
-import FirebaseKeys from './FirebaseKeys';
 import { withNavigation } from "react-navigation";
-
 import { Ionicons } from "@expo/vector-icons";
-import { FlatList } from "react-native-gesture-handler";
-import { render } from "react-dom";
+
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -39,55 +35,6 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-var creditor;
-var expectedDate;
-var installemntDuration;
-var installemntPrice;
-var installmentsType;
-var price;
-var reason;
-var repaymentType;
-var rqeuestStatus;
-var submittedDate;
-var userName;
-var userid;
-var key;
-var remAmount;
-var requestArray = [];
-var usersArray = [];
-var x = 0;
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
-
-const currentUser = firebase.auth();
-firebase
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-            requestArray.push({
-             creditor:child.val().creditor,
-              expectedDate:child.val().expectedDate,
-              installemntPrice:child.val().installemntPrice,
-               installmentsType:child.val().installmentsType,
-               price:child.val().price,
-              reason:child.val().reason,
-               repaymentType:child.val().repaymentType,
-             rqeuestStatus:child.val().rqeuestStatus,
-               submittedDate:child.val().submittedDate,
-              userName:child.val().userName,
-              userid:child.val().userid,
-               key:child.key,
-               remAmount: child.val().remAmount});
-    });
-  });
 
 var count =0;
 class Timeline extends React.Component {
@@ -98,7 +45,7 @@ class Timeline extends React.Component {
       currentUser: null,
       modalVisible: false,
       modalVisible2: false,
-      requestArray:[],
+      requestsArr:[],
       pic:
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       profilePic:
@@ -107,21 +54,10 @@ class Timeline extends React.Component {
       noDebts: 0,
     };
   }
-  // state = { currentUser: null };
-  // state = {
-  //   modalVisible: false,
-  //   modalVisible2: false,
-  //   requestArray:[],
-  //   pic:
-  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-  //   profilePic:
-  //     "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
-  // };
-
 
   componentDidMount() {
   
-    requestArray=[];
+   var requestArray=[];
 
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
@@ -147,6 +83,7 @@ class Timeline extends React.Component {
                 remAmount: child.val().remAmount});
           }
         });
+        this.setState({requestsArr:requestArray.reverse()})
       });
 ///////////////////////////////////// المفترض ارجع كل يوزر وعدد استلافه وتسليفه
 
@@ -297,7 +234,7 @@ class Timeline extends React.Component {
   list = () => {
     const currentUser = firebase.auth().currentUser.uid;
 
-    return requestArray.map((c) => {
+    return this.state.requestsArr.map((c) => {
      count++;
       if (c.userid != currentUser) {
         if (c.creditor == "") {
@@ -709,13 +646,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: "#fff",
   },
-  buttonText: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-    textAlign: "center",
-    fontSize: 50,
-    color:'#fff',
-    fontWeight:"bold",
-  },
+  // buttonText: {
+  //   fontFamily: "Bahij_TheSansArabic-Light",
+  //   textAlign: "center",
+  //   fontSize: 50,
+  //   color:'#fff',
+  //   fontWeight:"bold",
+  // },
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -759,22 +696,6 @@ const styles = StyleSheet.create({
     borderWidth: 10,
     borderColor: "red",
   },
-
-  UserImage: {
-    alignItems: "center",
-    marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    left: 100,
-    top: 0,
-    zIndex: 2,
-    width: 160,
-    height: 160,
-    resizeMode: "stretch",
-    borderRadius: 100,
-    borderColor: "#CBCA9E",
-    borderWidth: 4,
-  },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
@@ -786,12 +707,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     color: "#746356",
   },
-
   RateStarts: {
     left: 110,
     bottom: 50,
   },
-
   PinkRectangleShapeView: {
     width: 120,
     height: 70,
@@ -870,8 +789,5 @@ const styles = StyleSheet.create({
     zIndex:120,
   
   }
-
-  
-  //end
 });
 export default withNavigation(Timeline);
