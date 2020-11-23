@@ -203,6 +203,22 @@ console.log(this.state.RatingCount+this.state.requestKey);
       //   this.updateRating()
       // }
     }
+    cancelRatingModal(visible){
+      this.setState({
+        ratingVisable: visible,
+
+      }, () => {
+ 
+   firebase
+   .database()
+.ref('requests/' + this.state.requestKey)
+.update({
+isRated:  true,
+  })
+ 
+    }) 
+
+    }
     closeRatingModal(visible) {
    
 
@@ -1033,10 +1049,22 @@ type='custom'
  size={20}
 
 />
-          
+<View style={styles.buttonContainer}>
+<TouchableOpacity
+      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+             onPress={() => {
+             this.cancelRatingModal(false)
+         
+         
+
+             }}
+           >
+             <Text  style={[styles.buttonText,{fontSize:12}]}>تخطي</Text>
+
+           </TouchableOpacity>
 
            <TouchableOpacity
-      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+      style={[styles.Ratingbutton, { backgroundColor: "#CBCA9E" }]}
              onPress={() => {
              this.closeRatingModal(false)
          
@@ -1044,9 +1072,12 @@ type='custom'
 
              }}
            >
-             <Text style={styles.buttonText}>إرسال</Text>
+             <Text style={[styles.buttonText,{fontSize:12}]}>إرسال</Text>
 
            </TouchableOpacity>
+
+       </View>
+
          </View>
        </View>
      </Modal>
@@ -1904,8 +1935,8 @@ backgroundColor:'red',
       },
       Ratingbutton: {
         alignItems: "center",
-        width: 170,
-        height: 30,
+        width: 100,
+        height: 25,
         marginTop: 50,
         padding: 5,
         borderRadius: 15,
@@ -1944,7 +1975,6 @@ backgroundColor:'red',
         backgroundColor:"gray",
         zIndex:120,
       
-      }
-
+      },
 
 });
