@@ -3,8 +3,8 @@
   "expoServerPort": 19000,
   "packagerPort": 19001,
   "packagerPid": 35627,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://v7-2vh.anonymous.madeen.exp.direct",
+  "packagerNgrokUrl": "https://packager.v7-2vh.anonymous.madeen.exp.direct",
+  "ngrokPid": 39190,
   "webpackServerPort": null
 }

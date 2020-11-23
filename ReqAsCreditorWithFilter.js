@@ -12,6 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Rating, AirbnbRating } from 'react-native-elements';
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "@firebase/auth";
@@ -25,6 +26,8 @@ import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
+import { ArabicNumbers } from "react-native-arabic-numbers";
+import { IconButton } from 'react-native-paper';
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -52,6 +55,7 @@ var Searching=false;
 var Found=false;
 var specificStatus=false;
 let arrayFiltered22=[];
+var x = 0;
 
 firebase
   .database()
@@ -59,6 +63,7 @@ firebase
   .once("value", function (snapshot) {
     snapshot.forEach(function (childSnapshot) {
       var Data = childSnapshot.val();
+
       usersArray.push(Data);
     });
   });
@@ -90,20 +95,25 @@ firebase
   .ref("requests/")
   .on("value", (snapshot) => {
     snapshot.forEach((child) => {
-            requestArray.push({
-            creditor:child.val().creditor,
+              requestArray.push({
+              creditor:child.val().creditor,
               expectedDate:child.val().expectedDate,
               installemntPrice:child.val().installemntPrice,
               installmentsType:child.val().installmentsType,
               price:child.val().price,
               reason:child.val().reason,
               repaymentType:child.val().repaymentType,
-            rqeuestStatus:child.val().rqeuestStatus,
+              rqeuestStatus:child.val().rqeuestStatus,
               submittedDate:child.val().submittedDate,
-              userName:child.val().userName,
+             userName:child.val().userName,
               userid:child.val().userid,
               key:child.key,
-              remAmount: child.val().remAmount});
+              remAmount: child.val().remAmount,
+              isRated : child.val().isRated,
+              RatingCount: child.val().RatingCount
+
+            });
+             
     });
   });
 
@@ -112,18 +122,27 @@ export default class ReqAsCreditor extends React.Component {
   //const [modalVisible, setModalVisible] = useState(false);
 
   state = {
+    newRatingValue:5,
+    // rating:5,
+    ratingVisable: false,
     modalVisible: false,
     modalVisible2: false,
     CreditorEmail:"",
     specificStatus:false,
     SpecificStatusText:"",
     Searching:false,
-     Found:false,
+    Found:false,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     profilePic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
+  ratingCompleted = (rating) => {
+    this.setState({ newRatingValue: rating });
+            // console.log("Rating is: " + rating)
+  }
 
   componentDidMount() {
     registerForPushNotificationsAsync();
@@ -148,12 +167,16 @@ export default class ReqAsCreditor extends React.Component {
             price:child.val().price,
             reason:child.val().reason,
             repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
+            rqeuestStatus:child.val().rqeuestStatus,
             submittedDate:child.val().submittedDate,
             userName:child.val().userName,
             userid:child.val().userid,
             key:child.key,
-            remAmount: child.val().remAmount });
+            remAmount: child.val().remAmount ,
+            isRated: child.val().isRated,
+          
+            RatingCount:child.val().RatingCount
+          });
           
         }
       });
@@ -208,6 +231,69 @@ export default class ReqAsCreditor extends React.Component {
          debtor:userid,
         notificationType: "reject request",
         });
+    }
+
+    setRatingModalVisible(visible,debtor) {
+      var RatingCount = null;
+      var rating = 0;
+      firebase
+      .database()
+      .ref("users/"+ debtor.userid,).on("value", (snapshot) => {
+        RatingCount = snapshot.val().RatingCount;
+        rating = snapshot.val().rating;
+      });
+      this.setState({
+        ratingVisable: visible,
+        debtorID: debtor.userid,
+        RatingCount: RatingCount,
+        rating :rating,
+        requestKey: debtor.key
+      
+}, () => {
+console.log(this.state.RatingCount+this.state.requestKey);
+
+     
+
+
+})
+
+      // if (visible == false){
+      //   this.updateRating()
+      // }
+    }
+    closeRatingModal(visible) {
+   
+
+      this.setState({
+        ratingVisable: visible,
+    
+      
+      }, () => {
+     console.log( this.state.debtorID)
+     console.log( this.state.RatingCount)
+     console.log( this.state.newRatingValue)
+    
+        firebase
+       .database()
+   .ref('users/' + this.state.debtorID)
+   .update({
+    RatingCount: this.state.RatingCount+1,
+    rating:  this.state.rating + this.state.newRatingValue,
+ 
+      })
+   
+   firebase
+   .database()
+.ref('requests/' + this.state.requestKey)
+.update({
+
+isRated:  true,
+
+  })
+ 
+    }) 
+  
+  
     }
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -290,18 +376,27 @@ export default class ReqAsCreditor extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
 
+               }
+
+             console.log(x +"c");
+          })
         this.setprofilePic(snapshot.val().UserImage)
         this.setCreditorEmail(snapshot.val().email);
 
         console.log(this.state.profilePic);
       });
 
-    console.log("بتنحل");
 
-    console.log("here");
-
-    console.log("here");
 
     this.setState({
       modalVisible2: true,
@@ -310,24 +405,43 @@ export default class ReqAsCreditor extends React.Component {
       
       
     });
-    console.log("يارب١");
-    console.log("يارب٢");
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if(item.userid == child.val().creditor){
+          if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+            }
+            }else  if(item.userid == child.val().userid){
+              if ("مكتمل" == child.val().rqeuestStatus ){
+              countDebts++;
+            }
+          }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
     
   }
   //Areej Test
 
-  viewTimelineImageFunction(item) {
-    firebase.auth();
+  // viewTimelineImageFunction(item) {
+  //   firebase.auth();
 
-    firebase
-      .database()
-      .ref("users/" + item.userid)
-      .on("value", (snapshot) => {
-        this.setTimelinePic(snapshot.val().UserImage);
-        console.log("Areej Test");
-        console.log(this.state.setTimelinePic);
-      });
-  }
+  //   firebase
+  //     .database()
+  //     .ref("users/" + item.userid)
+  //     .on("value", (snapshot) => {
+  //       this.setTimelinePic(snapshot.val().UserImage);
+  //       console.log("Areej Test");
+  //       console.log(this.state.setTimelinePic);
+  //     });
+  // }
+
 
   openModalWithItem(item) {
     this.setState({
@@ -346,7 +460,10 @@ export default class ReqAsCreditor extends React.Component {
       creditorID: item.creditor,
       Rkey: item.key,
       rAmount: item.remAmount,
-      cEmail: item.creditorEmail
+      cEmail: item.creditorEmail,
+      rating : item.rating,
+      RatingCount:item.RatingCount,
+
     });
 
     //  this.openModalWithItem2(item)
@@ -362,6 +479,21 @@ export default class ReqAsCreditor extends React.Component {
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
         console.log(" الثانيه  جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.ratingValue );
+          if (this.state.RatingCount!=0){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+
+           }
+      
+               
+        
+
+          })
    
         console.log("inside retrive");
         this.setTimelinePic(snapshot.val().UserImage);
@@ -385,22 +517,7 @@ export default class ReqAsCreditor extends React.Component {
       { cancelable: false }
     );
   }
-  // updatestateAccept(k,props){
-    
-  // //   this.setModalVisible(!this.state.modalVisible);
-  // //  props.navigate("squares");
-  // //   const { currentUser } = firebase.auth();
-  // //   firebase
-  // //   .database()
-  // //   .ref('requests/' + k)
-  // //   .update({
-  // //     creditor:currentUser.uid,
-  // //     rqeuestStatus: "قيد التنفيذ",
-  // //   })
-  // //   .then(() => console.log('Data updated.'));
-    
-  
-  // }
+
   
   conformupdateReject(k,props){
     Alert.alert(
@@ -474,17 +591,15 @@ this.setModalVisible(!this.state.modalVisible);
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                
                 </View>
-                {console.log("here3")}
+            
 
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
                     <Text style={styles.status2}> طلب جديد  </Text>
+               
+                    
               </View>
 ):(
                       null
@@ -501,18 +616,39 @@ this.setModalVisible(!this.state.modalVisible);
                     )}
 
 
-{c.rqeuestStatus== "مكتمل" ? (
-                  <View style={styles.CompleteRectangleShapeView}> 
-                    <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+
+{c.rqeuestStatus== "مكتمل"  ?   
+
+
+                  <View  style={styles.CompleteRectangleShapeView}
+                 
+                  > 
+                     <Text style={styles.status2}
+             
+               >مكتمل </Text>
+              
+                  
               </View>
-):(
-                      null
-                      
-                    )}
+            
+// :c.rqeuestStatus== "مكتمل" && c.rating == true ?   
+//   <View style={styles.CompleteRectangleShapeView}> 
+   
+//    <Text style={styles.status2}>مكتمل </Text>
+//     <Text style={styles.status2}> {c.rqeuestStatus} </Text>
+// </View>
+:null}
+          
+                   
+                 
 
                 
                 <View style={styles.rightItems}>
+
                   <View style={styles.textContainer}>
+
+                    
+           
+             
                     <Text style={styles.textLabel}>
                       المدين |{" "}
                       <Text
@@ -538,6 +674,16 @@ this.setModalVisible(!this.state.modalVisible);
                       {" "}
                       تاريخ إنشاء الطلب |<Text style={styles.textData}> {c.submittedDate} </Text>
                     </Text>
+
+                         {console.log(c.is)}
+                         {c.rqeuestStatus== "مكتمل" && c.isRated == false  ?   
+                     <Text style={styles.RatingButton}
+      
+                      onPress={() =>{ this.setRatingModalVisible(true,c)}}
+             
+               >قــيّــم!</Text>
+                
+               :  null }
                   </View>
                   {/* <TouchableOpacity style={styles.imageT} 
           onPress={() => {
@@ -560,6 +706,15 @@ this.setModalVisible(!this.state.modalVisible);
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+                  <IconButton
+                     style={styles.chatIcon}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
                     <TouchableOpacity
                       onPress={() => {
                         
@@ -779,6 +934,7 @@ this.setModalVisible(!this.state.modalVisible);
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+             
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible2(!this.state.modalVisible2);
@@ -798,7 +954,7 @@ this.setModalVisible(!this.state.modalVisible);
                   
                     <Text style={styles.UserName}>{this.state.namef}</Text>
                     <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-                    <Text style={styles.RateStarts}>
+                    {/* <Text style={styles.RateStarts}>
                       <Ionicons
                         name="ios-star"
                         size={33}
@@ -829,15 +985,71 @@ this.setModalVisible(!this.state.modalVisible);
                         color="#E4E4E4"
                         solid
                       />
-                    </Text>
+                    </Text> */}
+                                  {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> {ArabicNumbers(this.state.noDebts)}</Text>
                     </View>
 
                     <View style={styles.buttonContainer}>
@@ -851,6 +1063,61 @@ this.setModalVisible(!this.state.modalVisible);
                   </View>
                 </View>
               </Modal>
+              {/* RATING */}
+              <Modal
+       
+       animationType="fade"
+       transparent={true}
+       visible={this.state.ratingVisable}
+     
+     >
+        <View style={styles.ratingcenteredView}>
+          <View style={styles.RatingmodalView}>
+          <Text style={styles.RatingmodalText}> كيف كانت تجربتك؟</Text>
+         <AirbnbRating 
+         reviewSize = {22}
+
+       reviewColor = {'#CBCA9E'}
+             
+type='custom'
+ count={5}
+ ratingBackgroundColor={'green'}
+ ratingColor='#3498db'
+ ratingBackgroundColor='#c8c7c8'
+ reviews={['سيئة','جيدة','متوسطة','ممتازة','رائعة']}
+ defaultRating={5}
+ onFinishRating={this.ratingCompleted}
+
+ ratingColor={'#3498db'}
+ ratingBackgroundColor={'red'}
+ ratingText= {{
+   fontSize: 2,
+   textAlign: 'center',
+   
+  
+ }}
+ 
+
+ size={20}
+
+/>
+          
+
+           <TouchableOpacity
+      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+             onPress={() => {
+             this.closeRatingModal(false)
+         
+         
+
+             }}
+           >
+             <Text style={styles.buttonText}>إرسال</Text>
+
+           </TouchableOpacity>
+         </View>
+       </View>
+     </Modal>
             </View>
           );
         }
@@ -992,6 +1259,11 @@ searchStatus = (textTosearch)  =>{
             position: "absolute",
           }}
         ></LinearGradient>
+         {this.state.modalVisible || this.state.modalVisible2||this.state.ratingVisable?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1067,7 +1339,7 @@ const styles = StyleSheet.create({
   ViewList:{
     marginBottom:220,
     // backgroundColor:'blue',
-    top:-25,
+    top:-32,
       },
       card: {
         top:1,
@@ -1088,7 +1360,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -1267,9 +1539,9 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: 5,
     borderRadius: 15,
-    marginLeft: 0,
+    marginLeft: 20,
     marginBottom: 0,
-    right: 0,
+    right: 22,
     top: -130,
     backgroundColor: "#EAF4E1",
     borderColor: "#FFFFFF",
@@ -1295,7 +1567,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     right: 0,
     left:2,
-    top: -38,
+    top: -32,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1311,8 +1583,8 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 75,
+    left:10,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
   },
@@ -1322,8 +1594,8 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#D9AE94",
     
   },
@@ -1333,8 +1605,8 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+     top: 18,
     backgroundColor: "#BE6A6C",
   
   },
@@ -1344,8 +1616,8 @@ const styles = StyleSheet.create({
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
   },
@@ -1463,7 +1735,7 @@ backgroundColor:'red',
     right: 0,
     left:150,
     top: -68,
-    backgroundColor: "#EAF4E1",
+    backgroundColor: "red",
     borderColor: "#EAF4E1",
     borderWidth: 1,
     zIndex:0,
@@ -1489,7 +1761,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -8,
+    top: 0,
     left: 180,
     right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -1650,7 +1922,6 @@ backgroundColor:'red',
     
       searchInput:{
         top:8,
-        marginBottom:10,
         padding: 10,
         borderColor: '#ffffff',
         borderWidth: 1,
@@ -1670,5 +1941,84 @@ backgroundColor:'red',
         opacity: 0.6
         
       },
+      ratingcenteredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      RatingmodalView: {
+        height:240,
+        width:300,
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+      },
+      RatingmodalText: {
+        fontFamily: "Bahij_TheSansArabic-Light",
+        fontSize:20,
+        marginBottom: 0,
+        textAlign: "center"
+      },
+      Ratingbutton: {
+        alignItems: "center",
+        width: 170,
+        height: 30,
+        marginTop: 50,
+        padding: 5,
+        borderRadius: 15,
+        marginLeft: 10,
+        bottom: 10,
+        // right:200,
+        backgroundColor: "#fff",
+    
+      },
+      RatingButton:{
+        color: "#EDD44D",
+        fontFamily: "Bahij_TheSansArabic-Bold",
+        fontSize:18,
+        textAlign:'right',
+        right:257,
+        bottom:30,
+        marginBottom:-35,
+        shadowColor: "grey",
+        shadowOffset: {
+          width: 0,
+          height: 1
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+        elevation: 5
+      },
+     
+
+
+   
+      shadow:{
+        position:'absolute',
+        height:2000,
+        width:'100%',
+        opacity:0.5,
+        padding:100,
+        backgroundColor:"gray",
+        zIndex:120,
+      
+      },
+
+      chatIcon:{
+        top:500,
+        backgroundColor:'#FFEEC4',
+      },
+
 
 });

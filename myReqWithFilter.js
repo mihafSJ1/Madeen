@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
-
+import { ArabicNumbers } from "react-native-arabic-numbers";
+import { Button, Overlay } from 'react-native-elements';
+import { IconButton } from 'react-native-paper';
 import {
   StyleSheet,
   Text,
@@ -122,7 +124,8 @@ export default class MyReqWithFilter extends React.Component {
       searchTerm: '',
 
     arrayFiltered:requestArray,
-   
+    noSubsidy: 0,
+    noDebts: 0,
   };
   }
 
@@ -244,26 +247,54 @@ export default class MyReqWithFilter extends React.Component {
       .ref("users/" + item.creditor)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
+
+               }
+
+            
+          })
+        
+        
 
         this.setprofilePic(snapshot.val().UserImage);
         this.setCreditorName(snapshot.val().fullName);
         this.setCreditorEmail(snapshot.val().email);
         console.log(this.state.profilePic);
       });
-
-    console.log("بتنحل");
-
-
-
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-    console.log("يارب١");
 
-    console.log("يارب٢");
-  
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+       if(item.creditor == child.val().creditor){
+        if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+          countSubsidy++;
+        }
+        }else  if(item.creditor == child.val().userid){
+          if ("مكتمل" == child.val().rqeuestStatus ){
+          countDebts++;
+        }
+      }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
   }
 
 
@@ -303,6 +334,7 @@ export default class MyReqWithFilter extends React.Component {
       RemAmount: item.remAmount,
       Rkey: item.key,
      repType:item.repaymentType,
+     userid:item.userid,
       });
     //  this.openModalWithItem2(item)
   }
@@ -409,7 +441,7 @@ console.log(text)
         if (true) {
           console.log("داخل الليست ٢٢٢٢");
           return (
-         
+    
             <View>
                 
                 {console.log("داخل الفيووووو")}
@@ -439,11 +471,11 @@ console.log(text)
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
+                  {/* <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid /> */}
                 </View>
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
@@ -535,14 +567,36 @@ console.log(text)
                 </View>
               </TouchableOpacity>
               {/* {console.log("here4")} */}
+       
               <Modal
                 animationType="slide"
                 transparent={true}
                 visible={this.state.modalVisible}
               >
                 <View style={styles.centeredView}>
+                  
                   <View style={styles.modalView}>
+                  <View style={styles.modalViewContent}>
+{/* ///////chattiinnnggg */}
+
+
+{this.state.CreName == "" ? null: (
+                     <IconButton
+                     style={styles.chatIcon}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
                     
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                        
+                        
+                      )}
+
+
+           
+        
                   <TouchableOpacity
                
                  style={styles.Editicon}
@@ -621,14 +675,29 @@ console.log(text)
 
 
                      {/* header */}
-{this.state.Rstatus== "قيد الإنتظار" ? (
-           <Text style={styles.waitheader}>تفاصيل الطلب </Text>    
+
+
+                     {this.state.CreName== "" ? (
+
+  
+<Text style={styles.waitheader}>تفاصيل الطلب </Text>    
 ):(
-  <Text style={styles.header}>تفاصيل الطلب </Text>
+null
+           
+          )}
+
+
+
+{this.state.Rstatus== "قيد الإنتظار" && this.state.CreName!= ""  ? (
+
+  
+           <Text style={styles.waitheaderWithCreditorName}>تفاصيل الطلب </Text>    
+):(
+null
                       
                      )}
 
-
+{this.state.Rstatus!= "قيد الإنتظار"?(<Text style={styles.header}>تفاصيل الطلب </Text>):(null)}
 
 
 
@@ -700,7 +769,6 @@ console.log(text)
                       )}
                     </Text>
 
-                   {/* كان هنا فيه كود المتبقي من الدين */}
 
 
 
@@ -763,14 +831,7 @@ console.log(text)
                       )}
   </Text>
 
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-تاريخ الطلب |{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.submmitedDate}{" "}
-    </Text>{" "}
-  </Text> */}
+
   <Text style={styles.textInputTitle}>
     نوع التسديد |{" "}
     <Text style={styles.textData}> {this.state.Type} </Text>
@@ -806,7 +867,6 @@ console.log(text)
       
     )}
   </Text>
-
   // */}
   <Text style={styles.textInputTitle}>
                     
@@ -924,9 +984,11 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
 
 
                     </View>
+                    </View>
                   </View>
                 </View>
               </Modal>
+        
 
               <Modal
                 animationType="slide"
@@ -935,6 +997,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+                    
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible2(!this.state.modalVisible2);
@@ -966,7 +1029,63 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName!=""? ( 
+                        {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+                    {/* {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -1001,7 +1120,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                     ): null }
+                     ): null } */}
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1012,14 +1131,14 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       ): null }
                     {this.state.CreditorName!=""? ( 
         <View style={styles.PinkRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
       </View>
 
       ): null }
                   
                     {this.state.CreditorName!=""? ( 
         <View style={styles.YellowRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noDebts)}</Text>
       </View>
       ): null }
                   
@@ -1101,17 +1220,7 @@ searchStatus = (textTosearch)  =>{
     }
     }
 
-  // requestArray.forEach(element =>{
-  //   if(textTosearch==element.rqeuestStatus){
-  //     arrayFiltered2.push(element);
-  //     this.setFound(true);
-  //     this.setSearching(true);
-  //     this.setSpecificStatus(true);
-  //     this.setSpecificStatusText(textTosearch);
-  //   }
-  // }
-
-  // )
+ 
 
 
 
@@ -1119,16 +1228,7 @@ searchStatus = (textTosearch)  =>{
 
 
 
-
-  // console.log(textTosearch)
-    // alert(textTosearch);
-    // this.setState({
-
-    //   arrayFiltered2:this.state.arrayFiltered.
-    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
-
-
-    // })
+ 
   console.log(" دخلت السيرتش ")
  
 //   console.log(arrayFiltered)
@@ -1152,6 +1252,7 @@ console.log(check)
 
     return (
       <View style={styles.container}>
+        
           
         <LinearGradient
           colors={[
@@ -1173,8 +1274,14 @@ console.log(check)
             right: -660,
             top: -630,
             position: "absolute",
+          
           }}
         ></LinearGradient>
+ {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1280,6 +1387,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+
   },
   container2: {
     marginTop: 40,
@@ -1291,7 +1399,7 @@ const styles = StyleSheet.create({
   ViewList:{
 marginBottom:220,
 // backgroundColor:'blue',
-top:-25,
+top:-32,
   },
   card: {
       top:1,
@@ -1312,7 +1420,7 @@ top:-25,
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -1364,7 +1472,7 @@ top:-25,
     fontSize:20,
     alignItems: "center",
     left:70,
-    top:50,
+    top:30,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -1416,6 +1524,7 @@ top:-25,
     shadowRadius: 3.84,
     elevation: 5,
     paddingBottom: 100,
+    // backgroundColor:'red'
   },
 
   modalText: {
@@ -1450,7 +1559,7 @@ top:-25,
     color: "#404040",
     fontSize: 30,
     // margin: 20,
-    top: -50,
+    top: -90,
 
     textAlign: "center",
     justifyContent: "center",
@@ -1462,7 +1571,7 @@ top:-25,
 
 
   Content:{
-  // backgroundColor:'red',
+  backgroundColor:'red',
 },
 
 waitContent:{
@@ -1473,20 +1582,20 @@ waitContent:{
 
 
 
-  waitheader:{
-    fontFamily: "Bahij_TheSansArabic-Light",
-    color: "#404040",
-    fontSize: 30,
-    // margin: 20,
-    top: -80,
+waitheader:{
+  fontFamily: "Bahij_TheSansArabic-Light",
+  color: "#404040",
+  fontSize: 30,
+  // margin: 20,
+  top: -80,
 
-    textAlign: "center",
-    justifyContent: "center",
-    marginBottom: 30,
-    width:170,
-    left:90,
-    // backgroundColor:'red',
-  },
+  textAlign: "center",
+  justifyContent: "center",
+  marginBottom: 30,
+  width:170,
+  left:90,
+  // backgroundColor:'red',
+},
 
 
 
@@ -1653,7 +1762,7 @@ waitContent:{
     marginBottom: 0,
     right: 0,
     left:164,
-    top: -38,
+    top: -32,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1666,8 +1775,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
    
@@ -1679,8 +1788,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#D3CDC8",
     
    
@@ -1692,8 +1801,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#BE6A6C",
     
    
@@ -1705,12 +1814,10 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
-   
-
   },
   status3:{
     textAlign: "center",
@@ -1852,8 +1959,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -8,
-    // bottom:5,
+    top: -5,
     left: 180,
     right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -2048,7 +2154,7 @@ top:-10,
 
 
   searchInput:{
-  
+    top:8,
     padding: 10,
     borderColor: '#ffffff',
     borderWidth: 1,
@@ -2059,6 +2165,7 @@ top:-10,
     fontFamily: "Bahij_TheSansArabic-Light",
     left:0,
     textAlign:'right',
+    marginBottom:10,
     backgroundColor:'#ffffff',
   
   },
@@ -2073,7 +2180,42 @@ left:20,
     opacity: 0.6
     
   },
+shadow:{
+  position:'absolute',
+  height:2000,
+  width:'100%',
+  opacity:0.5,
+  padding:100,
+  backgroundColor:"gray",
+  zIndex:120,
+
+},
 
 
+
+
+
+chatIcon:{
+  top:500,
+  backgroundColor:'#FFEEC4',
+},
+modalViewContent:{
+  top:-5,
+},
+
+
+waitheaderWithCreditorName:{
+  fontFamily: "Bahij_TheSansArabic-Light",
+  color: "#404040",
+  fontSize: 30,
+  // margin: 20,
+  top: -150,
+
+  textAlign: "center",
+  justifyContent: "center",
+  marginBottom: 30,
+  width:170,
+  left:90, 
+}
   //end
 });
