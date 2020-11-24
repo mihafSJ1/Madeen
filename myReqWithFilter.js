@@ -874,7 +874,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
                     />
   ):(null
   
@@ -888,7 +888,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
                     />  
  ): null }
 {this.state.Rstatus== "مكتمل" ? ( 
@@ -899,7 +899,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
                     />  
  ): null }
    
@@ -1018,42 +1018,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
-                    {/* {this.state.CreditorName!=""? ( 
-      
-     
-                    <Text style={styles.RateStarts}>
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                    </Text>
-                     ): null } */}
+                    
+                
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1153,49 +1119,12 @@ searchStatus = (textTosearch)  =>{
     }
     }
 
-  // requestArray.forEach(element =>{
-  //   if(textTosearch==element.rqeuestStatus){
-  //     arrayFiltered2.push(element);
-  //     this.setFound(true);
-  //     this.setSearching(true);
-  //     this.setSpecificStatus(true);
-  //     this.setSpecificStatusText(textTosearch);
-  //   }
-  // }
-
-  // )
-
-
-
-
-
-
-
-
-  // console.log(textTosearch)
-    // alert(textTosearch);
-    // this.setState({
-
-    //   arrayFiltered2:this.state.arrayFiltered.
-    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
-
-
-    // })
   console.log(" دخلت السيرتش ")
  
-//   console.log(arrayFiltered)
-// this.list(arrayFiltered2)
-// console.log(" اراي ٢ ")
 console.log(arrayFiltered2)
 console.log(" اخر السيرتش ")
 console.log(check)
-// console.log(textTosearch)
 
-
-
-
-  // console.log( arrayFiltered2)
-// {this.listToSearch()} 
   }
 
 
