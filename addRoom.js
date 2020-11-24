@@ -14,6 +14,7 @@ import {
   } from "react-native";
   import { useState } from "react";
   import { IconButton,Title} from 'react-native-paper';
+  import { AntDesign } from "@expo/vector-icons";
   //import firestore from '@react-native-firebase/firestore';
   //import firebase from 'firebase';
   //import firestoreNative from '@react-native-firebase/firestore';
@@ -35,7 +36,7 @@ import RequestBackgroundComp from "./RequestBackgroundComp";
     
     };
     state = {
-       
+    
       roomName: "",
     };
 //data base real time code 
@@ -46,6 +47,16 @@ setRoomName(name) {
 
 
        handleButtonPress() {
+
+        if(this.state.roomName.trim() ==""){
+          Alert.alert(
+            "",
+            "عفوًا، يجب ان تضع اسمًا للمحادثة ",
+            [{ text: "حسناً" }],
+            { cancelable: false }
+          );
+return;
+        }
         const { currentUser } = firebase.auth();
         const {secondID} = this.props.route.params;
         const{reqIDforChat}=this.props.route.params;
@@ -95,7 +106,7 @@ setRoomName(name) {
           })
             docRef => {
               docRef.collection('MESSAGES').add({
-                text: `You have joined the room ررررر ${this.state.roomName}.`,
+                text: `You have joined the room  ${this.state.roomName}.`,
                 createdAt: new Date().getTime(),
                 system: true
               });
@@ -118,7 +129,7 @@ setRoomName(name) {
         const { currentUser } = firebase.auth();
         const {secondID} = this.props.route.params;
         const{reqIDforChat}=this.props.route.params;
-
+        const{secondName}=this.props.route.params;
 //const [userName, setUserName] = useState("");
 
 //const {secondID} = this.props.route.params;//
@@ -138,35 +149,44 @@ setRoomName(name) {
                  <RequestBackgroundComp />    
           <View style={styles.closeButtonContainer}>
          
-            <IconButton
-              icon='close-circle'
-              size={50}
-              color='#6646ee'
-              onPress={() => this.props.navigation.goBack()}
-            />
+         
           </View>
           <View style={styles.innerContainer}>
           <View style={styles.registerBackground}>
+
+          <AntDesign
+                        style={styles.close}
+                        name="close"
+                        size={24}
+                        color="black"
+                        onPress={() => this.props.navigation.goBack()}
+                      />
 {console.log({secondID})
 }    
 {console.log({reqIDforChat})
 }     
  {/* // <Title style={styles.title}>Ccc {secondID}</Title> */}
 
-            <Title style={styles.title}>Create a new chat room</Title>
+<Title style={styles.title}>    محادثة جديدة مع </Title>
+<Title style={styles.name}>  !  {secondName} </Title>   
+
             <TextInput
               // labelName='Room Name'
               // value={roomName}
               // onChangeText={text => setRoomName(text)}
               // clearButtonMode='while-editing'
               style={styles.textinput}
-              placeholder="room name "
+              placeholder="اسم المحادثه "
               name="fullname"
-              value={this.state.roomName}
+              // value={this.state.roomName}
+                 roomName="Ra"
               onChangeText={text => this.setRoomName(text)}
+              editable = {true}
               value={this.state.roomName}
               input={this.state.roomName}
             />
+
+
       {/* 
       <TextInput
                       style={styles.textinput}
@@ -181,15 +201,35 @@ setRoomName(name) {
       
       
       
+      <View  Style={styles.buttonSubmit}>
       
-      
-            <Button
+            {/* <Button
               title='Create'
               modeValue='contained'
+             
               labelStyle={styles.buttonLabel}
               onPress={() => this.handleButtonPress()}
               disabled={this.state.roomName.length === 0}
-            />
+            /> */}
+</View>
+
+            
+{/* <Button
+              title='Create'
+              modeValue='contained'
+              style={styles.buttonSubmit}
+              // labelStyle={styles.buttonLabel}
+              onPress={() => this.handleButtonPress()}
+              disabled={this.state.roomName.length === 0}
+            />  */}
+
+<TouchableOpacity
+ onPress={() => this.handleButtonPress()}
+    style={[styles.Paybutton, { backgroundColor: '#986979' }]}
+    // disabled={this.state.roomName.length === 0}
+  >
+    <Text style={styles.PaybuttonText}> انشاء </Text>
+  </TouchableOpacity>
 
 </View>
           </View>
@@ -237,11 +277,18 @@ bottom:10,
     rootContainer: {
       flex: 1
     },
+
     closeButtonContainer: {
       position: 'absolute',
       top: 70,
       right: 0,
       zIndex: 3
+    },
+
+    close:{
+      top:10,
+left:20,
+
     },
     innerContainer: {
       top:-100,
@@ -249,12 +296,23 @@ bottom:10,
       justifyContent: 'center',
       alignItems: 'center',
     },
+
     title: {
+      top:15,
       fontSize: 24,
       marginBottom: 10,
       textAlign:'center',
+      fontFamily: "Bahij_TheSansArabic-Light",
+    },
+
+    name:{
+      top:17,
+      fontFamily: "Bahij_TheSansArabic-Bold",
+      color:'#CBCA9F',
+      textAlign:'center',
     },
     buttonLabel: {
+      top:50,
       fontSize: 22,
       textAlign:'center',
     },
@@ -262,19 +320,60 @@ bottom:10,
     registerBackground: {
       overflow: "hidden",
       flex: 1,
-      borderTopRightRadius: 60,
-      borderTopLeftRadius: 60,
+      borderTopRightRadius: 30,
+      borderTopLeftRadius: 30,
+      borderBottomLeftRadius: 30,
+      borderBottomRightRadius: 30,
       backgroundColor: "#fff",
-      width:410,
-      height:1000,
-      top:-300,
-      marginBottom:-500,
+      width:350,
+      height:190,
+      top:-290,
+      marginBottom:-200,
     },
     textinput:{
+      top:40,
       textAlign:'center',
-    }
+    },
+    buttonSubmit:{
+ top:1000,
+    },
+    PaybuttonText: {
+      textAlign: "center",
+      fontFamily: "Bahij_TheSansArabic-Bold",
+      top: -4,
+      bottom: -18,
+      textAlign: "center",
+      fontSize: 18,
+      color:'#fff',
+      // fontWeight:"bold",
+    },
+
+    Paybutton:{
+      // alignItems: "center",
+      // width: 170,
+      // height: 30,
+      // marginTop: 10,
+      // padding: 5,
+      // borderRadius: 15,
+      // marginLeft: 10,
+      // backgroundColor: "#fff",
+      // fontSize:10,
+      alignItems: "center",
+      width: 170,
+      height: 35,
+      marginTop: 0,
+      padding: 5,
+      borderRadius: 15,
+      marginLeft: 10,
+      backgroundColor: "#fff",
+      right:-85,
+      top:100,
+      shadowColor: "#000",
+      shadowOpacity: 0.21,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+    },
+    
   });
-
-
-
-  
