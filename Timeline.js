@@ -458,7 +458,8 @@ class Timeline extends React.Component {
         color='#986979'
         //,{secondID:this.state.creditor}
       
-        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+        onPress={() => {this.props.navigation.navigate('addRoom',
+        {secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
       />
                     </View>
                   </View>
@@ -737,7 +738,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
    // marginRight: 20,
     marginLeft: 79,
-    marginTop: -51,
+    marginTop: -31,
     fontSize: 10,
   },
   header: {
