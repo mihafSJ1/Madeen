@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
    // marginRight: 20,
     marginLeft: 79,
-    marginTop: -51,
+    marginTop: -31,
     fontSize: 10,
   },
   header: {

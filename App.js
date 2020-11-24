@@ -33,6 +33,7 @@ import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
 // import  chat from './chat';
 import  addRoom from './addRoom';
 import  Room from './Room';
+import ChatBar from './ChatBar'
 
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
@@ -179,7 +180,35 @@ function squaresScreens() {
     </Stack.Navigator>
   );
 }
+function chat(){
+  // حطيت هذا عشان يصير فيهم كل البارين 
+  return( <Stack.Navigator>
+    <Stack.Screen
+       name="NotImplementedScreens"
+       component={NotImplementedScreens}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         //حطي اسم البار الي تبغينه بدل TopBar
+         header: (props) => <ChatBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
+     />
+     <Stack.Screen
+       name="addRoom"
+       component={addRoom}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         header: (props) => <TopBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
+     />
+</Stack.Navigator>);
 
+}
 function Homenav() {
   return (
     <Tab.Navigator
@@ -226,7 +255,7 @@ function Homenav() {
       
       <Tab.Screen
         name="NotImplementedScreens"
-        component={NotImplementedScreens}
+        component={chat}
         options={{
           unmountOnBlur: true,
           tabBarLabel: "",
@@ -382,7 +411,14 @@ export default function App({ navigation }) {
 <Stack.Screen
               name="Room"
               component={Room}
-              options={{ headerShown: false }}
+               //حطي اسم البار الي تبغينه بدل TopBar
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <ChatBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
             />
 
             <Stack.Screen
