@@ -21,7 +21,7 @@ import Home from "./Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import FirebaseKeys from './FirebaseKeys';
-import {registerForPushNotificationsAsync} from './PushNotificationToken';
+
 
 import * as firebase from "firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
@@ -93,7 +93,7 @@ export default function login({ navigation }) {
             break;
         }
       });
-      registerForPushNotificationsAsync();
+   
     console.log("handleLogin");
     loadContacts();
   };

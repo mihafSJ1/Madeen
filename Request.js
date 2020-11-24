@@ -26,6 +26,7 @@ import "firebase/database";
 import "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import FirebaseKeys from "./FirebaseKeys";
+
 import RequestBackgroundComp from "./RequestBackgroundComp";
 import { da } from "date-fns/locale";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
@@ -58,7 +59,11 @@ if (!firebase.apps.length) {
 //-------------------------------------------- Data
 let applicationUsers_phone=[];
 for (var i = 0 ; i< loadContacts() ; i++){
-  applicationUsers_phone.push(loadContacts()[i]);
+  applicationUsers_phone.push({
+
+  
+   lable: loadContacts()[i].phone,
+  key: loadContacts()[i].key});
   console.log(loadContacts()[i]);
 }
 
@@ -245,6 +250,7 @@ class Request extends React.Component {
   //-------------------------------------------- Form Submission
   componentDidMount() {
     registerForPushNotificationsAsync();
+    loadContacts();
     Notifications.addNotificationReceivedListener(this._handleNotification);
     Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
    

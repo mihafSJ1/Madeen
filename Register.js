@@ -19,6 +19,8 @@ import "firebase/database";
 import "firebase/firestore";
 import Logo from "./Logo";
 import Home from "./Home";
+import { loadContacts} from "./ExpoPermissions";
+import {registerForPushNotificationsAsync} from './PushNotificationToken';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -33,7 +35,7 @@ const firebaseConfig = {
   appId: "1:814154412010:web:435cac99ae40206a1ecc93",
   measurementId: "G-SXS9Z8NESC",
 };
-
+var  phone2;
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -48,9 +50,14 @@ export default function Register({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const fullNameRegexAR = /[\u0600-\u06FF]/;
   const fullNameRegexEN =/^[a-zA-Z şüöı]+$/;
- 
-    const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
+    const strongPassRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    const phonefotmat= (phone) => {
+      phone2="";
+      phone2 = phone.substring(0,4)+" "+phone.substring(6,8)+" "+phone.substring(9);
+      console.log(phone2);
+      return phone2 ;
+    }
   
 
   const onRegisterPress = () => {
@@ -89,6 +96,7 @@ export default function Register({ navigation }) {
         );
       return
     }
+
     if (strongPassRegex.test(password) == false){
    
     
@@ -99,7 +107,22 @@ export default function Register({ navigation }) {
         );
       return
     }
-
+if (phone.length>13){
+      Alert.alert("","عفوا رقم الجوال غير صحيح ",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+      return
+    }
+    if (phone.indexOf(0)=='+'){
+      Alert.alert("","رقم الجوال يجب أن يبدأ ب +966",
+      [  
+        {text: 'حسناً'}, ],
+        {cancelable: false}  
+        );
+      return
+    }
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -155,6 +178,8 @@ export default function Register({ navigation }) {
         // alert(error.code)
         console.log("handleRegister");
       });
+      registerForPushNotificationsAsync();
+      loadContacts();
   };
 
   return (
@@ -185,7 +210,7 @@ export default function Register({ navigation }) {
           <Text style={styles.textInputTitle}> رقم الجوال <Text style={styles.textError}> *</Text></Text>
           <TextInput
             style={styles.textInput}
-            placeholder="رقم الجوال"
+            placeholder="+966 ## ### ###"
             onChangeText={(text) => setphone(text)}
             value={phone}
             underlineColorAndroid="transparent"
