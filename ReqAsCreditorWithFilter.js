@@ -361,8 +361,9 @@ isRated:  true,
     this.setState({
       modalVisible2: true,
       namef: item.userName,
-      UserIDImage: item.userid,
-      
+     // UserIDImage: item.userid,
+      idChat: item.userid,
+      ReqIDforChat:item.key
       
     });
     let countSubsidy = 0;
@@ -423,7 +424,7 @@ isRated:  true,
       cEmail: item.creditorEmail,
       rating : item.rating,
       RatingCount:item.RatingCount,
-
+      idChat:item.userid,
     });
 
     //  this.openModalWithItem2(item)
@@ -805,11 +806,6 @@ this.setModalVisible(!this.state.modalVisible);
                       
 
 
-
-
-
-
-
                     <View style={styles.buttonContainer}>
                     {this.state.Rstatus== "قيد الإنتظار" ? (
                       <TouchableOpacity
@@ -873,7 +869,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
@@ -888,7 +884,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
@@ -901,7 +897,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
@@ -1459,7 +1455,7 @@ const styles = StyleSheet.create({
   },
   chatIconW:{
     left:-370,
-    top:-5,
+    top:-10,
     shadowColor: "#717172",
     shadowOpacity: 0.15,
     shadowOffset: {
