@@ -33,6 +33,7 @@ import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
 // import  chat from './chat';
 import  addRoom from './addRoom';
 import  Room from './Room';
+import ChatBar from './ChatBar'
 
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
@@ -181,31 +182,32 @@ function squaresScreens() {
 }
 function chat(){
   // حطيت هذا عشان يصير فيهم كل البارين 
- <Stack.Navigator>
+  return( <Stack.Navigator>
+    <Stack.Screen
+       name="NotImplementedScreens"
+       component={NotImplementedScreens}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         //حطي اسم البار الي تبغينه بدل TopBar
+         header: (props) => <ChatBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
+     />
      <Stack.Screen
-        name="NotImplementedScreens"
-        component={NotImplementedScreens}
-        options={{
-          headerShown: true,
-          // navigation: { navigation },
-          //حطي اسم البار الي تبغينه بدل TopBar
-          header: (props) => <TopBar {...props} />,
-          // headerMode:screen,
-          headerTransparent: true,
-        }}
-      />
-      <Stack.Screen
-        name="addRoom"
-        component={addRoom}
-        options={{
-          headerShown: true,
-          // navigation: { navigation },
-          header: (props) => <TopBar {...props} />,
-          // headerMode:screen,
-          headerTransparent: true,
-        }}
-      />
- </Stack.Navigator>
+       name="addRoom"
+       component={addRoom}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         header: (props) => <TopBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
+     />
+</Stack.Navigator>);
+
 }
 function Homenav() {
   return (
@@ -376,7 +378,7 @@ export default function App({ navigation }) {
 <Stack.Screen
         name="addRoom"
         component={addRoom}
-        //options={{ headerShown: false }}
+        options={{ headerShown: false }}
       />
 {/* 
 <Stack.Screen
@@ -413,7 +415,7 @@ export default function App({ navigation }) {
               options={{
                 headerShown: true,
                 // navigation: { navigation },
-                header: (props) => <TopBar {...props} />,
+                header: (props) => <ChatBar {...props} />,
                 // headerMode:screen,
                 headerTransparent: true,
               }}
