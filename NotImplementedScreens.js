@@ -47,10 +47,11 @@ const [threads, setThreads] = useState([]);
         const threads = querySnapshot.docs.map(documentSnapshot => {
           return {
             _id: documentSnapshot.id,
-            name: '',
+            title:documentSnapshot.data().title,
+            // name: '',
             latestMessage: {
-              text: ''
-            },
+               text: ''
+             },
             // give defaults
             name: '',
             ...documentSnapshot.data()
@@ -138,7 +139,7 @@ const [threads, setThreads] = useState([]);
 style={styles.chatTouch}
           onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:item.latestMessage.createdBy})}
           >
-  <MaterialIcons style={styles.chat}  name="chat-bubble" size={34} color="#D9AE94" />
+  <MaterialIcons style={styles.chat}  name="chat-bubble" size={30} color="#C79578" />
 {/* <Ionicons  style={styles.chat} name="md-chatboxes" size={34} color="#D9AE94" /> */}
                {/* <Ionicons   style={styles.chat} name="ios-chatboxes" size={44} color="#D9AE94" /> */}
             <List.Item
@@ -190,7 +191,7 @@ bottom:10,
     textAlign:'right',
     zIndex:6,
     fontFamily: "Bahij_TheSansArabic-Light",
-   
+   right:16,
   },
 
   chatIcon:{
@@ -208,10 +209,11 @@ marginBottom:10,
 textAlign:'right',
 // backgroundColor:'red',
 width: 380,
-    fontSize: 18,
+    fontSize: 19,
     zIndex:5,
     fontFamily: "Bahij_TheSansArabic-Bold",
     color:'#9b9b7a',
+    right:10
   },
 
   card: {
@@ -222,8 +224,11 @@ width: 380,
     marginBottom: 10,
     width: 400,
     height:80,
-    shadowColor: "#D9AE94",
-    shadowOpacity: 0.5,
+    borderColor:'#746356',
+    borderWidth:0.15,
+    
+    shadowColor: "#746356",
+    shadowOpacity: 0.3,
     shadowOffset: {
       width: 0,
       height: 0,
@@ -239,11 +244,12 @@ chat:{
   top:60,
 left:35,
 zIndex:3,
+
 // backgroundColor:'red'
 },
 
 chatTouch:{
-marginBottom:-30,
+marginBottom:-35,
 }
 
 });
