@@ -179,7 +179,34 @@ function squaresScreens() {
     </Stack.Navigator>
   );
 }
-
+function chat(){
+  // حطيت هذا عشان يصير فيهم كل البارين 
+ <Stack.Navigator>
+     <Stack.Screen
+        name="NotImplementedScreens"
+        component={NotImplementedScreens}
+        options={{
+          headerShown: true,
+          // navigation: { navigation },
+          //حطي اسم البار الي تبغينه بدل TopBar
+          header: (props) => <TopBar {...props} />,
+          // headerMode:screen,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="addRoom"
+        component={addRoom}
+        options={{
+          headerShown: true,
+          // navigation: { navigation },
+          header: (props) => <TopBar {...props} />,
+          // headerMode:screen,
+          headerTransparent: true,
+        }}
+      />
+ </Stack.Navigator>
+}
 function Homenav() {
   return (
     <Tab.Navigator
@@ -226,7 +253,7 @@ function Homenav() {
       
       <Tab.Screen
         name="NotImplementedScreens"
-        component={NotImplementedScreens}
+        component={chat}
         options={{
           unmountOnBlur: true,
           tabBarLabel: "",
@@ -349,7 +376,7 @@ export default function App({ navigation }) {
 <Stack.Screen
         name="addRoom"
         component={addRoom}
-        options={{ headerShown: false }}
+        //options={{ headerShown: false }}
       />
 {/* 
 <Stack.Screen
@@ -382,7 +409,14 @@ export default function App({ navigation }) {
 <Stack.Screen
               name="Room"
               component={Room}
-              options={{ headerShown: false }}
+               //حطي اسم البار الي تبغينه بدل TopBar
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
             />
 
             <Stack.Screen
