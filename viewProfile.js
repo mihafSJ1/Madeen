@@ -76,7 +76,7 @@ export default class viewProfile extends React.Component {
 
     return (
       <KeyboardAwareScrollView>
-        <TopBar />
+        {/* <TopBar /> */}
      
 
         <View style={styles.container3}>
