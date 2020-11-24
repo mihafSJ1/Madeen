@@ -458,8 +458,7 @@ class Timeline extends React.Component {
         color='#986979'
         //,{secondID:this.state.creditor}
       
-        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
-      />
+        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey ,secondName:this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}      />
                     </View>
                   </View>
                 </View>
