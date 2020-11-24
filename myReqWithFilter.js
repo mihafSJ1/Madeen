@@ -3,6 +3,7 @@ import React, { useState }  from "react";
 import { ArabicNumbers } from "react-native-arabic-numbers";
 import { Button, Overlay } from 'react-native-elements';
 import { IconButton } from 'react-native-paper';
+
 import {
   StyleSheet,
   Text,
@@ -46,63 +47,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 var requestArray = [];
-
-var arrayFiltered=[];
-
-var myRequest = [];
-var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-var Searching=false;
-var Found=false;
-var specificStatus=false;
-// var SpecificStatusText="لا يوجد";
 let arrayFiltered2=[];
 
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
 
-
-const currentUser = firebase.auth();
-//this.setState({ currentUser });
-firebase
-
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-           cName:child.val().creditorName,
-            key:child.key,});
-      //  }
-    });
-  });
-  //هنا الاسناد الصح 
-  arrayFiltered=requestArray;
-  // arrayFiltered2=requestArray;
 export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
@@ -123,9 +70,10 @@ export default class MyReqWithFilter extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       searchTerm: '',
 
-    arrayFiltered:requestArray,
+    // arrayFiltered:requestArray,
     noSubsidy: 0,
     noDebts: 0,
+    requestsArr:[],
   };
   }
 
@@ -140,7 +88,6 @@ export default class MyReqWithFilter extends React.Component {
       .ref("requests/")
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
-          if (true) {
             requestArray.push({         
               creditor:child.val().creditor,
               expectedDate:child.val().expectedDate,
@@ -158,10 +105,11 @@ export default class MyReqWithFilter extends React.Component {
                key:child.key,
                remAmount: child.val().remAmount });
             
-          }
+
         });
+        this.setState({requestsArr: requestArray.reverse()})
       });
-      arrayFiltered=requestArray;
+
     
      
     }
@@ -334,7 +282,6 @@ export default class MyReqWithFilter extends React.Component {
       RemAmount: item.remAmount,
       Rkey: item.key,
      repType:item.repaymentType,
-     userid:item.userid,
       });
     //  this.openModalWithItem2(item)
   }
@@ -574,29 +521,8 @@ console.log(text)
                 visible={this.state.modalVisible}
               >
                 <View style={styles.centeredView}>
-                  
                   <View style={styles.modalView}>
-                  <View style={styles.modalViewContent}>
-{/* ///////chattiinnnggg */}
-
-
-{this.state.CreName == "" ? null: (
-                     <IconButton
-                     style={styles.chatIcon}
-                      icon='message-plus'
-                      size={38}
-                      color='#986979'
-                      //,{secondID:this.state.creditor}
-                    
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
-                    />
-                        
-                        
-                      )}
-
-
-           
-        
+               
                   <TouchableOpacity
                
                  style={styles.Editicon}
@@ -609,6 +535,7 @@ console.log(text)
                    <Ionicons name="md-create" size={30} color="#808065" solid />
                  </Text>)}
                </TouchableOpacity>
+               
                     <TouchableOpacity style={styles.Editicon3}
                       onPress={() => {
                         this.setModalVisible(!this.state.modalVisible);
@@ -628,12 +555,6 @@ console.log(text)
                            color="#746356"
                                />    )}
 
-
-
-
-
-                      
-                   
                     </TouchableOpacity>
                     
                     {this.state.Rstatus== "قيد التنفيذ" ? (
@@ -675,29 +596,14 @@ console.log(text)
 
 
                      {/* header */}
-
-
-                     {this.state.CreName== "" ? (
-
-  
-<Text style={styles.waitheader}>تفاصيل الطلب </Text>    
+{this.state.Rstatus== "قيد الإنتظار" ? (
+           <Text style={styles.waitheader}>تفاصيل الطلب </Text>    
 ):(
-null
-           
-          )}
-
-
-
-{this.state.Rstatus== "قيد الإنتظار" && this.state.CreName!= ""  ? (
-
-  
-           <Text style={styles.waitheaderWithCreditorName}>تفاصيل الطلب </Text>    
-):(
-null
+  <Text style={styles.header}>تفاصيل الطلب </Text>
                       
                      )}
 
-{this.state.Rstatus!= "قيد الإنتظار"?(<Text style={styles.header}>تفاصيل الطلب </Text>):(null)}
+
 
 
 
@@ -769,28 +675,6 @@ null
                       )}
                     </Text>
 
-
-
-
-
-                   
-
-
-
-
-
-
-
-
-
-                   
-
-
-
-
-
-
-                    
 
                     <Text style={styles.textInputTitle}>
 
@@ -939,7 +823,7 @@ null
                     <View style={styles.buttonContainer}>
                     
                     {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
-
+                    
 {/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
 {this.state.Rstatus== "قيد الإنتظار" ? (
                          <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
@@ -967,7 +851,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
     style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
   >
     <Text style={styles.PaybuttonText}> دفع </Text>
-  </TouchableOpacity>):(null
+  </TouchableOpacity>
+  ):(null
   
  )}
 
@@ -980,10 +865,59 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                        <Text style={styles.textReject}> نعتذر، تم رفض طلبك </Text>
   
  ): null }
-      
+
+{this.state.Rstatus== "قيد التنفيذ" ? ( 
+  <IconButton
+                     style={styles.chatIconProcess}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+  ):(null
+  
+ )}
+
+{this.state.Rstatus== "مرفوض" ? ( 
+  <IconButton
+                     style={styles.chatIconReject}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />  
+ ): null }
+{this.state.Rstatus== "مكتمل" ? ( 
+  <IconButton
+                     style={styles.chatIconComplete}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />  
+ ): null }
+   
+      {/* {this.state.CreName == "" ? (null): (
+                     <IconButton
+                     style={styles.chatIcon2}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                        
+                        
+                      )} */}
 
 
-                    </View>
                     </View>
                   </View>
                 </View>
@@ -997,7 +931,6 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible2(!this.state.modalVisible2);
@@ -1191,10 +1124,10 @@ searchStatus = (textTosearch)  =>{
 }
 
    var check=false;
-  for(var i =0 ,j = 0;i<requestArray.length;i++){
+  for(var i =0 ,j = 0;i<this.state.requestsArr.length;i++){
     console.log(textTosearch)
     if(textTosearch!=""){
-    if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+    if(textTosearch.trim()==this.state.requestsArr[i].rqeuestStatus.trim()){
      check=true;
       this.setFound(true);
       // this.setSearching(true);
@@ -1207,7 +1140,7 @@ searchStatus = (textTosearch)  =>{
       // this.setSpecificStatusText(textTosearch);
       console.log(this.state.SpecificStatusText);
     // alert(requestArray[i].creditorName)
-    arrayFiltered2[j++]=requestArray[i]
+    arrayFiltered2[j++]=this.state.requestsArr[i]
     console.log(" دخلت الاف  ")
 
     // this.setState({
@@ -1220,7 +1153,17 @@ searchStatus = (textTosearch)  =>{
     }
     }
 
- 
+  // requestArray.forEach(element =>{
+  //   if(textTosearch==element.rqeuestStatus){
+  //     arrayFiltered2.push(element);
+  //     this.setFound(true);
+  //     this.setSearching(true);
+  //     this.setSpecificStatus(true);
+  //     this.setSpecificStatusText(textTosearch);
+  //   }
+  // }
+
+  // )
 
 
 
@@ -1228,7 +1171,16 @@ searchStatus = (textTosearch)  =>{
 
 
 
- 
+
+  // console.log(textTosearch)
+    // alert(textTosearch);
+    // this.setState({
+
+    //   arrayFiltered2:this.state.arrayFiltered.
+    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
+
+
+    // })
   console.log(" دخلت السيرتش ")
  
 //   console.log(arrayFiltered)
@@ -1349,7 +1301,7 @@ console.log(check)
 ):this.state.Searching && !this.state.Found?(
 
 
-null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+null): <ScrollView>{this.list(this.state.requestsArr,null)}</ScrollView>}
 
 
 
@@ -1399,7 +1351,7 @@ const styles = StyleSheet.create({
   ViewList:{
 marginBottom:220,
 // backgroundColor:'blue',
-top:-32,
+top:-25,
   },
   card: {
       top:1,
@@ -1430,9 +1382,45 @@ top:-32,
     left: 10,
     top: 20,
     // width: "100%",
+    
+  },
+ 
+  chatIconProcess:{
+    bottom:-10,
+    left:-180,
+   // backgroundColor:'#FFEEC4',
+   shadowColor: "#717172",
+   shadowOpacity: 0.15,
+   shadowOffset: {
+     width: 0,
+     height: 0,
+   }
+  },
+  chatIconReject:{
+    bottom:-50,
+    left:-160,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+   // backgroundColor:'#FFEEC4',
   },
 
-  
+
+  chatIconComplete:{
+    bottom:-55,
+    left:-270,
+   // backgroundColor:'#FFEEC4',
+   shadowColor: "#717172",
+   shadowOpacity: 0.15,
+   shadowOffset: {
+     width: 0,
+     height: 0,
+   }
+  },
+
 
   textContainer: {
     marginRight: 10,
@@ -1472,7 +1460,7 @@ top:-32,
     fontSize:20,
     alignItems: "center",
     left:70,
-    top:30,
+    top:50,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
     shadowOffset: {
@@ -1524,7 +1512,6 @@ top:-32,
     shadowRadius: 3.84,
     elevation: 5,
     paddingBottom: 100,
-    // backgroundColor:'red'
   },
 
   modalText: {
@@ -1559,7 +1546,7 @@ top:-32,
     color: "#404040",
     fontSize: 30,
     // margin: 20,
-    top: -90,
+    top: -50,
 
     textAlign: "center",
     justifyContent: "center",
@@ -1571,7 +1558,7 @@ top:-32,
 
 
   Content:{
-  backgroundColor:'red',
+  // backgroundColor:'red',
 },
 
 waitContent:{
@@ -1582,20 +1569,20 @@ waitContent:{
 
 
 
-waitheader:{
-  fontFamily: "Bahij_TheSansArabic-Light",
-  color: "#404040",
-  fontSize: 30,
-  // margin: 20,
-  top: -80,
+  waitheader:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    color: "#404040",
+    fontSize: 30,
+    // margin: 20,
+    top: -80,
 
-  textAlign: "center",
-  justifyContent: "center",
-  marginBottom: 30,
-  width:170,
-  left:90,
-  // backgroundColor:'red',
-},
+    textAlign: "center",
+    justifyContent: "center",
+    marginBottom: 30,
+    width:170,
+    left:90,
+    // backgroundColor:'red',
+  },
 
 
 
@@ -2066,7 +2053,7 @@ backgroundColor:'red',
     marginLeft: 10,
     backgroundColor: "#fff",
     right:-50,
-    top:30,
+    top:7,
     shadowColor: "#000",
     shadowOpacity: 0.21,
     shadowOffset: {
@@ -2154,7 +2141,7 @@ top:-10,
 
 
   searchInput:{
-    top:8,
+  top:20,
     padding: 10,
     borderColor: '#ffffff',
     borderWidth: 1,
@@ -2176,6 +2163,7 @@ left:20,
   },
 
   searchHeader:{
+  
     backgroundColor: 'transparent',
     opacity: 0.6
     
@@ -2189,33 +2177,7 @@ shadow:{
   backgroundColor:"gray",
   zIndex:120,
 
-},
-
-
-
-
-
-chatIcon:{
-  top:500,
-  backgroundColor:'#FFEEC4',
-},
-modalViewContent:{
-  top:-5,
-},
-
-
-waitheaderWithCreditorName:{
-  fontFamily: "Bahij_TheSansArabic-Light",
-  color: "#404040",
-  fontSize: 30,
-  // margin: 20,
-  top: -150,
-
-  textAlign: "center",
-  justifyContent: "center",
-  marginBottom: 30,
-  width:170,
-  left:90, 
 }
+
   //end
 });
