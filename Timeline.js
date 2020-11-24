@@ -890,6 +890,12 @@ const styles = StyleSheet.create({
   chatIcon:{
     top:7,
     left:-230,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
   }
 
 
