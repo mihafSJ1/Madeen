@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -28,6 +27,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { render } from "react-dom";
 import { ArabicNumbers } from "react-native-arabic-numbers";
 import { IconButton } from 'react-native-paper';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyALc3LJdCzNeP3fbeV2MvTLYDbH8dP-Q-8",
   authDomain: "madeendb2.firebaseapp.com",
@@ -42,18 +43,8 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-var requestArray = [];
-var myRequest = [];
+
 var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-var Searching=false;
-var Found=false;
-var specificStatus=false;
 let arrayFiltered22=[];
 var x = 0;
 
@@ -65,55 +56,6 @@ firebase
       var Data = childSnapshot.val();
 
       usersArray.push(Data);
-    });
-  });
-// firebase
-// .database()
-// .ref("requests")
-// .once("value", function (snapshot) {
-//   snapshot.forEach(function (childSnapshot) {
-//     var Data = childSnapshot.val();
-//     // var expectedDate = childSnapshot.expectedDate;
-//     // var installemntDuration = childSnapshot.installemntDuration;
-//     // var installemntPrice = childSnapshot.installemntPrice;
-//     //  var installmentsType = childSnapshot.installmentsType;
-//     // var price = childSnapshot.price;
-//     // var reason=childSnapshot.reason;
-//     // var repaymentType=childSnapshot.repaymentType;
-//     // var rqeuestStatus=childSnapshot.rqeuestStatus;
-//     //  var submittedDate=childSnapshot.submittedDate;
-//     // var userid = childSnapshot.userid;
-
-//         requestArray.push(Data);
-//         // console.log(Data);
-//   });
-// });
-
-const currentUser = firebase.auth();
-firebase
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-              requestArray.push({
-              creditor:child.val().creditor,
-              expectedDate:child.val().expectedDate,
-              installemntPrice:child.val().installemntPrice,
-              installmentsType:child.val().installmentsType,
-              price:child.val().price,
-              reason:child.val().reason,
-              repaymentType:child.val().repaymentType,
-              rqeuestStatus:child.val().rqeuestStatus,
-              submittedDate:child.val().submittedDate,
-             userName:child.val().userName,
-              userid:child.val().userid,
-              key:child.key,
-              remAmount: child.val().remAmount,
-              isRated : child.val().isRated,
-              RatingCount: child.val().RatingCount
-
-            });
-             
     });
   });
 
@@ -138,6 +80,7 @@ export default class ReqAsCreditor extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
+    requestsArr: []
   };
   ratingCompleted = (rating) => {
     this.setState({ newRatingValue: rating });
@@ -148,8 +91,8 @@ export default class ReqAsCreditor extends React.Component {
     registerForPushNotificationsAsync();
     Notifications.addNotificationReceivedListener(this._handleNotification);
     Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
-    requestArray=[];
-  
+    var requestArray = [];
+
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     firebase
@@ -157,7 +100,7 @@ export default class ReqAsCreditor extends React.Component {
     .ref("requests/")
     .on("value", (snapshot) => {
       snapshot.forEach((child) => {
-        if (true) {
+
           requestArray.push({         
             creditor:child.val().creditor,
             expectedDate:child.val().expectedDate,
@@ -178,8 +121,9 @@ export default class ReqAsCreditor extends React.Component {
             RatingCount:child.val().RatingCount
           });
           
-        }
+        
       });
+      this.setState({requestsArr:requestArray.reverse()})
     });
     }
 
@@ -260,6 +204,22 @@ console.log(this.state.RatingCount+this.state.requestKey);
       // if (visible == false){
       //   this.updateRating()
       // }
+    }
+    cancelRatingModal(visible){
+      this.setState({
+        ratingVisable: visible,
+
+      }, () => {
+ 
+   firebase
+   .database()
+.ref('requests/' + this.state.requestKey)
+.update({
+isRated:  true,
+  })
+ 
+    }) 
+
     }
     closeRatingModal(visible) {
    
@@ -706,15 +666,6 @@ this.setModalVisible(!this.state.modalVisible);
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                  <IconButton
-                     style={styles.chatIcon}
-                      icon='message-plus'
-                      size={38}
-                      color='#986979'
-                      //,{secondID:this.state.creditor}
-                    
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
-                    />
                     <TouchableOpacity
                       onPress={() => {
                         
@@ -770,7 +721,9 @@ this.setModalVisible(!this.state.modalVisible);
                     
                     <Text style={styles.header}>تفاصيل الطلب </Text>
                     
+                
 
+                    
                     <Text style={styles.textInputTitle}>
                       {" "}
                       المدين |{" "}
@@ -827,6 +780,9 @@ this.setModalVisible(!this.state.modalVisible);
                         
                       )}
                     </Text>
+
+
+
                     <Text style={styles.textInputTitle}>
 
                       {this.state.Duration == "" ? null : <Text> فترة التقسيط |</Text>}
@@ -903,11 +859,52 @@ this.setModalVisible(!this.state.modalVisible);
                       
   
 ): null }
-                      
+                    
                       {this.state.Rstatus== "مكتمل" ? ( 
                       <Text style={styles.textComplete}> "تم تسديد جميع المستحقات" </Text>
   
 ): null }
+                      {this.state.Rstatus== "قيد التنفيذ" ? ( 
+
+<IconButton
+                     style={styles.chatIconP}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                    ): null }
+
+
+
+{this.state.Rstatus== "مكتمل" ? ( 
+
+<IconButton
+                     style={styles.chatIconC}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                    ): null }
+
+{this.state.Rstatus== "قيد الإنتظار" ? ( 
+
+<IconButton
+                     style={styles.chatIconW}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                    ): null }
+
                     </View>
 
 {/* <View style={styles.buttonContainer}>
@@ -934,7 +931,6 @@ this.setModalVisible(!this.state.modalVisible);
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-             
                     <TouchableOpacity
                       onPress={() => {
                         this.setModalVisible2(!this.state.modalVisible2);
@@ -1101,10 +1097,22 @@ type='custom'
  size={20}
 
 />
-          
+<View style={styles.buttonContainer}>
+<TouchableOpacity
+      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+             onPress={() => {
+             this.cancelRatingModal(false)
+         
+         
+
+             }}
+           >
+             <Text  style={[styles.buttonText,{fontSize:12}]}>تخطي</Text>
+
+           </TouchableOpacity>
 
            <TouchableOpacity
-      style={[styles.Ratingbutton, { backgroundColor: "#D4CEC9" }]}
+      style={[styles.Ratingbutton, { backgroundColor: "#CBCA9E" }]}
              onPress={() => {
              this.closeRatingModal(false)
          
@@ -1112,9 +1120,12 @@ type='custom'
 
              }}
            >
-             <Text style={styles.buttonText}>إرسال</Text>
+             <Text style={[styles.buttonText,{fontSize:12}]}>إرسال</Text>
 
            </TouchableOpacity>
+
+       </View>
+
          </View>
        </View>
      </Modal>
@@ -1158,10 +1169,10 @@ searchStatus = (textTosearch)  =>{
 
   
      var check=false;
-    for(var i =0 ,j = 0;i<requestArray.length;i++){
+    for(var i =0 ,j = 0;i<this.state.requestsArr.length;i++){
       console.log(textTosearch)
       if(textTosearch!=""){
-      if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+      if(textTosearch.trim()==this.state.requestsArr[i].rqeuestStatus.trim()){
        check=true;
         this.setFound(true);
         // this.setSearching(true);
@@ -1174,7 +1185,7 @@ searchStatus = (textTosearch)  =>{
         // this.setSpecificStatusText(textTosearch);
         console.log(this.state.SpecificStatusText);
       // alert(requestArray[i].creditorName)
-      arrayFiltered22[j++]=requestArray[i]
+      arrayFiltered22[j++]=this.state.requestsArr[i]
       console.log(" دخلت الاف  ")
   
       // this.setState({
@@ -1312,7 +1323,7 @@ searchStatus = (textTosearch)  =>{
 ):this.state.Searching && !this.state.Found?(
 
 
-null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+null): <ScrollView>{this.list(this.state.requestsArr,null)}</ScrollView>}
 
             </View>
         {/*View request */}
@@ -1339,7 +1350,7 @@ const styles = StyleSheet.create({
   ViewList:{
     marginBottom:220,
     // backgroundColor:'blue',
-    top:-32,
+    top:-25,
       },
       card: {
         top:1,
@@ -1426,7 +1437,36 @@ const styles = StyleSheet.create({
     // textAlign: "center"
   },
 
-
+  chatIconP:{
+    left:-330,
+    top:-85,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
+  chatIconC:{
+    left:-280,
+    top:45,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
+  chatIconW:{
+    left:-370,
+    top:-5,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+  },
 
   button: {
     alignItems: "center",
@@ -1541,7 +1581,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 20,
     marginBottom: 0,
-    right: 22,
+    right: 0,
     top: -130,
     backgroundColor: "#EAF4E1",
     borderColor: "#FFFFFF",
@@ -1558,16 +1598,15 @@ const styles = StyleSheet.create({
 
   WhiteRectangleShapeView: {
     alignItems: "center",
-    width: 192,
+    width: 179,
     height: 34,
     marginTop: 0,
     padding: 5,
     borderRadius: 13,
     marginLeft: 0,
     marginBottom: 0,
-    right: 0,
-    left:2,
-    top: -32,
+    left:22,
+    top: -31,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1584,7 +1623,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
     left:10,
-    top: 18,
+    top: 23,
     backgroundColor: "#F1DCA7",
     
   },
@@ -1735,7 +1774,7 @@ backgroundColor:'red',
     right: 0,
     left:150,
     top: -68,
-    backgroundColor: "red",
+    backgroundColor: "#EAF4E1",
     borderColor: "#EAF4E1",
     borderWidth: 1,
     zIndex:0,
@@ -1745,8 +1784,7 @@ backgroundColor:'red',
   buttonTextNav:{
     textAlign: "center",
     top: -95,
-    right: 90,
-    left:25,
+    left:43,
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 22,
     color: "#404040",
@@ -1754,16 +1792,13 @@ backgroundColor:'red',
     width:50,
     paddingLeft: 45,
     paddingRight:90,
-    // paddingBottom: 2,
-    // paddingTop: 0,
-    // backgroundColor:'black',
     
   },
   buttonTextNav2:{
     textAlign: "center",
     top: 0,
-    left: 180,
-    right:100,
+    left: 205,
+  
     fontFamily: "Bahij_TheSansArabic-Light",
     fontSize: 22,
     color: "#404040",
@@ -1903,8 +1938,8 @@ backgroundColor:'red',
   },
 
   twoButton:{
-    top:-80,
-    left:20,
+    top:-90,
+    left:-4,
       },
 
       searchb:{
@@ -1921,7 +1956,8 @@ backgroundColor:'red',
     
     
       searchInput:{
-        top:8,
+        top:12,
+        marginBottom:10,
         padding: 10,
         borderColor: '#ffffff',
         borderWidth: 1,
@@ -1972,8 +2008,8 @@ backgroundColor:'red',
       },
       Ratingbutton: {
         alignItems: "center",
-        width: 170,
-        height: 30,
+        width: 100,
+        height: 25,
         marginTop: 50,
         padding: 5,
         borderRadius: 15,
@@ -1988,9 +2024,8 @@ backgroundColor:'red',
         fontFamily: "Bahij_TheSansArabic-Bold",
         fontSize:18,
         textAlign:'right',
-        right:257,
-        bottom:30,
-        marginBottom:-35,
+        right:260,
+        bottom:15,
         shadowColor: "grey",
         shadowOffset: {
           width: 0,
@@ -2014,11 +2049,5 @@ backgroundColor:'red',
         zIndex:120,
       
       },
-
-      chatIcon:{
-        top:500,
-        backgroundColor:'#FFEEC4',
-      },
-
 
 });
