@@ -13,7 +13,7 @@ import Timeline from "./Timeline";
 import squares from "./squares";
 import Request from "./Request";
 import TopBar from "./TopBar";
-import NotImplementedScreens from "./NotImplementedScreens";
+import ChatScreen from "./ChatScreen";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
@@ -184,8 +184,8 @@ function chat(){
   // حطيت هذا عشان يصير فيهم كل البارين 
   return( <Stack.Navigator>
     <Stack.Screen
-       name="NotImplementedScreens"
-       component={NotImplementedScreens}
+       name="ChatScreen"
+       component={ChatScreen}
        options={{
          headerShown: true,
          // navigation: { navigation },
@@ -194,6 +194,8 @@ function chat(){
          // headerMode:screen,
          headerTransparent: true,
        }}
+
+       
      />
      <Stack.Screen
        name="addRoom"
@@ -254,7 +256,7 @@ function Homenav() {
       />
       
       <Tab.Screen
-        name="NotImplementedScreens"
+        name="ChatScreen"
         component={chat}
         options={{
           unmountOnBlur: true,
@@ -380,19 +382,8 @@ export default function App({ navigation }) {
         component={addRoom}
         options={{ headerShown: false }}
       />
-{/* 
-<Stack.Screen
-        name="Room"
-        component={Room}
-        options={({ route }) => ({
-          title: route.params.thread.name
-        })}      /> */}
 
-{/* <Stack.Screen
-        name="Room"
-        component={Room}
-        options={{ headerShown: false }}
-      /> */}
+
 
 
 <Stack.Screen
@@ -412,13 +403,17 @@ export default function App({ navigation }) {
               name="Room"
               component={Room}
                //حطي اسم البار الي تبغينه بدل TopBar
-              options={{
+       
+
+              options={({ route }) => ({
                 headerShown: true,
                 // navigation: { navigation },
                 header: (props) => <ChatBar {...props} />,
                 // headerMode:screen,
                 headerTransparent: true,
-              }}
+              //  title:" route.params.thread.name"
+              })}
+
             />
 
             <Stack.Screen
