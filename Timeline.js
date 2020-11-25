@@ -40,6 +40,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+const { currentUser } = firebase.auth();
 var count =0;
 class Timeline extends React.Component {
 
