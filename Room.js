@@ -229,6 +229,8 @@ export default function Room({ route, navigation }) {
   const [messages2, setMessages2] = useState([]);
   const { sID } = route.params;
   const { rID } = route.params;
+  const { Created } = route.params;
+
   const { currentUser } = firebase.auth();
   
 
@@ -376,6 +378,20 @@ console.log({text});
             }
           });
       }
+
+      // firebase.firestore()
+      // .collection('THREADS')
+      // .doc(currentUser.uid)
+      // .collection('allChat')
+        
+      //   .add({
+      //     // text
+      //     // createdAt: new Date().getTime(),
+      //     latestMessage: {
+      //       //   text: `You have joined the room  ${this.state.roomName}.`,
+      //          text:"try"
+      //        }
+      //   });
 
    
 
@@ -548,12 +564,10 @@ firebase.firestore()
         {...props}
         wrapperStyle={styles.systemMessageWrapper}
         textStyle={styles.systemMessageText}
-        containerStyle={{ backgroundColor: 'pink' }}
-           wrapperStyle={{ borderWidth: 10, borderColor: 'white' }}
-               textStyle={{ color: 'crimson', fontWeight: '900' }}
       />
     );
   }
+  
   
   function renderInputToolbar (props) {
 
@@ -627,6 +641,12 @@ const styles = StyleSheet.create({
     sendingContainer: {
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    systemMessageText: {
+      fontSize: 9999994,
+      color: '#fff',
+      fontWeight: 'bold',
+      backgroundColor:'red'
     },
 
     bottomComponentContainer: {
