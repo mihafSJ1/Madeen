@@ -1,1 +1,9 @@
-{}
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 25666,
+  "expoServerNgrokUrl": "https://v7-2vh.rihammastour.madeen.exp.direct",
+  "packagerNgrokUrl": "https://packager.v7-2vh.rihammastour.madeen.exp.direct",
+  "ngrokPid": 25711
+}

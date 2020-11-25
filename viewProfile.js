@@ -63,61 +63,6 @@ export default class viewProfile extends React.Component {
     this.setState({ pic: picNew });
   }
 
-  //   editProfile (URL) {
-  //     const { currentUser } = firebase.auth();
-  //     console.log("before update")
-  //     console.log(URL);
-  //     firebase.database().ref('users/' + currentUser.uid ).update({
-
-  //       UserImage: URL,
-  //   })
-
-  //   console.log("after update")
-  //   console.log(URL);
-  // }
-  //   ;
-
-  // uplaodImage = async (uri, draftName) => {
-  //   const response = await fetch(uri);
-  //   const blob = await response.blob();
-
-  //   var ref = firebase
-  //   .storage()
-  //   .ref()
-  //   .child("Draft/" + draftName);
-  //   return ref.put(blob);
-  // };
-
-  // onChooseImagePress = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync();
-  //   if (!result.cancelled){
-  //     this.uplaodImage(result.uri, "test")
-  //     .then(()=> {
-  //       const {imageName} = "test";
-  // let imageRef = firebase.storage().ref("Draft/"+"test");
-  // console.log("bey Bride2")
-  // imageRef
-  //   .getDownloadURL()
-  //   .then((url) => {
-  //     console.log("bey Bride3")
-  //     //from url you can fetched the uploaded image easily
-  //     this.setState({profileImageUrl: url});
-  //     console.log("bey Bride4")
-  //     console.log(this.state.profileImageUrl);
-  //     this.editProfile (this.state.profileImageUrl);
-  //     console.log("bey Bride5")
-  //     console.log(this.state.profileImageUrl)
-  //     console.log("bey Bride")
-  //   })
-  //   .catch((e) => console.log('getting downloadURL of image error => ', e));
-
-  //     })
-  //     .catch((error) => {
-  //       Alert.alert(error);
-  //     });
-  //   }
-
-  // };
 
   componentDidMount() {
     const { currentUser } = firebase.auth();
@@ -171,21 +116,7 @@ export default class viewProfile extends React.Component {
       this.setState({ currentUser });
   }
 
-  //   openModalWithItem(item){
-
-  //   this.setState({ modalVisible: true ,
-  //   //modalVisible2: true,
-  //    Name:item.userName,
-  //    Type:item.installmentsType,
-  //    Price:item.price,
-  //    EDate:item.expectedDate,
-  //    Reason:item.reason,
-  // UserID:item.userid,
-  // UserImage: item.userImage,
-
-  //   });
-
-  // }
+ 
 
   render() {
     // const { navigation:navigate } = this.props;
@@ -193,16 +124,8 @@ export default class viewProfile extends React.Component {
 
     return (
       <KeyboardAwareScrollView>
-        <TopBar />
-        {/* <Text style={{ fontSize: 20 }}>
-          Hi{" "}
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-            {currentUser && currentUser.email}!!
-          </Text>
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-           الاسم {namef}!!
-          </Text>
-        </Text> */}
+        {/* <TopBar /> */}
+     
 
         <View style={styles.container3}>
           <View style={styles.container2}>
@@ -318,7 +241,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    top: 110,
+    top: 170,
   },
 
   container2: {

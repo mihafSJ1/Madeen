@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
 import { ArabicNumbers } from "react-native-arabic-numbers";
 import { Button, Overlay } from 'react-native-elements';
+import { IconButton } from 'react-native-paper';
 
 import {
   StyleSheet,
@@ -521,7 +522,7 @@ console.log(text)
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    
+               
                   <TouchableOpacity
                
                  style={styles.Editicon}
@@ -534,6 +535,7 @@ console.log(text)
                    <Ionicons name="md-create" size={30} color="#808065" solid />
                  </Text>)}
                </TouchableOpacity>
+               
                     <TouchableOpacity style={styles.Editicon3}
                       onPress={() => {
                         this.setModalVisible(!this.state.modalVisible);
@@ -553,12 +555,6 @@ console.log(text)
                            color="#746356"
                                />    )}
 
-
-
-
-
-                      
-                   
                     </TouchableOpacity>
                     
                     {this.state.Rstatus== "قيد التنفيذ" ? (
@@ -679,28 +675,6 @@ console.log(text)
                       )}
                     </Text>
 
-
-
-
-
-                   
-
-
-
-
-
-
-
-
-
-                   
-
-
-
-
-
-
-                    
 
                     <Text style={styles.textInputTitle}>
 
@@ -849,7 +823,7 @@ console.log(text)
                     <View style={styles.buttonContainer}>
                     
                     {/* {c.rqeuestStatus == "قيد الإنتظار" ? <Text> </Text> : <Text style={styles.textData}> {c.rqeuestStatus} </Text>} */}
-
+                    
 {/* {if(c.rqeuestStatus == "قيد الإنتظار"){} } */}
 {this.state.Rstatus== "قيد الإنتظار" ? (
                          <Text style={styles.textWait}> انتظر حتى يتم الرد على طلبك </Text>
@@ -877,7 +851,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
     style={[styles.Paybutton, { backgroundColor: "#66795A" }]}
   >
     <Text style={styles.PaybuttonText}> دفع </Text>
-  </TouchableOpacity>):(null
+  </TouchableOpacity>
+  ):(null
   
  )}
 
@@ -890,7 +865,57 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                        <Text style={styles.textReject}> نعتذر، تم رفض طلبك </Text>
   
  ): null }
-      
+
+{this.state.Rstatus== "قيد التنفيذ" ? ( 
+  <IconButton
+                     style={styles.chatIconProcess}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+  ):(null
+  
+ )}
+
+{this.state.Rstatus== "مرفوض" ? ( 
+  <IconButton
+                     style={styles.chatIconReject}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+                    />  
+ ): null }
+{this.state.Rstatus== "مكتمل" ? ( 
+  <IconButton
+                     style={styles.chatIconComplete}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+                    />  
+ ): null }
+   
+      {/* {this.state.CreName == "" ? (null): (
+                     <IconButton
+                     style={styles.chatIcon2}
+                      icon='message-plus'
+                      size={38}
+                      color='#986979'
+                      //,{secondID:this.state.creditor}
+                    
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey}),this.setModalVisible(!this.state.modalVisible)}}
+                    />
+                        
+                        
+                      )} */}
 
 
                     </View>
@@ -993,42 +1018,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
-                    {/* {this.state.CreditorName!=""? ( 
-      
-     
-                    <Text style={styles.RateStarts}>
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                    </Text>
-                     ): null } */}
+                    
+                
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1128,49 +1119,12 @@ searchStatus = (textTosearch)  =>{
     }
     }
 
-  // requestArray.forEach(element =>{
-  //   if(textTosearch==element.rqeuestStatus){
-  //     arrayFiltered2.push(element);
-  //     this.setFound(true);
-  //     this.setSearching(true);
-  //     this.setSpecificStatus(true);
-  //     this.setSpecificStatusText(textTosearch);
-  //   }
-  // }
-
-  // )
-
-
-
-
-
-
-
-
-  // console.log(textTosearch)
-    // alert(textTosearch);
-    // this.setState({
-
-    //   arrayFiltered2:this.state.arrayFiltered.
-    //   filter(i=>i.rqeuestStatus.match(textTosearch)),
-
-
-    // })
   console.log(" دخلت السيرتش ")
  
-//   console.log(arrayFiltered)
-// this.list(arrayFiltered2)
-// console.log(" اراي ٢ ")
 console.log(arrayFiltered2)
 console.log(" اخر السيرتش ")
 console.log(check)
-// console.log(textTosearch)
 
-
-
-
-  // console.log( arrayFiltered2)
-// {this.listToSearch()} 
   }
 
 
@@ -1357,9 +1311,45 @@ top:-25,
     left: 10,
     top: 20,
     // width: "100%",
+    
+  },
+ 
+  chatIconProcess:{
+    bottom:-10,
+    left:-180,
+   // backgroundColor:'#FFEEC4',
+   shadowColor: "#717172",
+   shadowOpacity: 0.15,
+   shadowOffset: {
+     width: 0,
+     height: 0,
+   }
+  },
+  chatIconReject:{
+    bottom:-50,
+    left:-160,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
+   // backgroundColor:'#FFEEC4',
   },
 
-  
+
+  chatIconComplete:{
+    bottom:-55,
+    left:-270,
+   // backgroundColor:'#FFEEC4',
+   shadowColor: "#717172",
+   shadowOpacity: 0.15,
+   shadowOffset: {
+     width: 0,
+     height: 0,
+   }
+  },
+
 
   textContainer: {
     marginRight: 10,
@@ -1992,7 +1982,7 @@ backgroundColor:'red',
     marginLeft: 10,
     backgroundColor: "#fff",
     right:-50,
-    top:30,
+    top:7,
     shadowColor: "#000",
     shadowOpacity: 0.21,
     shadowOffset: {
@@ -2080,7 +2070,7 @@ top:-10,
 
 
   searchInput:{
-  
+  top:20,
     padding: 10,
     borderColor: '#ffffff',
     borderWidth: 1,
@@ -2102,6 +2092,7 @@ left:20,
   },
 
   searchHeader:{
+  
     backgroundColor: 'transparent',
     opacity: 0.6
     
