@@ -186,6 +186,7 @@ return;
               editable = {true}
               value={this.state.roomName}
               input={this.state.roomName}
+         
             />
 
 
@@ -335,6 +336,13 @@ left:20,
     textinput:{
       top:40,
       textAlign:'center',
+      borderColor: "gray",
+      borderWidth: 0.5,
+      height:40,
+      width:200,
+      left:80,
+      borderRadius:10
+    
     },
     buttonSubmit:{
  top:1000,
@@ -369,7 +377,7 @@ left:20,
       marginLeft: 10,
       backgroundColor: "#fff",
       right:-85,
-      top:100,
+      top:90,
       shadowColor: "#000",
       shadowOpacity: 0.21,
       shadowOffset: {
