@@ -80,7 +80,8 @@ export default class ReqAsCreditor extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
-    requestsArr: []
+    requestsArr: [],
+    nameChat:"m"
   };
   ratingCompleted = (rating) => {
     this.setState({ newRatingValue: rating });
@@ -298,7 +299,9 @@ isRated:  true,
   });
     // this.setState({ Found: flag });
   }
-
+  setName(name) {
+    this.setState({ nameChat: name });
+  }
 
   setSpecificStatus(flag) {
     // console.log("تروحين تغيرين الفلاق الحاله ولا لا ")
@@ -405,6 +408,22 @@ isRated:  true,
 
 
   openModalWithItem(item) {
+
+
+    const { currentUser } = firebase.auth();
+
+    firebase
+         .database()
+         .ref("users/" + currentUser.uid)
+         .on("value", (snapshot) => {
+           this.setName(snapshot.val().fullName);
+           console.log("Areej Test");
+           console.log(this.state.setTimelinePic);
+         });
+
+
+
+
     this.setState({
       submmitedDate: item.submmitedDate,
       modalVisible: true,
@@ -425,6 +444,7 @@ isRated:  true,
       rating : item.rating,
       RatingCount:item.RatingCount,
       idChat:item.userid,
+      CreName:item.creditorName,
     });
 
     //  this.openModalWithItem2(item)
@@ -721,9 +741,9 @@ this.setModalVisible(!this.state.modalVisible);
 
                     
                     <Text style={styles.header}>تفاصيل الطلب </Text>
-                    
+                    {/* <Text style={styles.header}>   {this.state.CreName} الطلب </Text> */}
                 
-
+                 
                     
                     <Text style={styles.textInputTitle}>
                       {" "}
@@ -869,7 +889,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name , firstName:this.state.nameChat}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
@@ -884,7 +904,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name, firstName:this.state.nameChat}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
@@ -897,7 +917,7 @@ this.setModalVisible(!this.state.modalVisible);
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.idChat, reqIDforChat:this.state.Rkey, secondName: this.state.Name, firstName:this.state.nameChat}),this.setModalVisible(!this.state.modalVisible)}}
                     />
                     ): null }
 
