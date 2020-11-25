@@ -15,10 +15,15 @@ import { AntDesign } from "@expo/vector-icons";
 
 
 
-export default function TopBar({ navigation }) {
+export default function TopBar({ route, navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
+  // const { sID } = route.params;
+  // const { rID } = route.params;
+  // const { Created } = route.params;
+  //  const { sID } = route.params;
+  // const { rID } = route.params;
   useEffect(() => {
     const { currentUser } = firebase.auth();
     setCurrentUser({ currentUser });
@@ -34,9 +39,18 @@ export default function TopBar({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.rightItems}>
-        <Text style={styles.topBarText}>اهلين وسهلين  !</Text>
+  <Text style={styles.topBarText}>محادثة</Text>
         {/* <Image source={{ uri: userImage }} style={styles.profileImage}></Image> */}
       </View>
+      
+      <TouchableOpacity            
+         onPress={() => navigation.navigate("ChatScreen")}
+>
+      <AntDesign style={styles.logoutButton} name="back" size={29} color="#9B9B7B" />
+      </TouchableOpacity>
+
+      {/* {navigation.navigate('Room', {sID:sID, rID:rID, Created:Created})} */}
+      
       {/* <TouchableOpacity
         style={styles.logoutButton}
         onPress={() =>
@@ -76,13 +90,7 @@ export default function TopBar({ navigation }) {
       </TouchableOpacity> */}
 
 
-{/* <AntDesign
-                        style={styles.close}
-                        name="close"
-                        size={24}
-                        color="black"
-                        onPress={() => this.props.navigation.goBack()}
-                      /> */}
+
     </View>
   );
 }
@@ -125,13 +133,13 @@ const styles = StyleSheet.create({
   },
 
   topBarText: {
-    color: "#404040",
-    fontFamily: "Bahij_TheSansArabic-Light",
+    color: "#986979",
+    fontFamily: "Bahij_TheSansArabic-Bold",
     // textAlign: "center",
-    fontSize: 18,
+    fontSize: 24,
     marginTop: 10,
-    marginRight: 10,
-left:-60,
+    marginRight: 111,
+left:-40,
   },
 
   logoutButton: {
