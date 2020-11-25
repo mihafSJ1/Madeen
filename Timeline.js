@@ -107,6 +107,7 @@ class Timeline extends React.Component {
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       noSubsidy: 0,
       noDebts: 0,
+      nameChat:"m"
     };
   }
   // state = { currentUser: null };
@@ -152,7 +153,8 @@ class Timeline extends React.Component {
       });
 ///////////////////////////////////// المفترض ارجع كل يوزر وعدد استلافه وتسليفه
 
-      
+
+//
 
 
     }
@@ -165,6 +167,9 @@ class Timeline extends React.Component {
   }
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
+  }
+  setName(name) {
+    this.setState({ nameChat: name });
   }
 
   setTimelinePic(picNew) {
@@ -237,6 +242,17 @@ class Timeline extends React.Component {
   }
 
   openModalWithItem(item) {
+    this.setState({ currentUser });
+    const { currentUser } = firebase.auth();
+
+ firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+        this.setName(snapshot.val().fullName);
+        console.log("Areej Test");
+        console.log(this.state.setTimelinePic);
+      });
     this.setState({
       submmitedDate: item.submmitedDate,
       modalVisible: true,
@@ -282,25 +298,10 @@ class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  // updatestate(k,props){
-    
-  //   this.setModalVisible(!this.state.modalVisible);
-  //   this.props.navigation.navigate("PayAsCreditor",{amount:this.state.rAmount, reqID: this.state.Rkey});
-  //   const { currentUser } = firebase.auth();
-  //   firebase
-  //   .database()
-  //   .ref('requests/' + k)
-  //   .update({
-  //     creditor:currentUser.uid,
-  //     rqeuestStatus: "قيد التنفيذ",
-  //   })
-  //   .then(() => console.log('Data updated.'));
-    
-  //  // props.navigate("Timeline");
-  // }
+
 
   list = () => {
-    const currentUser = firebase.auth().currentUser.uid;
+    const currentUserName = firebase.auth().currentUser.fullName;
 
     return requestArray.map((c) => {
      count++;
@@ -458,7 +459,7 @@ class Timeline extends React.Component {
         color='#986979'
         //,{secondID:this.state.creditor}
       
-        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey ,secondName:this.state.Name}),this.setModalVisible(!this.state.modalVisible)}}      />
+        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey ,secondName:this.state.Name, firstName:this.state.nameChat}),this.setModalVisible(!this.state.modalVisible)}}      />
                     </View>
                   </View>
                 </View>
