@@ -60,6 +60,8 @@ return;
         const { currentUser } = firebase.auth();
         const {secondID} = this.props.route.params;
         const{reqIDforChat}=this.props.route.params;
+        const {firstName} = this.props.route.params;
+        const{secondName}=this.props.route.params;
         console.log(reqIDforChat);
         if (this.state.roomName.length > 0) {
           firebase.firestore()
@@ -70,7 +72,7 @@ return;
           .set({
             name: this.state.roomName,
             latestMessage: {
-              text: `You have joined the room  ${this.state.roomName}.`,
+              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} ؛`,
               createdAt: new Date().getTime(),
               to:`${secondID}`,
               createdBy:`${currentUser.uid}`,
@@ -78,7 +80,7 @@ return;
           })
             docRef => {
               docRef.collection('MESSAGES').add({
-                text: `You have joined the room ررررر ${this.state.roomName}.`,
+                text: `هذه المحادثة أُنشأت من قبل رغد مع أريج`,
                 createdAt: new Date().getTime(),
                 system: true
               });
@@ -97,7 +99,7 @@ return;
           .set({
             name: this.state.roomName,
             latestMessage: {
-              text: `You have joined the room  ${this.state.roomName}.`,
+              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} ؛`,
               createdAt: new Date().getTime(),
               to:`${currentUser.uid}`,
               createdBy:`${currentUser.uid}`,
