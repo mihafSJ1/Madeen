@@ -166,21 +166,9 @@ return;
             />
 
 
-     
-      
-      
-      
       
       <View  Style={styles.buttonSubmit}>
       
-            {/* <Button
-              title='Create'
-              modeValue='contained'
-             
-              labelStyle={styles.buttonLabel}
-              onPress={() => this.handleButtonPress()}
-              disabled={this.state.roomName.length === 0}
-            /> */}
 </View>
 
 
@@ -203,10 +191,6 @@ return;
 
 
 }
-
-
-
-
 
 
 const styles = StyleSheet.create({
@@ -313,19 +297,10 @@ left:20,
       textAlign: "center",
       fontSize: 18,
       color:'#fff',
-      // fontWeight:"bold",
     },
 
     Paybutton:{
-      // alignItems: "center",
-      // width: 170,
-      // height: 30,
-      // marginTop: 10,
-      // padding: 5,
-      // borderRadius: 15,
-      // marginLeft: 10,
-      // backgroundColor: "#fff",
-      // fontSize:10,
+    
       alignItems: "center",
       width: 170,
       height: 35,
