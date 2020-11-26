@@ -1,7 +1,5 @@
 
 
-// ////صفحة الهوم عنده 
-
 import { List, Divider } from 'react-native-paper';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -10,14 +8,11 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet , Button, FlatList, TouchableOpacity,  Dimensions,} from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Title } from 'react-native-paper';
-// import { AuthContext } from '../navigation/AuthProvider';
-// import FormButton from '../components/FormButton';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from './AuthProvider';
 import { Right } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import BackgroundComponent from "./BackgroundComponent";
-
 import { MaterialIcons } from '@expo/vector-icons'; 
 export default function HomeScreen({ navigation }) {
   const { currentUser } = firebase.auth();
@@ -110,7 +105,6 @@ const [threads, setThreads] = useState([]);
         data={threads}
        
         keyExtractor={item => item._id}
-        // ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item }) => (
           < View>
            
@@ -119,13 +113,10 @@ style={styles.chatTouch}
           onPress={() => navigation.navigate('Room', {sID:item.latestMessage.to, rID:item._id, Created:item.latestMessage.createdBy}, { thread: 'item' })}
           >
   <MaterialIcons style={styles.chat}  name="chat-bubble" size={30} color="#C79578" />
-{/* <Ionicons  style={styles.chat} name="md-chatboxes" size={34} color="#D9AE94" /> */}
-               {/* <Ionicons   style={styles.chat} name="ios-chatboxes" size={44} color="#D9AE94" /> */}
             <List.Item
   
                 style={styles.card}
               title={item.name}
-              // description='Item description'
               description={item.latestMessage.text}
               titleNumberOfLines={1}
               titleStyle={styles.listTitle}
@@ -138,16 +129,6 @@ style={styles.chatTouch}
           </View>
         )}
       />
-
-
-
-
-
-
-
-
-
-
   </View>
   
 </View>
@@ -214,17 +195,13 @@ width: 380,
     },
 
     flexDirection: "row",
-    // zIndex:-3,
     left:5,
-    // justifyContent: "flex-end",
   },
 
 chat:{
   top:60,
 left:35,
 zIndex:3,
-
-// backgroundColor:'red'
 },
 
 chatTouch:{
