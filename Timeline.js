@@ -1,4 +1,6 @@
+import { StatusBar } from "expo-status-bar";
 import { ArabicNumbers } from "react-native-arabic-numbers";
+
 import React, { useState } from "react";
 
 import {
@@ -11,7 +13,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+
 } from "react-native";
+import { IconButton } from 'react-native-paper';
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -36,6 +40,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+
 var count =0;
 class Timeline extends React.Component {
 
@@ -52,6 +57,7 @@ class Timeline extends React.Component {
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       noSubsidy: 0,
       noDebts: 0,
+      nameChat:"m"
     };
   }
 
@@ -101,6 +107,9 @@ class Timeline extends React.Component {
   setprofilePic(picNew) {
     this.setState({ profilePic: picNew });
   }
+  setName(name) {
+    this.setState({ nameChat: name });
+  }
 
   setTimelinePic(picNew) {
     this.setState({ pic: picNew });
@@ -130,7 +139,9 @@ class Timeline extends React.Component {
     this.setState({
       modalVisible2: true,
       namef: item.userName,
-      UserIDImage: item.userid,
+  
+      creditorID: item.userid,
+      ReqIDforChat:item.key
     });
 
     let countSubsidy = 0;
@@ -170,6 +181,17 @@ class Timeline extends React.Component {
   }
 
   openModalWithItem(item) {
+    this.setState({ currentUser });
+    const { currentUser } = firebase.auth();
+
+ firebase
+      .database()
+      .ref("users/" + currentUser.uid)
+      .on("value", (snapshot) => {
+        this.setName(snapshot.val().fullName);
+        console.log("Areej Test");
+        console.log(this.state.setTimelinePic);
+      });
     this.setState({
       submmitedDate: item.submmitedDate,
       modalVisible: true,
@@ -183,7 +205,8 @@ class Timeline extends React.Component {
       iType: item.installmentsType,
       submittedDate:item.submittedDate,
       Rkey: item.key,
-      rAmount: item.remAmount
+      rAmount: item.remAmount,
+      userid:item.userid,
     });
   }
 
@@ -214,29 +237,14 @@ class Timeline extends React.Component {
       { cancelable: false }
     );
   }
-  // updatestate(k,props){
-    
-  //   this.setModalVisible(!this.state.modalVisible);
-  //   this.props.navigation.navigate("PayAsCreditor",{amount:this.state.rAmount, reqID: this.state.Rkey});
-  //   const { currentUser } = firebase.auth();
-  //   firebase
-  //   .database()
-  //   .ref('requests/' + k)
-  //   .update({
-  //     creditor:currentUser.uid,
-  //     rqeuestStatus: "قيد التنفيذ",
-  //   })
-  //   .then(() => console.log('Data updated.'));
-    
-  //  // props.navigate("Timeline");
-  // }
+
 
   list = () => {
-    const currentUser = firebase.auth().currentUser.uid;
-
+    const currentUserName = firebase.auth().currentUser.fullName;
+    const { currentUser } = firebase.auth();
     return this.state.requestsArr.map((c) => {
      count++;
-      if (c.userid != currentUser) {
+      if (c.userid != currentUser.uid) {
         if (c.creditor == "") {
          
           return (
@@ -307,9 +315,10 @@ class Timeline extends React.Component {
                       />
                     </TouchableOpacity>
                     <Text style={styles.header}>تفاصيل الطلب </Text>
+    
                     <Text style={styles.textInputTitle}>
                       {" "}
-                      اسم الدائن |{" "}
+                      اسم المدين |{" "}
                       <Text style={styles.textData}> {this.state.Name} </Text>
                     </Text>
 
@@ -369,7 +378,7 @@ class Timeline extends React.Component {
                        <Text style={styles.textData}> {this.state.Tprice} </Text>
                         )}
                         </Text>
-
+                     
                     <View style={styles.buttonContainer}>
                      
                       <TouchableOpacity
@@ -381,6 +390,15 @@ class Timeline extends React.Component {
                       >
                         <Text style={styles.buttonText}> قبول </Text>
                       </TouchableOpacity>
+                    
+                      <IconButton
+       style={styles.chatIcon}
+        icon='message-plus'
+        size={38}
+        color='#986979'
+        //,{secondID:this.state.creditor}
+      
+        onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.userid , reqIDforChat:this.state.Rkey ,secondName:this.state.Name, firstName:this.state.nameChat}),this.setModalVisible(!this.state.modalVisible)}}      />
                     </View>
                   </View>
                 </View>
@@ -658,7 +676,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
    // marginRight: 20,
     marginLeft: 79,
-    marginTop: -79,
+    marginTop: -31,
     fontSize: 10,
   },
   header: {
@@ -695,6 +713,22 @@ const styles = StyleSheet.create({
     zIndex: 2,
     borderWidth: 10,
     borderColor: "red",
+  },
+
+  UserImage: {
+    alignItems: "center",
+    marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    left: 100,
+    top: 0,
+    zIndex: 2,
+    width: 160,
+    height: 160,
+    resizeMode: "stretch",
+    borderRadius: 100,
+    borderColor: "#CBCA9E",
+    borderWidth: 4,
   },
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
@@ -788,6 +822,22 @@ const styles = StyleSheet.create({
     backgroundColor:"gray",
     zIndex:120,
   
+  },
+
+  chatIcon:{
+    top:7,
+    left:-230,
+    shadowColor: "#717172",
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    }
   }
+
+
+
+  
+  //end
 });
 export default withNavigation(Timeline);

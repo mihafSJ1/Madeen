@@ -3,7 +3,9 @@ import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 
 
 
-//raghad comment
+//chat branch raghad
+//chat branch raghad
+//chat branch raghad
 function BackgroundComponent() {
   return (
     <Svg width={728.938} height={655.025}>

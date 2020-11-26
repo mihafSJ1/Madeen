@@ -14,7 +14,7 @@ import Timeline from "./Timeline";
 import squares from "./squares";
 import Request from "./Request";
 import TopBar from "./TopBar";
-import NotImplementedScreens from "./NotImplementedScreens";
+import ChatScreen from "./ChatScreen";
 import CustomAlertComponent from "./CustomAlertComponent";
 import viewProfile from "./viewProfile";
 import EditProfile from "./EditProfile";
@@ -27,12 +27,17 @@ import  Calculator from './Calculator';
 import  myReqWithFilter from './myReqWithFilter';
 import  ReqAsCreditorWithFilter from './ReqAsCreditorWithFilter';
 
+// import  chat from './chat';
+import  addRoom from './addRoom';
+import  Room from './Room';
+import ChatBar from './ChatBar'
 
 // import * as firebase from "firebase";
 import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+console.disableYellowBox = true;
 function squaresScreens() {
   return (
     <Stack.Navigator>
@@ -124,6 +129,21 @@ function squaresScreens() {
               }}
             />
 
+{/* <Stack.Screen
+              name="chat"
+              component={chat}
+              options={{
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            /> */}
+
+
+
+
 
 
 
@@ -158,7 +178,37 @@ function squaresScreens() {
     </Stack.Navigator>
   );
 }
+function chat(){
+  // حطيت هذا عشان يصير فيهم كل البارين 
+  return( <Stack.Navigator>
+    <Stack.Screen
+       name="ChatScreen"
+       component={ChatScreen}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         //حطي اسم البار الي تبغينه بدل TopBar
+         header: (props) => <ChatBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
 
+       
+     />
+     <Stack.Screen
+       name="addRoom"
+       component={addRoom}
+       options={{
+         headerShown: true,
+         // navigation: { navigation },
+         header: (props) => <TopBar {...props} />,
+         // headerMode:screen,
+         headerTransparent: true,
+       }}
+     />
+</Stack.Navigator>);
+
+}
 function Homenav() {
   return (
     <Tab.Navigator
@@ -204,8 +254,8 @@ function Homenav() {
       />
       
       <Tab.Screen
-        name="NotImplementedScreens"
-        component={NotImplementedScreens}
+        name="ChatScreen"
+        component={chat}
         options={{
           unmountOnBlur: true,
           tabBarLabel: "",
@@ -219,6 +269,12 @@ function Homenav() {
           ),
         }}
       />
+
+
+
+
+
+      
       <Tab.Screen
         name="Request"
         
@@ -313,7 +369,51 @@ export default function App({ navigation }) {
         options={{ headerShown: false }}
       />
        {/* حل موقت  */}
-  
+       <Stack.Screen
+        name="myRequest"
+        component={myReqWithFilter}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="addRoom"
+        component={addRoom}
+        options={{ headerShown: false }}
+      />
+
+
+
+
+<Stack.Screen
+        name="ReqAsCreditor"
+        component={ReqAsCreditorWithFilter}
+        options={{ headerShown: false }}
+      />
+
+<Stack.Screen
+        name="Calculator"
+        component={Calculator}
+        options={{ headerShown: false }}
+      />
+
+
+<Stack.Screen
+              name="Room"
+              component={Room}
+               //حطي اسم البار الي تبغينه بدل TopBar
+       
+
+              options={({ route }) => ({
+                headerShown: true,
+                // navigation: { navigation },
+                header: (props) => <ChatBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              //  title:" route.params.thread.name"
+              })}
+
+            />
+
             <Stack.Screen
               name="login"
               component={login}
@@ -334,11 +434,7 @@ export default function App({ navigation }) {
               component={CustomAlertComponent}
               options={{ headerShown: false }}
             />
-             {/* <Stack.Screen
-              name="myRequestRA"
-              component={myRequestRA}
-              options={{ headerShown: false }}
-            /> */}
+          
 
 
             <Stack.Screen
@@ -363,7 +459,20 @@ export default function App({ navigation }) {
                 headerTransparent: true,
               }}
             />
-         
+       
+         {/* <Stack.Screen
+              name="addRoom"
+              component={addRoom}
+              options={{
+                headerShown: true,
+                navigation: { navigation },
+                header: (props) => <TopBar {...props} />,
+                // headerMode:screen,
+                headerTransparent: true,
+              }}
+            /> */}
+
+
          
               <Stack.Screen
               name="PaymentFormView"
@@ -416,4 +525,3 @@ export default function App({ navigation }) {
     </NavigationContainer>
   );
 }
-
