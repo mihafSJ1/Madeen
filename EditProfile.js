@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component, useState } from "react";
+import { ArabicNumbers } from "react-native-arabic-numbers";
 
 import {
   StyleSheet,
@@ -44,6 +45,7 @@ if (!firebase.apps.length) {
 var requestArrayU=[];
 var requestArrayC=[];
 let input = "";
+var x = 0;
 const fullNameRegexAR = /[\u0600-\u06FF]/;
 const fullNameRegexEN = /^[a-zA-Z şüöı]+$/;
 export default class EditProfile extends React.Component {
@@ -55,8 +57,11 @@ export default class EditProfile extends React.Component {
   state = {
     namef: "name",
     emailf: "email",
+    ratingValue: null,
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
   updatename(name){
     requestArrayU=[];
@@ -101,12 +106,20 @@ export default class EditProfile extends React.Component {
         
       })}
     }
+
+   
   setName(name) {
     this.setState({ namef: name });
     this.updatename(name);
   }
   setEmail(email) {
     this.setState({ emailf: email });
+  }
+  setRatingCount(count) {
+    this.setState({ RatingCount: count });
+  }
+  setRating(rating) {
+    this.setState({ rating: rating });
   }
 
   setPic(picNew) {
@@ -172,14 +185,32 @@ export default class EditProfile extends React.Component {
   };
 
   componentDidMount() {
+    
     const { currentUser } = firebase.auth();
     firebase
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
-        // namef   = snapshot.val().fullName;
-        // emailf   = snapshot.val().email;
-        // pic=snapshot.val().UserImage;
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+          this.state.rating / this.state.RatingCount
+               
+          if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+
+           }
+          })
+      
+       
+        
+    
+    
+   
+
 
         this.setName(snapshot.val().fullName),
           this.setEmail(snapshot.val().email),
@@ -188,34 +219,29 @@ export default class EditProfile extends React.Component {
         this.setState({ currentUser });
       });
 
-    //   const upload = async (filepath, filename, filemime) => {
-    //     const metaData = { contentType: filemime };
-    //    res = await firebase
-    //         .storage()
-    //         .ref(`./assets/orange.png/${filename}`)
-    //         .putFile(filepath, metaData); // put image file to GCS
-    //     return res;
-
-    //   };
-    //   async ()=>{
-    // const userId = firebase.auth().currentUser.uid;
-    //  res =  await upload(`orange.png`, `/assets/orange.png`, `orange/png`); // function in step 1
-    // data = {
-    //    fullName:namef,
-    //    email:emailf,
-    //     pic: res.downloadURL, // retrieve image URL
-    // }
-    // };
-
-    // firebase.database().ref('users/' + currentUser.uid ).set({
-
-    //   fullName:namef,
-    //   email:emailf,
-    //    pic: res.downloadURL,
-
-    // });
-
+      let countSubsidy = 0;
+      let countDebts = 0;
+      firebase
+      .database()
+      .ref("requests")
+      .on("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+          if(currentUser.uid == child.val().creditor){
+            if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+              }
+              }else  if(currentUser.uid == child.val().userid){
+                if ("مكتمل" == child.val().rqeuestStatus ){
+                countDebts++;
+              }
+            }
+      });
+      });
+      this.setState({ noDebts: countDebts });
+      this.setState({ noSubsidy: countSubsidy });
     this.setState({ currentUser });
+  
+ 
   }
 
   editProfile(URL) {
@@ -279,15 +305,7 @@ export default class EditProfile extends React.Component {
     return (
       <KeyboardAwareScrollView>
         <TopBar />
-        {/* <Text style={{ fontSize: 20 }}>
-          Hi{" "}
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-            {currentUser && currentUser.email}!!
-          </Text>
-          <Text style={{ color: "#CBCA9E", fontSize: 20 }}>
-           الاسم {namef}!!
-          </Text>
-        </Text> */}
+     
 
         <View style={styles.container3}>
           <View style={styles.container2}>
@@ -295,11 +313,7 @@ export default class EditProfile extends React.Component {
               style={styles.UserImagetuch}
               onPress={() => this.onChooseImagePress()}
             >
-              {/* <Image style={styles.UserImage}  source={require(this.state.profileImageUrl)} />  */}
-              {/* <Image
- style={styles.UserImage}
- source={require("./assets/UserImageProfile.png")} 
-/> */}
+      
               <Image
                 style={styles.UserImage}
                 source={{ uri: this.state.pic }}
@@ -308,19 +322,7 @@ export default class EditProfile extends React.Component {
 
             {/* <Image style={styles.UserImage} source={pic} />  */}
             <View style={styles.registerBackground}>
-              {/* <Text style={styles.UserName}>{namef}</Text> */}
-
-              {/* <TextInput style={styles.textinput}
-        autoFocus = {true}
-        autoCorrect = {false}
-        autoCapitalize = "none"
-        // onPress={() => firebase.database().ref('users/' + currentUser.uid ).update({
-        //      namef: value ,
-        //   })}
-     
-        placeholder={namef}
-        editable={false}
-        /> */}
+       
 
               <TouchableOpacity
                 onPress={() => {
@@ -334,7 +336,6 @@ export default class EditProfile extends React.Component {
                   color="#9B9B7A"
                 />
               </TouchableOpacity>
-
               <TextInput
                 style={styles.textinput}
                 placeholder={this.state.namef}
@@ -348,22 +349,72 @@ export default class EditProfile extends React.Component {
               {/* field number1  */}
 
               <Text style={styles.Email}> {this.state.emailf} </Text>
-
+              {console.log(this.state.ratingValue)}
+              { this.state.ratingValue== 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-              </Text>
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 {this.state.ratingValue== 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                {this.state.ratingValue == 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+
 
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
               <View style={styles.PinkRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}> {ArabicNumbers(this.state.noSubsidy)} </Text>
               </View>
               <View style={styles.YellowRectangleShapeView}>
-                <Text style={styles.buttonText2}> ٠ </Text>
+                <Text style={styles.buttonText2}>{ ArabicNumbers(this.state.noDebts)} </Text>
               </View>
 
               <TouchableOpacity

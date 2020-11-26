@@ -9,14 +9,18 @@ export   async function schedulePushNotification(exDate,instalmentT,repaymentT,s
     if(repaymentT=="السداد بالتقسيط"){
       
     var repeat;
-    if(instalmentT=="سنويًا")
+    if(instalmentT=="سنويًا"){
     repeat = 31536000;
-    else if(instalmentT=="شهريًا")
-    repeat = 2629743.83;
-    else if(instalmentT=="أسبوعيًا")
-      repeat = 604800;
-      else if(instalmentT=="يوميًا")
+  }
+    else if(instalmentT=="شهريًا"){
       repeat = 2629743.83;
+    } 
+    else if(instalmentT=="أسبوعيًا"){
+      repeat = 604800;
+    }
+      else if(instalmentT=="يوميًا"){
+      repeat = 2629743.83;
+      }
       console.log("بالتقسيط"+repeat)
 
   // set schedule notfication
@@ -30,8 +34,8 @@ export   async function schedulePushNotification(exDate,instalmentT,repaymentT,s
         repeats: true },
   });
 
-
-  setTimeout(() => {
+// update to set stInterval
+  setInterval(() => {
     const notificationKey = firebase
     .database()
     .ref("notifications/")

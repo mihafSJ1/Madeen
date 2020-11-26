@@ -1,6 +1,9 @@
 import * as React from "react";
 import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 
+
+
+//raghad comment
 function BackgroundComponent() {
   return (
     <Svg width={728.938} height={655.025}>

@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState }  from "react";
+import { ArabicNumbers } from "react-native-arabic-numbers";
+import { Button, Overlay } from 'react-native-elements';
 
 import {
   StyleSheet,
@@ -44,63 +46,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 var requestArray = [];
-
-var arrayFiltered=[];
-
-var myRequest = [];
-var usersArray = [];
-var namef = "name";
-var emailf = "email";
-// var pic="https://firebasestorage.googleapis.com/v0/b/madeen-46af8.appspot.com/o/Draft%2FUserImageProfile.png?alt=media&token=647ebe23-8753-4e8f-a29a-c902048a810a";
-var UserIDImage = "2";
-var UserID = "3";
-let namefff = "999999";
-var Searching=false;
-var Found=false;
-var specificStatus=false;
-// var SpecificStatusText="لا يوجد";
 let arrayFiltered2=[];
 
-firebase
-  .database()
-  .ref("users")
-  .once("value", function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var Data = childSnapshot.val();
-      usersArray.push(Data);
-    });
-  });
 
-
-const currentUser = firebase.auth();
-//this.setState({ currentUser });
-firebase
-
-  .database()
-  .ref("requests/")
-  .on("value", (snapshot) => {
-    snapshot.forEach((child) => {
-      //if (child.val().uid != currentUser.uid) {
-        requestArray.push({
-          creditor:child.val().creditor,
-           expectedDate:child.val().expectedDate,
-           installemntPrice:child.val().installemntPrice,
-            installmentsType:child.val().installmentsType,
-            price:child.val().price,
-           reason:child.val().reason,
-            repaymentType:child.val().repaymentType,
-          rqeuestStatus:child.val().rqeuestStatus,
-            submittedDate:child.val().submittedDate,
-           userName:child.val().userName,
-           userid:child.val().userid,
-           cName:child.val().creditorName,
-            key:child.key,});
-      //  }
-    });
-  });
-  //هنا الاسناد الصح 
-  arrayFiltered=requestArray;
-  // arrayFiltered2=requestArray;
 export default class MyReqWithFilter extends React.Component {
   state = { currentUser: null };
   //const [modalVisible, setModalVisible] = useState(false);
@@ -121,8 +69,10 @@ export default class MyReqWithFilter extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       searchTerm: '',
 
-    arrayFiltered:requestArray,
-   
+    // arrayFiltered:requestArray,
+    noSubsidy: 0,
+    noDebts: 0,
+    requestsArr:[],
   };
   }
 
@@ -137,7 +87,6 @@ export default class MyReqWithFilter extends React.Component {
       .ref("requests/")
       .on("value", (snapshot) => {
         snapshot.forEach((child) => {
-          if (true) {
             requestArray.push({         
               creditor:child.val().creditor,
               expectedDate:child.val().expectedDate,
@@ -155,10 +104,11 @@ export default class MyReqWithFilter extends React.Component {
                key:child.key,
                remAmount: child.val().remAmount });
             
-          }
+
         });
+        this.setState({requestsArr: requestArray.reverse()})
       });
-      arrayFiltered=requestArray;
+
     
      
     }
@@ -244,26 +194,54 @@ export default class MyReqWithFilter extends React.Component {
       .ref("users/" + item.creditor)
       .on("value", (snapshot) => {
         console.log("جوا البيس");
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+         
+               if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+                this.setState({ ratingValue:
+         Math.round(this.state.rating / this.state.RatingCount)})
+               }else{
+                this.setState({ ratingValue:
+                0})
+
+               }
+
+            
+          })
+        
+        
 
         this.setprofilePic(snapshot.val().UserImage);
         this.setCreditorName(snapshot.val().fullName);
         this.setCreditorEmail(snapshot.val().email);
         console.log(this.state.profilePic);
       });
-
-    console.log("بتنحل");
-
-
-
     this.setState({
       modalVisible2: true,
       namef: item.userName,
       UserIDImage: item.userid,
     });
-    console.log("يارب١");
 
-    console.log("يارب٢");
-  
+    let countSubsidy = 0;
+    let countDebts = 0;
+    firebase
+    .database()
+    .ref("requests")
+    .on("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+       if(item.creditor == child.val().creditor){
+        if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+          countSubsidy++;
+        }
+        }else  if(item.creditor == child.val().userid){
+          if ("مكتمل" == child.val().rqeuestStatus ){
+          countDebts++;
+        }
+      }
+    });
+    });
+    this.setState({ noDebts: countDebts });
+    this.setState({ noSubsidy: countSubsidy });
   }
 
 
@@ -409,7 +387,7 @@ console.log(text)
         if (true) {
           console.log("داخل الليست ٢٢٢٢");
           return (
-         
+    
             <View>
                 
                 {console.log("داخل الفيووووو")}
@@ -439,11 +417,11 @@ console.log(text)
                     solid
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
+                  {/* <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
                   <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
-                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid />
+                  <Ionicons name="ios-star" size={17} color="#E4E4E4" solid /> */}
                 </View>
                 {c.rqeuestStatus== "قيد الإنتظار" ? (
                   <View style={styles.waitingRectangleShapeView}> 
@@ -535,6 +513,7 @@ console.log(text)
                 </View>
               </TouchableOpacity>
               {/* {console.log("here4")} */}
+       
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -700,7 +679,6 @@ console.log(text)
                       )}
                     </Text>
 
-                   {/* كان هنا فيه كود المتبقي من الدين */}
 
 
 
@@ -763,14 +741,7 @@ console.log(text)
                       )}
   </Text>
 
-  {/* <Text style={styles.textInputTitle}>
-    {" "}
-تاريخ الطلب |{" "}
-    <Text style={styles.textData}>
-      {" "}
-      {this.state.submmitedDate}{" "}
-    </Text>{" "}
-  </Text> */}
+
   <Text style={styles.textInputTitle}>
     نوع التسديد |{" "}
     <Text style={styles.textData}> {this.state.Type} </Text>
@@ -806,7 +777,6 @@ console.log(text)
       
     )}
   </Text>
-
   // */}
   <Text style={styles.textInputTitle}>
                     
@@ -927,6 +897,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                   </View>
                 </View>
               </Modal>
+        
 
               <Modal
                 animationType="slide"
@@ -966,7 +937,63 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                           <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
 
  ): null }
-                    {this.state.CreditorName!=""? ( 
+                        {  this.state.ratingValue == 0 ?
+              <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 { this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue== 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+                    {/* {this.state.CreditorName!=""? ( 
       
      
                     <Text style={styles.RateStarts}>
@@ -1001,7 +1028,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                         solid
                       />
                     </Text>
-                     ): null }
+                     ): null } */}
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
 
@@ -1012,14 +1039,14 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       ): null }
                     {this.state.CreditorName!=""? ( 
         <View style={styles.PinkRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>٠ </Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
       </View>
 
       ): null }
                   
                     {this.state.CreditorName!=""? ( 
         <View style={styles.YellowRectangleShapeView}>
-        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> ٠</Text>
+        <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noDebts)}</Text>
       </View>
       ): null }
                   
@@ -1072,10 +1099,10 @@ searchStatus = (textTosearch)  =>{
 }
 
    var check=false;
-  for(var i =0 ,j = 0;i<requestArray.length;i++){
+  for(var i =0 ,j = 0;i<this.state.requestsArr.length;i++){
     console.log(textTosearch)
     if(textTosearch!=""){
-    if(textTosearch.trim()==requestArray[i].rqeuestStatus.trim()){
+    if(textTosearch.trim()==this.state.requestsArr[i].rqeuestStatus.trim()){
      check=true;
       this.setFound(true);
       // this.setSearching(true);
@@ -1088,7 +1115,7 @@ searchStatus = (textTosearch)  =>{
       // this.setSpecificStatusText(textTosearch);
       console.log(this.state.SpecificStatusText);
     // alert(requestArray[i].creditorName)
-    arrayFiltered2[j++]=requestArray[i]
+    arrayFiltered2[j++]=this.state.requestsArr[i]
     console.log(" دخلت الاف  ")
 
     // this.setState({
@@ -1152,6 +1179,7 @@ console.log(check)
 
     return (
       <View style={styles.container}>
+        
           
         <LinearGradient
           colors={[
@@ -1173,8 +1201,14 @@ console.log(check)
             right: -660,
             top: -630,
             position: "absolute",
+          
           }}
         ></LinearGradient>
+ {this.state.modalVisible || this.state.modalVisible2?
+        <View style=  {styles.shadow}>
+
+        </View>
+        : null}
 
         {/* -------------------------------------- CARD 1*/}
 
@@ -1242,7 +1276,7 @@ console.log(check)
 ):this.state.Searching && !this.state.Found?(
 
 
-null): <ScrollView>{this.list(requestArray,null)}</ScrollView>}
+null): <ScrollView>{this.list(this.state.requestsArr,null)}</ScrollView>}
 
 
 
@@ -1280,6 +1314,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F8F4",
     top: 120,
+
   },
   container2: {
     marginTop: 40,
@@ -1312,7 +1347,7 @@ top:-25,
     justifyContent: "flex-end",
     padding: 20,
     width: "100%",
-    left: -180,
+    left: -120,
   },
 
   leftItems: {
@@ -1666,8 +1701,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#F1DCA7",
     
    
@@ -1679,8 +1714,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#D3CDC8",
     
    
@@ -1692,8 +1727,8 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#BE6A6C",
     
    
@@ -1705,12 +1740,10 @@ waitContent:{
     width: 88,
     height: 25,
     borderRadius: 15,
-    left:-70,
-    top: 46,
+    left:10,
+    top: 18,
     backgroundColor: "#A8CB9E",
     
-   
-
   },
   status3:{
     textAlign: "center",
@@ -1852,8 +1885,7 @@ backgroundColor:'red',
   },
   buttonTextNav2:{
     textAlign: "center",
-    top: -8,
-    // bottom:5,
+    top: -5,
     left: 180,
     right:100,
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -2059,6 +2091,7 @@ top:-10,
     fontFamily: "Bahij_TheSansArabic-Light",
     left:0,
     textAlign:'right',
+    marginBottom:10,
     backgroundColor:'#ffffff',
   
   },
@@ -2073,7 +2106,16 @@ left:20,
     opacity: 0.6
     
   },
+shadow:{
+  position:'absolute',
+  height:2000,
+  width:'100%',
+  opacity:0.5,
+  padding:100,
+  backgroundColor:"gray",
+  zIndex:120,
 
+}
 
   //end
 });

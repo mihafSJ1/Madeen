@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { ArabicNumbers } from "react-native-arabic-numbers";
 
 import React from "react";
 import {
@@ -37,15 +38,19 @@ if (!firebase.apps.length) {
 // var res= "" ;
 // var draftName= "yarb";
 
+var x= 0;
 export default class viewProfile extends React.Component {
   state = { currentUser: null };
+  
   state = {
     namef: "name",
     emailf: "email",
     pic:
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
+    noSubsidy: 0,
+    noDebts: 0,
   };
-
+ 
   setName(name) {
     this.setState({ namef: name });
   }
@@ -120,14 +125,50 @@ export default class viewProfile extends React.Component {
       .database()
       .ref("users/" + currentUser.uid)
       .on("value", (snapshot) => {
+        this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
+          console.log(this.state.rating );
+          this.state.rating / this.state.RatingCount
+               
+          if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+
+           }
+          })
+
+          console.log(this.state.ratingValue);
         this.setName(snapshot.val().fullName),
           this.setEmail(snapshot.val().email),
           this.setPic(snapshot.val().UserImage);
+          
         // emailf=snapshot.val().email;
         // pic=snapshot.val().UserImage;
       });
 
-    this.setState({ currentUser });
+      let countSubsidy = 0;
+      let countDebts = 0;
+      firebase
+      .database()
+      .ref("requests")
+      .on("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+          if(currentUser.uid == child.val().creditor){
+            if ("قيد التنفيذ" == child.val().rqeuestStatus || "مكتمل" == child.val().rqeuestStatus  ){
+              countSubsidy++;
+              }
+              }else  if(currentUser.uid == child.val().userid){
+                if ("مكتمل" == child.val().rqeuestStatus ){
+                countDebts++;
+              }
+            }
+      });
+      });
+      this.setState({ noDebts: countDebts });
+      this.setState({ noSubsidy: countSubsidy });
+      this.setState({ currentUser });
   }
 
   //   openModalWithItem(item){
@@ -196,21 +237,71 @@ onPress={() => this.onChooseImagePress()}
 
               <Text style={styles.Email}> {this.state.emailf} </Text>
 
+              {this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
-              </Text>
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 1 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                {this.state.ratingValue == 2?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                { this.state.ratingValue== 3 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+                : null}
+                 {this.state.ratingValue == 4 ?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
+                </Text>
+             
+                : null}
+                { this.state.ratingValue == 5?
+                <Text style={styles.RateStarts}>
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+                <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
+  
+                </Text>:null}
+
 
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
               <View style={styles.PinkRectangleShapeView}>
-                <Text style={styles.buttonText}> ٠ </Text>
+              <Text style={styles.buttonText}> { ArabicNumbers(this.state.noSubsidy)} </Text>
               </View>
               <View style={styles.YellowRectangleShapeView}>
-                <Text style={styles.buttonText}> ٠ </Text>
+              <Text style={styles.buttonText}> { ArabicNumbers(this.state.noDebts)}</Text>
               </View>
 
               <StatusBar style="auto" />

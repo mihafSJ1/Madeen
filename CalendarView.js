@@ -65,11 +65,12 @@ var array = [];
  
 
   componentDidMount() {
+    const { currentUser } = firebase.auth();
+this.setState({ currentUser });
     onceRequests = [];
     installmentRequests = [];
     array = [];
-const { currentUser } = firebase.auth();
-this.setState({ currentUser });
+
 firebase
   .database()
   .ref("requests/")
@@ -222,14 +223,16 @@ firebase
     //   acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
 
     //   return acc;
-    // },{});
+    // },{});      // console.log("hello")
+      console.log("once")
+     console.log(array)
     onceMarkedDates = array.reduce((acc, {expectedDate}) => {
       acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
         return acc;
       },{});
       // console.log("hello")
-      // console.log("once")
-      // console.log(array)
+      console.log("once")
+      console.log(onceMarkedDates)
       // console.log("hellolll")
       // console.log(onceMarkedDates)
   
@@ -492,7 +495,6 @@ marginHorizontal:5,
     margin:2,
     fontSize:15,
     color:'#746356',
-    bottom:5,
   
 
   }

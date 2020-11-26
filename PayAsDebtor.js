@@ -97,7 +97,6 @@ class PayAsDebtor extends React.Component {
       creditCardToken = await getCreditCardToken(creditCardInput,amount);
       this.setState({cToken: creditCardToken.id})
       if (creditCardToken.error) {
-        alert("creditCardToken.error")
         // Reset the state if Stripe responds with an error
         // Set submitted to false to let the user subscribe again
         this.setState({ submitted: false, error: STRIPE_ERROR });
