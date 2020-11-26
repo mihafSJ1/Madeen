@@ -244,7 +244,7 @@ class Timeline extends React.Component {
 
     return this.state.requestsArr.map((c) => {
      count++;
-      if (c.userid != currentUser) {
+      if (c.userid != currentUser.uid) {
         if (c.creditor == "") {
          
           return (
