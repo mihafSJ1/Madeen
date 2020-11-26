@@ -421,7 +421,7 @@ return;
           .set({
             name: this.state.roomName,
             latestMessage: {
-              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} ؛`,
+              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} .`,
               createdAt: new Date().getTime(),
               to:`${secondID}`,
               createdBy:`${currentUser.uid}`,
@@ -448,7 +448,7 @@ return;
           .set({
             name: this.state.roomName,
             latestMessage: {
-              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} ؛`,
+              text: `هذه المحادثة أنشأت من قبل ${firstName} مع ${secondName} .`,
               createdAt: new Date().getTime(),
               to:`${currentUser.uid}`,
               createdBy:`${currentUser.uid}`,
