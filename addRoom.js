@@ -15,21 +15,15 @@ import {
   import { useState } from "react";
   import { IconButton,Title} from 'react-native-paper';
   import { AntDesign } from "@expo/vector-icons";
-  //import firestore from '@react-native-firebase/firestore';
-  //import firebase from 'firebase';
-  //import firestoreNative from '@react-native-firebase/firestore';
-
-  //import '@firebase/firestore';
-  import * as firebase from 'firebase';
+   import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { render } from 'react-dom';
 import RequestBackgroundComp from "./RequestBackgroundComp";
 
-// import FormButton from '../components/FormButton';
 
 
 
-//export default function addRoom({ navigation }) {
+
   export default class addRoom extends React.Component {
     constructor(props) {
       super(props);
@@ -132,20 +126,11 @@ return;
         const {secondID} = this.props.route.params;
         const{reqIDforChat}=this.props.route.params;
         const{secondName}=this.props.route.params;
-//const [userName, setUserName] = useState("");
 
-//const {secondID} = this.props.route.params;//
-
-
-      
-
-    // this.setState({ currentUser });
-    //const [roomName, setRoomName] = useState('');
     const db = firebase.firestore();
         return (
 
-          // <View style={styles.container}>
-          // <View style={styles.background}>
+
 
           <View style={styles.rootContainer}>
                  <RequestBackgroundComp />    
@@ -167,16 +152,13 @@ return;
 }    
 {console.log({reqIDforChat})
 }     
- {/* // <Title style={styles.title}>Ccc {secondID}</Title> */}
+
 
 <Title style={styles.title}>    محادثة جديدة مع </Title>
 <Title style={styles.name}>  !  {secondName} </Title>   
 
             <TextInput
-              // labelName='Room Name'
-              // value={roomName}
-              // onChangeText={text => setRoomName(text)}
-              // clearButtonMode='while-editing'
+
               style={styles.textinput}
               placeholder="اسم المحادثه "
               name="fullname"
@@ -190,16 +172,7 @@ return;
             />
 
 
-      {/* 
-      <TextInput
-                      style={styles.textinput}
-                      placeholder={this.state.namef}
-                      name="fullname"
-                      onChangeText={(userInput) => saveUserInput(userInput)}
-                      // onChangeText={text => this.setState({text})}
-                      value={this.state.text}
-                      input={this.state.text}
-                    /> */}
+     
       
       
       
@@ -216,15 +189,7 @@ return;
             /> */}
 </View>
 
-            
-{/* <Button
-              title='Create'
-              modeValue='contained'
-              style={styles.buttonSubmit}
-              // labelStyle={styles.buttonLabel}
-              onPress={() => this.handleButtonPress()}
-              disabled={this.state.roomName.length === 0}
-            />  */}
+
 
 <TouchableOpacity
  onPress={() => this.handleButtonPress()}
@@ -238,8 +203,7 @@ return;
           </View>
         </View>
 
-        // </View>
-        // </View>
+   
         );
       }
 
@@ -265,7 +229,7 @@ bottom:10,
     bottom: 500,
     position: "absolute",
     height: 480,
-    // paddingBottom:100,
+
   },
 
   container: {
@@ -376,7 +340,7 @@ left:20,
       borderRadius: 15,
       marginLeft: 10,
       backgroundColor: "#fff",
-      right:-85,
+      right:-83,
       top:90,
       shadowColor: "#000",
       shadowOpacity: 0.21,
