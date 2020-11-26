@@ -263,6 +263,8 @@ export default class MyReqWithFilter extends React.Component {
   
 
   openModalWithItem(item) {
+
+    
     this.setState({
       submmitedDate: item.submmitedDate,
       modalVisible: true,
@@ -873,8 +875,8 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       size={38}
                       color='#986979'
                       //,{secondID:this.state.creditor}
-                    
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+     
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName,   firstName:this.state.Name    }),this.setModalVisible(!this.state.modalVisible)}}
                     />
   ):(null
   
@@ -888,7 +890,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName, firstName:this.state.Name }),this.setModalVisible(!this.state.modalVisible)}}
                     />  
  ): null }
 {this.state.Rstatus== "مكتمل" ? ( 
@@ -899,7 +901,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                       color='#986979'
                       //,{secondID:this.state.creditor}
                     
-                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName}),this.setModalVisible(!this.state.modalVisible)}}
+                      onPress={() => {this.props.navigation.navigate('addRoom',{secondID:this.state.CreditorID , reqIDforChat:this.state.Rkey, secondName: this.state.CreName, firstName:this.state.Name }),this.setModalVisible(!this.state.modalVisible)}}
                     />  
  ): null }
    
