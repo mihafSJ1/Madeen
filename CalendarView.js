@@ -110,6 +110,7 @@ firebase
  });
       
   });
+if(onceRequests!=null){
   for (var i =0 ;i< onceRequests.length;i++){
     array.push({
       expectedDate:onceRequests[i].expectedDate,
@@ -121,8 +122,8 @@ firebase
       remAmount: onceRequests.remAmount,
     })
   }
-
-
+}
+if(installmentRequests!=null){
   for (var i =0 ;i< installmentRequests.length;i++){
     if (installmentRequests[i].installmentsType == "سنويًا"){
         for(var j =0 ; j<installmentRequests[i].duration;j++){
@@ -217,6 +218,7 @@ firebase
   
    
     }
+  }
 
     
     // installmentRequestsMarkedDates = dates.reduce((acc, {expectedDate}) => {
@@ -224,15 +226,15 @@ firebase
 
     //   return acc;
     // },{});      // console.log("hello")
-      console.log("once")
-     console.log(array)
+    //   console.log("once")
+    //  console.log(array)
     onceMarkedDates = array.reduce((acc, {expectedDate}) => {
       acc[expectedDate] = {selected: true, selectedColor: '#F1E2D8',selectedTextColor: 'white',marked:true}
         return acc;
       },{});
       // console.log("hello")
-      console.log("once")
-      console.log(onceMarkedDates)
+      // console.log("once")
+      // console.log(onceMarkedDates)
       // console.log("hellolll")
       // console.log(onceMarkedDates)
   
