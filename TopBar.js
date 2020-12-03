@@ -33,6 +33,7 @@ export default function TopBar({ navigation }) {
         <Text style={styles.topBarText}>مرحبًا {userName}!</Text>
         <Image source={{ uri: userImage }} style={styles.profileImage}></Image>
       </View>
+      {navigation.ref}
       <TouchableOpacity
         style={styles.logoutButton}
         onPress={() =>

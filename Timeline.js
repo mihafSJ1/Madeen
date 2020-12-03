@@ -57,6 +57,7 @@ class Timeline extends React.Component {
         "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
       noSubsidy: 0,
       noDebts: 0,
+      RatingCount:0,
       nameChat:"m"
     };
   }
@@ -347,11 +348,14 @@ class Timeline extends React.Component {
                       </Text>{" "}
                     </Text>
                     <Text style={styles.textInputTitle}>
+                    <Text> السبب |</Text>
                       {" "}
-                      {this.state.Reason == "" ? null : <Text> السبب |</Text>}
-                      {this.state.Reason == "" ? null : (
+                      {/* {this.state.Reason == "" ? null : <Text> السبب |</Text>} */}
+                      {this.state.Reason == "" ? <Text style={styles.textData}>
+                        لا يوجد سبب
+                        </Text> : (
                         <Text style={styles.textData}>
-                          {" "}
+                          {""}
                           {this.state.Reason}{" "}
                         </Text>
                         
@@ -484,6 +488,7 @@ class Timeline extends React.Component {
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
+                <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}</Text>
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -658,7 +663,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 170,
     height: 30,
-    marginTop: 10,
+    marginTop: 15,
     padding: 5,
     borderRadius: 15,
     marginLeft: 10,
@@ -678,6 +683,18 @@ const styles = StyleSheet.create({
     marginLeft: 79,
     marginTop: -31,
     fontSize: 10,
+  },
+  RatingNumber:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+  
+      marginTop: 5,
+     marginBottom: 20,
+    bottom: 60,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
   },
   header: {
     fontFamily: "Bahij_TheSansArabic-Light",
@@ -823,6 +840,7 @@ const styles = StyleSheet.create({
     zIndex:120,
   
   },
+ 
 
   chatIcon:{
     top:7,
@@ -832,7 +850,8 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 0,
-    }
+    },
+    
   }
 
 

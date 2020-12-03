@@ -1,4 +1,3 @@
-
 import { GiftedChat, Bubble, Send ,  SystemMessage,MessageText,ImageBackground,Time,InputToolbar} from 'react-native-gifted-chat';
 import { IconButton } from 'react-native-paper';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
@@ -6,6 +5,11 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import React, { useState, useContext, useEffect,alert,Text } from 'react';
 import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
+
+import RequestBackgroundComp from "./RequestBackgroundComp";
+
+
+import BackgroundComponent from "./BackgroundComponent";
 
 
 export default function Room({ route, navigation }) {
@@ -17,6 +21,13 @@ export default function Room({ route, navigation }) {
 
   const { currentUser } = firebase.auth();
   
+
+
+  // helper method that is sends a message
+  // function handleSend(newMessage = []) {
+  //   setMessages(GiftedChat.append(messages, newMessage));
+  // }
+
   function renderBubble(props) {
    
     return (
@@ -39,6 +50,7 @@ export default function Room({ route, navigation }) {
         
         }}
         textProps={{
+          ////هذي اللي تغير
           style: {
             color: props.position === 'left' ? '#fff' : '#746356',
             fontFamily: "Bahij_TheSansArabic-Light",
@@ -66,6 +78,11 @@ export default function Room({ route, navigation }) {
   }
 
 
+
+
+
+
+  
   
   function renderSend(props) {
     return (
@@ -113,6 +130,7 @@ color: 'white',
 
   async function handleSend(messages, messages2) {
     const text = messages[0].text;
+   // const text2 = messages[0].text;
     console.log("herehere");
 console.log({text});
     firebase.firestore()
@@ -149,7 +167,108 @@ console.log({text});
           });
       }
 
-    
+      // firebase.firestore()
+      // .collection('THREADS')
+      // .doc(currentUser.uid)
+      // .collection('allChat')
+        
+      //   .add({
+      //     // text
+      //     // createdAt: new Date().getTime(),
+      //     latestMessage: {
+      //       //   text: `You have joined the room  ${this.state.roomName}.`,
+      //          text:"try"
+      //        }
+      //   });
+
+   
+
+      //دبلكيت 
+       //text = messages2[0].text;
+      console.log("handle 2 here");
+      // firebase.firestore()
+      // .collection('THREADS')
+      // .doc(sID)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add({
+      //     text,
+      //     createdAt: new Date().getTime(),
+      //     user: {
+      //       _id: currentUser.uid,
+      //       email: currentUser.email
+      //     }
+      //   });
+  
+      //يبدا الاويت
+      // await firebase.firestore()
+      // .collection('THREADS')
+      // .doc(sID)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add(
+      //     {
+      //       latestMessage: {
+      //         text,
+      //         createdAt: new Date().getTime()
+      //       }
+      //     },
+      //     { merge: true }
+      //   );
+      //   console.log("قبل اويت كرنت يوزر");
+      //   await firebase.firestore()
+      // .collection('THREADS')
+      // .doc(currentUser.uid)
+      // .collection('allChat')
+      // .doc(rID)
+      //   .collection('MESSAGES')
+      //   .add(
+      //     {
+      //       latestMessage: {
+      //         text,
+      //         createdAt: new Date().getTime()
+      //       }
+      //     },
+      //     { merge: true }
+      //   );
+  };
+  // async function handleSend2(messages2) {
+  //   const text = messages2[0].text;
+  //   console.log("handle 2 here");
+  //   firebase.firestore()
+  //   .collection('THREADS')
+  //   .doc(sID)
+  //   .collection('allChat')
+  //   .doc(rID)
+  //     .collection('MESSAGES')
+  //     .add({
+  //       text,
+  //       createdAt: new Date().getTime(),
+  //       user: {
+  //         _id: currentUser.uid,
+  //         email: currentUser.email
+  //       }
+  //     });
+
+  //   await firebase.firestore()
+  //   .collection('THREADS')
+  //   .doc(sID)
+  //   .collection('allChat')
+  //   .doc(rID)
+  //     .collection('MESSAGES')
+  //     .add(
+  //       {
+  //         latestMessage: {
+  //           text,
+  //           createdAt: new Date().getTime()
+  //         }
+  //       },
+  //       { merge: true }
+  //     );
+  // };
+  
 
   useEffect(() => {
     const {messagesListener} = firebase.firestore()
@@ -182,6 +301,7 @@ console.log({text});
 
         setMessages(messages);
       });
+// ذبلكيت مسج
 
 firebase.firestore()
     .collection('THREADS')
@@ -215,7 +335,9 @@ firebase.firestore()
       });
 
 
-    
+      
+    // Stop listening for updates whenever the component unmounts
+    // return () => messagesListener();
   }, []);
 
 
@@ -273,9 +395,13 @@ firebase.firestore()
       messages={messages}
       messages2={messages2}
       onSend={handleSend}
+ 
+    
+      // onSend={handleSend2}
       user={{ _id: currentUser.uid }}
       renderBubble={renderBubble}
       placeholder ='اكتب رسالتك هنا...                                                                .'
+      // 'اكتب رسالتك هنا...'
       // showUserAvatar
       // alwaysShowSend
       // Step 4: add the prop
@@ -286,6 +412,8 @@ firebase.firestore()
       renderAvatar={() => null}
       renderTime={renderTime}
       renderInputToolbar={renderInputToolbar}
+
+    
       // renderMessageText={renderMessageText}
 
     />

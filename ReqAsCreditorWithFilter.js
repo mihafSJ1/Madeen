@@ -80,6 +80,7 @@ export default class ReqAsCreditor extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
+    RatingCount:0,
     requestsArr: [],
     nameChat:"m"
   };
@@ -966,39 +967,9 @@ this.setModalVisible(!this.state.modalVisible);
                   
                     <Text style={styles.UserName}>{this.state.namef}</Text>
                     <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-                    {/* <Text style={styles.RateStarts}>
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                      <Ionicons
-                        name="ios-star"
-                        size={33}
-                        color="#E4E4E4"
-                        solid
-                      />
-                    </Text> */}
-                                  {  this.state.ratingValue == 0 ?
+                 
+               
+              {  this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
@@ -1054,6 +1025,7 @@ this.setModalVisible(!this.state.modalVisible);
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
+                <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}</Text>
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -1622,7 +1594,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginBottom: 0,
     left:22,
-    top: -31,
+    top: -38,
     backgroundColor: "#FFFFFF",
     borderColor: "#FFFFFF",
     borderWidth: 1,
@@ -1937,7 +1909,7 @@ backgroundColor:'red',
   },
   RateStarts: {
     
-    left: 100,
+    left: 120,
     bottom: 70,
   },
   Email: {
@@ -1952,6 +1924,19 @@ backgroundColor:'red',
     justifyContent: "center",
     color: "#746356",
   },
+  RatingNumber: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+  
+     marginTop: -10,
+     marginBottom: 20,
+    bottom: 60,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+
 
   twoButton:{
     top:-90,
@@ -2036,6 +2021,7 @@ backgroundColor:'red',
     
       },
       RatingButton:{
+        marginBottom:-20,
         color: "#EDD44D",
         fontFamily: "Bahij_TheSansArabic-Bold",
         fontSize:18,

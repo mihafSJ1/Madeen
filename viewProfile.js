@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { ArabicNumbers } from "react-native-arabic-numbers";
 
+
 import React from "react";
 import {
   StyleSheet,
@@ -49,6 +50,8 @@ export default class viewProfile extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
+    RatingCount:0
+  
   };
  
   setName(name) {
@@ -154,11 +157,14 @@ onPress={() => this.onChooseImagePress()}
             {/* <Image style={styles.UserImage} > {pic} </Image>  */}
             <View style={styles.registerBackground}>
               <Text style={styles.UserName}>{this.state.namef}</Text>
+              
               {/* <Text style={styles.UserName}>{this.state.profileImageUrl}</Text> */}
 
               {/* field number1  */}
-
+       
               <Text style={styles.Email}> {this.state.emailf} </Text>
+              <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}
+            </Text>
 
               {this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
@@ -253,7 +259,7 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 140,
+    left: 145,
     bottom: -160,
   },
 
@@ -405,6 +411,18 @@ const styles = StyleSheet.create({
     top: 150,
     right: 134,
   },
+  RatingNumber:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+    marginTop:5,
+    marginBottom: 0,
+    textAlign: "right",
+    color: "#404040",
+    marginRight: 0,
+    top: 150,
+    right: 140,
+  },
+ 
 
   textinput: {
     marginBottom: 13,

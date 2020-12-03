@@ -56,6 +56,7 @@ export default class MyReqWithFilter extends React.Component {
   constructor(props) {
     super(props);
   this.state = {
+    RatingCount:0,
     modalVisible: false,
     modalVisible2: false,
     specificStatus:false,
@@ -196,14 +197,16 @@ export default class MyReqWithFilter extends React.Component {
       .on("value", (snapshot) => {
         console.log("جوا البيس");
         this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
-          console.log(this.state.rating );
+          console.log(this.state.RatingCount +"xxx");
          
-               if (this.state.RatingCount!=0|| this.state.RatingCount!= null){
+               if (this.state.RatingCount!=0){
+                console.log(this.state.RatingCount +"xxx");
                 this.setState({ ratingValue:
          Math.round(this.state.rating / this.state.RatingCount)})
                }else{
                 this.setState({ ratingValue:
                 0})
+                console.log(this.state.RatingCount +"else");
 
                }
 
@@ -296,19 +299,22 @@ export default class MyReqWithFilter extends React.Component {
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-        console.log(" الثانيه  جوا البيس");
+  
+        
         // console.log(item.userid);
         //  console.log(snapshot.val().UserImage);
 
         // this.setName(snapshot.val().fullName),
         // this.setEmail(snapshot.val().email),
-        console.log("inside retrive");
+      
+        
         this.setTimelinePic(snapshot.val().UserImage);
         // emailf=snapshot.val().email;
         // pic=snapshot.val().UserImage;
       });
     console.log(this.state.pic);
-    console.log("انتهى رتريف الصورة");
+
+    
   }
   EditRequest(k,Rstatus){
     if(Rstatus!= "قيد الإنتظار"){
@@ -372,28 +378,34 @@ export default class MyReqWithFilter extends React.Component {
 
 
   list = (array,text) => {
-    // console.log("داخل الليست س");
+    
+    
     const currentUser = firebase.auth().currentUser.uid;
-    console.log("hi")
+  
+    
 console.log(this.state.SpecificStatusText)
 console.log(this.state.SpecificStatusText)
 console.log(this.state.specificStatus)
 console.log(text)
     return array.map((c,index) => {
-      console.log("داخل الليست ١١١١١");
+  
+      
       if (c.userid == currentUser) {
-        console.log("اول شرط بالليست ") ;
+        
+        
         // console.log(specificStatus);
         console.log(this.state.specificStatus);
 
 
         if (true) {
-          console.log("داخل الليست ٢٢٢٢");
+      
+          
           return (
     
             <View>
                 
-                {console.log("داخل الفيووووو")}
+           
+           
               
            
               <TouchableOpacity
@@ -401,11 +413,12 @@ console.log(text)
                 style={styles.card}
                 
                 onPress={() => {
-                  console.log("نداااء");
+         
+                  
           
                   this.openModalWithItem(c);
                
-                  console.log("رغد الحلوه");
+      
               
                   // this.viewProfileFunction(this.state.UserID);
                 }}
@@ -961,9 +974,11 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
       
  ): null }
           {this.state.CreditorName!=""? ( 
-                          <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+     <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
+     
 
  ): null }
+    
                         {  this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
@@ -1020,7 +1035,7 @@ onPress = {()=>  { this.props.navigation.navigate("PayAsDebtor",{amount:this.sta
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
-                    
+                <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}</Text>
                 
                     {this.state.CreditorName!=""? ( 
                           <Text style={styles.subsidy}> عدد التسليف </Text>
@@ -2054,7 +2069,18 @@ top:-10,
     justifyContent: "center",
     color: "#746356",
   },
-
+  RatingNumber: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+  
+     marginTop: -10,
+     marginBottom: 20,
+    bottom: 60,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
 
 
 

@@ -23,7 +23,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase";
 import "@firebase/auth";
 import FirebaseKeys from "./FirebaseKeys";
-import TopBar from "./TopBar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view-fix";
 import { Ionicons } from "@expo/vector-icons";
 import { Value } from "react-native-reanimated";
@@ -62,6 +61,7 @@ export default class EditProfile extends React.Component {
       "https://firebasestorage.googleapis.com/v0/b/madeendb.appspot.com/o/draft%2FUserImageProfile.png?alt=media&token=8d72df15-548d-4112-819e-801ba9c2fea0",
     noSubsidy: 0,
     noDebts: 0,
+    RatingCount:0,
   };
   updatename(name){
     requestArrayU=[];
@@ -304,7 +304,7 @@ export default class EditProfile extends React.Component {
 
     return (
       <KeyboardAwareScrollView>
-        <TopBar />
+  
      
 
         <View style={styles.container3}>
@@ -407,6 +407,8 @@ export default class EditProfile extends React.Component {
   
                 </Text>:null}
 
+                <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}
+            </Text>
 
               <Text style={styles.subsidy}> عدد التسليف </Text>
               <Text style={styles.debts}> عدد الاستلاف </Text>
@@ -459,8 +461,8 @@ const styles = StyleSheet.create({
   },
 
   RateStarts: {
-    left: 133,
-    bottom: -220,
+    left: 143,
+    bottom: -260,
   },
 
   ProfileEdit: {
@@ -530,6 +532,18 @@ const styles = StyleSheet.create({
     width: 410,
     backgroundColor: "#fff",
   },
+  RatingNumber:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+    marginTop:45,
+    marginBottom: 10,
+    textAlign: "right",
+    color: "#404040",
+    marginRight: 0,
+    top: 150,
+    right: 140,
+  },
+ 
 
   UserImage: {
     alignItems: "center",
