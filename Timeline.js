@@ -58,7 +58,9 @@ class Timeline extends React.Component {
       noSubsidy: 0,
       noDebts: 0,
       RatingCount:0,
-      nameChat:"m"
+      nameChat:"m",
+      emailf:"",
+
     };
   }
 
@@ -115,13 +117,17 @@ class Timeline extends React.Component {
   setTimelinePic(picNew) {
     this.setState({ pic: picNew });
   }
+  setEmail(emailProfile) {
+    this.setState({ emailf: emailProfile });
+  }
   viewProfileFunction(item) {
     firebase.auth();
     firebase
       .database()
       .ref("users/" + item.userid)
       .on("value", (snapshot) => {
-      
+        this.setEmail(snapshot.val().email);
+        
         this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
           console.log(this.state.rating );
           this.state.rating / this.state.RatingCount
@@ -140,7 +146,7 @@ class Timeline extends React.Component {
     this.setState({
       modalVisible2: true,
       namef: item.userName,
-  
+   
       creditorID: item.userid,
       ReqIDforChat:item.key
     });
@@ -432,6 +438,7 @@ class Timeline extends React.Component {
                       source={{ uri: this.state.profilePic }}
                     />
                     <Text style={styles.UserName}>{this.state.namef}</Text>
+                    <Text style={styles.UserEmail}>{this.state.emailf}</Text>
                     {this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
@@ -732,24 +739,22 @@ const styles = StyleSheet.create({
     borderColor: "red",
   },
 
-  UserImage: {
-    alignItems: "center",
-    marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    left: 100,
-    top: 0,
-    zIndex: 2,
-    width: 160,
-    height: 160,
-    resizeMode: "stretch",
-    borderRadius: 100,
-    borderColor: "#CBCA9E",
-    borderWidth: 4,
-  },
+
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
+    margin: 0,
+    marginBottom: 0,
+    bottom: 10,
+    right: -7,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+
+  UserEmail:{
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 22,
     margin: 20,
     marginBottom: 40,
     bottom: 20,
@@ -822,7 +827,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
     left: 100,
-    top: -50,
+    top: -30,
     zIndex: 2,
     width: 160,
     height: 160,

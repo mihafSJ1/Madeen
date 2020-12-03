@@ -1436,7 +1436,7 @@ const styles = StyleSheet.create({
     }
   },
   chatIconC:{
-    left:-280,
+    left:-266,
     top:45,
     shadowColor: "#717172",
     shadowOpacity: 0.15,
@@ -1849,7 +1849,7 @@ backgroundColor:'red',
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize:20,
     alignItems: "center",
-    left:30,
+    left:40,
     top:40,
     shadowColor: "#FFCB69",
     shadowOpacity: 0.41,
