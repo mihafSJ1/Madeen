@@ -82,7 +82,8 @@ export default class ReqAsCreditor extends React.Component {
     noDebts: 0,
     RatingCount:0,
     requestsArr: [],
-    nameChat:"m"
+    nameChat:"m",
+  
   };
   ratingCompleted = (rating) => {
     this.setState({ newRatingValue: rating });
@@ -180,7 +181,7 @@ export default class ReqAsCreditor extends React.Component {
     }
 
     setRatingModalVisible(visible,debtor) {
-      var RatingCount = null;
+     var RatingCount = 0;
       var rating = 0;
       firebase
       .database()
@@ -203,9 +204,7 @@ console.log(this.state.RatingCount+this.state.requestKey);
 
 })
 
-      // if (visible == false){
-      //   this.updateRating()
-      // }
+    
     }
     cancelRatingModal(visible){
       this.setState({
@@ -231,9 +230,9 @@ isRated:  true,
     
       
       }, () => {
-     console.log( this.state.debtorID)
-     console.log( this.state.RatingCount)
-     console.log( this.state.newRatingValue)
+     console.log( this.state.debtorID)
+     console.log( this.state.RatingCount)
+     console.log( this.state.newRatingValue)
     
         firebase
        .database()
@@ -318,9 +317,9 @@ isRated:  true,
 
 
   setSpecificStatusText(text){
-    // this.setState({ SpecificStatusText: text });
+    
     this.setState({ SpecificStatusText: text}, function() {
-      // do something with new state
+
 
       console.log("new code4")
       console.log(this.state.SpecificStatusText)
@@ -343,14 +342,19 @@ isRated:  true,
         this.setState({ RatingCount: snapshot.val().RatingCount ,rating: snapshot.val().rating}, () => {
           console.log(this.state.rating );
          
-               if (this.state.RatingCount!=0){
-                this.setState({ ratingValue:
-         Math.round(this.state.rating / this.state.RatingCount)})
-               }else{
-                this.setState({ ratingValue:
-                0})
+           
+          if (this.state.RatingCount!=0){
+            console.log(this.state.RatingCount +"xxx");
+            this.setState({ ratingValue:
+     Math.round(this.state.rating / this.state.RatingCount)})
+           }else{
+            this.setState({ ratingValue:
+            0})
+            console.log(this.state.RatingCount +"else");
 
-               }
+           }
+
+               
 
              console.log(x +"c");
           })
@@ -967,9 +971,39 @@ this.setModalVisible(!this.state.modalVisible);
                   
                     <Text style={styles.UserName}>{this.state.namef}</Text>
                     <Text style={styles.Email}>{this.state.CreditorEmail}</Text>
-                 
-               
-              {  this.state.ratingValue == 0 ?
+                    {/* <Text style={styles.RateStarts}>
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                      <Ionicons
+                        name="ios-star"
+                        size={33}
+                        color="#E4E4E4"
+                        solid
+                      />
+                    </Text> */}
+                                  {  this.state.ratingValue == 0 ?
               <Text style={styles.RateStarts}>
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
                 <Ionicons name="ios-star" size={33} color="#E4E4E4" solid />
@@ -1025,12 +1059,12 @@ this.setModalVisible(!this.state.modalVisible);
                 <Ionicons name="ios-star" size={33} color="#FFCB69" solid />
   
                 </Text>:null}
-                <Text style={styles.RatingNumber}> عدد المقيّمين | { ArabicNumbers(this.state.RatingCount)}</Text>
+    <Text style={styles.RatingNumber}> عدد المقيّمين |{ArabicNumbers(this.state.noSubsidy)}</Text> 
 
                     <Text style={styles.subsidy}> عدد التسليف </Text>
                     <Text style={styles.debts}> عدد الاستلاف </Text>
                     <View style={styles.PinkRectangleShapeView}>
-                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{ArabicNumbers(this.state.noSubsidy)}</Text>
+                      <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}>{this.state.RatingCount}</Text>
                     </View>
                     <View style={styles.YellowRectangleShapeView}>
                       <Text style={[styles.buttonText,{fontSize:40,color:"#fff"}]}> {ArabicNumbers(this.state.noDebts)}</Text>
@@ -1166,69 +1200,30 @@ searchStatus = (textTosearch)  =>{
         // this.setSearching(true);
         this.setSpecificStatus(true);
         this.setSpecificStatusText(textTosearch);
-        // specificStatus="true";
-        console.log("طباعه الحاله ");
-        console.log(this.state.specificStatus);
-        // console.log(specificStatus);
-        // this.setSpecificStatusText(textTosearch);
-        console.log(this.state.SpecificStatusText);
-      // alert(requestArray[i].creditorName)
+   
       arrayFiltered22[j++]=this.state.requestsArr[i]
       console.log(" دخلت الاف  ")
   
-      // this.setState({
-      //   specificStatus: true,
-      //   SpecificStatusText:textTosearch ,
-       
-      // });
+     
       
       }
       }
       }
   
-    // requestArray.forEach(element =>{
-    //   if(textTosearch==element.rqeuestStatus){
-    //     arrayFiltered2.push(element);
-    //     this.setFound(true);
-    //     this.setSearching(true);
-    //     this.setSpecificStatus(true);
-    //     this.setSpecificStatusText(textTosearch);
-    //   }
-    // }
-  
-    // )
+
   
   
   
   
   
   
-  
-  
-    // console.log(textTosearch)
-      // alert(textTosearch);
-      // this.setState({
-  
-      //   arrayFiltered2:this.state.arrayFiltered.
-      //   filter(i=>i.rqeuestStatus.match(textTosearch)),
-  
-  
-      // })
     console.log(" دخلت السيرتش ")
    
-  //   console.log(arrayFiltered)
-  // this.list(arrayFiltered2)
-  // console.log(" اراي ٢ ")
+  
   console.log(arrayFiltered22)
   console.log(" اخر السيرتش ")
   console.log(check)
-  // console.log(textTosearch)
   
-  
-  
-  
-    // console.log( arrayFiltered2)
-  // {this.listToSearch()} 
     }
 
   render() {
@@ -1546,6 +1541,19 @@ const styles = StyleSheet.create({
     height: 160,
     resizeMode: "stretch",
   },
+  RatingNumber: {
+    fontFamily: "Bahij_TheSansArabic-Light",
+    fontSize: 20,
+  
+     marginTop: -10,
+     marginBottom: 20,
+    bottom: 60,
+    right: -1,
+    textAlign: "center",
+    justifyContent: "center",
+    color: "#746356",
+  },
+
   UserName: {
     fontFamily: "Bahij_TheSansArabic-Bold",
     fontSize: 28,
@@ -1909,7 +1917,7 @@ backgroundColor:'red',
   },
   RateStarts: {
     
-    left: 120,
+    left: 100,
     bottom: 70,
   },
   Email: {
@@ -1924,19 +1932,6 @@ backgroundColor:'red',
     justifyContent: "center",
     color: "#746356",
   },
-  RatingNumber: {
-    fontFamily: "Bahij_TheSansArabic-Light",
-    fontSize: 20,
-  
-     marginTop: -10,
-     marginBottom: 20,
-    bottom: 60,
-    right: -1,
-    textAlign: "center",
-    justifyContent: "center",
-    color: "#746356",
-  },
-
 
   twoButton:{
     top:-90,
@@ -2021,10 +2016,10 @@ backgroundColor:'red',
     
       },
       RatingButton:{
-        marginBottom:-20,
         color: "#EDD44D",
         fontFamily: "Bahij_TheSansArabic-Bold",
         fontSize:18,
+        marginBottom:-10,
         textAlign:'right',
         right:260,
         bottom:15,
