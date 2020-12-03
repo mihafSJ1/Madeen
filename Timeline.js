@@ -697,9 +697,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   
       marginTop: 5,
-     marginBottom: 20,
+     marginBottom: -23,
     bottom: 60,
-    right: -1,
+    right: -11.5,
     textAlign: "center",
     justifyContent: "center",
     color: "#746356",
