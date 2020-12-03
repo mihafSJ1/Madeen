@@ -81,15 +81,16 @@ class Timeline extends React.Component {
                expectedDate:child.val().expectedDate,
                installemntPrice:child.val().installemntPrice,
                 installmentsType:child.val().installmentsType,
+                installemntDuration: child.val().installemntDuration,
                 price:child.val().price,
                reason:child.val().reason,
                 repaymentType:child.val().repaymentType,
               rqeuestStatus:child.val().rqeuestStatus,
-                submittedDate:child.val().submittedDate,
+              submittedDate:child.val().submittedDate,
                userName:child.val().userName,
                userid:child.val().userid,
-                key:child.key,
-                remAmount: child.val().remAmount});
+              key:child.key,
+              remAmount: child.val().remAmount});
           }
         });
         this.setState({requestsArr:requestArray.reverse()})
